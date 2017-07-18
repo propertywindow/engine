@@ -1,0 +1,25 @@
+nginx:
+  build: docker/nginx
+  ports:
+    - "80:80"
+  links:
+    - php
+  volumes:
+    - ./:/app
+
+mysql:
+    image: tutum/mysql
+    ports:
+        - 3306:3306
+    environment:
+        MYSQL_PASS: dev
+        MYSQL_USER: dev
+        ON_CREATE_DB: dev
+
+php:
+  build: docker/php-fpm
+  volumes:
+    - ./:/app
+  working_dir: /app
+  links:
+          - mysql
