@@ -3,7 +3,7 @@ version: '2.0'
 services:
 
   nginx:
-    container_name: sf.nginx
+    container_name: propertywindow.nginx
     build: .docker/nginx
     ports:
       - "80:80"
@@ -12,22 +12,35 @@ services:
     volumes:
       - ./:/app
 
-  mysql:
-      container_name: sf.mysql
-      image: tutum/mysql
-      ports:
-          - 3306:3306
-      environment:
-          MYSQL_DATABASE: symfony
-          MYSQL_USER: root
-          MYSQL_PASSWORD: ~
-          MYSQL_ROOT_PASSWORD: ~
+  db:
+    container_name: propertywindow.db
+    image: tutum/mysql
+    ports:
+        - 3306:3306
+    environment:
+        MYSQL_ROOT_PASSWORD: root
+        MYSQL_DATABASE: propertywindow
+        MYSQL_USER: propertywindow
+        MYSQL_PASSWORD: propertywindow
 
   php:
-    container_name: sf.phpdo
+    container_name: propertywindow.php
     build: .docker/php-fpm
     volumes:
       - ./:/app
     working_dir: /app
     links:
-      - mysql
+      - db
+
+  phpmyadmin:
+    container_name: propertywindow.phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    links:
+      - db
+    ports:
+      - 8183:80
+    environment:
+      MYSQL_USERNAME: admin
+      MYSQL_ROOT_PASSWORD: admin
+      PMA_ARBITRARY: 1
