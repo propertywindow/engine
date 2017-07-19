@@ -1,4 +1,7 @@
-image: php:7.1.1
+image: php:7.1
+
+options:
+  docker: true
 
 pipelines:
   default:
