@@ -44,7 +44,6 @@ RUN rm /etc/localtime
 RUN ln -s /usr/share/zoneinfo/Europe/London /etc/localtime
 RUN "date"
 
-
 RUN useradd -ms /bin/bash vagrant
 
 USER vagrant

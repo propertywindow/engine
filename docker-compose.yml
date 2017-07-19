@@ -12,9 +12,9 @@ mysql:
     ports:
         - 3306:3306
     environment:
-        MYSQL_PASS: dev
-        MYSQL_USER: dev
-        ON_CREATE_DB: dev
+        MYSQL_PASS: boekaboeka
+        MYSQL_USER: dbadmin
+        ON_CREATE_DB: propertywindow
 
 php:
   build: docker/php-fpm
@@ -22,4 +22,4 @@ php:
     - ./:/app
   working_dir: /app
   links:
-          - mysql
+    - mysql
