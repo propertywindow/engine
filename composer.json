@@ -1,5 +1,5 @@
 {
-    "name": "marc/propertywindow-engine",
+    "name": "dcs/propertywindow-engine",
     "license": "proprietary",
     "type": "project",
     "autoload": {
@@ -58,7 +58,7 @@
     },
     "extra": {
         "symfony-app-dir": "app",
-        "symfony-bin-dir": "bin",
+        "symfony-bin-dir": "app",
         "symfony-var-dir": "var",
         "symfony-web-dir": "web",
         "symfony-tests-dir": "tests",
