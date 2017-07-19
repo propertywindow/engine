@@ -1,27 +1,33 @@
-nginx:
-  build: docker/nginx
-  ports:
-    - "80:80"
-  links:
-    - php
-  volumes:
-    - ./:/app
+version: '2.0'
 
-mysql:
-    image: tutum/mysql
+services:
+
+  nginx:
+    container_name: sf.nginx
+    build: .docker/nginx
     ports:
-        - 3306:3306
-    environment:
-        MYSQL_DATABASE: propertywindow
-        MYSQL_USER: root
-        MYSQL_PASSWORD: boekaboeka
-        MYSQL_ROOT_PASSWORD: boekaboeka
+      - "80:80"
+    links:
+      - php
+    volumes:
+      - ./:/app
 
-php:
-  build: docker/php-fpm
-  volumes:
-    - ./:/app
-  working_dir: /app
-  links:
-    - mysql
+  mysql:
+      container_name: sf.mysql
+      image: tutum/mysql
+      ports:
+          - 3306:3306
+      environment:
+          MYSQL_DATABASE: symfony
+          MYSQL_USER: root
+          MYSQL_PASSWORD: ~
+          MYSQL_ROOT_PASSWORD: ~
 
+  php:
+    container_name: sf.phpdo
+    build: .docker/php-fpm
+    volumes:
+      - ./:/app
+    working_dir: /app
+    links:
+      - mysql
