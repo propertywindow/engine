@@ -27,7 +27,6 @@ RUN composer --version
 RUN docker-php-ext-configure intl \
     && docker-php-ext-install pdo pdo_mysql opcache intl
 
-
 # install xdebug
 RUN pecl install xdebug
 RUN docker-php-ext-enable xdebug \

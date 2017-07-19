@@ -5,7 +5,7 @@ parameters:
     database_host: 127.0.0.1
     database_port: ~
     database_name: propertywindow
-    database_user: dbadmin
+    database_user: root
     database_password: boekaboeka
     # You should uncomment this if you want to use pdo_sqlite
     #database_path: '%kernel.project_dir%/var/data/data.sqlite'
