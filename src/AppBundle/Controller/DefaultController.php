@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class DefaultController extends Controller
 {
     /**
-     * @Route("/", name="index")
+     * @Route("/")
      *
      * @return JsonResponse
      */
@@ -21,16 +21,4 @@ class DefaultController extends Controller
     {
         return new JsonResponse('no-access');
     }
-
-
-    /**
-     * @Route("/blaat", name="blaat")
-     *
-     * @return JsonResponse
-     */
-    public function blaatAction()
-    {
-        return new JsonResponse('no-sdfsdf');
-    }
-
 }
