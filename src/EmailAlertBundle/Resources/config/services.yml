@@ -1,0 +1,4 @@
+services:
+#    email_alert.example:
+#        class: EmailAlertBundle\Example
+#        arguments: ["@service_id", "plain_value", "%parameter%"]

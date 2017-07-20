@@ -1,22 +1,22 @@
 <?php declare(strict_types=1);
 
-namespace AppBundle\Controller;
+namespace LogBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class DefaultController
- * @package AppBundle\Controller
+ * @package LogBundle\Controller
  */
 class DefaultController extends Controller
 {
     /**
      * @Route("/")
-     *
      */
     public function indexAction()
     {
-        throw $this->createAccessDeniedException("You don't have access to this page!");
+        return new Response('no-access');
     }
 }

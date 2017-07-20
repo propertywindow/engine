@@ -5,9 +5,9 @@ namespace PropertyBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * SaleRepository
+ * LetRepository
  *
  */
-class SaleRepository extends EntityRepository
+class LetRepository extends EntityRepository
 {
 }

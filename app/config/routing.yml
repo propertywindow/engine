@@ -1,8 +1,53 @@
-property:
-    resource: "@PropertyBundle/Controller/"
-    type:     annotation
-    prefix:   /
-
 app:
     resource: '@AppBundle/Controller/'
     type: annotation
+
+transparency:
+    resource: "@TransparencyBundle/Controller/"
+    type:     annotation
+    prefix:   /transparency
+
+authentication:
+    resource: "@AuthenticationBundle/Controller/"
+    type:     annotation
+    prefix:   /authentication
+
+conversation:
+    resource: "@ConversationBundle/Controller/"
+    type:     annotation
+    prefix:   /conversation
+
+log:
+    resource: "@LogBundle/Controller/"
+    type:     annotation
+    prefix:   /log
+
+appointment:
+    resource: "@AppointmentBundle/Controller/"
+    type:     annotation
+    prefix:   /appointment
+
+offer:
+    resource: "@OfferBundle/Controller/"
+    type:     annotation
+    prefix:   /offer
+
+invoice:
+    resource: "@InvoiceBundle/Controller/"
+    type:     annotation
+    prefix:   /invoice
+
+traffic:
+    resource: "@TrafficBundle/Controller/"
+    type:     annotation
+    prefix:   /traffic
+
+email_alert:
+    resource: "@EmailAlertBundle/Controller/"
+    type:     annotation
+    prefix:   /email_alert
+
+property:
+    resource: "@PropertyBundle/Controller/"
+    type:     annotation
+    prefix:   /property

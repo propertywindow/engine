@@ -1,12 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace PropertyBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Sale
- *
  * @ORM\Table(name="sale")
  * @ORM\Entity(repositoryClass="PropertyBundle\Repository\SaleRepository")
  */
@@ -63,4 +61,3 @@ class Sale
         return $this->name;
     }
 }
-
