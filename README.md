@@ -1,5 +1,3 @@
-[(http://www.propertywindow.com/img/logo_red_new.png)]
-
 Property Window Engine [![by](https://img.shields.io/badge/by-%40marcgeurts-ff69b4.svg?style=flat-square)](https://bitbucket.org/geurtsmarc)
 ========================
 
