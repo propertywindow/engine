@@ -17,6 +17,6 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-        return new Response('no-access');
+        return new Response('conversations');
     }
 }
