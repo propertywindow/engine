@@ -1,6 +1,6 @@
-<img align="right" src="http://www.propertywindow.com/img/logo_red_new.png" />
+[(http://www.propertywindow.com/img/logo_red_new.png)]
 
-Property Window Engine [![by](https://img.shields.io/badge/by-%40marcgeurts-ff69b4.svg?style=flat-square)](https://github.com/marcgeurts)
+Property Window Engine [![by](https://img.shields.io/badge/by-%40marcgeurts-ff69b4.svg?style=flat-square)](https://bitbucket.org/geurtsmarc)
 ========================
 
 This is the propertywindow engine repository that runs on [Docker](https://www.docker.com/). The main tools used are Symfony, Docker and Docker Compose. Other things included are:
