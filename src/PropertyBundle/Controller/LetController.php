@@ -15,8 +15,8 @@ class LetController extends Controller
     /**
      * @Route("/let")
      */
-    public function LetAction()
+    public function letAction()
     {
-        return new JsonResponse('Sale');
+        return new JsonResponse('Let');
     }
 }

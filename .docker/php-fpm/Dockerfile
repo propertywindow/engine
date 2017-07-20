@@ -43,10 +43,23 @@ RUN rm /etc/localtime
 RUN ln -s /usr/share/zoneinfo/Europe/London /etc/localtime
 RUN "date"
 
+# Cleanup
+RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN apt-get autoremove -y
+
+
+# Add Symfony alias
+RUN echo 'alias sf="php app/console"' >> ~/.bashrc
+
+# Set enviroments
+ENV MYSQL_ROOT_PASSWORD=root
+ENV MYSQL_ROOT_USER=root
+
 RUN useradd -ms /bin/bash vagrant
+
+CMD php-fpm -F
 
 USER vagrant
 
 WORKDIR /app
 
-COPY php-fpm.conf /etc/php-fpm.conf

@@ -24,6 +24,16 @@ Build and run the containers:
 docker-compose up -d --build
 ```
 
+UNIX only: get containers IP address and update host (replace IP according to your configuration)
+```bash
+$ docker network inspect bridge | grep Gateway
+```
+
+unix only (on Windows, edit C:\Windows\System32\drivers\etc\hosts)
+```bash
+$ sudo echo "171.17.0.1 property-engine.dev" >> /etc/hosts
+```
+
 Once that's done, you should be able to access the application on the IP that docker (or Docker Machine) is running at.
 
 ## FAQ

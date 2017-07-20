@@ -15,7 +15,7 @@ class SaleController extends Controller
     /**
      * @Route("/sale")
      */
-    public function SaleAction()
+    public function saleAction()
     {
         return new JsonResponse('Sale');
     }
