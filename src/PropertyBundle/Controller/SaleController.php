@@ -7,10 +7,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
- * Class SaleController
+ * Class PropertyController
  * @package PropertyBundle\Controller
  */
-class SaleController extends Controller
+class PropertyController extends Controller
 {
     /**
      * @Route("/list", name="index")
@@ -19,7 +19,7 @@ class SaleController extends Controller
      */
     public function listAction()
     {
-        $propertyService = $this->container->get('property_sale_service');
+        $propertyService = $this->container->get('property_service');
         $propertyService->listAll();
 
         return new JsonResponse($propertyService);
@@ -34,7 +34,7 @@ class SaleController extends Controller
      */
         public function viewAction($id)
         {
-            $propertyService = $this->container->get('property_sale_service');
+            $propertyService = $this->container->get('property_service');
             $propertyService->viewProperty($id);
 
             return new JsonResponse('view'. $id);
@@ -48,7 +48,7 @@ class SaleController extends Controller
      */
     public function createAction()
     {
-        $propertyService = $this->container->get('property_sale_service');
+        $propertyService = $this->container->get('property_service');
         $propertyService->createProperty();
 
         return new JsonResponse('added');
