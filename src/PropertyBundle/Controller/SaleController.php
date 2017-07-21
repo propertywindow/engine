@@ -13,10 +13,44 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class SaleController extends Controller
 {
     /**
-     * @Route("/sale")
+     * @Route("/list", name="index")
+     *
+     * @return JsonResponse
      */
-    public function saleAction()
+    public function listAction()
     {
-        return new JsonResponse('Sale');
+        $propertyService = $this->container->get('property_sale_service');
+        $propertyService->listAll();
+
+        return new JsonResponse($propertyService);
+    }
+
+    /**
+     * @Route("/view/{id}", name="get")
+     *
+     * @param int $id
+     *
+     * @return JsonResponse
+     */
+        public function viewAction($id)
+        {
+            $propertyService = $this->container->get('property_sale_service');
+            $propertyService->viewProperty($id);
+
+            return new JsonResponse('view'. $id);
+        }
+
+
+    /**
+     * @Route("/create", name="create")
+     *
+     * @return JsonResponse
+     */
+    public function createAction()
+    {
+        $propertyService = $this->container->get('property_sale_service');
+        $propertyService->createProperty();
+
+        return new JsonResponse('added');
     }
 }
