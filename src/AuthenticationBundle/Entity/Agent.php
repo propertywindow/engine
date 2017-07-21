@@ -122,7 +122,7 @@ class Agent
     /**
      * @var bool
      *
-     * @ORM\Column(name="espc", type="boolean")
+     * @ORM\Column(name="ESPC", type="boolean")
      */
     private $espc;
 
@@ -481,7 +481,7 @@ class Agent
     }
 
     /**
-     * Set espc
+     * Set ESPC
      *
      * @param boolean $espc
      *
@@ -495,7 +495,7 @@ class Agent
     }
 
     /**
-     * Get espc
+     * Get ESPC
      *
      * @return bool
      */

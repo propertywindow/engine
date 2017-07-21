@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * ESPC
  *
- * @ORM\Table(name="e_s_p_c")
+ * @ORM\Table(name="espc")
  * @ORM\Entity(repositoryClass="PropertyBundle\Repository\ESPCRepository")
  */
 
