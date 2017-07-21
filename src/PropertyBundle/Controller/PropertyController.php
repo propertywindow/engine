@@ -32,13 +32,13 @@ class PropertyController extends Controller
      *
      * @return JsonResponse
      */
-        public function viewAction($id)
-        {
-            $propertyService = $this->container->get('property_service');
-            $propertyService->viewProperty($id);
+    public function viewAction($id)
+    {
+        $propertyService = $this->container->get('property_service');
+        $propertyService->viewProperty($id);
 
-            return new JsonResponse('view'. $id);
-        }
+        return new JsonResponse('view'. $id);
+    }
 
 
     /**

@@ -24,7 +24,6 @@ class AppKernel extends Kernel
             new AppBundle\AppBundle(),
             new PropertyBundle\PropertyBundle(),
             new EmailAlertBundle\EmailAlertBundle(),
-            new TrafficBundle\TrafficBundle(),
             new InvoiceBundle\InvoiceBundle(),
             new OfferBundle\OfferBundle(),
             new AppointmentBundle\AppointmentBundle(),
@@ -32,6 +31,7 @@ class AppKernel extends Kernel
             new ConversationBundle\ConversationBundle(),
             new AuthenticationBundle\AuthenticationBundle(),
             new TransparencyBundle\TransparencyBundle(),
+            new AgentBundle\AgentBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
