@@ -5,9 +5,9 @@ namespace PropertyBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * ESPCRepository
+ * PropertyOfTheMonthRepository
  *
  */
-class ESPCRepository extends EntityRepository
+class PropertyOfTheMonthRepository extends EntityRepository
 {
 }

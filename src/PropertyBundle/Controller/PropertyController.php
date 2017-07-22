@@ -13,7 +13,17 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class PropertyController extends Controller
 {
     /**
-     * @Route("/list", name="index")
+     * @Route("/", name="index")
+     *
+     * @return JsonResponse
+     */
+    public function indexAction()
+    {
+        return new JsonResponse('property');
+    }
+
+    /**
+     * @Route("/list", name="list")
      *
      * @return JsonResponse
      */
