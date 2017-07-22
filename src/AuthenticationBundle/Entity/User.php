@@ -5,12 +5,12 @@ namespace AuthenticationBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Agent
+ * User
  *
- * @ORM\Table(name="agent")
- * @ORM\Entity(repositoryClass="AuthenticationBundle\Repository\AgentRepository")
+ * @ORM\Table(name="user")
+ * @ORM\Entity(repositoryClass="AuthenticationBundle\Repository\UserRepository")
  */
-class Agent
+class User
 {
     /**
      * @var int
@@ -22,32 +22,18 @@ class Agent
     private $id;
 
     /**
-     * @var int
+     * @var string
      *
-     * @ORM\Column(name="group_id", type="integer")
+     * @ORM\Column(name="username", type="string", length=255)
      */
-    private $groupId;
+    private $username;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="password", type="string", length=255)
      */
-    private $name;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="phone", type="string", length=255)
-     */
-    private $phone;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="fax", type="string", length=255)
-     */
-    private $fax;
+    private $password;
 
     /**
      * @var string
@@ -59,16 +45,16 @@ class Agent
     /**
      * @var string
      *
-     * @ORM\Column(name="website", type="string", length=255)
+     * @ORM\Column(name="first_name", type="string", length=255)
      */
-    private $website;
+    private $firstName;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="logo", type="string", length=255)
+     * @ORM\Column(name="last_name", type="string", length=255)
      */
-    private $logo;
+    private $lastName;
 
     /**
      * @var string
@@ -80,14 +66,14 @@ class Agent
     /**
      * @var string
      *
-     * @ORM\Column(name="house_number", type="string", length=255)
+     * @ORM\Column(name="house_number", type="string", length=5)
      */
     private $houseNumber;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="postcode", type="string", length=255)
+     * @ORM\Column(name="postcode", type="string", length=10)
      */
     private $postcode;
 
@@ -106,32 +92,39 @@ class Agent
     private $country;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="phone", type="string", length=255)
+     */
+    private $phone;
+
+    /**
      * @var int
      *
-     * @ORM\Column(name="property_limit", type="integer")
+     * @ORM\Column(name="agent_id", type="integer")
      */
-    private $propertyLimit;
+    private $agentId;
 
     /**
-     * @var bool
+     * @var int
      *
-     * @ORM\Column(name="webprint", type="boolean")
+     * @ORM\Column(name="type_id", type="integer")
      */
-    private $webprint;
+    private $typeId;
 
     /**
-     * @var bool
+     * @var string
      *
-     * @ORM\Column(name="ESPC", type="boolean")
+     * @ORM\Column(name="avatar", type="string", length=255)
      */
-    private $espc;
+    private $avatar;
 
     /**
-     * @var bool
+     * @var \datetime
      *
-     * @ORM\Column(name="archived", type="boolean")
+     * @ORM\Column(name="last_login", type="datetime", length=255)
      */
-    private $archived;
+    private $lastLogin;
 
 
     /**
@@ -145,99 +138,51 @@ class Agent
     }
 
     /**
-     * Set groupId
+     * Set username
      *
-     * @param integer $groupId
+     * @param string $username
      *
-     * @return Agent
+     * @return User
      */
-    public function setGroupId($groupId)
+    public function setUsername($username)
     {
-        $this->groupId = $groupId;
+        $this->username = $username;
 
         return $this;
     }
 
     /**
-     * Get groupId
-     *
-     * @return int
-     */
-    public function getGroupId()
-    {
-        return $this->groupId;
-    }
-
-    /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return Agent
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Get name
+     * Get username
      *
      * @return string
      */
-    public function getName()
+    public function getUsername()
     {
-        return $this->name;
+        return $this->username;
     }
 
     /**
-     * Set phone
+     * Set password
      *
-     * @param string $phone
+     * @param string $password
      *
-     * @return Agent
+     * @return User
      */
-    public function setPhone($phone)
+    public function setPassword($password)
     {
-        $this->phone = $phone;
+        $this->password = $password;
 
         return $this;
     }
 
     /**
-     * Get phone
+     * Get password
      *
      * @return string
      */
-    public function getPhone()
+    public function getPassword()
     {
-        return $this->phone;
-    }
-
-    /**
-     * Set fax
-     *
-     * @param string $fax
-     *
-     * @return Agent
-     */
-    public function setFax($fax)
-    {
-        $this->fax = $fax;
-
-        return $this;
-    }
-
-    /**
-     * Get fax
-     *
-     * @return string
-     */
-    public function getFax()
-    {
-        return $this->fax;
+        return $this->password;
     }
 
     /**
@@ -245,7 +190,7 @@ class Agent
      *
      * @param string $email
      *
-     * @return Agent
+     * @return User
      */
     public function setEmail($email)
     {
@@ -265,51 +210,51 @@ class Agent
     }
 
     /**
-     * Set website
+     * Set firstName
      *
-     * @param string $website
+     * @param string $firstName
      *
-     * @return Agent
+     * @return User
      */
-    public function setWebsite($website)
+    public function setFirstName($firstName)
     {
-        $this->website = $website;
+        $this->firstName = $firstName;
 
         return $this;
     }
 
     /**
-     * Get website
+     * Get firstName
      *
      * @return string
      */
-    public function getWebsite()
+    public function getFirstName()
     {
-        return $this->website;
+        return $this->firstName;
     }
 
     /**
-     * Set logo
+     * Set lastName
      *
-     * @param string $logo
+     * @param string $lastName
      *
-     * @return Agent
+     * @return User
      */
-    public function setLogo($logo)
+    public function setLastName($lastName)
     {
-        $this->logo = $logo;
+        $this->lastName = $lastName;
 
         return $this;
     }
 
     /**
-     * Get logo
+     * Get lastName
      *
      * @return string
      */
-    public function getLogo()
+    public function getLastName()
     {
-        return $this->logo;
+        return $this->lastName;
     }
 
     /**
@@ -317,7 +262,7 @@ class Agent
      *
      * @param string $address
      *
-     * @return Agent
+     * @return User
      */
     public function setAddress($address)
     {
@@ -341,7 +286,7 @@ class Agent
      *
      * @param string $houseNumber
      *
-     * @return Agent
+     * @return User
      */
     public function setHouseNumber($houseNumber)
     {
@@ -365,7 +310,7 @@ class Agent
      *
      * @param string $postcode
      *
-     * @return Agent
+     * @return User
      */
     public function setPostcode($postcode)
     {
@@ -389,7 +334,7 @@ class Agent
      *
      * @param string $city
      *
-     * @return Agent
+     * @return User
      */
     public function setCity($city)
     {
@@ -413,7 +358,7 @@ class Agent
      *
      * @param string $country
      *
-     * @return Agent
+     * @return User
      */
     public function setCountry($country)
     {
@@ -433,98 +378,122 @@ class Agent
     }
 
     /**
-     * Set propertyLimit
+     * Set phone
      *
-     * @param integer $propertyLimit
+     * @param string $phone
      *
-     * @return Agent
+     * @return User
      */
-    public function setPropertyLimit($propertyLimit)
+    public function setPhone($phone)
     {
-        $this->propertyLimit = $propertyLimit;
+        $this->phone = $phone;
 
         return $this;
     }
 
     /**
-     * Get propertyLimit
+     * Get phone
+     *
+     * @return string
+     */
+    public function getPhone()
+    {
+        return $this->phone;
+    }
+
+    /**
+     * Set agentId
+     *
+     * @param integer $agentId
+     *
+     * @return User
+     */
+    public function setAgentId($agentId)
+    {
+        $this->agentId = $agentId;
+
+        return $this;
+    }
+
+    /**
+     * Get agentId
      *
      * @return int
      */
-    public function getPropertyLimit()
+    public function getAgentId()
     {
-        return $this->propertyLimit;
+        return $this->agentId;
     }
 
     /**
-     * Set webprint
+     * Set typeId
      *
-     * @param boolean $webprint
+     * @param integer $typeId
      *
-     * @return Agent
+     * @return User
      */
-    public function setWebprint($webprint)
+    public function setTypeId($typeId)
     {
-        $this->webprint = $webprint;
+        $this->typeId = $typeId;
 
         return $this;
     }
 
     /**
-     * Get webprint
+     * Get typeId
      *
-     * @return bool
+     * @return int
      */
-    public function getWebprint()
+    public function getTypeId()
     {
-        return $this->webprint;
+        return $this->typeId;
     }
 
     /**
-     * Set ESPC
+     * Set avatar
      *
-     * @param boolean $espc
+     * @param string $avatar
      *
-     * @return Agent
+     * @return User
      */
-    public function setEspc($espc)
+    public function setAvatar($avatar)
     {
-        $this->espc = $espc;
+        $this->avatar = $avatar;
 
         return $this;
     }
 
     /**
-     * Get ESPC
+     * Get avatar
      *
-     * @return bool
+     * @return string
      */
-    public function getEspc()
+    public function getAvatar()
     {
-        return $this->espc;
+        return $this->avatar;
     }
 
     /**
-     * Set archived
+     * Set lastLogin
      *
-     * @param boolean $archived
+     * @param \datetime $lastLogin
      *
-     * @return Agent
+     * @return User
      */
-    public function setArchived($archived)
+    public function setLastLogin($lastLogin)
     {
-        $this->archived = $archived;
+        $this->lastLogin = $lastLogin;
 
         return $this;
     }
 
     /**
-     * Get archived
+     * Get lastLogin
      *
-     * @return bool
+     * @return \datetime
      */
-    public function getArchived()
+    public function getLastLogin()
     {
-        return $this->archived;
+        return $this->lastLogin;
     }
 }
