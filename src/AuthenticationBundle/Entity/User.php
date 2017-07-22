@@ -59,9 +59,9 @@ class User
     /**
      * @var string
      *
-     * @ORM\Column(name="address", type="string", length=255)
+     * @ORM\Column(name="street", type="string", length=255)
      */
-    private $address;
+    private $street;
 
     /**
      * @var string
@@ -94,14 +94,14 @@ class User
     /**
      * @var string
      *
-     * @ORM\Column(name="phone", type="string", length=255)
+     * @ORM\Column(name="phone", type="string", length=255, nullable=true)
      */
     private $phone;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="agent_id", type="integer")
+     * @ORM\Column(name="agent_id", type="integer", nullable=true)
      */
     private $agentId;
 
@@ -115,14 +115,14 @@ class User
     /**
      * @var string
      *
-     * @ORM\Column(name="avatar", type="string", length=255)
+     * @ORM\Column(name="avatar", type="string", length=255, nullable=true)
      */
     private $avatar;
 
     /**
      * @var \datetime
      *
-     * @ORM\Column(name="last_login", type="datetime", length=255)
+     * @ORM\Column(name="last_login", type="datetime", length=255, nullable=true)
      */
     private $lastLogin;
 
@@ -258,27 +258,27 @@ class User
     }
 
     /**
-     * Set address
+     * Set street
      *
-     * @param string $address
+     * @param string $street
      *
      * @return User
      */
-    public function setAddress($address)
+    public function setStreet($street)
     {
-        $this->address = $address;
+        $this->street = $street;
 
         return $this;
     }
 
     /**
-     * Get address
+     * Get street
      *
      * @return string
      */
-    public function getAddress()
+    public function getStreet()
     {
-        return $this->address;
+        return $this->street;
     }
 
     /**

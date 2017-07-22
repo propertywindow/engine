@@ -19,10 +19,14 @@ class LoadUserData implements FixtureInterface
     {
         $user = new User();
 
+        $user->setTypeId(1);
         $user->setUsername('marc');
         $user->setPassword('marc');
         $user->setEmail('geurtsmarc@hotmail.com');
-        $user->setAddress('27 Portobello High Street');
+        $user->setFirstName('Marc');
+        $user->setLastName('Geurts');
+        $user->setStreet('Portobello High Street');
+        $user->setHouseNumber('27');
         $user->setPostcode('EH15 1DE');
         $user->setCity('Edinburgh');
         $user->setCountry('GB');
