@@ -1,8 +1,3 @@
-agent:
-    resource: "@AgentBundle/Controller/"
-    type:     annotation
-    prefix:   /
-
 app:
     resource: '@AppBundle/Controller/'
     type: annotation
@@ -51,3 +46,8 @@ property:
     resource: "@PropertyBundle/Controller/"
     type:     annotation
     prefix:   /property
+
+agent:
+    resource: "@AgentBundle/Controller/"
+    type:     annotation
+    prefix:   /agent
