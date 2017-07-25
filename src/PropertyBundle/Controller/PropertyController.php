@@ -133,11 +133,11 @@ class PropertyController extends Controller
     private function invoke(int $userId, string $method, array $parameters = [])
     {
         switch ($method) {
-            case "getNotification":
+            case "getProperty":
                 return $this->getProperty($parameters);
-            case "getNotifications":
+            case "getProperties":
                 return $this->getProperties($userId);
-            case "listNotifications":
+            case "listProperties":
                 return $this->listProperties($parameters);
         }
 
