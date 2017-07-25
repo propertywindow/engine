@@ -3,7 +3,6 @@
 namespace AppBundle\Models\JsonRpc;
 
 use JsonSerializable;
-use LogicException;
 
 /**
  * @package AppBundle\Models\JsonRpc
@@ -26,6 +25,7 @@ class Response implements JsonSerializable
     private $id;
 
     /**
+     * @param $id
      */
     private function __construct($id)
     {

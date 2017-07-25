@@ -15,6 +15,7 @@ class DefaultController extends Controller
     /**
      * @Route("/")
      *
+     * @return Response
      */
     public function indexAction()
     {
@@ -23,5 +24,14 @@ class DefaultController extends Controller
         }
 
         return new Response('dev');
+    }
+
+    /**
+     * @Route("/token")
+     *
+     */
+    public function tokenAction()
+    {
+        return new Response('token');
     }
 }
