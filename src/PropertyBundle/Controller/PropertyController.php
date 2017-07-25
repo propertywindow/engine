@@ -47,7 +47,7 @@ class PropertyController extends Controller
         $propertyService = $this->container->get('property_service');
         $propertyService->viewProperty($id);
 
-        return new JsonResponse('view'. $id);
+        return new JsonResponse('view'.$id);
     }
 
 

@@ -38,9 +38,16 @@ class Property
     /**
      * @var int
      *
-     * @ORM\Column(name="status", type="integer")
+     * @ORM\Column(name="status", type="boolean")
      */
     private $status;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="sub_type", type="integer")
+     */
+    private $subType;
 
     /**
      * @var bool
@@ -180,7 +187,7 @@ class Property
     /**
      * Set status
      *
-     * @param integer $status
+     * @param boolean $status
      *
      * @return Property
      */
@@ -194,11 +201,35 @@ class Property
     /**
      * Get status
      *
-     * @return int
+     * @return bool
      */
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * Set subType
+     *
+     * @param integer $subType
+     *
+     * @return Property
+     */
+    public function setSubType($subType)
+    {
+        $this->subType = $subType;
+
+        return $this;
+    }
+
+    /**
+     * Get subType
+     *
+     * @return int
+     */
+    public function getSubType()
+    {
+        return $this->subType;
     }
 
     /**
