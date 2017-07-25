@@ -23,7 +23,7 @@ class DefaultController extends Controller
             throw $this->createAccessDeniedException('You don\'t have access to this page!');
         }
 
-        return new Response('dev');
+        return new Response('Property Window Engine');
     }
 
     /**
@@ -32,6 +32,6 @@ class DefaultController extends Controller
      */
     public function tokenAction()
     {
-        return new Response('token');
+        return new Response(hash_hmac('sha1', time() . '-' . 1, '1874Hearts!'));
     }
 }

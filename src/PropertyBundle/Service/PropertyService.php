@@ -2,61 +2,60 @@
 
 namespace PropertyBundle\Service;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use PropertyBundle\Entity\Property;
+use PropertyBundle\Exceptions\PropertyNotFoundException;
 
 /**
  * @package PropertyBundle\Service
  */
 class PropertyService
 {
-    private $em;
+    /**
+     * @var EntityManagerInterface
+     */
+    private $entityManager;
 
     /**
-     * @param EntityManager $em
+     * @param EntityManagerInterface $entityManger
      */
-    public function __construct(EntityManager $em)
+    public function __construct(EntityManagerInterface $entityManger)
     {
-        $this->em = $em;
+        $this->entityManager = $entityManger;
     }
 
-
-    /**
-     * @return Property[] $properties
-     */
-    public function listAll()
-    {
-        $properties = $this->em->getRepository('PropertyBundle:Property')->findAll();
-
-        return $properties;
-    }
 
     /**
      * @param int $id
      *
-     * @return object $property
+     * @return Property $property
+     *
+     * @throws PropertyNotFoundException
      */
-    public function viewProperty($id)
+    public function getProperty(int $id)
     {
-        $property = $this->em->getRepository('PropertyBundle:PropertySale')->find($id);
+        $repository   = $this->entityManager->getRepository('PropertyBundle:Property');
+        $property = $repository->find($id);
+
+        if ($property === null) {
+            throw new PropertyNotFoundException($id);
+        }
 
         return $property;
     }
 
+
     /**
-     * @return Property $property
+     * @param int|null $limit
+     * @param int|null $offset
+     *
+     * @return array|Property First value Property[], second value the total count.
+     * @throws \Doctrine\ORM\RuntimeException
      */
-    public function createProperty()
+    public function listNotifications(?int $limit, ?int $offset)
     {
-        $property = new Property();
-        $property->setAddress('58 Parkside Street');
-        $property->setPrice(250000);
-        $property->setDescription('Some description goes here');
+        $propertyRepository = $this->entityManager->getRepository('PropertyBundle:Property');
 
-        $this->em->persist($property);
-
-        $this->em->flush();
-
-        return $property;
+        return $propertyRepository->listAll($limit, $offset);
     }
 }
