@@ -32,6 +32,19 @@ class DefaultController extends Controller
      */
     public function tokenAction()
     {
-        return new Response(hash_hmac('sha1', time() . '-' . 1, '1874Hearts!'));
+        $userId         = 1;
+        $timestamp      = time();
+        $secret         = '1874Hearts!';
+        $signature      = hash_hmac("sha1", $timestamp."-".$userId, $secret);
+        $payload        = [
+            "user"      => $userId,
+            "api"       => $secret,
+            "timestamp" => $timestamp,
+            "signature" => $signature,
+        ];
+        $payloadJson    = json_encode($payload);
+        $payloadEncoded = base64_encode($payloadJson);
+
+        return new Response('Basic ' . $payloadEncoded);
     }
 }

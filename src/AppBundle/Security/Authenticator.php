@@ -66,6 +66,7 @@ class Authenticator
         );
 
         if ($decoded === null) {
+
             throw new CouldNotAuthenticateUserException("Could not decode authorization header");
         }
 
