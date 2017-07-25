@@ -62,4 +62,28 @@ class PropertyRepository extends EntityRepository
             $count,
         ];
     }
+
+    /**
+     * @param int $userId
+     *
+     * @return Property[]
+     *
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\RuntimeException
+     */
+    public function findPropertiesForUser(int $userId): array
+    {
+        // todo: get agentId from userId
+
+        $qb = $this->getEntityManager()->createQueryBuilder()
+                   ->select('n')
+                   ->from('PropertyBundle:Property', 'n');
+
+        $qb->where("n.agentId = :userId");
+        $qb->orderBy('n.id', 'DESC');
+        $qb->setParameter('userId', $userId);
+
+        $query      = $qb;
+        $properties = $query->getQuery()->getResult();
+    }
 }

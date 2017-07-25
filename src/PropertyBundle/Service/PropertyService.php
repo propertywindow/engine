@@ -34,8 +34,8 @@ class PropertyService
      */
     public function getProperty(int $id)
     {
-        $repository   = $this->entityManager->getRepository('PropertyBundle:Property');
-        $property = $repository->find($id);
+        $repository = $this->entityManager->getRepository('PropertyBundle:Property');
+        $property   = $repository->find($id);
 
         if ($property === null) {
             throw new PropertyNotFoundException($id);
@@ -44,6 +44,20 @@ class PropertyService
         return $property;
     }
 
+    /**
+     * @param  int $userId
+     *
+     * @return array|Property[] $notifications
+     *
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\RuntimeException
+     */
+    public function getByUserId(int $userId): array
+    {
+        $repository = $this->entityManager->getRepository('PropertyBundle:Property');
+
+        return $repository->findPropertiesForUser($userId);
+    }
 
     /**
      * @param int|null $limit
@@ -52,10 +66,10 @@ class PropertyService
      * @return array|Property First value Property[], second value the total count.
      * @throws \Doctrine\ORM\RuntimeException
      */
-    public function listNotifications(?int $limit, ?int $offset)
+    public function listProperties(?int $limit, ?int $offset)
     {
-        $propertyRepository = $this->entityManager->getRepository('PropertyBundle:Property');
+        $repository = $this->entityManager->getRepository('PropertyBundle:Property');
 
-        return $propertyRepository->listAll($limit, $offset);
+        return $repository->listAll($limit, $offset);
     }
 }

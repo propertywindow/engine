@@ -2,3 +2,6 @@ services:
     property_service:
           class: PropertyBundle\Service\PropertyService
           arguments: ["@doctrine.orm.entity_manager"]
+    property_controller:
+          class: PropertyBundle\Controller\PropertyController
+          arguments: ['@authenticator', '@property_service']
