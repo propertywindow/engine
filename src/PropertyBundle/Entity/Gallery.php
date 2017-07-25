@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Gallery
  *
- * @ORM\Table(name="gallery")
+ * @ORM\Table(name="property_gallery")
  * @ORM\Entity(repositoryClass="PropertyBundle\Repository\GalleryRepository")
  */
 class Gallery

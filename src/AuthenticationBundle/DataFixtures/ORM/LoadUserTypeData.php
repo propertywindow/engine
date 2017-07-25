@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace AuthenticationBundle\DataFixtures\ORM;
+namespace AppBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -8,7 +8,7 @@ use AuthenticationBundle\Entity\UserType;
 
 /**
  * Class LoadUserTypeData
- * @package AuthenticationBundle\DataFixtures\ORM
+ * @package AppBundle\DataFixtures\ORM
  */
 class LoadUserTypeData implements FixtureInterface
 {

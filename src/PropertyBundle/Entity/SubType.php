@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * SubType
  *
- * @ORM\Table(name="sub_type")
+ * @ORM\Table(name="property_sub_type")
  * @ORM\Entity(repositoryClass="PropertyBundle\Repository\SubTypeRepository")
  */
 class SubType

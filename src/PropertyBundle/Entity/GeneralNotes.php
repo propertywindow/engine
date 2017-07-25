@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * GeneralNotes
  *
- * @ORM\Table(name="general_notes")
+ * @ORM\Table(name="property_general_notes")
  * @ORM\Entity(repositoryClass="PropertyBundle\Repository\GeneralNotesRepository")
  */
 class GeneralNotes

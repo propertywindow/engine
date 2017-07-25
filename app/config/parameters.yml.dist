@@ -13,4 +13,6 @@ parameters:
     mailer_user: ~
     mailer_password: ~
 
-    secret: 1874Hearts!
+    secret: 2a1m5Ww34Hs23dsmQ
+    authentication:
+        pw: '1874Hearts!'

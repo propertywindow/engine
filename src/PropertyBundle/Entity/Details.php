@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Details
  *
- * @ORM\Table(name="details")
+ * @ORM\Table(name="property_details")
  * @ORM\Entity(repositoryClass="PropertyBundle\Repository\DetailsRepository")
  */
 class Details

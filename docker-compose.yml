@@ -2,7 +2,7 @@ version: '2.0'
 
 services:
   nginx:
-    build: .docker/nginx
+    build: docker/nginx
     ports:
       - "80:80"
     links:
@@ -11,12 +11,19 @@ services:
       - ./:/app
 
   php:
-    build: .docker/php-fpm
+    build: docker/php-fpm
     volumes:
       - ./:/app
     working_dir: /app
     links:
-                - db
+      - db
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+        - "8080:80"
+    links:
+        - db
 
   db:
     restart: always

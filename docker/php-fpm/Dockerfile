@@ -62,4 +62,3 @@ CMD php-fpm -F
 USER vagrant
 
 WORKDIR /app
-

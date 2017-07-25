@@ -1,0 +1,4 @@
+services:
+     authenticator:
+          class: AppBundle\Security\Authenticator
+          arguments: ['%authentication%', '%kernel.environment%']
