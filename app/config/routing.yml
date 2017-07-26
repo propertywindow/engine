@@ -45,7 +45,7 @@ email_alert:
 property:
     resource: "@PropertyBundle/Controller/"
     type:     annotation
-    prefix:   /property
+    prefix:   /
 
 agent:
     resource: "@AgentBundle/Controller/"
