@@ -14,3 +14,4 @@ pipelines:
           - composer install --prefer-source --no-interaction --dev
           - vendor/bin/phpcs --standard=PSR2 src/ tests/
           - vendor/bin/phpunit
+          - git push https://$AZURE_LOGIN:$AZURE_PASSWORD@propertywindow.scm.azurewebsites.net/propertywindow.git master
