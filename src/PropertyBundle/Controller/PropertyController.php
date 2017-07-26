@@ -54,7 +54,7 @@ class PropertyController extends Controller
     }
 
     /**
-     * @Route("/json" , name="jsonRpc")
+     * @Route("/property" , name="jsonRpc")
      *
      * @param Request $httpRequest
      *
@@ -137,8 +137,8 @@ class PropertyController extends Controller
                 return $this->getProperty($parameters);
             case "getProperties":
                 return $this->getProperties($userId);
-            case "listProperties":
-                return $this->listProperties($parameters);
+            case "getAllProperties":
+                return $this->getAllProperties($parameters);
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
@@ -180,7 +180,7 @@ class PropertyController extends Controller
      *
      * @throws \Doctrine\ORM\RuntimeException
      */
-    private function listProperties(array $parameters)
+    private function getAllProperties(array $parameters)
     {
         $limit  = array_key_exists('limit', $parameters) &&
                   $parameters['limit'] !== null ? (int)$parameters['limit'] : null;
