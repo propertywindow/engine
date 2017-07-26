@@ -54,7 +54,7 @@ class PropertyController extends Controller
     }
 
     /**
-     * @Route("/property" , name="jsonRpc")
+     * @Route("/property" , name="property")
      *
      * @param Request $httpRequest
      *
