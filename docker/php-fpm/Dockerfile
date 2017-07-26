@@ -55,6 +55,15 @@ RUN echo 'alias sf="php app/console"' >> ~/.bashrc
 ENV MYSQL_ROOT_PASSWORD=root
 ENV MYSQL_ROOT_USER=root
 
+# Composer install
+COPY composer.json ./
+COPY composer.lock ./
+RUN composer install --no-scripts --no-autoloader
+COPY . ./
+RUN composer dump-autoload --optimize && \
+	composer run-scripts post-install-cmd
+
+# Set rights
 RUN useradd -ms /bin/bash vagrant
 
 CMD php-fpm -F
