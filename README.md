@@ -12,6 +12,8 @@ Table of Contents
 ==================
 
 - [Installation](#installation)
+- [Usage](#usage)
+- [Testing](#testing)
 - [Troubleshooting](#troubleshooting)
 
 ## Installation
@@ -26,20 +28,45 @@ docker-compose up -d --build
 
 Add new container to docker-machine
 ```bash
-$ eval $(docker-machine env php71)
+eval $(docker-machine env php71)
 ```
 
 UNIX only: get containers IP address and update host (replace IP according to your configuration)
 ```bash
-$ docker-machine ip php71
+docker-machine ip php71
 ```
 
 unix only (on Windows, edit C:\Windows\System32\drivers\etc\hosts)
 ```bash
-$ sudo echo "192.168.99.100 property-engine.dev" >> /etc/hosts
+sudo echo "192.168.99.100 property-engine.dev" >> /etc/hosts
 ```
 
 Once that's done, you should be able to access the application on the http://propertywindow-engine.dev
+
+## Usage
+
+Generate tables:
+```bash
+php/app console doctrine:generate:schema --force
+```
+Load data fixtures:
+```bash
+php app/console doctrine:fixtures:load
+```
+
+## Testing
+
+> Before every commit please make sure the following tests pass successful.
+
+PHP Unit:
+```bash
+vendor/bin/phpunit
+```
+
+PHP Codesniffer:
+```bash
+vendor/bin/phpcs
+```
 
 ## Troubleshooting
 
