@@ -61,6 +61,8 @@ $ php app/console doctrine:fixtures:load --no-interaction
 
 ## Usage
 
+> Helpful commands for developing
+
 Build all docker containers:
 ```bash
 $ docker-compose build
