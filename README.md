@@ -77,7 +77,7 @@ Stop all docker containers:
 ```bash
 $ docker-compose stop
 ```
-Generate tables:
+Update tables:
 ```bash
 $ php/app console doctrine:generate:schema --force
 ```
@@ -91,7 +91,7 @@ $ php app/console doctrine:fixtures:load
 
 > Before every commit please make sure the following tests pass successful.
 
-PHP Unit:
+PHP Unit Testing:
 ```bash
 $ vendor/bin/phpunit
 ```
@@ -104,4 +104,5 @@ $ vendor/bin/phpcs
 
 ## Troubleshooting
 
-Coming soon...
+No troubles so far :)
+
