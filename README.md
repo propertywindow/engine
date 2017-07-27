@@ -34,8 +34,8 @@ eval $(docker-machine env php71)
 ```bash
 docker-machine ip php71
 ```
+> unix only (on Windows, edit C:\Windows\System32\drivers\etc\hosts)
 
-	unix only (on Windows, edit C:\Windows\System32\drivers\etc\hosts)
 ```bash
 sudo echo "192.168.99.100 property-engine.dev" >> /etc/hosts
 ```
