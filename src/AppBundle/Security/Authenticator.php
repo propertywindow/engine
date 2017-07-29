@@ -63,7 +63,7 @@ class Authenticator
         }
 
         $userId    = (int)$decoded['user'];
-        $apiKey    = $decoded['api'];
+        $password  = md5($decoded['password']);
         $timestamp = $decoded['timestamp'];
         $signature = $decoded['signature'];
 
@@ -76,7 +76,7 @@ class Authenticator
         $secret     = $user->getPassword();
 
 
-        if ($apiKey !== $secret) {
+        if ($password !== $secret) {
             throw new CouldNotAuthenticateUserException("User not recognized");
         }
 
