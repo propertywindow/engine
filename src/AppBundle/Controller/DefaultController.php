@@ -27,14 +27,19 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/token")
+     * @Route("/token/{userId}")
      *
+     * @param int $userId
+     *
+     * @return Response
      */
-    public function tokenAction()
+    public function tokenAction($userId)
     {
-        $userId         = 1;
+        $repository    = $this->getDoctrine()->getRepository('AuthenticationBundle:User');
+        $user          = $repository->find($userId);
+
         $timestamp      = time();
-        $secret         = '1874Hearts!';
+        $secret         = $user->getPassword();
         $signature      = hash_hmac("sha1", $timestamp."-".$userId, $secret);
         $payload        = [
             "user"      => $userId,
@@ -45,6 +50,6 @@ class DefaultController extends Controller
         $payloadJson    = json_encode($payload);
         $payloadEncoded = base64_encode($payloadJson);
 
-        return new Response('Basic ' . $payloadEncoded);
+        return new Response('Basic '.$payloadEncoded);
     }
 }

@@ -13,23 +13,15 @@ class Authenticator
     private const AUTHORIZATION_HEADER_PREFIX = "Basic ";
 
     /**
-     * @var string[]
-     */
-    private $applications;
-
-    /**
      * @var bool
      */
     private $strict;
 
     /**
-     * @param string[] $applications
-     * @param string   $environment
+     * @param string $environment
      */
-    public function __construct($applications, $environment)
+    public function __construct($environment)
     {
-        $this->applications = $applications;
-
         if ($environment === "dev") {
             $this->strict = false;
         } else {
@@ -79,13 +71,17 @@ class Authenticator
             return $userId;
         }
 
-        if (!array_key_exists($apiKey, $this->applications)) {
+        $repository = $this->getDoctrine()->getRepository('AuthenticationBundle:User');
+        $user       = $repository->find($userId);
+        $secret     = $user->getPassword();
+
+
+        if ($apiKey !== $secret) {
             throw new CouldNotAuthenticateUserException("User not recognized");
         }
 
-        $secret = $this->applications[$apiKey];
 
-        if (hash_hmac('sha1', $timestamp . "-" . $userId, $secret) !== $signature) {
+        if (hash_hmac('sha1', $timestamp."-".$userId, $secret) !== $signature) {
             throw new CouldNotAuthenticateUserException("User not recognized");
         }
 
