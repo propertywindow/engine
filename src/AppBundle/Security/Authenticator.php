@@ -4,6 +4,7 @@ namespace AppBundle\Security;
 
 use AppBundle\Exceptions\CouldNotAuthenticateUserException;
 use Symfony\Component\HttpFoundation\Request;
+use AuthenticationBundle\Service\UserService;
 
 /**
  * @package AppBundle\Security
@@ -13,22 +14,22 @@ class Authenticator
     private const AUTHORIZATION_HEADER_PREFIX = "Basic ";
 
     /**
-     * @var string[]
-     */
-    private $applications;
-
-    /**
      * @var bool
      */
     private $strict;
 
     /**
-     * @param string[] $applications
-     * @param string   $environment
+     * @var UserService
      */
-    public function __construct($applications, $environment)
+    private $service;
+
+    /**
+     * @param string      $environment
+     * @param UserService $service
+     */
+    public function __construct($environment, UserService $service)
     {
-        $this->applications = $applications;
+        $this->service = $service;
 
         if ($environment === "dev") {
             $this->strict = false;
@@ -66,12 +67,11 @@ class Authenticator
         );
 
         if ($decoded === null) {
-
             throw new CouldNotAuthenticateUserException("Could not decode authorization header");
         }
 
         $userId    = (int)$decoded['user'];
-        $apiKey    = $decoded['api'];
+        $password  = $decoded['password'];
         $timestamp = $decoded['timestamp'];
         $signature = $decoded['signature'];
 
@@ -79,13 +79,20 @@ class Authenticator
             return $userId;
         }
 
-        if (!array_key_exists($apiKey, $this->applications)) {
+        $user       = $this->service->getUser($userId);
+
+        if (empty($user)) {
             throw new CouldNotAuthenticateUserException("User not recognized");
         }
 
-        $secret = $this->applications[$apiKey];
+        $secret     = $user->getPassword();
 
-        if (hash_hmac('sha1', $timestamp . "-" . $userId, $secret) !== $signature) {
+        if (md5($password) !== $secret) {
+            throw new CouldNotAuthenticateUserException("Password incorrect");
+        }
+
+
+        if (hash_hmac('sha1', $timestamp."-".$userId, $secret) !== $signature) {
             throw new CouldNotAuthenticateUserException("User not recognized");
         }
 

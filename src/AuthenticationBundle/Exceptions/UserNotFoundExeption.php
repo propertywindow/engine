@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace PropertyBundle\Exceptions;
+namespace AuthenticationBundle\Exceptions;
 
 use AppBundle\Exceptions\Exception;
 
 /**
- * @package PropertyBundle\Exceptions
+ * @package AuthenticationBundle\Exceptions
  */
-class PropertyNotFoundException extends Exception
+class UserNotFoundException extends Exception
 {
     /**
      * @var int
@@ -21,6 +21,6 @@ class PropertyNotFoundException extends Exception
     {
         $this->id = $id;
 
-        parent::__construct(sprintf("Could not find property with id: %d", $id));
+        parent::__construct(sprintf("Could not find user with id: %d", $id));
     }
 }
