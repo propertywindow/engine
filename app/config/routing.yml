@@ -2,6 +2,10 @@ app:
     resource: '@AppBundle/Controller/'
     type: annotation
 
+property:
+    resource: "@PropertyBundle/Controller/"
+    type:     annotation
+
 transparency:
     resource: "@TransparencyBundle/Controller/"
     type:     annotation
@@ -41,11 +45,6 @@ email_alert:
     resource: "@EmailAlertBundle/Controller/"
     type:     annotation
     prefix:   /email_alert
-
-property:
-    resource: "@PropertyBundle/Controller/"
-    type:     annotation
-    prefix:   /
 
 agent:
     resource: "@AgentBundle/Controller/"
