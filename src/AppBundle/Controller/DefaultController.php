@@ -38,7 +38,7 @@ class DefaultController extends Controller
         $repository     = $this->getDoctrine()->getRepository('AuthenticationBundle:User');
         $user           = $repository->find($userId);
         $timestamp      = time();
-        $secret         = $user->getPassword();
+        $secret         = $user->getUsername(); // because of md5
         $signature      = hash_hmac("sha1", $timestamp."-".$userId, $secret);
         $payload        = [
             "user"      => $userId,
