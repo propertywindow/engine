@@ -4,6 +4,7 @@ namespace AppBundle\Security;
 
 use AppBundle\Exceptions\CouldNotAuthenticateUserException;
 use Symfony\Component\HttpFoundation\Request;
+use AuthenticationBundle\Service\UserService;
 
 /**
  * @package AppBundle\Security
@@ -18,10 +19,18 @@ class Authenticator
     private $strict;
 
     /**
-     * @param string $environment
+     * @var UserService
      */
-    public function __construct($environment)
+    private $service;
+
+    /**
+     * @param string      $environment
+     * @param UserService $service
+     */
+    public function __construct($environment, UserService $service)
     {
+        $this->service = $service;
+
         if ($environment === "dev") {
             $this->strict = false;
         } else {
@@ -58,12 +67,11 @@ class Authenticator
         );
 
         if ($decoded === null) {
-
             throw new CouldNotAuthenticateUserException("Could not decode authorization header");
         }
 
         $userId    = (int)$decoded['user'];
-        $password  = md5($decoded['password']);
+        $password  = $decoded['password'];
         $timestamp = $decoded['timestamp'];
         $signature = $decoded['signature'];
 
@@ -71,13 +79,16 @@ class Authenticator
             return $userId;
         }
 
-        $repository = $this->getDoctrine()->getRepository('AuthenticationBundle:User');
-        $user       = $repository->find($userId);
+        $user       = $this->service->getUser($userId);
+
+        if (empty($user)) {
+            throw new CouldNotAuthenticateUserException("User not recognized");
+        }
+
         $secret     = $user->getPassword();
 
-
-        if ($password !== $secret) {
-            throw new CouldNotAuthenticateUserException("User not recognized");
+        if (md5($password) !== $secret) {
+            throw new CouldNotAuthenticateUserException("Password incorrect");
         }
 
 

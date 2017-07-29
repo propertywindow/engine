@@ -35,9 +35,8 @@ class DefaultController extends Controller
      */
     public function tokenAction($userId)
     {
-        $repository = $this->getDoctrine()->getRepository('AuthenticationBundle:User');
-        $user       = $repository->find($userId);
-
+        $repository     = $this->getDoctrine()->getRepository('AuthenticationBundle:User');
+        $user           = $repository->find($userId);
         $timestamp      = time();
         $secret         = $user->getUsername(); // because of md5
         $signature      = hash_hmac("sha1", $timestamp."-".$userId, $secret);
