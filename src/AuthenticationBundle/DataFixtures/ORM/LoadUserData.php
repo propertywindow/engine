@@ -21,7 +21,7 @@ class LoadUserData implements FixtureInterface
 
         $user->setTypeId(1);
         $user->setUsername('marc');
-        $user->setPassword(md5('marc'));
+        $user->setPassword('marc');
         $user->setEmail('geurtsmarc@hotmail.com');
         $user->setFirstName('Marc');
         $user->setLastName('Geurts');
