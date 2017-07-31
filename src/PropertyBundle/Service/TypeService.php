@@ -42,4 +42,45 @@ class TypeService
 
         return $type;
     }
+
+    /**
+     * @return Type[]
+     *
+     * @throws \Doctrine\ORM\RuntimeException
+     */
+    public function listNotifications()
+    {
+        $repository = $this->entityManager->getRepository('PropertyBundle:Type');
+
+        return $repository->listAll();
+    }
+
+    /**
+     * @param Type $type
+     *
+     * @return Type
+     *
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function createType(Type $type)
+    {
+        $this->entityManager->persist($type);
+        $this->entityManager->flush();
+
+        return $type;
+    }
+
+    /**
+     * @param Type $type
+     *
+     * @return Type
+     *
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function updateType(Type $type)
+    {
+        $this->entityManager->flush();
+
+        return $type;
+    }
 }
