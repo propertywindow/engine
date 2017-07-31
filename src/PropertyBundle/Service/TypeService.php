@@ -24,7 +24,6 @@ class TypeService
         $this->entityManager = $entityManger;
     }
 
-
     /**
      * @param int $id
      *
