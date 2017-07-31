@@ -17,59 +17,42 @@ class LoadPropertyData implements FixtureInterface
      */
     public function load(ObjectManager $manager)
     {
-
         $property = new Property();
-
         $property->setKind('sale');
         $property->setAgentId(1);
         $property->setStatus(1);
         $property->setOnline(1);
         $property->setSubType(1);
-        $property->setStreet('27 Portobello High Street');
-        $property->setHouseNumber(10);
+        $property->setStreet('Portobello High Street');
+        $property->setHouseNumber(27);
         $property->setPostcode('EH15 1DE');
         $property->setCity('Edinburgh');
         $property->setCountry('GB');
         $property->setPrice(250500);
-        $property->setLat(1);
-        $property->setLng(1);
+        $property->setLat(55.9553591);
+        $property->setLng(-3.1188563000000613);
         $property->setEspc(false);
         $property->setArchived(false);
-
+        $manager->persist($property);
+        
+        $property = new Property();
+        $property->setKind('sale');
+        $property->setAgentId(1);
+        $property->setStatus(1);
+        $property->setOnline(1);
+        $property->setSubType(1);
+        $property->setStreet('Graafsedijk');
+        $property->setHouseNumber(19);
+        $property->setPostcode('5437 NG');
+        $property->setCity('Beers');
+        $property->setCountry('NL');
+        $property->setPrice(350500);
+        $property->setLat(51.71832819999999);
+        $property->setLng(5.812249999999949);
+        $property->setEspc(false);
+        $property->setArchived(false);
         $manager->persist($property);
 
         $manager->flush();
-
-
-//        for ($i = 33284; $i <= 33300; $i++) {
-//            $json = file_get_contents(
-//                'http://propertywindow.com/login2/ajax/properties_sale/view_property.php?ID='. $i
-//            );
-//            $obj  = json_decode($json);
-//
-//            if (isset($obj->ID)) {
-//                $property = new Property();
-//                $property->setKind('sale');
-//                $property->setAgentId(1);
-//                $property->setStatus($obj->StatusRef);
-//                $property->setOnline(1);
-//                $property->setSubType($obj->SubTypeRef);
-//
-//                $property->setStreet($obj->Address);
-//                $property->setHouseNumber(10);
-//                $property->setPostcode($obj->Postcode);
-//                $property->setCity($obj->SubArea);
-//                $property->setCountry('GB');
-//                $property->setPrice($obj->Price);
-//                $property->setLat(1);
-//                $property->setLng(1);
-//                $property->setEspc(false);
-//                $property->setArchived($obj->Archived);
-//
-//                $manager->persist($property);
-//            }
-//        }
-//
-//        $manager->flush();
     }
 }

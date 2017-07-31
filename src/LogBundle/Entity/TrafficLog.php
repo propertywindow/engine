@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * TrafficLog
  *
- * @ORM\Table(name="traffic_log")
+ * @ORM\Table(name="log_traffic")
  * @ORM\Entity(repositoryClass="LogBundle\Repository\TrafficLogRepository")
  */
 class TrafficLog

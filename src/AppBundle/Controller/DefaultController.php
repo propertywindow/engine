@@ -35,6 +35,10 @@ class DefaultController extends Controller
      */
     public function tokenAction($userId)
     {
+        if (empty($userId)) {
+            throw $this->createAccessDeniedException('You did not pass an user id!');
+        }
+        
         $repository     = $this->getDoctrine()->getRepository('AuthenticationBundle:User');
         $user           = $repository->find($userId);
         $timestamp      = time();

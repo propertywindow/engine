@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Alert
  *
- * @ORM\Table(name="alert")
+ * @ORM\Table(name="email_alert")
  * @ORM\Entity(repositoryClass="EmailAlertBundle\Repository\AlertRepository")
  */
 class Alert
