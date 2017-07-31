@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * ErrorLog
  *
- * @ORM\Table(name="error_log")
+ * @ORM\Table(name="log_error")
  * @ORM\Entity(repositoryClass="LogBundle\Repository\ErrorLogRepository")
  */
 class ErrorLog
