@@ -18,9 +18,12 @@ class Mapper
     public static function fromProperty(Property $property): array
     {
         return [
-            'id'       => $property->getId(),
-            'street'   => $property->getStreet(),
-            'agent_id' => $property->getAgentId(),
+            'id'           => $property->getId(),
+            'street'       => $property->getStreet(),
+            'house_number' => $property->getHouseNumber(),
+            'postcode'     => $property->getPostcode(),
+            'city'         => $property->getCity(),
+            'agent_id'     => $property->getAgentId(),
         ];
     }
 
