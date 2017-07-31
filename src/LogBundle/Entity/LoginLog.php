@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * LoginLog
  *
- * @ORM\Table(name="login_log")
+ * @ORM\Table(name="log_login")
  * @ORM\Entity(repositoryClass="LogBundle\Repository\LoginLogRepository")
  */
 class LoginLog
