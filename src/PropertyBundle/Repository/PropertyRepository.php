@@ -87,4 +87,27 @@ class PropertyRepository extends EntityRepository
 
         return $results;
     }
+
+    /**
+     * @param int $subTypeId
+     *
+     * @return Property[]
+     *
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\RuntimeException
+     */
+    public function findPropertiesWithSubType(int $subTypeId): array
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder()
+                   ->select('p')
+                   ->from('PropertyBundle:Property', 'p');
+
+        $qb->where("p.subType = :subTypeId");
+        $qb->orderBy('p.id', 'DESC');
+        $qb->setParameter('subTypeId', $subTypeId);
+
+        $results = $qb->getQuery()->getResult();
+
+        return $results;
+    }
 }

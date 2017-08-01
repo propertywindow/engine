@@ -136,6 +136,8 @@ class SubTypeController extends Controller
                 return $this->getSubType($parameters);
             case "getSubTypes":
                 return $this->getSubTypes($parameters);
+            case "deleteSubType":
+                return $this->deleteSubType($parameters);
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
@@ -174,5 +176,24 @@ class SubTypeController extends Controller
         }
 
         return Mapper::fromSubTypes(...$this->service->getSubTypes($typeId));
+    }
+
+    /**
+     * @param array $parameters
+     *
+     * @throws SubTypeNotFoundException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     */
+    private function deleteSubType(array $parameters)
+    {
+        if (!array_key_exists('id', $parameters)) {
+            throw new InvalidArgumentException("No argument provided");
+        }
+
+        $id = (int)$parameters['id'];
+
+        $this->service->deleteType($id);
     }
 }

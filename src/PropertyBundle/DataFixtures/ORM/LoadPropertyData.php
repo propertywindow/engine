@@ -40,7 +40,7 @@ class LoadPropertyData implements FixtureInterface
         $property->setAgentId(1);
         $property->setStatus(1);
         $property->setOnline(1);
-        $property->setSubType(1);
+        $property->setSubType(2);
         $property->setStreet('Graafsedijk');
         $property->setHouseNumber(19);
         $property->setPostcode('5437 NG');
