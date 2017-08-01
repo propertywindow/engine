@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="agent")
  * @ORM\Entity(repositoryClass="AuthenticationBundle\Repository\AgentRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class Agent
 {
@@ -38,14 +39,14 @@ class Agent
     /**
      * @var string
      *
-     * @ORM\Column(name="phone", type="string", length=255)
+     * @ORM\Column(name="phone", type="string", length=255, nullable=true)
      */
     private $phone;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="fax", type="string", length=255)
+     * @ORM\Column(name="fax", type="string", length=255, nullable=true)
      */
     private $fax;
 
@@ -59,14 +60,14 @@ class Agent
     /**
      * @var string
      *
-     * @ORM\Column(name="website", type="string", length=255)
+     * @ORM\Column(name="website", type="string", length=255, nullable=true)
      */
     private $website;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="logo", type="string", length=255)
+     * @ORM\Column(name="logo", type="string", length=255, nullable=true)
      */
     private $logo;
 
@@ -110,29 +111,42 @@ class Agent
      *
      * @ORM\Column(name="property_limit", type="integer")
      */
-    private $propertyLimit;
+    private $propertyLimit = 0;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="webprint", type="boolean")
      */
-    private $webprint;
+    private $webprint = false;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="ESPC", type="boolean")
      */
-    private $espc;
+    private $espc = false;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="archived", type="boolean")
      */
-    private $archived;
+    private $archived = false;
 
+    /**
+     * @var \DateTime $created
+     *
+     * @ORM\Column(type="datetime")
+     */
+    protected $created;
+
+    /**
+     * @var \DateTime $updated
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $updated;
 
     /**
      * Get id
@@ -526,5 +540,25 @@ class Agent
     public function getArchived()
     {
         return $this->archived;
+    }
+
+    /**
+     * Gets triggered only on insert
+
+     * @ORM\PrePersist
+     */
+    public function onPrePersist()
+    {
+        $this->created = new \DateTime("now");
+    }
+
+    /**
+     * Gets triggered every time on update
+
+     * @ORM\PreUpdate
+     */
+    public function onPreUpdate()
+    {
+        $this->updated = new \DateTime("now");
     }
 }

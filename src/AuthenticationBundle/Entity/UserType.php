@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="user_type")
  * @ORM\Entity(repositoryClass="AuthenticationBundle\Repository\UserTypeRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class UserType
 {
@@ -35,6 +36,19 @@ class UserType
      */
     private $nl;
 
+    /**
+     * @var \DateTime $created
+     *
+     * @ORM\Column(type="datetime")
+     */
+    protected $created;
+
+    /**
+     * @var \DateTime $updated
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $updated;
 
     /**
      * Get id
@@ -92,5 +106,25 @@ class UserType
     public function getNl()
     {
         return $this->nl;
+    }
+
+    /**
+     * Gets triggered only on insert
+
+     * @ORM\PrePersist
+     */
+    public function onPrePersist()
+    {
+        $this->created = new \DateTime("now");
+    }
+
+    /**
+     * Gets triggered every time on update
+
+     * @ORM\PreUpdate
+     */
+    public function onPreUpdate()
+    {
+        $this->updated = new \DateTime("now");
     }
 }

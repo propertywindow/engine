@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="agency")
  * @ORM\Entity(repositoryClass="AgentBundle\Repository\AgencyRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class Agency
 {
@@ -90,6 +91,20 @@ class Agency
      * @ORM\Column(name="email", type="string", length=255)
      */
     private $email;
+
+    /**
+     * @var \DateTime $created
+     *
+     * @ORM\Column(type="datetime")
+     */
+    protected $created;
+
+    /**
+     * @var \DateTime $updated
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $updated;
 
 
     /**
@@ -340,5 +355,25 @@ class Agency
     public function getEmail()
     {
         return $this->email;
+    }
+
+    /**
+     * Gets triggered only on insert
+     *
+     * @ORM\PrePersist
+     */
+    public function onPrePersist()
+    {
+        $this->created = new \DateTime("now");
+    }
+
+    /**
+     * Gets triggered every time on update
+     *
+     * @ORM\PreUpdate
+     */
+    public function onPreUpdate()
+    {
+        $this->updated = new \DateTime("now");
     }
 }

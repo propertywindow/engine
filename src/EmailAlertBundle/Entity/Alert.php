@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="email_alert")
  * @ORM\Entity(repositoryClass="EmailAlertBundle\Repository\AlertRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class Alert
 {
@@ -54,21 +55,21 @@ class Alert
      *
      * @ORM\Column(name="distance", type="integer")
      */
-    private $distance;
+    private $distance = 10;
 
     /**
      * @var int
      *
      * @ORM\Column(name="min_price", type="integer")
      */
-    private $minPrice;
+    private $minPrice = 0;
 
     /**
      * @var int
      *
      * @ORM\Column(name="max_price", type="integer")
      */
-    private $maxPrice;
+    private $maxPrice = 100000;
 
     /**
      * @var int
@@ -82,15 +83,28 @@ class Alert
      *
      * @ORM\Column(name="rooms", type="integer")
      */
-    private $rooms;
+    private $rooms = 0;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="terms", type="boolean")
      */
-    private $terms;
+    private $terms = true;
 
+    /**
+     * @var \DateTime $created
+     *
+     * @ORM\Column(type="datetime")
+     */
+    protected $created;
+
+    /**
+     * @var \DateTime $updated
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $updated;
 
     /**
      * Get id
@@ -340,5 +354,25 @@ class Alert
     public function getTerms()
     {
         return $this->terms;
+    }
+
+    /**
+     * Gets triggered only on insert
+     *
+     * @ORM\PrePersist
+     */
+    public function onPrePersist()
+    {
+        $this->created = new \DateTime("now");
+    }
+
+    /**
+     * Gets triggered every time on update
+     *
+     * @ORM\PreUpdate
+     */
+    public function onPreUpdate()
+    {
+        $this->updated = new \DateTime("now");
     }
 }

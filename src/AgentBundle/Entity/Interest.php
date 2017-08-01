@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="interest")
  * @ORM\Entity(repositoryClass="AgentBundle\Repository\InterestRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class Interest
 {
@@ -36,12 +37,18 @@ class Interest
     private $propertyId;
 
     /**
-     * @var \DateTime
+     * @var \DateTime $created
      *
-     * @ORM\Column(name="datetime", type="datetime")
+     * @ORM\Column(type="datetime")
      */
-    private $datetime;
+    protected $created;
 
+    /**
+     * @var \DateTime $updated
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $updated;
 
     /**
      * Get id
@@ -102,26 +109,22 @@ class Interest
     }
 
     /**
-     * Set datetime
+     * Gets triggered only on insert
      *
-     * @param \DateTime $datetime
-     *
-     * @return Interest
+     * @ORM\PrePersist
      */
-    public function setDatetime($datetime)
+    public function onPrePersist()
     {
-        $this->datetime = $datetime;
-
-        return $this;
+        $this->created = new \DateTime("now");
     }
 
     /**
-     * Get datetime
+     * Gets triggered every time on update
      *
-     * @return \DateTime
+     * @ORM\PreUpdate
      */
-    public function getDatetime()
+    public function onPreUpdate()
     {
-        return $this->datetime;
+        $this->updated = new \DateTime("now");
     }
 }

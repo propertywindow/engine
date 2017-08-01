@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="conversation")
  * @ORM\Entity(repositoryClass="ConversationBundle\Repository\ConversationRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class Conversation
 {
@@ -43,18 +44,25 @@ class Conversation
     private $message;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="datetime", type="datetime")
-     */
-    private $datetime;
-
-    /**
      * @var bool
      *
      * @ORM\Column(name="seen", type="boolean")
      */
     private $seen;
+
+    /**
+     * @var \DateTime $created
+     *
+     * @ORM\Column(type="datetime")
+     */
+    protected $created;
+
+    /**
+     * @var \DateTime $updated
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $updated;
 
 
     /**
@@ -140,30 +148,6 @@ class Conversation
     }
 
     /**
-     * Set datetime
-     *
-     * @param \DateTime $datetime
-     *
-     * @return Conversation
-     */
-    public function setDatetime($datetime)
-    {
-        $this->datetime = $datetime;
-
-        return $this;
-    }
-
-    /**
-     * Get datetime
-     *
-     * @return \DateTime
-     */
-    public function getDatetime()
-    {
-        return $this->datetime;
-    }
-
-    /**
      * Set seen
      *
      * @param boolean $seen
@@ -185,5 +169,25 @@ class Conversation
     public function getSeen()
     {
         return $this->seen;
+    }
+
+    /**
+     * Gets triggered only on insert
+     *
+     * @ORM\PrePersist
+     */
+    public function onPrePersist()
+    {
+        $this->created = new \DateTime("now");
+    }
+
+    /**
+     * Gets triggered every time on update
+     *
+     * @ORM\PreUpdate
+     */
+    public function onPreUpdate()
+    {
+        $this->updated = new \DateTime("now");
     }
 }

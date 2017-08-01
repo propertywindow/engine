@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="appointment")
  * @ORM\Entity(repositoryClass="AgentBundle\Repository\AppointmentRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class Appointment
 {
@@ -69,6 +70,20 @@ class Appointment
      * @ORM\Column(name="end", type="datetime", nullable=true)
      */
     private $end;
+
+    /**
+     * @var \DateTime $created
+     *
+     * @ORM\Column(type="datetime")
+     */
+    protected $created;
+
+    /**
+     * @var \DateTime $updated
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $updated;
 
 
     /**
@@ -247,5 +262,25 @@ class Appointment
     public function getEnd()
     {
         return $this->end;
+    }
+
+    /**
+     * Gets triggered only on insert
+     *
+     * @ORM\PrePersist
+     */
+    public function onPrePersist()
+    {
+        $this->created = new \DateTime("now");
+    }
+
+    /**
+     * Gets triggered every time on update
+     *
+     * @ORM\PreUpdate
+     */
+    public function onPreUpdate()
+    {
+        $this->updated = new \DateTime("now");
     }
 }
