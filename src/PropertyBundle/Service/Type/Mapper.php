@@ -25,11 +25,6 @@ class Mapper
                     'id'   => $type->getId(),
                     'type' => $type->getNl(),
                 ];
-            case "en":
-                return [
-                    'id'   => $type->getId(),
-                    'type' => $type->getEn(),
-                ];
             default:
                 return [
                     'id'   => $type->getId(),

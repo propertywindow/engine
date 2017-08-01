@@ -17,14 +17,32 @@ class Mapper
      */
     public static function fromProperty(Property $property): array
     {
-        return [
-            'id'           => $property->getId(),
-            'street'       => $property->getStreet(),
-            'house_number' => $property->getHouseNumber(),
-            'postcode'     => $property->getPostcode(),
-            'city'         => $property->getCity(),
-            'agent_id'     => $property->getAgentId(),
-        ];
+        $country = $property->getCountry();
+
+        switch ($country) {
+            case "NL":
+                return [
+                    'id'           => $property->getId(),
+                    'address'      => $property->getStreet().' '.$property->getHouseNumber(),
+                    'street'       => $property->getStreet(),
+                    'house_number' => $property->getHouseNumber(),
+                    'postcode'     => $property->getPostcode(),
+                    'city'         => $property->getCity(),
+                    'agent_id'     => $property->getAgentId(),
+                    'subtype_id'   => $property->getSubType(),
+                ];
+            default:
+                return [
+                    'id'           => $property->getId(),
+                    'address'      => $property->getHouseNumber().' '.$property->getStreet(),
+                    'street'       => $property->getStreet(),
+                    'house_number' => $property->getHouseNumber(),
+                    'postcode'     => $property->getPostcode(),
+                    'city'         => $property->getCity(),
+                    'agent_id'     => $property->getAgentId(),
+                    'subtype_id'   => $property->getSubType(),
+                ];
+        }
     }
 
     /**

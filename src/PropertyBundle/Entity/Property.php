@@ -66,7 +66,7 @@ class Property
     /**
      * @var string
      *
-     * @ORM\Column(name="houseNumber", type="string", length=5)
+     * @ORM\Column(name="house_number", type="string", length=5)
      */
     private $houseNumber;
 

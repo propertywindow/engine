@@ -26,6 +26,11 @@ Table of Contents
 
 > Before anything, you need to make sure you have Docker properly setup in your environment. For that, refer to the official documentation for both [Docker](https://docs.docker.com/) and [Docker Compose](https://docs.docker.com/compose/). Also make sure you have [Docker Machine](https://docs.docker.com/machine/) properly setup.
 
+* Create a docker machine:
+```bash
+$ docker-machine create php71 --driver virtualbox
+```
+
 * Build and run the containers:
 ```bash
 $ docker-compose up -d --build

@@ -137,7 +137,7 @@ class PropertyController extends Controller
             case "getProperties":
                 return $this->getProperties($userId);
             case "getAllProperties":
-                return $this->getAllProperties($parameters);
+                return $this->getAllProperties($userId, $parameters);
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
@@ -169,24 +169,25 @@ class PropertyController extends Controller
      */
     private function getProperties(int $userId)
     {
-        return Mapper::fromProperties(...$this->service->getByUserId($userId));
+        return Mapper::fromProperties(...$this->service->listProperties($userId));
     }
 
     /**
+     * @param int   $userId
      * @param array $parameters
      *
      * @return array
      *
      * @throws \Doctrine\ORM\RuntimeException
      */
-    private function getAllProperties(array $parameters)
+    private function getAllProperties(int $userId, array $parameters)
     {
         $limit  = array_key_exists('limit', $parameters) &&
                   $parameters['limit'] !== null ? (int)$parameters['limit'] : null;
         $offset = array_key_exists('offset', $parameters) &&
                   $parameters['offset'] !== null ? (int)$parameters['offset'] : null;
 
-        list($properties, $count) = $this->service->listProperties($limit, $offset);
+        list($properties, $count) = $this->service->listAllProperties($userId, $limit, $offset);
 
         return [
             'properties' => Mapper::fromProperty(...$properties),
