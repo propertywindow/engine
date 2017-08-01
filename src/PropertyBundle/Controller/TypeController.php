@@ -13,16 +13,16 @@ use AppBundle\Exceptions\CouldNotAuthenticateUserException;
 use AppBundle\Exceptions\JsonRpc\CouldNotParseJsonRequestException;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcRequestException;
-use PropertyBundle\Exceptions\PropertyNotFoundException;
-use PropertyBundle\Service\PropertyService;
-use PropertyBundle\Service\Property\Mapper;
+use PropertyBundle\Exceptions\TypeNotFoundException;
+use PropertyBundle\Service\TypeService;
+use PropertyBundle\Service\Type\Mapper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 /**
- * @Route(service="property_controller")
+ * @Route(service="type_controller")
  */
-class PropertyController extends Controller
+class TypeController extends Controller
 {
     private const PARSE_ERROR            = -32700;
     private const INVALID_REQUEST        = -32600;
@@ -30,7 +30,7 @@ class PropertyController extends Controller
     private const INVALID_PARAMS         = -32602;
     private const INTERNAL_ERROR         = -32603;
     private const USER_NOT_AUTHENTICATED = -32000;
-    private const PROPERTY_NOT_FOUND     = -32001;
+    private const TYPE_NOT_FOUND         = -32001;
 
     /**
      * @var Authenticator
@@ -38,22 +38,22 @@ class PropertyController extends Controller
     private $authenticator;
 
     /**
-     * @var PropertyService
+     * @var TypeService
      */
     private $service;
 
     /**
-     * @param Authenticator   $authenticator
-     * @param PropertyService $service
+     * @param Authenticator $authenticator
+     * @param TypeService   $service
      */
-    public function __construct(Authenticator $authenticator, PropertyService $service)
+    public function __construct(Authenticator $authenticator, TypeService $service)
     {
         $this->authenticator = $authenticator;
         $this->service       = $service;
     }
 
     /**
-     * @Route("/property" , name="property")
+     * @Route("/property/type" , name="type")
      *
      * @param Request $httpRequest
      *
@@ -99,8 +99,8 @@ class PropertyController extends Controller
             $jsonRpcResponse = Response::failure($id, new Error(self::INVALID_PARAMS, $ex->getMessage()));
         } catch (CouldNotAuthenticateUserException $ex) {
             $jsonRpcResponse = Response::failure($id, new Error(self::USER_NOT_AUTHENTICATED, $ex->getMessage()));
-        } catch (PropertyNotFoundException $ex) {
-            $jsonRpcResponse = Response::failure($id, new Error(self::PROPERTY_NOT_FOUND, $ex->getMessage()));
+        } catch (TypeNotFoundException $ex) {
+            $jsonRpcResponse = Response::failure($id, new Error(self::TYPE_NOT_FOUND, $ex->getMessage()));
         } catch (Exception $ex) {
             $jsonRpcResponse = Response::failure($id, new Error(self::INTERNAL_ERROR, $ex->getMessage()));
         }
@@ -123,7 +123,7 @@ class PropertyController extends Controller
      *
      * @return array
      * @throws InvalidJsonRpcMethodException
-     * @throws PropertyNotFoundException
+     * @throws TypeNotFoundException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\RuntimeException
@@ -132,12 +132,10 @@ class PropertyController extends Controller
     private function invoke(int $userId, string $method, array $parameters = [])
     {
         switch ($method) {
-            case "getProperty":
-                return $this->getProperty($parameters);
-            case "getProperties":
-                return $this->getProperties($userId);
-            case "getAllProperties":
-                return $this->getAllProperties($parameters);
+            case "getType":
+                return $this->getType($parameters);
+            case "getTypes":
+                return $this->getTypes($parameters);
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
@@ -147,9 +145,9 @@ class PropertyController extends Controller
      * @param array $parameters
      *
      * @return array
-     * @throws PropertyNotFoundException
+     * @throws TypeNotFoundException
      */
-    private function getProperty(array $parameters)
+    private function getType(array $parameters)
     {
         if (!array_key_exists('id', $parameters)) {
             throw new InvalidArgumentException("No argument provided");
@@ -157,40 +155,18 @@ class PropertyController extends Controller
 
         $id = (int)$parameters['id'];
 
-        return Mapper::fromProperty($this->service->getProperty($id));
-    }
-
-    /**
-     * @param int $userId
-     *
-     * @return array
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\RuntimeException
-     */
-    private function getProperties(int $userId)
-    {
-        return Mapper::fromProperties(...$this->service->getByUserId($userId));
+        return Mapper::fromType($this->service->getType($id));
     }
 
     /**
      * @param array $parameters
      *
      * @return array
-     *
+     * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\RuntimeException
      */
-    private function getAllProperties(array $parameters)
+    private function getTypes(array $parameters)
     {
-        $limit  = array_key_exists('limit', $parameters) &&
-                  $parameters['limit'] !== null ? (int)$parameters['limit'] : null;
-        $offset = array_key_exists('offset', $parameters) &&
-                  $parameters['offset'] !== null ? (int)$parameters['offset'] : null;
-
-        list($properties, $count) = $this->service->listProperties($limit, $offset);
-
-        return [
-            'properties' => Mapper::fromProperty(...$properties),
-            'count'      => $count,
-        ];
+        return Mapper::fromTypes(...$this->service->getTypes($parameters));
     }
 }

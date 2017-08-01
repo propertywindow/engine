@@ -76,14 +76,15 @@ class PropertyRepository extends EntityRepository
         // todo: get agentId from userId
 
         $qb = $this->getEntityManager()->createQueryBuilder()
-                   ->select('n')
-                   ->from('PropertyBundle:Property', 'n');
+                   ->select('p')
+                   ->from('PropertyBundle:Property', 'p');
 
-        $qb->where("n.agentId = :userId");
-        $qb->orderBy('n.id', 'DESC');
+        $qb->where("p.agentId = :userId");
+        $qb->orderBy('p.id', 'DESC');
         $qb->setParameter('userId', $userId);
 
-        $query      = $qb;
-        $properties = $query->getQuery()->getResult();
+        $results = $qb->getQuery()->getResult();
+
+        return $results;
     }
 }

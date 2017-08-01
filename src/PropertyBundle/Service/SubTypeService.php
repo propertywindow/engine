@@ -44,15 +44,17 @@ class SubTypeService
     }
 
     /**
+     * @param int|null $typeId
+     *
      * @return SubType[]
      *
      * @throws \Doctrine\ORM\RuntimeException
      */
-    public function listSubType()
+    public function getSubTypes(?int  $typeId)
     {
         $repository = $this->entityManager->getRepository('PropertyBundle:SubType');
 
-        return $repository->listAll();
+        return $repository->listAll($typeId);
     }
 
     /**

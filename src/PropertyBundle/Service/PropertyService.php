@@ -47,7 +47,7 @@ class PropertyService
     /**
      * @param  int $userId
      *
-     * @return array|Property[] $notifications
+     * @return array|Property[] $properties
      *
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\RuntimeException

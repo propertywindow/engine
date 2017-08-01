@@ -48,7 +48,7 @@ class TypeService
      *
      * @throws \Doctrine\ORM\RuntimeException
      */
-    public function listTypes()
+    public function getTypes()
     {
         $repository = $this->entityManager->getRepository('PropertyBundle:Type');
 
