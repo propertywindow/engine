@@ -107,6 +107,13 @@ class Property
     private $price;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="sold_price", type="integer", nullable=true)
+     */
+    private $soldPrice;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="espc", type="boolean")
@@ -444,6 +451,30 @@ class Property
     public function getPrice()
     {
         return $this->price;
+    }
+
+    /**
+     * Set soldPrice
+     *
+     * @param integer $soldPrice
+     *
+     * @return Property
+     */
+    public function setSoldPrice($soldPrice)
+    {
+        $this->soldPrice = $soldPrice;
+
+        return $this;
+    }
+
+    /**
+     * Get soldPrice
+     *
+     * @return int
+     */
+    public function getSoldPrice()
+    {
+        return $this->soldPrice;
     }
 
     /**
