@@ -194,6 +194,6 @@ class SubTypeController extends Controller
 
         $id = (int)$parameters['id'];
 
-        $this->service->deleteType($id);
+        $this->service->deleteSubType($id);
     }
 }

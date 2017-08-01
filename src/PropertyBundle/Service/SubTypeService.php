@@ -96,7 +96,7 @@ class SubTypeService
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
      */
-    public function deleteType(int $id)
+    public function deleteSubType(int $id)
     {
         $subTypeRepository  = $this->entityManager->getRepository('PropertyBundle:SubType');
         $type               = $subTypeRepository->findById($id);
