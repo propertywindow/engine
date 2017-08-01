@@ -83,4 +83,21 @@ class TypeService
 
         return $type;
     }
+
+    /**
+     * @param int $id
+     *
+     * @throws TypeNotFoundException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     */
+    public function deleteType(int $id)
+    {
+        $repository = $this->entityManager->getRepository('PropertyBundle:Type');
+        $type       = $repository->findById($id);
+
+        $this->entityManager->remove($type);
+        $this->entityManager->flush();
+    }
 }
