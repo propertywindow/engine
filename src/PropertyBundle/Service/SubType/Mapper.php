@@ -25,11 +25,6 @@ class Mapper
                     'id'      => $subtype->getId(),
                     'subtype' => $subtype->getNl(),
                 ];
-            case "en":
-                return [
-                    'id'      => $subtype->getId(),
-                    'subtype' => $subtype->getEn(),
-                ];
             default:
                 return [
                     'id'      => $subtype->getId(),

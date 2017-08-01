@@ -34,22 +34,47 @@ class PropertyRepository extends EntityRepository
         return $result;
     }
 
+    /**
+     * @param int $userId
+     *
+     * @return Property[]
+     *
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function listProperties(int $userId): array
+    {
+
+        $qb = $this->getEntityManager()->createQueryBuilder()
+                   ->select('p')
+                   ->from('PropertyBundle:Property', 'p');
+
+        $qb->where("p.agentId = :userId")
+           ->orderBy('p.id', 'DESC')
+           ->setParameter('userId', $userId);
+
+        $results = $qb->getQuery()->getResult();
+
+        return $results;
+    }
 
     /**
+     * @param int      $userId
      * @param int|null $limit
      * @param int|null $offset
      *
      * @return array First value Property[], second value the total count.
      */
-    public function listAll(?int $limit, ?int $offset): array
+    public function listAllProperties($userId, ?int $limit, ?int $offset): array
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
-                   ->select('n')
-                   ->from('PropertyBundle:Property', 'n');
+                   ->select('p')
+                   ->from('PropertyBundle:Property', 'p');
 
-        $qb->orderBy('n.id', 'DESC')
+        $qb->where("p.agentId = :userId")
+           ->orderBy('p.id', 'DESC')
            ->setFirstResult($offset)
-           ->setMaxResults($limit);
+           ->setMaxResults($limit)
+           ->setParameter('userId', $userId);
 
         $pages = new Paginator($qb);
 
@@ -60,30 +85,6 @@ class PropertyRepository extends EntityRepository
             $results,
             $count,
         ];
-    }
-
-    /**
-     * @param int $userId
-     *
-     * @return Property[]
-     *
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
-    public function findPropertiesForUser(int $userId): array
-    {
-        // todo: get agentId from userId
-
-        $qb = $this->getEntityManager()->createQueryBuilder()
-                   ->select('p')
-                   ->from('PropertyBundle:Property', 'p');
-
-        $qb->where("p.agentId = :userId");
-        $qb->orderBy('p.id', 'DESC');
-        $qb->setParameter('userId', $userId);
-
-        $results = $qb->getQuery()->getResult();
-
-        return $results;
     }
 
     /**

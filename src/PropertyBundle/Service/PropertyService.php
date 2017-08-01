@@ -50,26 +50,25 @@ class PropertyService
      * @return array|Property[] $properties
      *
      * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\RuntimeException
      */
-    public function getByUserId(int $userId): array
+    public function listProperties(int $userId): array
     {
         $repository = $this->entityManager->getRepository('PropertyBundle:Property');
 
-        return $repository->findPropertiesForUser($userId);
+        return $repository->listProperties($userId);
     }
 
     /**
+     * @param int      $userId
      * @param int|null $limit
      * @param int|null $offset
      *
      * @return array|Property First value Property[], second value the total count.
-     * @throws \Doctrine\ORM\RuntimeException
      */
-    public function listProperties(?int $limit, ?int $offset)
+    public function listAllProperties(int $userId, ?int $limit, ?int $offset)
     {
         $repository = $this->entityManager->getRepository('PropertyBundle:Property');
 
-        return $repository->listAll($limit, $offset);
+        return $repository->listAllProperties($userId, $limit, $offset);
     }
 }
