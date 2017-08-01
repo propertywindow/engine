@@ -30,18 +30,11 @@ class Client
     private $userId;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="property_id", type="integer")
-     */
-    private $propertyId;
-
-    /**
      * @var bool
      *
      * @ORM\Column(name="transparency", type="boolean")
      */
-    private $transparency;
+    private $transparency = false;
 
     /**
      * @var \DateTime $created
@@ -89,30 +82,6 @@ class Client
     public function getUserId()
     {
         return $this->userId;
-    }
-
-    /**
-     * Set propertyId
-     *
-     * @param integer $propertyId
-     *
-     * @return Client
-     */
-    public function setPropertyId($propertyId)
-    {
-        $this->propertyId = $propertyId;
-
-        return $this;
-    }
-
-    /**
-     * Get propertyId
-     *
-     * @return int
-     */
-    public function getPropertyId()
-    {
-        return $this->propertyId;
     }
 
     /**

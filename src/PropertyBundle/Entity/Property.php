@@ -30,6 +30,13 @@ class Property
     private $agentId;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="clientId", type="integer")
+     */
+    private $clientId;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="kind", type="string", length=10)
@@ -173,6 +180,30 @@ class Property
     public function getAgentId()
     {
         return $this->agentId;
+    }
+
+    /**
+     * Set clientId
+     *
+     * @param integer $clientId
+     *
+     * @return Property
+     */
+    public function setClientId($clientId)
+    {
+        $this->clientId = $clientId;
+
+        return $this;
+    }
+
+    /**
+     * Get clientId
+     *
+     * @return int
+     */
+    public function getClientId()
+    {
+        return $this->clientId;
     }
 
     /**

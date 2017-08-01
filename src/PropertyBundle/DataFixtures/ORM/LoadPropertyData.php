@@ -20,6 +20,7 @@ class LoadPropertyData implements FixtureInterface
         $property = new Property();
         $property->setKind('sale');
         $property->setAgentId(1);
+        $property->setClientId(1);
         $property->setStatus(1);
         $property->setOnline(1);
         $property->setSubType(2);
@@ -38,6 +39,7 @@ class LoadPropertyData implements FixtureInterface
         $property = new Property();
         $property->setKind('sale');
         $property->setAgentId(2);
+        $property->setClientId(1);
         $property->setStatus(1);
         $property->setOnline(1);
         $property->setSubType(1);

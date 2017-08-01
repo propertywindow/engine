@@ -45,6 +45,20 @@ class LoadUserData implements FixtureInterface
         $user->setCountry('GB');
         $manager->persist($user);
 
+        $user = new User();
+        $user->setTypeId(4);
+        $user->setUsername('marc');
+        $user->setPassword(md5('marc'));
+        $user->setEmail('geurtsmarc@hotmail.com');
+        $user->setFirstName('Marc');
+        $user->setLastName('Geurts');
+        $user->setStreet('Graafsedijk');
+        $user->setHouseNumber('19');
+        $user->setPostcode('5437 NG');
+        $user->setCity('Beers');
+        $user->setCountry('NL');
+        $manager->persist($user);
+
         $manager->flush();
     }
 }
