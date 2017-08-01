@@ -170,7 +170,7 @@ class SubTypeController extends Controller
         $typeId = null;
 
         if (array_key_exists('typeId', $parameters)) {
-            $typeId = $parameters['typeId'];
+            $typeId = (int)$parameters['typeId'];
         }
 
         return Mapper::fromSubTypes(...$this->service->getSubTypes($typeId));

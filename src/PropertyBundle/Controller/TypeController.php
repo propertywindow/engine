@@ -135,7 +135,9 @@ class TypeController extends Controller
             case "getType":
                 return $this->getType($parameters);
             case "getTypes":
-                return $this->getTypes($parameters);
+                return $this->getTypes();
+            case "deleteType":
+                return $this->deleteType($parameters);
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
@@ -159,14 +161,31 @@ class TypeController extends Controller
     }
 
     /**
-     * @param array $parameters
-     *
      * @return array
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\RuntimeException
      */
-    private function getTypes(array $parameters)
+    private function getTypes()
     {
-        return Mapper::fromTypes(...$this->service->getTypes($parameters));
+        return Mapper::fromTypes(...$this->service->getTypes());
+    }
+
+    /**
+     * @param array $parameters
+     *
+     * @throws TypeNotFoundException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     */
+    private function deleteType(array $parameters)
+    {
+        if (!array_key_exists('id', $parameters)) {
+            throw new InvalidArgumentException("No argument provided");
+        }
+
+        $id = (int)$parameters['id'];
+
+        $this->service->deleteType($id);
     }
 }

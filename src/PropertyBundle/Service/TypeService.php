@@ -4,6 +4,7 @@ namespace PropertyBundle\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
 use PropertyBundle\Entity\Type;
+use PropertyBundle\Exceptions\TypeDeleteException;
 use PropertyBundle\Exceptions\TypeNotFoundException;
 
 /**
@@ -87,15 +88,21 @@ class TypeService
     /**
      * @param int $id
      *
-     * @throws TypeNotFoundException
+     * @throws TypeDeleteException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
      */
     public function deleteType(int $id)
     {
-        $repository = $this->entityManager->getRepository('PropertyBundle:Type');
-        $type       = $repository->findById($id);
+        $typeRepository    = $this->entityManager->getRepository('PropertyBundle:Type');
+        $type              = $typeRepository->findById($id);
+        $subTypeRepository = $this->entityManager->getRepository('PropertyBundle:SubType');
+        $subTypes          = $subTypeRepository->listAll($type->getId());
+
+        if (!empty($subTypes)) {
+            throw new TypeDeleteException($id);
+        }
 
         $this->entityManager->remove($type);
         $this->entityManager->flush();
