@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="email_applicant")
  * @ORM\Entity(repositoryClass="EmailAlertBundle\Repository\ApplicantRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class Applicant
 {
@@ -40,8 +41,21 @@ class Applicant
      *
      * @ORM\Column(name="protection", type="boolean")
      */
-    private $protection;
+    private $protection = false;
 
+    /**
+     * @var \DateTime $created
+     *
+     * @ORM\Column(type="datetime")
+     */
+    protected $created;
+
+    /**
+     * @var \DateTime $updated
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $updated;
 
     /**
      * Get id
@@ -123,5 +137,25 @@ class Applicant
     public function getProtection()
     {
         return $this->protection;
+    }
+
+    /**
+     * Gets triggered only on insert
+     *
+     * @ORM\PrePersist
+     */
+    public function onPrePersist()
+    {
+        $this->created = new \DateTime("now");
+    }
+
+    /**
+     * Gets triggered every time on update
+     *
+     * @ORM\PreUpdate
+     */
+    public function onPreUpdate()
+    {
+        $this->updated = new \DateTime("now");
     }
 }

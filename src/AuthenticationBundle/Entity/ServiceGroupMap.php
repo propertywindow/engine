@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="service_group_map")
  * @ORM\Entity(repositoryClass="AuthenticationBundle\Repository\ServiceGroupMapRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class ServiceGroupMap
 {
@@ -35,6 +36,19 @@ class ServiceGroupMap
      */
     private $groupId;
 
+    /**
+     * @var \DateTime $created
+     *
+     * @ORM\Column(type="datetime")
+     */
+    protected $created;
+
+    /**
+     * @var \DateTime $updated
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $updated;
 
     /**
      * Get id
@@ -92,5 +106,25 @@ class ServiceGroupMap
     public function getGroupId()
     {
         return $this->groupId;
+    }
+
+    /**
+     * Gets triggered only on insert
+
+     * @ORM\PrePersist
+     */
+    public function onPrePersist()
+    {
+        $this->created = new \DateTime("now");
+    }
+
+    /**
+     * Gets triggered every time on update
+
+     * @ORM\PreUpdate
+     */
+    public function onPreUpdate()
+    {
+        $this->updated = new \DateTime("now");
     }
 }

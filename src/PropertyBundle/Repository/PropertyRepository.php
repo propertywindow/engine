@@ -43,6 +43,7 @@ class PropertyRepository extends EntityRepository
      */
     public function listProperties(int $userId): array
     {
+        // todo: get agentId from userId
 
         $qb = $this->getEntityManager()->createQueryBuilder()
                    ->select('p')
@@ -66,6 +67,8 @@ class PropertyRepository extends EntityRepository
      */
     public function listAllProperties($userId, ?int $limit, ?int $offset): array
     {
+        // todo: get properties from all agentIds in AgentGroup
+
         $qb = $this->getEntityManager()->createQueryBuilder()
                    ->select('p')
                    ->from('PropertyBundle:Property', 'p');

@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="blacklist")
  * @ORM\Entity(repositoryClass="AuthenticationBundle\Repository\BlacklistRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class Blacklist
 {
@@ -43,12 +44,18 @@ class Blacklist
     private $amount;
 
     /**
-     * @var \DateTime
+     * @var \DateTime $created
      *
-     * @ORM\Column(name="datetime", type="datetime")
+     * @ORM\Column(type="datetime")
      */
-    private $datetime;
+    protected $created;
 
+    /**
+     * @var \DateTime $updated
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $updated;
 
     /**
      * Get id
@@ -133,26 +140,22 @@ class Blacklist
     }
 
     /**
-     * Set datetime
-     *
-     * @param \DateTime $datetime
-     *
-     * @return Blacklist
-     */
-    public function setDatetime($datetime)
-    {
-        $this->datetime = $datetime;
+     * Gets triggered only on insert
 
-        return $this;
+     * @ORM\PrePersist
+     */
+    public function onPrePersist()
+    {
+        $this->created = new \DateTime("now");
     }
 
     /**
-     * Get datetime
-     *
-     * @return \DateTime
+     * Gets triggered every time on update
+
+     * @ORM\PreUpdate
      */
-    public function getDatetime()
+    public function onPreUpdate()
     {
-        return $this->datetime;
+        $this->updated = new \DateTime("now");
     }
 }

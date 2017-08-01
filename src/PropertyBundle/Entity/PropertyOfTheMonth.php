@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="property_of_the_month")
  * @ORM\Entity(repositoryClass="PropertyBundle\Repository\PropertyOfTheMonthRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class PropertyOfTheMonth
 {
@@ -35,6 +36,19 @@ class PropertyOfTheMonth
      */
     private $agentId;
 
+    /**
+     * @var \DateTime $created
+     *
+     * @ORM\Column(type="datetime")
+     */
+    protected $created;
+
+    /**
+     * @var \DateTime $updated
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $updated;
 
     /**
      * Get id
@@ -92,5 +106,25 @@ class PropertyOfTheMonth
     public function getAgentId()
     {
         return $this->agentId;
+    }
+
+    /**
+     * Gets triggered only on insert
+     *
+     * @ORM\PrePersist
+     */
+    public function onPrePersist()
+    {
+        $this->created = new \DateTime("now");
+    }
+
+    /**
+     * Gets triggered every time on update
+     *
+     * @ORM\PreUpdate
+     */
+    public function onPreUpdate()
+    {
+        $this->updated = new \DateTime("now");
     }
 }

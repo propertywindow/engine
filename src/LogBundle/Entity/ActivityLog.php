@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="log_activity")
  * @ORM\Entity(repositoryClass="LogBundle\Repository\ActivityLogRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class ActivityLog
 {
@@ -50,11 +51,11 @@ class ActivityLog
     private $newValue;
 
     /**
-     * @var \DateTime
+     * @var \DateTime $created
      *
-     * @ORM\Column(name="datetime", type="datetime")
+     * @ORM\Column(type="datetime")
      */
-    private $datetime;
+    protected $created;
 
 
     /**
@@ -164,26 +165,12 @@ class ActivityLog
     }
 
     /**
-     * Set datetime
+     * Gets triggered only on insert
      *
-     * @param \DateTime $datetime
-     *
-     * @return ActivityLog
+     * @ORM\PrePersist
      */
-    public function setDatetime($datetime)
+    public function onPrePersist()
     {
-        $this->datetime = $datetime;
-
-        return $this;
-    }
-
-    /**
-     * Get datetime
-     *
-     * @return \DateTime
-     */
-    public function getDatetime()
-    {
-        return $this->datetime;
+        $this->created = new \DateTime("now");
     }
 }
