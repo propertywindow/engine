@@ -40,7 +40,6 @@ class PropertyRepository extends EntityRepository
      * @param int|null $offset
      *
      * @return array First value Property[], second value the total count.
-     * @throws \Doctrine\ORM\RuntimeException
      */
     public function listAll(?int $limit, ?int $offset): array
     {
@@ -69,7 +68,6 @@ class PropertyRepository extends EntityRepository
      * @return Property[]
      *
      * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\RuntimeException
      */
     public function findPropertiesForUser(int $userId): array
     {
@@ -94,7 +92,6 @@ class PropertyRepository extends EntityRepository
      * @return Property[]
      *
      * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\RuntimeException
      */
     public function findPropertiesWithSubType(int $subTypeId): array
     {

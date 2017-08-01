@@ -67,7 +67,6 @@ class TypeController extends Controller
      * @param Request $httpRequest
      *
      * @return HttpResponse
-     * @throws \Doctrine\ORM\RuntimeException
      */
     public function requestHandler(Request $httpRequest)
     {
@@ -135,7 +134,6 @@ class TypeController extends Controller
      * @throws TypeNotFoundException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\RuntimeException
      * @throws \Doctrine\ORM\TransactionRequiredException
      */
     private function invoke(int $userId, string $method, array $parameters = [])
@@ -172,7 +170,6 @@ class TypeController extends Controller
     /**
      * @return array
      * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\RuntimeException
      */
     private function getTypes()
     {
