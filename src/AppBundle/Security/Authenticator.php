@@ -79,13 +79,13 @@ class Authenticator
             return $userId;
         }
 
-        $user       = $this->service->getUser($userId);
+        $user = $this->service->getUser($userId);
 
         if (empty($user)) {
-            throw new CouldNotAuthenticateUserException("User not recognized");
+            throw new CouldNotAuthenticateUserException("No user found");
         }
 
-        $secret     = $user->getPassword();
+        $secret = $user->getPassword();
 
         if (md5($password) !== $secret) {
             throw new CouldNotAuthenticateUserException("Password incorrect");

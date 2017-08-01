@@ -40,7 +40,6 @@ class PropertyRepository extends EntityRepository
      * @param int|null $offset
      *
      * @return array First value Property[], second value the total count.
-     * @throws \Doctrine\ORM\RuntimeException
      */
     public function listAll(?int $limit, ?int $offset): array
     {
@@ -69,21 +68,44 @@ class PropertyRepository extends EntityRepository
      * @return Property[]
      *
      * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\RuntimeException
      */
     public function findPropertiesForUser(int $userId): array
     {
         // todo: get agentId from userId
 
         $qb = $this->getEntityManager()->createQueryBuilder()
-                   ->select('n')
-                   ->from('PropertyBundle:Property', 'n');
+                   ->select('p')
+                   ->from('PropertyBundle:Property', 'p');
 
-        $qb->where("n.agentId = :userId");
-        $qb->orderBy('n.id', 'DESC');
+        $qb->where("p.agentId = :userId");
+        $qb->orderBy('p.id', 'DESC');
         $qb->setParameter('userId', $userId);
 
-        $query      = $qb;
-        $properties = $query->getQuery()->getResult();
+        $results = $qb->getQuery()->getResult();
+
+        return $results;
+    }
+
+    /**
+     * @param int $subTypeId
+     *
+     * @return Property[]
+     *
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function findPropertiesWithSubType(int $subTypeId): array
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder()
+                   ->select('p')
+                   ->from('PropertyBundle:Property', 'p');
+
+        $qb->where("p.subType = :subTypeId");
+        $qb->andWhere("p.archived = false");
+        $qb->orderBy('p.id', 'DESC');
+        $qb->setParameter('subTypeId', $subTypeId);
+
+        $results = $qb->getQuery()->getResult();
+
+        return $results;
     }
 }

@@ -2,6 +2,8 @@
 
 namespace PropertyBundle\Controller;
 
+use AuthenticationBundle\Exceptions\NotAuthorizedException;
+use AuthenticationBundle\Service\UserService;
 use Exception;
 use InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -13,16 +15,16 @@ use AppBundle\Exceptions\CouldNotAuthenticateUserException;
 use AppBundle\Exceptions\JsonRpc\CouldNotParseJsonRequestException;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcRequestException;
-use PropertyBundle\Exceptions\PropertyNotFoundException;
-use PropertyBundle\Service\PropertyService;
-use PropertyBundle\Service\Property\Mapper;
+use PropertyBundle\Exceptions\SubTypeNotFoundException;
+use PropertyBundle\Service\SubTypeService;
+use PropertyBundle\Service\SubType\Mapper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 /**
- * @Route(service="property_controller")
+ * @Route(service="sub_type_controller")
  */
-class PropertyController extends Controller
+class SubTypeController extends Controller
 {
     private const PARSE_ERROR            = -32700;
     private const INVALID_REQUEST        = -32600;
@@ -30,7 +32,7 @@ class PropertyController extends Controller
     private const INVALID_PARAMS         = -32602;
     private const INTERNAL_ERROR         = -32603;
     private const USER_NOT_AUTHENTICATED = -32000;
-    private const PROPERTY_NOT_FOUND     = -32001;
+    private const SUB_TYPE_NOT_FOUND     = -32001;
 
     /**
      * @var Authenticator
@@ -38,22 +40,29 @@ class PropertyController extends Controller
     private $authenticator;
 
     /**
-     * @var PropertyService
+     * @var SubTypeService
      */
-    private $service;
+    private $typeService;
 
     /**
-     * @param Authenticator   $authenticator
-     * @param PropertyService $service
+     * @var UserService
      */
-    public function __construct(Authenticator $authenticator, PropertyService $service)
+    private $userService;
+
+    /**
+     * @param Authenticator  $authenticator
+     * @param SubTypeService $typeService
+     * @param UserService    $userService
+     */
+    public function __construct(Authenticator $authenticator, SubTypeService $typeService, UserService $userService)
     {
         $this->authenticator = $authenticator;
-        $this->service       = $service;
+        $this->typeService   = $typeService;
+        $this->userService   = $userService;
     }
 
     /**
-     * @Route("/property" , name="property")
+     * @Route("/property/subtype" , name="subtype")
      *
      * @param Request $httpRequest
      *
@@ -99,8 +108,8 @@ class PropertyController extends Controller
             $jsonRpcResponse = Response::failure($id, new Error(self::INVALID_PARAMS, $ex->getMessage()));
         } catch (CouldNotAuthenticateUserException $ex) {
             $jsonRpcResponse = Response::failure($id, new Error(self::USER_NOT_AUTHENTICATED, $ex->getMessage()));
-        } catch (PropertyNotFoundException $ex) {
-            $jsonRpcResponse = Response::failure($id, new Error(self::PROPERTY_NOT_FOUND, $ex->getMessage()));
+        } catch (SubTypeNotFoundException $ex) {
+            $jsonRpcResponse = Response::failure($id, new Error(self::SUB_TYPE_NOT_FOUND, $ex->getMessage()));
         } catch (Exception $ex) {
             $jsonRpcResponse = Response::failure($id, new Error(self::INTERNAL_ERROR, $ex->getMessage()));
         }
@@ -123,7 +132,7 @@ class PropertyController extends Controller
      *
      * @return array
      * @throws InvalidJsonRpcMethodException
-     * @throws PropertyNotFoundException
+     * @throws SubTypeNotFoundException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\RuntimeException
@@ -132,12 +141,12 @@ class PropertyController extends Controller
     private function invoke(int $userId, string $method, array $parameters = [])
     {
         switch ($method) {
-            case "getProperty":
-                return $this->getProperty($parameters);
-            case "getProperties":
-                return $this->getProperties($userId);
-            case "getAllProperties":
-                return $this->getAllProperties($parameters);
+            case "getSubType":
+                return $this->getSubType($parameters);
+            case "getSubTypes":
+                return $this->getSubTypes($parameters);
+            case "deleteSubType":
+                return $this->deleteSubType($parameters, $userId);
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
@@ -147,9 +156,9 @@ class PropertyController extends Controller
      * @param array $parameters
      *
      * @return array
-     * @throws PropertyNotFoundException
+     * @throws SubTypeNotFoundException
      */
-    private function getProperty(array $parameters)
+    private function getSubType(array $parameters)
     {
         if (!array_key_exists('id', $parameters)) {
             throw new InvalidArgumentException("No argument provided");
@@ -157,40 +166,47 @@ class PropertyController extends Controller
 
         $id = (int)$parameters['id'];
 
-        return Mapper::fromProperty($this->service->getProperty($id));
-    }
-
-    /**
-     * @param int $userId
-     *
-     * @return array
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\RuntimeException
-     */
-    private function getProperties(int $userId)
-    {
-        return Mapper::fromProperties(...$this->service->getByUserId($userId));
+        return Mapper::fromSubType($this->typeService->getSubType($id));
     }
 
     /**
      * @param array $parameters
      *
      * @return array
-     *
+     * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\RuntimeException
      */
-    private function getAllProperties(array $parameters)
+    private function getSubTypes(array $parameters)
     {
-        $limit  = array_key_exists('limit', $parameters) &&
-                  $parameters['limit'] !== null ? (int)$parameters['limit'] : null;
-        $offset = array_key_exists('offset', $parameters) &&
-                  $parameters['offset'] !== null ? (int)$parameters['offset'] : null;
+        $typeId = null;
 
-        list($properties, $count) = $this->service->listProperties($limit, $offset);
+        if (array_key_exists('typeId', $parameters)) {
+            $typeId = (int)$parameters['typeId'];
+        }
 
-        return [
-            'properties' => Mapper::fromProperty(...$properties),
-            'count'      => $count,
-        ];
+        return Mapper::fromSubTypes(...$this->typeService->getSubTypes($typeId));
+    }
+
+    /**
+     * @param array $parameters
+     * @param int   $userId
+     *
+     * @throws NotAuthorizedException
+     */
+    private function deleteSubType(array $parameters, int $userId)
+    {
+        if (!array_key_exists('id', $parameters)) {
+            throw new InvalidArgumentException("No argument provided");
+        }
+
+        $userType = $this->userService->getUserType($userId);
+
+        if ($userType !== 1) {
+            throw new NotAuthorizedException($userId);
+        }
+
+        $id = (int)$parameters['id'];
+
+        $this->typeService->deleteSubType($id);
     }
 }
