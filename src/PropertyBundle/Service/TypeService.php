@@ -48,7 +48,7 @@ class TypeService
      *
      * @throws \Doctrine\ORM\RuntimeException
      */
-    public function listNotifications()
+    public function listTypes()
     {
         $repository = $this->entityManager->getRepository('PropertyBundle:Type');
 

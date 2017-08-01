@@ -2,6 +2,12 @@ services:
     property_service:
           class: PropertyBundle\Service\PropertyService
           arguments: ["@doctrine.orm.entity_manager"]
+    type_service:
+          class: PropertyBundle\Service\TypeService
+          arguments: ["@doctrine.orm.entity_manager"]
+    sub_type_service:
+          class: PropertyBundle\Service\SubTypeService
+          arguments: ["@doctrine.orm.entity_manager"]
     property_controller:
           class: PropertyBundle\Controller\PropertyController
           arguments: ['@authenticator', '@property_service']
