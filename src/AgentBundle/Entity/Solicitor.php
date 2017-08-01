@@ -45,14 +45,14 @@ class Solicitor
     /**
      * @var string
      *
-     * @ORM\Column(name="address", type="string", length=255)
+     * @ORM\Column(name="street", type="string", length=255)
      */
-    private $address;
+    private $street;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="house_number", type="string", length=10)
+     * @ORM\Column(name="house_number", type="string", length=5)
      */
     private $houseNumber;
 
@@ -182,27 +182,27 @@ class Solicitor
     }
 
     /**
-     * Set address
+     * Set street
      *
-     * @param string $address
+     * @param string $street
      *
      * @return Solicitor
      */
-    public function setAddress($address)
+    public function setStreet($street)
     {
-        $this->address = $address;
+        $this->street = $street;
 
         return $this;
     }
 
     /**
-     * Get address
+     * Get street
      *
      * @return string
      */
-    public function getAddress()
+    public function getStreet()
     {
-        return $this->address;
+        return $this->street;
     }
 
     /**

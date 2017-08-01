@@ -59,14 +59,21 @@ class Surveyor
     /**
      * @var string
      *
-     * @ORM\Column(name="address", type="string", length=255)
+     * @ORM\Column(name="street", type="string", length=255)
      */
-    private $address;
+    private $street;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="postcode", type="string", length=255)
+     * @ORM\Column(name="house_number", type="string", length=5)
+     */
+    private $houseNumber;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="postcode", type="string", length=10)
      */
     private $postcode;
 
@@ -216,27 +223,51 @@ class Surveyor
     }
 
     /**
-     * Set address
+     * Set street
      *
-     * @param string $address
+     * @param string $street
      *
      * @return Surveyor
      */
-    public function setAddress($address)
+    public function setStreet($street)
     {
-        $this->address = $address;
+        $this->street = $street;
 
         return $this;
     }
 
     /**
-     * Get address
+     * Get street
      *
      * @return string
      */
-    public function getAddress()
+    public function getStreet()
     {
-        return $this->address;
+        return $this->street;
+    }
+
+    /**
+     * Set houseNumber
+     *
+     * @param string $houseNumber
+     *
+     * @return Surveyor
+     */
+    public function setHouseNumber($houseNumber)
+    {
+        $this->houseNumber = $houseNumber;
+
+        return $this;
+    }
+
+    /**
+     * Get houseNumber
+     *
+     * @return string
+     */
+    public function getHouseNumber()
+    {
+        return $this->houseNumber;
     }
 
     /**
