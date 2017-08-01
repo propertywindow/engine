@@ -43,4 +43,19 @@ class UserService
 
         return $user;
     }
+
+    /**
+     * @param int $userId
+     *
+     * @return int $userTypeId
+     *
+     * @throws UserNotFoundException
+     */
+    public function getUserType(int $userId)
+    {
+        $repository = $this->entityManager->getRepository('AuthenticationBundle:User');
+        $userTypeId = $repository->getUserType($userId);
+
+        return $userTypeId;
+    }
 }

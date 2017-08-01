@@ -2,6 +2,8 @@
 
 namespace PropertyBundle\Controller;
 
+use AuthenticationBundle\Exceptions\NotAuthorizedException;
+use AuthenticationBundle\Service\UserService;
 use Exception;
 use InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -40,16 +42,23 @@ class TypeController extends Controller
     /**
      * @var TypeService
      */
-    private $service;
+    private $typeService;
+
+    /**
+     * @var UserService
+     */
+    private $userService;
 
     /**
      * @param Authenticator $authenticator
-     * @param TypeService   $service
+     * @param TypeService   $typeService
+     * @param UserService   $userService
      */
-    public function __construct(Authenticator $authenticator, TypeService $service)
+    public function __construct(Authenticator $authenticator, TypeService $typeService, UserService $userService)
     {
         $this->authenticator = $authenticator;
-        $this->service       = $service;
+        $this->typeService   = $typeService;
+        $this->userService   = $userService;
     }
 
     /**
@@ -137,7 +146,7 @@ class TypeController extends Controller
             case "getTypes":
                 return $this->getTypes();
             case "deleteType":
-                return $this->deleteType($parameters);
+                return $this->deleteType($parameters, $userId);
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
@@ -157,7 +166,7 @@ class TypeController extends Controller
 
         $id = (int)$parameters['id'];
 
-        return Mapper::fromType($this->service->getType($id));
+        return Mapper::fromType($this->typeService->getType($id));
     }
 
     /**
@@ -167,25 +176,30 @@ class TypeController extends Controller
      */
     private function getTypes()
     {
-        return Mapper::fromTypes(...$this->service->getTypes());
+        return Mapper::fromTypes(...$this->typeService->getTypes());
     }
 
     /**
      * @param array $parameters
      *
-     * @throws TypeNotFoundException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
+     * @param int   $userId
+     *
+     * @throws NotAuthorizedException
      */
-    private function deleteType(array $parameters)
+    private function deleteType(array $parameters, int $userId)
     {
         if (!array_key_exists('id', $parameters)) {
             throw new InvalidArgumentException("No argument provided");
         }
 
+        $userType = $this->userService->getUserType($userId);
+
+        if ($userType !== 1) {
+            throw new NotAuthorizedException($userId);
+        }
+
         $id = (int)$parameters['id'];
 
-        $this->service->deleteType($id);
+        $this->typeService->deleteType($id);
     }
 }

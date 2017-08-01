@@ -13,7 +13,7 @@ services:
           arguments: ['@authenticator', '@property_service']
     type_controller:
           class: PropertyBundle\Controller\TypeController
-          arguments: ['@authenticator', '@type_service']
+          arguments: ['@authenticator', '@type_service', '@user_service']
     sub_type_controller:
           class: PropertyBundle\Controller\SubTypeController
-          arguments: ['@authenticator', '@sub_type_service']
+          arguments: ['@authenticator', '@sub_type_service', '@user_service']

@@ -2,6 +2,8 @@
 
 namespace PropertyBundle\Controller;
 
+use AuthenticationBundle\Exceptions\NotAuthorizedException;
+use AuthenticationBundle\Service\UserService;
 use Exception;
 use InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -40,16 +42,23 @@ class SubTypeController extends Controller
     /**
      * @var SubTypeService
      */
-    private $service;
+    private $typeService;
+
+    /**
+     * @var UserService
+     */
+    private $userService;
 
     /**
      * @param Authenticator  $authenticator
-     * @param SubTypeService $service
+     * @param SubTypeService $typeService
+     * @param UserService    $userService
      */
-    public function __construct(Authenticator $authenticator, SubTypeService $service)
+    public function __construct(Authenticator $authenticator, SubTypeService $typeService, UserService $userService)
     {
         $this->authenticator = $authenticator;
-        $this->service       = $service;
+        $this->typeService   = $typeService;
+        $this->userService   = $userService;
     }
 
     /**
@@ -137,7 +146,7 @@ class SubTypeController extends Controller
             case "getSubTypes":
                 return $this->getSubTypes($parameters);
             case "deleteSubType":
-                return $this->deleteSubType($parameters);
+                return $this->deleteSubType($parameters, $userId);
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
@@ -157,7 +166,7 @@ class SubTypeController extends Controller
 
         $id = (int)$parameters['id'];
 
-        return Mapper::fromSubType($this->service->getSubType($id));
+        return Mapper::fromSubType($this->typeService->getSubType($id));
     }
 
     /**
@@ -175,25 +184,29 @@ class SubTypeController extends Controller
             $typeId = (int)$parameters['typeId'];
         }
 
-        return Mapper::fromSubTypes(...$this->service->getSubTypes($typeId));
+        return Mapper::fromSubTypes(...$this->typeService->getSubTypes($typeId));
     }
 
     /**
      * @param array $parameters
+     * @param int   $userId
      *
-     * @throws SubTypeNotFoundException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
+     * @throws NotAuthorizedException
      */
-    private function deleteSubType(array $parameters)
+    private function deleteSubType(array $parameters, int $userId)
     {
         if (!array_key_exists('id', $parameters)) {
             throw new InvalidArgumentException("No argument provided");
         }
 
+        $userType = $this->userService->getUserType($userId);
+
+        if ($userType !== 1) {
+            throw new NotAuthorizedException($userId);
+        }
+
         $id = (int)$parameters['id'];
 
-        $this->service->deleteSubType($id);
+        $this->typeService->deleteSubType($id);
     }
 }

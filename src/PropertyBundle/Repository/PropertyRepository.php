@@ -103,6 +103,7 @@ class PropertyRepository extends EntityRepository
                    ->from('PropertyBundle:Property', 'p');
 
         $qb->where("p.subType = :subTypeId");
+        $qb->andWhere("p.archived = false");
         $qb->orderBy('p.id', 'DESC');
         $qb->setParameter('subTypeId', $subTypeId);
 
