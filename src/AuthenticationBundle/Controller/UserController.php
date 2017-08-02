@@ -1,22 +1,22 @@
 <?php declare(strict_types=1);
 
-namespace AgentBundle\Controller;
+namespace AuthenticationBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class DefaultController
- * @package AgentBundle\Controller
+ * Class UserController
+ * @package AuthenticationBundle\Controller
  */
-class DefaultController extends Controller
+class UserController extends Controller
 {
     /**
-     * @Route("/")
+     * @Route("/user")
      */
     public function indexAction()
     {
-        return new Response('no-access');
+        return new Response('user-controller');
     }
 }

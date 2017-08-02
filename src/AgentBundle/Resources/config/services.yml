@@ -1,4 +1,7 @@
 services:
-#    agent.example:
-#        class: AgentBundle\Example
-#        arguments: ["@service_id", "plain_value", "%parameter%"]
+    agent_service:
+          class: AgentBundle\Service\AgentService
+          arguments: ["@doctrine.orm.entity_manager"]
+    agent_controller:
+          class: AgentBundle\Controller\AgentController
+          arguments: ['@authenticator', '@agent_service', '@user_service']

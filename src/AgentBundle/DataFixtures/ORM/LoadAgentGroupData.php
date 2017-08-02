@@ -1,14 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace AuthenticationBundle\DataFixtures\ORM;
+namespace AgentBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use AuthenticationBundle\Entity\AgentGroup;
+use AgentBundle\Entity\AgentGroup;
 
 /**
  * Class LoadAgentGroupData
- * @package AuthenticationBundle\DataFixtures\ORM
+ * @package AgentBundle\DataFixtures\ORM
  */
 class LoadAgentGroupData implements FixtureInterface
 {
