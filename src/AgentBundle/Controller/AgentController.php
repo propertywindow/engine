@@ -164,7 +164,7 @@ class AgentController extends Controller
 
         $id = (int)$parameters['id'];
 
-        return Mapper::fromAgent($this->agentService->getAgents($id));
+        return Mapper::fromAgent($this->agentService->getAgent($id));
     }
 
     /**
@@ -181,7 +181,7 @@ class AgentController extends Controller
             throw new NotAuthorizedException($userId);
         }
 
-        return Mapper::fromAgents(...$this->agentService->getAgents($userId));
+        return Mapper::fromAgents(...$this->agentService->getAgents());
     }
 
     /**
