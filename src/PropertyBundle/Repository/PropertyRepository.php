@@ -57,25 +57,23 @@ class PropertyRepository extends EntityRepository
     }
 
     /**
-     * @param int      $userId
+     * @param int[]    $agentIds
      * @param int|null $limit
      * @param int|null $offset
      *
      * @return array First value Property[], second value the total count.
      */
-    public function listAllProperties($userId, ?int $limit, ?int $offset): array
+    public function listAllProperties($agentIds, ?int $limit, ?int $offset): array
     {
-        // todo: get properties from all agentIds in AgentGroup
-
         $qb = $this->getEntityManager()->createQueryBuilder()
                    ->select('p')
                    ->from('PropertyBundle:Property', 'p');
 
-        $qb->where("p.agentId = :userId")
+        $qb->where("p.agentId IN (:agentIds)")
            ->orderBy('p.id', 'DESC')
            ->setFirstResult($offset)
            ->setMaxResults($limit)
-           ->setParameter('userId', $userId);
+           ->setParameter('agentIds', $agentIds);
 
         $pages = new Paginator($qb);
 

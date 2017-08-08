@@ -59,16 +59,16 @@ class PropertyService
     }
 
     /**
-     * @param int      $userId
+     * @param int[]    $agentIds
      * @param int|null $limit
      * @param int|null $offset
      *
      * @return array|Property First value Property[], second value the total count.
      */
-    public function listAllProperties(int $userId, ?int $limit, ?int $offset)
+    public function listAllProperties(array $agentIds, ?int $limit, ?int $offset)
     {
         $repository = $this->entityManager->getRepository('PropertyBundle:Property');
 
-        return $repository->listAllProperties($userId, $limit, $offset);
+        return $repository->listAllProperties($agentIds, $limit, $offset);
     }
 }

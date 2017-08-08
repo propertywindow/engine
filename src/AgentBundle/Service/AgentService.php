@@ -54,6 +54,36 @@ class AgentService
         return $repository->listAll();
     }
 
+
+    /**
+     * @param int $id
+     *
+     * @return int $groupId
+     */
+    public function getGroupId(int $id)
+    {
+        $repository = $this->entityManager->getRepository('AgentBundle:Agent');
+        $agent      = $repository->find($id);
+
+        $groupId = (int)$agent->getGroupId();
+
+        return $groupId;
+    }
+
+    /**
+     * @param int $agentId
+     *
+     * @return int[] $groupIds
+     */
+    public function getAgentIdsFromGroup(int $agentId)
+    {
+        $groupId    = $this->getGroupId($agentId);
+        $repository = $this->entityManager->getRepository('AgentBundle:Agent');
+        $groupIds   = $repository->getAgentIdsFromGroupId($groupId);
+
+        return $groupIds;
+    }
+
     /**
      * @param int $id
      *

@@ -2,6 +2,7 @@
 
 namespace PropertyBundle\Controller;
 
+use AgentBundle\Service\AgentService;
 use Exception;
 use InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -50,18 +51,26 @@ class PropertyController extends Controller
     private $userService;
 
     /**
+     * @var AgentService
+     */
+    private $agentService;
+
+    /**
      * @param Authenticator   $authenticator
      * @param PropertyService $propertyService
      * @param UserService     $userService
+     * @param AgentService    $agentService
      */
     public function __construct(
         Authenticator $authenticator,
         PropertyService $propertyService,
-        UserService $userService
+        UserService $userService,
+        AgentService $agentService
     ) {
         $this->authenticator   = $authenticator;
         $this->propertyService = $propertyService;
         $this->userService     = $userService;
+        $this->agentService    = $agentService;
     }
 
     /**
@@ -143,7 +152,7 @@ class PropertyController extends Controller
     {
         switch ($method) {
             case "getProperty":
-                return $this->getProperty($parameters, $userId);
+                return $this->getProperty($userId, $parameters);
             case "getProperties":
                 return $this->getProperties($userId);
             case "getAllProperties":
@@ -154,13 +163,13 @@ class PropertyController extends Controller
     }
 
     /**
-     * @param array $parameters
      * @param int   $userId
+     * @param array $parameters
      *
      * @return array
      * @throws NotAuthorizedException
      */
-    private function getProperty(array $parameters, int $userId)
+    private function getProperty(int $userId, array $parameters)
     {
         if (!array_key_exists('id', $parameters)) {
             throw new InvalidArgumentException("No argument provided");
@@ -209,7 +218,10 @@ class PropertyController extends Controller
         $offset = array_key_exists('offset', $parameters) &&
                   $parameters['offset'] !== null ? (int)$parameters['offset'] : null;
 
-        list($properties, $count) = $this->propertyService->listAllProperties($userId, $limit, $offset);
+        $user     = $this->userService->getUser($userId);
+        $agentIds = $this->agentService->getAgentIdsFromGroup((int)$user->getAgentId());
+
+        list($properties, $count) = $this->propertyService->listAllProperties($agentIds, $limit, $offset);
 
         return [
             'properties' => Mapper::fromProperty(...$properties),
