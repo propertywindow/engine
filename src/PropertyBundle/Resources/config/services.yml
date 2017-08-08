@@ -10,7 +10,7 @@ services:
           arguments: ["@doctrine.orm.entity_manager"]
     property_controller:
           class: PropertyBundle\Controller\PropertyController
-          arguments: ['@authenticator', '@property_service']
+          arguments: ['@authenticator', '@property_service', '@user_service']
     type_controller:
           class: PropertyBundle\Controller\TypeController
           arguments: ['@authenticator', '@type_service', '@user_service']

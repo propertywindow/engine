@@ -45,17 +45,17 @@ class PropertyService
     }
 
     /**
-     * @param  int $userId
+     * @param  int $agentId
      *
      * @return array|Property[] $properties
      *
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function listProperties(int $userId): array
+    public function listProperties(int $agentId): array
     {
         $repository = $this->entityManager->getRepository('PropertyBundle:Property');
 
-        return $repository->listProperties($userId);
+        return $repository->listProperties($agentId);
     }
 
     /**

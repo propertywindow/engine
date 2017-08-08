@@ -13,6 +13,8 @@ use AppBundle\Exceptions\CouldNotAuthenticateUserException;
 use AppBundle\Exceptions\JsonRpc\CouldNotParseJsonRequestException;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcRequestException;
+use AuthenticationBundle\Exceptions\NotAuthorizedException;
+use AuthenticationBundle\Service\UserService;
 use PropertyBundle\Exceptions\PropertyNotFoundException;
 use PropertyBundle\Service\PropertyService;
 use PropertyBundle\Service\Property\Mapper;
@@ -40,16 +42,26 @@ class PropertyController extends Controller
     /**
      * @var PropertyService
      */
-    private $service;
+    private $propertyService;
+
+    /**
+     * @var UserService
+     */
+    private $userService;
 
     /**
      * @param Authenticator   $authenticator
-     * @param PropertyService $service
+     * @param PropertyService $propertyService
+     * @param UserService     $userService
      */
-    public function __construct(Authenticator $authenticator, PropertyService $service)
-    {
-        $this->authenticator = $authenticator;
-        $this->service       = $service;
+    public function __construct(
+        Authenticator $authenticator,
+        PropertyService $propertyService,
+        UserService $userService
+    ) {
+        $this->authenticator   = $authenticator;
+        $this->propertyService = $propertyService;
+        $this->userService     = $userService;
     }
 
     /**
@@ -58,7 +70,6 @@ class PropertyController extends Controller
      * @param Request $httpRequest
      *
      * @return HttpResponse
-     * @throws \Doctrine\ORM\RuntimeException
      */
     public function requestHandler(Request $httpRequest)
     {
@@ -126,14 +137,13 @@ class PropertyController extends Controller
      * @throws PropertyNotFoundException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\RuntimeException
      * @throws \Doctrine\ORM\TransactionRequiredException
      */
     private function invoke(int $userId, string $method, array $parameters = [])
     {
         switch ($method) {
             case "getProperty":
-                return $this->getProperty($parameters);
+                return $this->getProperty($parameters, $userId);
             case "getProperties":
                 return $this->getProperties($userId);
             case "getAllProperties":
@@ -145,11 +155,12 @@ class PropertyController extends Controller
 
     /**
      * @param array $parameters
+     * @param int   $userId
      *
      * @return array
-     * @throws PropertyNotFoundException
+     * @throws NotAuthorizedException
      */
-    private function getProperty(array $parameters)
+    private function getProperty(array $parameters, int $userId)
     {
         if (!array_key_exists('id', $parameters)) {
             throw new InvalidArgumentException("No argument provided");
@@ -157,7 +168,19 @@ class PropertyController extends Controller
 
         $id = (int)$parameters['id'];
 
-        return Mapper::fromProperty($this->service->getProperty($id));
+        $user = $this->userService->getUser($userId);
+
+        if ($user->getTypeId() === 5) {
+            // set traffic log
+        }
+
+        $property = $this->propertyService->getProperty($id);
+
+        if ($property->getAgentId() !== $user->getAgentId()) {
+            throw new NotAuthorizedException($userId);
+        }
+
+        return Mapper::fromProperty($property);
     }
 
     /**
@@ -165,11 +188,12 @@ class PropertyController extends Controller
      *
      * @return array
      * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\RuntimeException
      */
     private function getProperties(int $userId)
     {
-        return Mapper::fromProperties(...$this->service->listProperties($userId));
+        $user = $this->userService->getUser($userId);
+
+        return Mapper::fromProperties(...$this->propertyService->listProperties((int)$user->getAgentId()));
     }
 
     /**
@@ -177,8 +201,6 @@ class PropertyController extends Controller
      * @param array $parameters
      *
      * @return array
-     *
-     * @throws \Doctrine\ORM\RuntimeException
      */
     private function getAllProperties(int $userId, array $parameters)
     {
@@ -187,7 +209,7 @@ class PropertyController extends Controller
         $offset = array_key_exists('offset', $parameters) &&
                   $parameters['offset'] !== null ? (int)$parameters['offset'] : null;
 
-        list($properties, $count) = $this->service->listAllProperties($userId, $limit, $offset);
+        list($properties, $count) = $this->propertyService->listAllProperties($userId, $limit, $offset);
 
         return [
             'properties' => Mapper::fromProperty(...$properties),

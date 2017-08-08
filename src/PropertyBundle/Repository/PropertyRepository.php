@@ -35,23 +35,21 @@ class PropertyRepository extends EntityRepository
     }
 
     /**
-     * @param int $userId
+     * @param int $agentId
      *
      * @return Property[]
      *
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function listProperties(int $userId): array
+    public function listProperties(int $agentId): array
     {
-        // todo: get agentId from userId
-
         $qb = $this->getEntityManager()->createQueryBuilder()
                    ->select('p')
                    ->from('PropertyBundle:Property', 'p');
 
-        $qb->where("p.agentId = :userId")
+        $qb->where("p.agentId = :agentId")
            ->orderBy('p.id', 'DESC')
-           ->setParameter('userId', $userId);
+           ->setParameter('agentId', $agentId);
 
         $results = $qb->getQuery()->getResult();
 
