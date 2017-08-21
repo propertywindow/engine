@@ -64,8 +64,7 @@ class AgentService
     {
         $repository = $this->entityManager->getRepository('AgentBundle:Agent');
         $agent      = $repository->find($id);
-
-        $groupId = (int)$agent->getGroupId();
+        $groupId    = (int)$agent->getGroupId();
 
         return $groupId;
     }
