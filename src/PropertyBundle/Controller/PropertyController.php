@@ -2,7 +2,6 @@
 
 namespace PropertyBundle\Controller;
 
-use AgentBundle\Service\AgentService;
 use Exception;
 use InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -16,6 +15,7 @@ use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcRequestException;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use AuthenticationBundle\Service\UserService;
+use AgentBundle\Service\AgentService;
 use PropertyBundle\Exceptions\PropertyNotFoundException;
 use PropertyBundle\Service\PropertyService;
 use PropertyBundle\Service\Property\Mapper;
