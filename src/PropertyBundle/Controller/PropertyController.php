@@ -157,6 +157,14 @@ class PropertyController extends Controller
                 return $this->getProperties($userId);
             case "getAllProperties":
                 return $this->getAllProperties($userId, $parameters);
+            case "createProperty":
+                return $this->createProperty($userId, $parameters);
+            case "updateProperty":
+                return $this->updateProperty($userId, $parameters);
+            case "archiveProperty":
+                return $this->archiveProperty($userId, $parameters);
+            case "deleteProperty":
+                return $this->deleteProperty($userId, $parameters);
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
@@ -180,7 +188,7 @@ class PropertyController extends Controller
         $user = $this->userService->getUser($userId);
 
         if ($user->getTypeId() === 5) {
-            // set traffic log
+            // todo: set traffic log
         }
 
         $property = $this->propertyService->getProperty($id);
@@ -227,5 +235,96 @@ class PropertyController extends Controller
             'properties' => Mapper::fromProperty(...$properties),
             'count'      => $count,
         ];
+    }
+
+    /**
+     * @param int   $userId
+     * @param array $parameters
+     *
+     * @return array $property
+     * @throws NotAuthorizedException
+     */
+    private function createProperty(int $userId, array $parameters)
+    {
+        $user = $this->userService->getUser($userId);
+
+        if ($user->getTypeId() === 3) {
+            throw new NotAuthorizedException($userId);
+        }
+
+        if (!array_key_exists('kind', $parameters) && $parameters['content'] !== null) {
+            throw new InvalidArgumentException("Kind parameter not provided");
+        }
+        if (!array_key_exists('status', $parameters) && $parameters['type'] !== null) {
+            throw new InvalidArgumentException("Status parameter not provided");
+        }
+        if (!array_key_exists('sub_type', $parameters) && $parameters['start'] !== null) {
+            throw new InvalidArgumentException("Sub type parameter not provided");
+        }
+
+        $property = $this->propertyService->createProperty($parameters);
+
+        return Mapper::fromProperty($property);
+    }
+
+    /**
+     * @param int   $userId
+     * @param array $parameters
+     *
+     * @return array $property
+     * @throws NotAuthorizedException
+     */
+    private function updateProperty(int $userId, array $parameters)
+    {
+        $user = $this->userService->getUser($userId);
+
+        if ($user->getTypeId() === 3) {
+            throw new NotAuthorizedException($userId);
+        }
+
+        $property = $this->propertyService->updateProperty($parameters);
+
+        return Mapper::fromProperty($property);
+    }
+
+    /**
+     * @param int   $userId
+     * @param array $parameters
+     *
+     * @throws PropertyNotFoundException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     */
+    private function archiveProperty(int $userId, array $parameters)
+    {
+        if (!array_key_exists('id', $parameters)) {
+            throw new InvalidArgumentException("No argument provided");
+        }
+
+        $user = $this->userService->getUser($userId);
+
+        $id = (int)$parameters['id'];
+
+        $this->propertyService->archiveProperty($id);
+    }
+
+    /**
+     * @param array $parameters
+     *
+     * @throws PropertyNotFoundException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     */
+    private function deleteProperty(int $userId, array $parameters)
+    {
+        if (!array_key_exists('id', $parameters)) {
+            throw new InvalidArgumentException("No argument provided");
+        }
+
+        $id = (int)$parameters['id'];
+
+        $this->propertyService->deleteProperty($id);
     }
 }

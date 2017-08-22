@@ -71,4 +71,68 @@ class PropertyService
 
         return $repository->listAllProperties($agentIds, $limit, $offset);
     }
+
+    /**
+     * @param Property $property
+     *
+     * @return Property
+     *
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function createProperty(Property $property)
+    {
+        $this->entityManager->persist($property);
+        $this->entityManager->flush();
+
+        return $property;
+    }
+
+    /**
+     * @param Property $property
+     *
+     * @return Property
+     *
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function updateProperty(Property $property)
+    {
+        $this->entityManager->flush();
+
+        return $property;
+    }
+
+    /**
+     * @param int $id
+     *
+     * @throws PropertyNotFoundException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     */
+    public function archiveProperty(int $id)
+    {
+        $repository = $this->entityManager->getRepository('PropertyBundle:Property');
+        $property   = $repository->find($id);
+
+        $property->setArchived(true);
+
+        $this->entityManager->flush();
+    }
+
+    /**
+     * @param int $id
+     *
+     * @throws PropertyNotFoundException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     */
+    public function deleteProperty(int $id)
+    {
+        $repository = $this->entityManager->getRepository('PropertyBundle:Property');
+        $property   = $repository->find($id);
+
+        $this->entityManager->remove($property);
+        $this->entityManager->flush();
+    }
 }
