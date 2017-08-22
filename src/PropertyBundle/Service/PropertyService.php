@@ -73,14 +73,41 @@ class PropertyService
     }
 
     /**
-     * @param Property $property
+     * @param array $parameters
      *
      * @return Property
      *
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function createProperty(Property $property)
+    public function createProperty(array $parameters)
     {
+        $property = new Property();
+
+        $property->setKind($parameters['kind']);
+        $property->setAgentId($parameters['agent_id']);
+        $property->setClientId($parameters['client_id']);
+        $property->setStreet(ucfirst($parameters['street']));
+        $property->setHouseNumber($parameters['house_number']);
+        $property->setPostcode($parameters['postcode']);
+        $property->setCity(ucfirst($parameters['city']));
+        $property->setCountry($parameters['country']);
+        $property->setSubType($parameters['sub_type_id']);
+        $property->setLat($parameters['lat']);
+        $property->setLng($parameters['lng']);
+
+        if (array_key_exists('status', $parameters) && $parameters['status'] !== null) {
+            $property->setStatus((int)$parameters['status']);
+        }
+        if (array_key_exists('online', $parameters) && $parameters['online'] !== null) {
+            $property->setOnline((bool)$parameters['online']);
+        }
+        if (array_key_exists('price', $parameters) && $parameters['price'] !== null) {
+            $property->setPrice((int)$parameters['price']);
+        }
+        if (array_key_exists('espc', $parameters) && $parameters['espc'] !== null) {
+            $property->setEspc((bool)$parameters['espc']);
+        }
+
         $this->entityManager->persist($property);
         $this->entityManager->flush();
 
@@ -131,6 +158,10 @@ class PropertyService
     {
         $repository = $this->entityManager->getRepository('PropertyBundle:Property');
         $property   = $repository->find($id);
+
+        if ($property === null) {
+            throw new PropertyNotFoundException($id);
+        }
 
         $this->entityManager->remove($property);
         $this->entityManager->flush();

@@ -46,9 +46,9 @@ class Property
     /**
      * @var int
      *
-     * @ORM\Column(name="status", type="boolean")
+     * @ORM\Column(name="status", type="integer")
      */
-    private $status;
+    private $status = 1;
 
     /**
      * @var int
@@ -60,9 +60,9 @@ class Property
     /**
      * @var bool
      *
-     * @ORM\Column(name="online", type="boolean")
+     * @ORM\Column(name="online", type="boolean", options={"default": false})
      */
-    private $online;
+    private $online = false;
 
     /**
      * @var string
@@ -104,7 +104,7 @@ class Property
      *
      * @ORM\Column(name="price", type="integer")
      */
-    private $price;
+    private $price = 0;
 
     /**
      * @var int
@@ -116,9 +116,9 @@ class Property
     /**
      * @var bool
      *
-     * @ORM\Column(name="espc", type="boolean")
+     * @ORM\Column(name="espc", type="boolean", options={"default": false})
      */
-    private $espc;
+    private $espc = false;
 
     /**
      * @var string
@@ -139,7 +139,7 @@ class Property
      *
      * @ORM\Column(name="archived", type="boolean", options={"default": false})
      */
-    private $archived;
+    private $archived = false;
 
     /**
      * @var \DateTime $created

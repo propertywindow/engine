@@ -183,8 +183,7 @@ class PropertyController extends Controller
             throw new InvalidArgumentException("No argument provided");
         }
 
-        $id = (int)$parameters['id'];
-
+        $id   = (int)$parameters['id'];
         $user = $this->userService->getUser($userId);
 
         if ($user->getTypeId() === 5) {
@@ -242,6 +241,7 @@ class PropertyController extends Controller
      * @param array $parameters
      *
      * @return array $property
+     *
      * @throws NotAuthorizedException
      */
     private function createProperty(int $userId, array $parameters)
@@ -252,49 +252,82 @@ class PropertyController extends Controller
             throw new NotAuthorizedException($userId);
         }
 
-        if (!array_key_exists('kind', $parameters) && $parameters['content'] !== null) {
+        if (!array_key_exists('kind', $parameters) && $parameters['kind'] !== null) {
             throw new InvalidArgumentException("Kind parameter not provided");
         }
-        if (!array_key_exists('status', $parameters) && $parameters['type'] !== null) {
-            throw new InvalidArgumentException("Status parameter not provided");
-        }
-        if (!array_key_exists('sub_type', $parameters) && $parameters['start'] !== null) {
+        if (!array_key_exists('sub_type_id', $parameters) && $parameters['sub_type_id'] !== null) {
             throw new InvalidArgumentException("Sub type parameter not provided");
         }
+        if (!array_key_exists('street', $parameters) && $parameters['street'] !== null) {
+            throw new InvalidArgumentException("Street parameter not provided");
+        }
+        if (!array_key_exists('house_number', $parameters) && $parameters['house_number'] !== null) {
+            throw new InvalidArgumentException("House number parameter not provided");
+        }
+        if (!array_key_exists('postcode', $parameters) && $parameters['postcode'] !== null) {
+            throw new InvalidArgumentException("Postcode parameter not provided");
+        }
+        if (!array_key_exists('city', $parameters) && $parameters['city'] !== null) {
+            throw new InvalidArgumentException("City parameter not provided");
+        }
+        if (!array_key_exists('country', $parameters) && $parameters['country'] !== null) {
+            throw new InvalidArgumentException("Country parameter not provided");
+        }
+        if (!array_key_exists('lat', $parameters) && $parameters['lat'] !== null) {
+            throw new InvalidArgumentException("lat parameter not provided");
+        }
+        if (!array_key_exists('lng', $parameters) && $parameters['lng'] !== null) {
+            throw new InvalidArgumentException("lng parameter not provided");
+        }
 
-        $property = $this->propertyService->createProperty($parameters);
+        $parameters['agent_id']  = (int)$user->getAgentId();
+        $parameters['client_id'] = 1;
 
-        return Mapper::fromProperty($property);
+
+        return Mapper::fromProperty($this->propertyService->createProperty($parameters));
+
+        // todo: check if address already exists with same clientId
+        // todo: add to activityLog
+        // todo: also update Details, Gallery, GeneralNotes
     }
 
     /**
      * @param int   $userId
      * @param array $parameters
      *
-     * @return array $property
+     * @return array
+     *
      * @throws NotAuthorizedException
      */
     private function updateProperty(int $userId, array $parameters)
     {
-        $user = $this->userService->getUser($userId);
+        if (!array_key_exists('id', $parameters) || empty($parameters['id'])) {
+            throw new InvalidArgumentException("Identifier not provided");
+        }
 
-        if ($user->getTypeId() === 3) {
+        $user     = $this->userService->getUser($userId);
+        $property = $this->propertyService->getProperty((int)$parameters['id']);
+
+        if ($property->getAgentId() !== $user->getAgentId()) {
             throw new NotAuthorizedException($userId);
         }
 
-        $property = $this->propertyService->updateProperty($parameters);
+        if (array_key_exists('street', $parameters) && $parameters['street'] !== null) {
+            $property->setStreet((string)$parameters['street']);
+        }
 
-        return Mapper::fromProperty($property);
+        return Mapper::fromProperty($this->propertyService->updateProperty($property));
+
+        // todo: add other Property fields
+        // todo: add to activityLog
+        // todo: also update Details, Gallery, GeneralNotes
     }
 
     /**
      * @param int   $userId
      * @param array $parameters
      *
-     * @throws PropertyNotFoundException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
+     * @throws NotAuthorizedException
      */
     private function archiveProperty(int $userId, array $parameters)
     {
@@ -302,20 +335,25 @@ class PropertyController extends Controller
             throw new InvalidArgumentException("No argument provided");
         }
 
-        $user = $this->userService->getUser($userId);
+        $id       = (int)$parameters['id'];
+        $user     = $this->userService->getUser($userId);
+        $property = $this->propertyService->getProperty($id);
 
-        $id = (int)$parameters['id'];
+        if ($property->getAgentId() !== $user->getAgentId()) {
+            throw new NotAuthorizedException($userId);
+        }
 
         $this->propertyService->archiveProperty($id);
+
+        // todo: remove all photos apart from main from data folder and Gallery
+        // todo: add to activityLog
     }
 
     /**
+     * @param int   $userId
      * @param array $parameters
      *
-     * @throws PropertyNotFoundException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
+     * @throws NotAuthorizedException
      */
     private function deleteProperty(int $userId, array $parameters)
     {
@@ -323,8 +361,74 @@ class PropertyController extends Controller
             throw new InvalidArgumentException("No argument provided");
         }
 
-        $id = (int)$parameters['id'];
+        $id   = (int)$parameters['id'];
+        $user = $this->userService->getUser($userId);
+
+        // todo: only admin and agent can delete, but doesn't work
+
+        if ((int)$user->getTypeId() === 1 || (int)$user->getTypeId() === 2) {
+            throw new NotAuthorizedException($userId);
+        }
 
         $this->propertyService->deleteProperty($id);
+
+        // todo: delete info from all tables, including logBundle
+        // todo: remove all photos apart from main from data folder and Gallery
+    }
+
+    /**
+     * @param int   $userId
+     * @param array $parameters
+     *
+     * @throws NotAuthorizedException
+     */
+    private function setPropertySold(int $userId, array $parameters)
+    {
+        if (!array_key_exists('id', $parameters)) {
+            throw new InvalidArgumentException("No argument provided");
+        }
+
+        // todo: gets propertyId and soldPrice
+        // todo: check if soldPrice is filled
+        // todo: change Property:status to sold, and set soldPrice
+
+        $id       = (int)$parameters['id'];
+        $user     = $this->userService->getUser($userId);
+        $property = $this->propertyService->getProperty($id);
+
+        if ($property->getAgentId() !== $user->getAgentId()) {
+            throw new NotAuthorizedException($userId);
+        }
+
+        // todo: create function in service
+
+        // todo: add to activityLog
+    }
+
+    /**
+     * @param int   $userId
+     * @param array $parameters
+     *
+     * @throws NotAuthorizedException
+     */
+    private function toggleOnline(int $userId, array $parameters)
+    {
+        if (!array_key_exists('id', $parameters)) {
+            throw new InvalidArgumentException("No argument provided");
+        }
+
+        // todo: gets propertyId and boolean
+
+        $id       = (int)$parameters['id'];
+        $user     = $this->userService->getUser($userId);
+        $property = $this->propertyService->getProperty($id);
+
+        if ($property->getAgentId() !== $user->getAgentId()) {
+            throw new NotAuthorizedException($userId);
+        }
+
+        // todo: create function in service
+
+        // todo: add to activityLog
     }
 }

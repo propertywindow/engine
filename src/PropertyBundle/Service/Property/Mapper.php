@@ -21,28 +21,26 @@ class Mapper
 
         switch ($country) {
             case "NL":
-                return [
-                    'id'           => $property->getId(),
-                    'address'      => $property->getStreet().' '.$property->getHouseNumber(),
-                    'street'       => $property->getStreet(),
-                    'house_number' => $property->getHouseNumber(),
-                    'postcode'     => $property->getPostcode(),
-                    'city'         => $property->getCity(),
-                    'agent_id'     => $property->getAgentId(),
-                    'subtype_id'   => $property->getSubType(),
-                ];
+                $address = $property->getStreet().' '.$property->getHouseNumber();
+                break;
             default:
-                return [
-                    'id'           => $property->getId(),
-                    'address'      => $property->getHouseNumber().' '.$property->getStreet(),
-                    'street'       => $property->getStreet(),
-                    'house_number' => $property->getHouseNumber(),
-                    'postcode'     => $property->getPostcode(),
-                    'city'         => $property->getCity(),
-                    'agent_id'     => $property->getAgentId(),
-                    'subtype_id'   => $property->getSubType(),
-                ];
+                $address = $property->getHouseNumber().' '.$property->getStreet();
         }
+
+        return [
+            'id'           => $property->getId(),
+            'kind'         => $property->getKind(),
+            'address'      => $address,
+            'street'       => $property->getStreet(),
+            'house_number' => $property->getHouseNumber(),
+            'postcode'     => $property->getPostcode(),
+            'city'         => $property->getCity(),
+            'country'      => $property->getCountry(),
+            'agent_id'     => $property->getAgentId(),
+            'subtype_id'   => $property->getSubType(),
+            'price'        => $property->getPrice(),
+            'espc'         => $property->getEspc(),
+        ];
     }
 
     /**
