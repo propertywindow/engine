@@ -16,6 +16,7 @@ use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcRequestException;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use AuthenticationBundle\Service\UserService;
 use AgentBundle\Service\AgentService;
+use LogBundle\Service\ActivityService;
 use PropertyBundle\Exceptions\PropertyNotFoundException;
 use PropertyBundle\Service\PropertyService;
 use PropertyBundle\Service\Property\Mapper;
@@ -56,21 +57,29 @@ class PropertyController extends Controller
     private $agentService;
 
     /**
+     * @var ActivityService
+     */
+    private $activityService;
+
+    /**
      * @param Authenticator   $authenticator
      * @param PropertyService $propertyService
      * @param UserService     $userService
      * @param AgentService    $agentService
+     * @param ActivityService $activityService
      */
     public function __construct(
         Authenticator $authenticator,
         PropertyService $propertyService,
         UserService $userService,
-        AgentService $agentService
+        AgentService $agentService,
+        ActivityService $activityService
     ) {
         $this->authenticator   = $authenticator;
         $this->propertyService = $propertyService;
         $this->userService     = $userService;
         $this->agentService    = $agentService;
+        $this->activityService = $activityService;
     }
 
     /**
@@ -165,10 +174,15 @@ class PropertyController extends Controller
                 return $this->archiveProperty($userId, $parameters);
             case "deleteProperty":
                 return $this->deleteProperty($userId, $parameters);
+            case "setPropertySold":
+                return $this->setPropertySold($userId, $parameters);
+            case "toggleOnline":
+                return $this->toggleOnline($userId, $parameters);
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
     }
+
 
     /**
      * @param int   $userId
@@ -252,26 +266,29 @@ class PropertyController extends Controller
             throw new NotAuthorizedException($userId);
         }
 
+        if (!array_key_exists('client_id', $parameters) && $parameters['client_id'] !== null) {
+            throw new InvalidArgumentException("client_id parameter not provided");
+        }
         if (!array_key_exists('kind', $parameters) && $parameters['kind'] !== null) {
-            throw new InvalidArgumentException("Kind parameter not provided");
+            throw new InvalidArgumentException("kind parameter not provided");
         }
         if (!array_key_exists('sub_type_id', $parameters) && $parameters['sub_type_id'] !== null) {
-            throw new InvalidArgumentException("Sub type parameter not provided");
+            throw new InvalidArgumentException("sub_type_id parameter not provided");
         }
         if (!array_key_exists('street', $parameters) && $parameters['street'] !== null) {
-            throw new InvalidArgumentException("Street parameter not provided");
+            throw new InvalidArgumentException("street parameter not provided");
         }
         if (!array_key_exists('house_number', $parameters) && $parameters['house_number'] !== null) {
-            throw new InvalidArgumentException("House number parameter not provided");
+            throw new InvalidArgumentException("house_number parameter not provided");
         }
         if (!array_key_exists('postcode', $parameters) && $parameters['postcode'] !== null) {
-            throw new InvalidArgumentException("Postcode parameter not provided");
+            throw new InvalidArgumentException("postcode parameter not provided");
         }
         if (!array_key_exists('city', $parameters) && $parameters['city'] !== null) {
-            throw new InvalidArgumentException("City parameter not provided");
+            throw new InvalidArgumentException("city parameter not provided");
         }
         if (!array_key_exists('country', $parameters) && $parameters['country'] !== null) {
-            throw new InvalidArgumentException("Country parameter not provided");
+            throw new InvalidArgumentException("country parameter not provided");
         }
         if (!array_key_exists('lat', $parameters) && $parameters['lat'] !== null) {
             throw new InvalidArgumentException("lat parameter not provided");
@@ -280,15 +297,15 @@ class PropertyController extends Controller
             throw new InvalidArgumentException("lng parameter not provided");
         }
 
-        $parameters['agent_id']  = (int)$user->getAgentId();
-        $parameters['client_id'] = 1;
+        $parameters['agent_id'] = (int)$user->getAgentId();
+        $property               = $this->propertyService->createProperty($parameters);
 
+        $this->activityService->createActivity($userId, 'createProperty', [], $parameters);
 
-        return Mapper::fromProperty($this->propertyService->createProperty($parameters));
-
-        // todo: check if address already exists with same clientId
-        // todo: add to activityLog
+        // todo: check if address already exists with same clientId and archived = false
         // todo: also update Details, Gallery, GeneralNotes
+
+        return Mapper::fromProperty($property);
     }
 
     /**
@@ -316,10 +333,15 @@ class PropertyController extends Controller
             $property->setStreet((string)$parameters['street']);
         }
 
+        $oldValue = (array)$property;
+
+        $this->activityService->createActivity($userId, 'updateProperty', $oldValue, $parameters);
+
         return Mapper::fromProperty($this->propertyService->updateProperty($property));
 
+        // todo: make both oldValue and newValue proper json
         // todo: add other Property fields
-        // todo: add to activityLog
+        // todo: make more fields mandatory
         // todo: also update Details, Gallery, GeneralNotes
     }
 
@@ -345,8 +367,9 @@ class PropertyController extends Controller
 
         $this->propertyService->archiveProperty($id);
 
+        $this->activityService->createActivity($userId, 'archiveProperty', [], $parameters);
+
         // todo: remove all photos apart from main from data folder and Gallery
-        // todo: add to activityLog
     }
 
     /**
@@ -402,7 +425,7 @@ class PropertyController extends Controller
 
         // todo: create function in service
 
-        // todo: add to activityLog
+        $this->activityService->createActivity($userId, 'setPropertySold', [], $parameters);
     }
 
     /**
@@ -429,6 +452,6 @@ class PropertyController extends Controller
 
         // todo: create function in service
 
-        // todo: add to activityLog
+        $this->activityService->createActivity($userId, 'toggleOnline', [], $parameters);
     }
 }

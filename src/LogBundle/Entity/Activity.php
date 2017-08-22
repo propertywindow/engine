@@ -5,13 +5,13 @@ namespace LogBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * ActivityLog
+ * Activity
  *
  * @ORM\Table(name="log_activity")
- * @ORM\Entity(repositoryClass="LogBundle\Repository\ActivityLogRepository")
+ * @ORM\Entity(repositoryClass="LogBundle\Repository\ActivityRepository")
  * @ORM\HasLifecycleCallbacks
  */
-class ActivityLog
+class Activity
 {
     /**
      * @var int
@@ -37,16 +37,16 @@ class ActivityLog
     private $action;
 
     /**
-     * @var string
+     * @var array
      *
-     * @ORM\Column(name="old_value", type="blob")
+     * @ORM\Column(name="old_value", type="array", nullable=true)
      */
     private $oldValue;
 
     /**
-     * @var string
+     * @var array
      *
-     * @ORM\Column(name="new_value", type="blob")
+     * @ORM\Column(name="new_value", type="array")
      */
     private $newValue;
 
@@ -73,7 +73,7 @@ class ActivityLog
      *
      * @param integer $userId
      *
-     * @return ActivityLog
+     * @return Activity
      */
     public function setUserId($userId)
     {
@@ -97,7 +97,7 @@ class ActivityLog
      *
      * @param string $action
      *
-     * @return ActivityLog
+     * @return Activity
      */
     public function setAction($action)
     {
@@ -119,9 +119,9 @@ class ActivityLog
     /**
      * Set oldValue
      *
-     * @param string $oldValue
+     * @param array $oldValue
      *
-     * @return ActivityLog
+     * @return Activity
      */
     public function setOldValue($oldValue)
     {
@@ -133,7 +133,7 @@ class ActivityLog
     /**
      * Get oldValue
      *
-     * @return string
+     * @return array
      */
     public function getOldValue()
     {
@@ -143,9 +143,9 @@ class ActivityLog
     /**
      * Set newValue
      *
-     * @param string $newValue
+     * @param array $newValue
      *
-     * @return ActivityLog
+     * @return Activity
      */
     public function setNewValue($newValue)
     {
@@ -157,7 +157,7 @@ class ActivityLog
     /**
      * Get newValue
      *
-     * @return string
+     * @return array
      */
     public function getNewValue()
     {

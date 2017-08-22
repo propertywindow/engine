@@ -5,13 +5,13 @@ namespace LogBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * TrafficLog
+ * Traffic
  *
  * @ORM\Table(name="log_traffic")
- * @ORM\Entity(repositoryClass="LogBundle\Repository\TrafficLogRepository")
+ * @ORM\Entity(repositoryClass="LogBundle\Repository\TrafficRepository")
  * @ORM\HasLifecycleCallbacks
  */
-class TrafficLog
+class Traffic
 {
     /**
      * @var int
@@ -80,7 +80,7 @@ class TrafficLog
      *
      * @param integer $propertyId
      *
-     * @return TrafficLog
+     * @return Traffic
      */
     public function setPropertyId($propertyId)
     {
@@ -104,7 +104,7 @@ class TrafficLog
      *
      * @param string $ip
      *
-     * @return TrafficLog
+     * @return Traffic
      */
     public function setIp($ip)
     {
@@ -128,7 +128,7 @@ class TrafficLog
      *
      * @param string $browser
      *
-     * @return TrafficLog
+     * @return Traffic
      */
     public function setBrowser($browser)
     {
@@ -152,7 +152,7 @@ class TrafficLog
      *
      * @param string $location
      *
-     * @return TrafficLog
+     * @return Traffic
      */
     public function setLocation($location)
     {
@@ -176,7 +176,7 @@ class TrafficLog
      *
      * @param string $referrer
      *
-     * @return TrafficLog
+     * @return Traffic
      */
     public function setReferrer($referrer)
     {

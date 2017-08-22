@@ -5,13 +5,13 @@ namespace LogBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * LoginLog
+ * Login
  *
  * @ORM\Table(name="log_login")
- * @ORM\Entity(repositoryClass="LogBundle\Repository\LoginLogRepository")
+ * @ORM\Entity(repositoryClass="LogBundle\Repository\LoginRepository")
  * @ORM\HasLifecycleCallbacks
  */
-class LoginLog
+class Login
 {
     /**
      * @var int
@@ -59,7 +59,7 @@ class LoginLog
      *
      * @param integer $userId
      *
-     * @return LoginLog
+     * @return Login
      */
     public function setUserId($userId)
     {
@@ -83,7 +83,7 @@ class LoginLog
      *
      * @param string $ip
      *
-     * @return LoginLog
+     * @return Login
      */
     public function setIp($ip)
     {

@@ -1,4 +1,4 @@
 services:
-#    log.example:
-#        class: LogBundle\Example
-#        arguments: ["@service_id", "plain_value", "%parameter%"]
+    activity_service:
+          class: LogBundle\Service\ActivityService
+          arguments: ["@doctrine.orm.entity_manager"]
