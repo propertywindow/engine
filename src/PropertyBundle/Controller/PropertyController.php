@@ -17,6 +17,7 @@ use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use AuthenticationBundle\Service\UserService;
 use AgentBundle\Service\AgentService;
 use LogBundle\Service\ActivityService;
+use LogBundle\Service\TrafficService;
 use PropertyBundle\Exceptions\PropertyNotFoundException;
 use PropertyBundle\Service\PropertyService;
 use PropertyBundle\Service\Property\Mapper;
@@ -70,24 +71,32 @@ class PropertyController extends Controller
     private $activityService;
 
     /**
+     * @var TrafficService
+     */
+    private $trafficService;
+
+    /**
      * @param Authenticator   $authenticator
      * @param PropertyService $propertyService
      * @param UserService     $userService
      * @param AgentService    $agentService
      * @param ActivityService $activityService
+     * @param TrafficService  $trafficService
      */
     public function __construct(
         Authenticator $authenticator,
         PropertyService $propertyService,
         UserService $userService,
         AgentService $agentService,
-        ActivityService $activityService
+        ActivityService $activityService,
+        TrafficService $trafficService
     ) {
         $this->authenticator   = $authenticator;
         $this->propertyService = $propertyService;
         $this->userService     = $userService;
         $this->agentService    = $agentService;
         $this->activityService = $activityService;
+        $this->trafficService  = $trafficService;
     }
 
     /**
@@ -208,14 +217,30 @@ class PropertyController extends Controller
         $id   = (int)$parameters['id'];
         $user = $this->userService->getUser($userId);
 
-        if ($user->getTypeId() === self::USER_API) {
-            // todo: set traffic log
-        }
-
         $property = $this->propertyService->getProperty($id);
 
         if ($property->getAgentId() !== $user->getAgentId()) {
             throw new NotAuthorizedException($userId);
+        }
+
+        if ($user->getTypeId() === self::USER_API) {
+            if (!array_key_exists('ip', $parameters)) {
+                throw new InvalidArgumentException("No ip argument provided");
+            }
+            if (!array_key_exists('browser', $parameters)) {
+                throw new InvalidArgumentException("No browser argument provided");
+            }
+            if (!array_key_exists('location', $parameters)) {
+                throw new InvalidArgumentException("No location argument provided");
+            }
+
+            $this->trafficService->createTraffic(
+                $id,
+                (string)$parameters['id'],
+                (string)$parameters['browser'],
+                (string)$parameters['location'],
+                (string)$parameters['referrer']
+            );
         }
 
         return Mapper::fromProperty($property);

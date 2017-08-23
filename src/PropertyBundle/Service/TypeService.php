@@ -37,6 +37,7 @@ class TypeService
         $repository = $this->entityManager->getRepository('PropertyBundle:Type');
         $type       = $repository->find($id);
 
+        /** @var Type $type */
         if ($type === null) {
             throw new TypeNotFoundException($id);
         }
@@ -46,8 +47,6 @@ class TypeService
 
     /**
      * @return Type[]
-     *
-     * @throws \Doctrine\ORM\RuntimeException
      */
     public function getTypes()
     {

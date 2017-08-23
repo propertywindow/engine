@@ -24,7 +24,6 @@ class ActivityService
         $this->entityManager = $entityManger;
     }
 
-
     /**
      * @param int $id
      *
@@ -32,11 +31,12 @@ class ActivityService
      *
      * @throws ActivityNotFoundException
      */
-    public function getUser(int $id)
+    public function getActivity(int $id)
     {
         $repository = $this->entityManager->getRepository('LogBundle:Activity');
         $activity   = $repository->find($id);
 
+        /** @var Activity $activity */
         if ($activity === null) {
             throw new ActivityNotFoundException($id);
         }

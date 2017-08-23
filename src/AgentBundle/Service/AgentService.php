@@ -37,6 +37,7 @@ class AgentService
         $repository = $this->entityManager->getRepository('AgentBundle:Agent');
         $agent      = $repository->find($id);
 
+        /** @var Agent $agent */
         if ($agent === null) {
             throw new AgentNotFoundException($id);
         }

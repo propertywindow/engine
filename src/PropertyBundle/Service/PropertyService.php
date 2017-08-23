@@ -37,6 +37,7 @@ class PropertyService
         $repository = $this->entityManager->getRepository('PropertyBundle:Property');
         $property   = $repository->find($id);
 
+        /** @var Property $property */
         if ($property === null) {
             throw new PropertyNotFoundException($id);
         }

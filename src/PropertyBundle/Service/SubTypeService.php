@@ -37,6 +37,7 @@ class SubTypeService
         $repository = $this->entityManager->getRepository('PropertyBundle:SubType');
         $subType    = $repository->find($id);
 
+        /** @var SubType $subType */
         if ($subType === null) {
             throw new SubTypeNotFoundException($id);
         }
@@ -48,8 +49,6 @@ class SubTypeService
      * @param int|null $typeId
      *
      * @return SubType[]
-     *
-     * @throws \Doctrine\ORM\RuntimeException
      */
     public function getSubTypes(?int $typeId)
     {
@@ -102,7 +101,6 @@ class SubTypeService
         $type               = $subTypeRepository->findById($id);
         $propertyRepository = $this->entityManager->getRepository('PropertyBundle:Property');
         $subTypes           = $propertyRepository->findPropertiesWithSubType($type->getId());
-
 
         if (!empty($subTypes)) {
             throw new SubTypeDeleteException($id);

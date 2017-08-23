@@ -39,7 +39,9 @@ class Mapper
             'agent_id'     => $property->getAgentId(),
             'subtype_id'   => $property->getSubType(),
             'price'        => $property->getPrice(),
+            'sold_price'   => $property->getSoldPrice(),
             'espc'         => $property->getEspc(),
+            'terms'        => $property->getTerms(),
         ];
     }
 
