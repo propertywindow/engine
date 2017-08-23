@@ -45,19 +45,29 @@ class ActivityService
     }
 
     /**
-     * @param int    $userId
-     * @param string $action
+     * @param int         $userId
+     * @param int|null    $actionId
+     * @param null|string $actionCategory
+     * @param string      $actionName
      * @param array|null  $oldValue
-     * @param array  $newValue
+     * @param array       $newValue
      *
      * @return Activity
      */
-    public function createActivity(int $userId, string $action, ?array $oldValue, array $newValue)
-    {
+    public function createActivity(
+        int $userId,
+        ?int $actionId,
+        ?string $actionCategory,
+        string $actionName,
+        ?array $oldValue,
+        array $newValue
+    ) {
         $activity = new Activity();
 
         $activity->setUserId($userId);
-        $activity->setAction($action);
+        $activity->setActionId($actionId);
+        $activity->setActionCategory($actionCategory);
+        $activity->setActionName($actionName);
         $activity->setOldValue($oldValue);
         $activity->setNewValue($newValue);
 

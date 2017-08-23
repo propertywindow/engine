@@ -39,7 +39,14 @@ class Activity
     /**
      * @var string
      *
-     * @ORM\Column(name="action_name", type="string", length=255)
+     * @ORM\Column(name="action_category", type="string", length=255, nullable=true)
+     */
+    private $actionCategory;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="action_name", type="string", length=255, nullable=true)
      */
     private $actionName;
 
@@ -123,6 +130,29 @@ class Activity
         return $this->actionId;
     }
 
+    /**
+     * Set actionCategory
+     *
+     * @param string $actionCategory
+     *
+     * @return Activity
+     */
+    public function setActionCategory($actionCategory)
+    {
+        $this->actionCategory = $actionCategory;
+
+        return $this;
+    }
+
+    /**
+     * Get actionCategory
+     *
+     * @return string
+     */
+    public function getActionCategory()
+    {
+        return $this->actionCategory;
+    }
 
     /**
      * Set actionName

@@ -307,8 +307,16 @@ class PropertyController extends Controller
 
         $parameters['agent_id'] = (int)$user->getAgentId();
         $property               = $this->propertyService->createProperty($parameters);
+        $propertyId             = $property->getId();
 
-        $this->activityService->createActivity($userId, 'createProperty', null, $parameters);
+        $this->activityService->createActivity(
+            $userId,
+            $propertyId,
+            'property',
+            'create',
+            null,
+            $parameters
+        );
 
         // todo: check if address already exists with same clientId and archived = false
         // todo: also update Details, Gallery, GeneralNotes
@@ -332,7 +340,8 @@ class PropertyController extends Controller
         }
 
         $user     = $this->userService->getUser($userId);
-        $property = $this->propertyService->getProperty((int)$parameters['id']);
+        $id       = (int)$parameters['id'];
+        $property = $this->propertyService->getProperty($id);
 
         if ($property->getAgentId() !== $user->getAgentId()) {
             throw new NotAuthorizedException($userId);
@@ -343,9 +352,16 @@ class PropertyController extends Controller
         }
 
         $serializer = new Serializer([new GetSetMethodNormalizer()], ['json' => new JsonEncoder()]);
-        $oldValue = (array)$serializer->serialize($property, 'json');
+        $oldValue   = (array)$serializer->serialize($property, 'json');
 
-        $this->activityService->createActivity($userId, 'updateProperty', $oldValue, $parameters);
+        $this->activityService->createActivity(
+            $userId,
+            $id,
+            'property',
+            'update',
+            $oldValue,
+            $parameters
+        );
 
         return Mapper::fromProperty($this->propertyService->updateProperty($property));
 
@@ -377,7 +393,14 @@ class PropertyController extends Controller
 
         $this->propertyService->archiveProperty($id);
 
-        $this->activityService->createActivity($userId, 'archiveProperty', null, $parameters);
+        $this->activityService->createActivity(
+            $userId,
+            $id,
+            'property',
+            'archive',
+            null,
+            $parameters
+        );
 
         // todo: remove all photos apart from main from data folder and Gallery
     }
@@ -437,7 +460,14 @@ class PropertyController extends Controller
 
         // todo: create function in service
 
-        $this->activityService->createActivity($userId, 'setPropertySold', null, $parameters);
+        $this->activityService->createActivity(
+            $userId,
+            $id,
+            'property',
+            'update',
+            null,
+            $parameters
+        );
     }
 
     /**
@@ -467,6 +497,13 @@ class PropertyController extends Controller
 
         // todo: create function in service with id and action
 
-        $this->activityService->createActivity($userId, 'toggleOnline', null, $parameters);
+        $this->activityService->createActivity(
+            $userId,
+            $id,
+            'property',
+            'update',
+            null,
+            $parameters
+        );
     }
 }
