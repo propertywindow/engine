@@ -30,23 +30,30 @@ class Activity
     private $userId;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="action_id", type="integer", nullable=true)
+     */
+    private $actionId;
+
+    /**
      * @var string
      *
-     * @ORM\Column(name="action", type="string", length=255)
+     * @ORM\Column(name="action_name", type="string", length=255)
      */
-    private $action;
+    private $actionName;
 
     /**
      * @var array
      *
-     * @ORM\Column(name="old_value", type="array", nullable=true)
+     * @ORM\Column(name="old_value", type="json_array", nullable=true)
      */
     private $oldValue;
 
     /**
      * @var array
      *
-     * @ORM\Column(name="new_value", type="array")
+     * @ORM\Column(name="new_value", type="json_array")
      */
     private $newValue;
 
@@ -93,27 +100,52 @@ class Activity
     }
 
     /**
-     * Set action
+     * Set actionId
      *
-     * @param string $action
+     * @param integer $actionId
      *
      * @return Activity
      */
-    public function setAction($action)
+    public function setActionId($actionId)
     {
-        $this->action = $action;
+        $this->actionId = $actionId;
 
         return $this;
     }
 
     /**
-     * Get action
+     * Get actionId
+     *
+     * @return int
+     */
+    public function getActionId()
+    {
+        return $this->actionId;
+    }
+
+
+    /**
+     * Set actionName
+     *
+     * @param string $actionName
+     *
+     * @return Activity
+     */
+    public function setActionName($actionName)
+    {
+        $this->actionName = $actionName;
+
+        return $this;
+    }
+
+    /**
+     * Get actionName
      *
      * @return string
      */
-    public function getAction()
+    public function getActionName()
     {
-        return $this->action;
+        return $this->actionName;
     }
 
     /**

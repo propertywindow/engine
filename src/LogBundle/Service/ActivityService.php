@@ -47,12 +47,12 @@ class ActivityService
     /**
      * @param int    $userId
      * @param string $action
-     * @param array  $oldValue
+     * @param array|null  $oldValue
      * @param array  $newValue
      *
      * @return Activity
      */
-    public function createActivity(int $userId, string $action, array $oldValue, array $newValue)
+    public function createActivity(int $userId, string $action, ?array $oldValue, array $newValue)
     {
         $activity = new Activity();
 

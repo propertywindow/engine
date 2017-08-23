@@ -5,9 +5,9 @@ namespace LogBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * LoginLogRepository
+ * ActivityRepository
  *
  */
-class LoginLogRepository extends EntityRepository
+class ActivityRepository extends EntityRepository
 {
 }

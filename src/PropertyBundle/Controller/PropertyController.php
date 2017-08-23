@@ -22,19 +22,27 @@ use PropertyBundle\Service\PropertyService;
 use PropertyBundle\Service\Property\Mapper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 /**
  * @Route(service="property_controller")
  */
 class PropertyController extends Controller
 {
-    private const PARSE_ERROR            = -32700;
-    private const INVALID_REQUEST        = -32600;
-    private const METHOD_NOT_FOUND       = -32601;
-    private const INVALID_PARAMS         = -32602;
-    private const INTERNAL_ERROR         = -32603;
-    private const USER_NOT_AUTHENTICATED = -32000;
-    private const PROPERTY_NOT_FOUND     = -32001;
+    private const         PARSE_ERROR            = -32700;
+    private const         INVALID_REQUEST        = -32600;
+    private const         METHOD_NOT_FOUND       = -32601;
+    private const         INVALID_PARAMS         = -32602;
+    private const         INTERNAL_ERROR         = -32603;
+    private const         USER_NOT_AUTHENTICATED = -32000;
+    private const         PROPERTY_NOT_FOUND     = -32001;
+    private const         USER_ADMIN             = 1;
+    private const         USER_AGENT             = 2;
+    private const         USER_COLLEAGUE         = 3;
+    private const         USER_CLIENT            = 4;
+    private const         USER_API               = 5;
 
     /**
      * @var Authenticator
@@ -200,7 +208,7 @@ class PropertyController extends Controller
         $id   = (int)$parameters['id'];
         $user = $this->userService->getUser($userId);
 
-        if ($user->getTypeId() === 5) {
+        if ($user->getTypeId() === self::USER_API) {
             // todo: set traffic log
         }
 
@@ -262,7 +270,7 @@ class PropertyController extends Controller
     {
         $user = $this->userService->getUser($userId);
 
-        if ($user->getTypeId() === 3) {
+        if ($user->getTypeId() === self::USER_CLIENT || $user->getTypeId() === self::USER_API) {
             throw new NotAuthorizedException($userId);
         }
 
@@ -300,10 +308,11 @@ class PropertyController extends Controller
         $parameters['agent_id'] = (int)$user->getAgentId();
         $property               = $this->propertyService->createProperty($parameters);
 
-        $this->activityService->createActivity($userId, 'createProperty', [], $parameters);
+        $this->activityService->createActivity($userId, 'createProperty', null, $parameters);
 
         // todo: check if address already exists with same clientId and archived = false
         // todo: also update Details, Gallery, GeneralNotes
+        // todo: make more fields mandatory
 
         return Mapper::fromProperty($property);
     }
@@ -333,7 +342,8 @@ class PropertyController extends Controller
             $property->setStreet((string)$parameters['street']);
         }
 
-        $oldValue = (array)$property;
+        $serializer = new Serializer([new GetSetMethodNormalizer()], ['json' => new JsonEncoder()]);
+        $oldValue = (array)$serializer->serialize($property, 'json');
 
         $this->activityService->createActivity($userId, 'updateProperty', $oldValue, $parameters);
 
@@ -367,7 +377,7 @@ class PropertyController extends Controller
 
         $this->propertyService->archiveProperty($id);
 
-        $this->activityService->createActivity($userId, 'archiveProperty', [], $parameters);
+        $this->activityService->createActivity($userId, 'archiveProperty', null, $parameters);
 
         // todo: remove all photos apart from main from data folder and Gallery
     }
@@ -387,9 +397,8 @@ class PropertyController extends Controller
         $id   = (int)$parameters['id'];
         $user = $this->userService->getUser($userId);
 
-        // todo: only admin and agent can delete, but doesn't work
-
-        if ((int)$user->getTypeId() === 1 || (int)$user->getTypeId() === 2) {
+        // todo: doesn't work
+        if ((int)$user->getTypeId() === self::USER_ADMIN || (int)$user->getTypeId() === self::USER_AGENT) {
             throw new NotAuthorizedException($userId);
         }
 
@@ -411,13 +420,16 @@ class PropertyController extends Controller
             throw new InvalidArgumentException("No argument provided");
         }
 
-        // todo: gets propertyId and soldPrice
-        // todo: check if soldPrice is filled
+        if (!array_key_exists('soldPrice', $parameters)) {
+            throw new InvalidArgumentException("No argument provided");
+        }
+
         // todo: change Property:status to sold, and set soldPrice
 
-        $id       = (int)$parameters['id'];
-        $user     = $this->userService->getUser($userId);
-        $property = $this->propertyService->getProperty($id);
+        $id        = (int)$parameters['id'];
+        $soldPrice = (int)$parameters['soldPrice'];
+        $user      = $this->userService->getUser($userId);
+        $property  = $this->propertyService->getProperty($id);
 
         if ($property->getAgentId() !== $user->getAgentId()) {
             throw new NotAuthorizedException($userId);
@@ -425,7 +437,7 @@ class PropertyController extends Controller
 
         // todo: create function in service
 
-        $this->activityService->createActivity($userId, 'setPropertySold', [], $parameters);
+        $this->activityService->createActivity($userId, 'setPropertySold', null, $parameters);
     }
 
     /**
@@ -440,9 +452,12 @@ class PropertyController extends Controller
             throw new InvalidArgumentException("No argument provided");
         }
 
-        // todo: gets propertyId and boolean
+        if (!array_key_exists('action', $parameters)) {
+            throw new InvalidArgumentException("No argument provided");
+        }
 
         $id       = (int)$parameters['id'];
+        $action   = (bool)$parameters['action'];
         $user     = $this->userService->getUser($userId);
         $property = $this->propertyService->getProperty($id);
 
@@ -450,8 +465,8 @@ class PropertyController extends Controller
             throw new NotAuthorizedException($userId);
         }
 
-        // todo: create function in service
+        // todo: create function in service with id and action
 
-        $this->activityService->createActivity($userId, 'toggleOnline', [], $parameters);
+        $this->activityService->createActivity($userId, 'toggleOnline', null, $parameters);
     }
 }
