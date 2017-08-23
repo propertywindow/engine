@@ -46,9 +46,9 @@ class Property
     /**
      * @var int
      *
-     * @ORM\Column(name="status", type="integer")
+     * @ORM\Column(name="terms", type="integer")
      */
-    private $status = 1;
+    private $terms = 1;
 
     /**
      * @var int
@@ -238,27 +238,27 @@ class Property
     }
 
     /**
-     * Set status
+     * Set terms
      *
-     * @param boolean $status
+     * @param integer $terms
      *
      * @return Property
      */
-    public function setStatus($status)
+    public function setTerms($terms)
     {
-        $this->status = $status;
+        $this->terms = $terms;
 
         return $this;
     }
 
     /**
-     * Get status
+     * Get terms
      *
      * @return bool
      */
-    public function getStatus()
+    public function getTerms()
     {
-        return $this->status;
+        return $this->terms;
     }
 
     /**

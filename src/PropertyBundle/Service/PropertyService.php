@@ -95,8 +95,8 @@ class PropertyService
         $property->setLat($parameters['lat']);
         $property->setLng($parameters['lng']);
 
-        if (array_key_exists('status', $parameters) && $parameters['status'] !== null) {
-            $property->setStatus((int)$parameters['status']);
+        if (array_key_exists('terms', $parameters) && $parameters['terms'] !== null) {
+            $property->setTerms((int)$parameters['terms']);
         }
         if (array_key_exists('online', $parameters) && $parameters['online'] !== null) {
             $property->setOnline((bool)$parameters['online']);
@@ -165,5 +165,52 @@ class PropertyService
 
         $this->entityManager->remove($property);
         $this->entityManager->flush();
+    }
+
+    /**
+     * @param int $id
+     * @param int $soldPrice
+     *
+     * @return Property
+     * @throws PropertyNotFoundException
+     */
+    public function setPropertySold(int $id, int $soldPrice)
+    {
+        $repository = $this->entityManager->getRepository('PropertyBundle:Property');
+        $property   = $repository->find($id);
+
+        if ($property === null) {
+            throw new PropertyNotFoundException($id);
+        }
+
+        $property->setOnline($soldPrice);
+        $property->setTerms(9);
+
+        $this->entityManager->flush();
+
+        return $property;
+    }
+
+    /**
+     * @param int  $id
+     * @param bool $online
+     *
+     * @return Property
+     * @throws PropertyNotFoundException
+     */
+    public function toggleOnline(int $id, bool $online)
+    {
+        $repository = $this->entityManager->getRepository('PropertyBundle:Property');
+        $property   = $repository->find($id);
+
+        if ($property === null) {
+            throw new PropertyNotFoundException($id);
+        }
+
+        $property->setOnline($online);
+
+        $this->entityManager->flush();
+
+        return $property;
     }
 }

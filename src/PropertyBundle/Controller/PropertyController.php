@@ -320,7 +320,6 @@ class PropertyController extends Controller
 
         // todo: check if address already exists with same clientId and archived = false
         // todo: also update Details, Gallery, GeneralNotes
-        // todo: make more fields mandatory
 
         return Mapper::fromProperty($property);
     }
@@ -427,6 +426,7 @@ class PropertyController extends Controller
 
         $this->propertyService->deleteProperty($id);
 
+        // todo: link other property entities to property entity
         // todo: delete info from all tables, including logBundle
         // todo: remove all photos apart from main from data folder and Gallery
     }
@@ -447,8 +447,6 @@ class PropertyController extends Controller
             throw new InvalidArgumentException("No argument provided");
         }
 
-        // todo: change Property:status to sold, and set soldPrice
-
         $id        = (int)$parameters['id'];
         $soldPrice = (int)$parameters['soldPrice'];
         $user      = $this->userService->getUser($userId);
@@ -458,7 +456,7 @@ class PropertyController extends Controller
             throw new NotAuthorizedException($userId);
         }
 
-        // todo: create function in service
+        $this->propertyService->setPropertySold($id, $soldPrice);
 
         $this->activityService->createActivity(
             $userId,
@@ -482,12 +480,12 @@ class PropertyController extends Controller
             throw new InvalidArgumentException("No argument provided");
         }
 
-        if (!array_key_exists('action', $parameters)) {
+        if (!array_key_exists('online', $parameters)) {
             throw new InvalidArgumentException("No argument provided");
         }
 
         $id       = (int)$parameters['id'];
-        $action   = (bool)$parameters['action'];
+        $online   = (bool)$parameters['online'];
         $user     = $this->userService->getUser($userId);
         $property = $this->propertyService->getProperty($id);
 
@@ -495,7 +493,7 @@ class PropertyController extends Controller
             throw new NotAuthorizedException($userId);
         }
 
-        // todo: create function in service with id and action
+        $this->propertyService->toggleOnline($id, $online);
 
         $this->activityService->createActivity(
             $userId,

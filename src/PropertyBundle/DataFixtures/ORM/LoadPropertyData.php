@@ -21,7 +21,7 @@ class LoadPropertyData implements FixtureInterface
         $property->setKind('sale');
         $property->setAgentId(1);
         $property->setClientId(1);
-        $property->setStatus(1);
+        $property->setTerms(1);
         $property->setOnline(1);
         $property->setSubType(2);
         $property->setStreet('Graafsedijk');
@@ -40,7 +40,7 @@ class LoadPropertyData implements FixtureInterface
         $property->setKind('sale');
         $property->setAgentId(2);
         $property->setClientId(1);
-        $property->setStatus(1);
+        $property->setTerms(1);
         $property->setOnline(1);
         $property->setSubType(1);
         $property->setStreet('Portobello High Street');
