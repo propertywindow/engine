@@ -375,20 +375,22 @@ class PropertyController extends Controller
 
         if (array_key_exists('client_id', $parameters) && $parameters['client_id'] !== null) {
             $property->setClientId((int)$parameters['client_id']);
-        } else {
-            throw new InvalidArgumentException("client_id parameter not provided");
         }
 
         if (array_key_exists('kind', $parameters) && $parameters['kind'] !== null) {
             $property->setKind((string)$parameters['kind']);
-        } else {
-            throw new InvalidArgumentException("kind parameter not provided");
         }
 
         if (array_key_exists('sub_type_id', $parameters) && $parameters['sub_type_id'] !== null) {
             $property->setSubType((int)$parameters['sub_type_id']);
-        } else {
-            throw new InvalidArgumentException("sub_type_id parameter not provided");
+        }
+
+        if (array_key_exists('terms', $parameters) && $parameters['terms'] !== null) {
+            $property->setTerms((int)$parameters['terms']);
+        }
+
+        if (array_key_exists('online', $parameters) && $parameters['online'] !== null) {
+            $property->setOnline((int)$parameters['online']);
         }
 
         if (array_key_exists('street', $parameters) && $parameters['street'] !== null) {
@@ -419,6 +421,14 @@ class PropertyController extends Controller
             $property->setCountry((string)$parameters['country']);
         } else {
             throw new InvalidArgumentException("country parameter not provided");
+        }
+
+        if (array_key_exists('price', $parameters) && $parameters['price'] !== null) {
+            $property->setPrice((int)$parameters['price']);
+        }
+
+        if (array_key_exists('espc', $parameters) && $parameters['espc'] !== null) {
+            $property->setEspc((bool)$parameters['espc']);
         }
 
         if (array_key_exists('lat', $parameters) && $parameters['lat'] !== null) {
@@ -498,7 +508,7 @@ class PropertyController extends Controller
         $id   = (int)$parameters['id'];
         $user = $this->userService->getUser($userId);
 
-        if ((int)$user->getTypeId() === self::USER_ADMIN || (int)$user->getTypeId() === self::USER_AGENT) {
+        if ((int)$user->getTypeId() !== self::USER_ADMIN || (int)$user->getTypeId() !== self::USER_AGENT) {
             throw new NotAuthorizedException($userId);
         }
 
