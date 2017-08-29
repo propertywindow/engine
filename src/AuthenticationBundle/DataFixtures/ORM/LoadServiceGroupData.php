@@ -28,7 +28,7 @@ class LoadServiceGroupData extends AbstractFixture implements OrderedFixtureInte
         $serviceGroup = new ServiceGroup();
         $serviceGroup->setEn('Users');
         $serviceGroup->setNl('Gebruikers');
-        $serviceGroup->setIcon('zmdi zmdi-palette');
+        $serviceGroup->setIcon('zmdi zmdi-accounts');
         $this->addReference('service_group_users', $serviceGroup);
         $manager->persist($serviceGroup);
 
@@ -84,7 +84,7 @@ class LoadServiceGroupData extends AbstractFixture implements OrderedFixtureInte
         $serviceGroup = new ServiceGroup();
         $serviceGroup->setEn('Contacts');
         $serviceGroup->setNl('Contacten');
-        $serviceGroup->setIcon('zmdi zmdi zmdi-accounts');
+        $serviceGroup->setIcon('zmdi zmdi-accounts');
         $this->addReference('service_group_contacts', $serviceGroup);
         $manager->persist($serviceGroup);
 
@@ -105,7 +105,7 @@ class LoadServiceGroupData extends AbstractFixture implements OrderedFixtureInte
         $serviceGroup = new ServiceGroup();
         $serviceGroup->setEn('Notifications');
         $serviceGroup->setNl('Notificaties');
-        $serviceGroup->setIcon('zmdi zmdi-palette');
+        $serviceGroup->setIcon('zmdi zmdi-notifications');
         $this->addReference('service_group_notifications', $serviceGroup);
         $manager->persist($serviceGroup);
 
