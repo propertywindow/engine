@@ -514,7 +514,7 @@ class PropertyController extends Controller
             throw new NotAuthorizedException($userId);
         }
 
-        // todo: link other property entities to property entity
+        // todo: cascade entities
         // todo: delete info from all tables, including logBundle
         // todo: remove all photos from data folder and Gallery
     }

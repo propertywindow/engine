@@ -47,6 +47,7 @@ class Mapper
             'online'       => $property->getOnline(),
             'lat'          => $property->getLat(),
             'lng'          => $property->getLng(),
+            'gallery'      => $property->getImages(),
         ];
     }
 

@@ -2,8 +2,6 @@
 
 namespace PropertyBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -163,14 +161,6 @@ class Property
     protected $updated;
 
     /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->images = new ArrayCollection();
-    }
-
-    /**
      * Get id
      *
      * @return int
@@ -178,40 +168,6 @@ class Property
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Add image
-     *
-     * @param Gallery $image
-     *
-     * @return Property
-     */
-    public function addImage(Gallery $image)
-    {
-        $this->images[] = $image;
-
-        return $this;
-    }
-
-    /**
-     * Remove image
-     *
-     * @param Gallery $image
-     */
-    public function removeImage(Gallery $image)
-    {
-        $this->images->removeElement($image);
-    }
-
-    /**
-     * Get images
-     *
-     * @return Collection
-     */
-    public function getImages()
-    {
-        return $this->images;
     }
 
     /**
@@ -639,53 +595,5 @@ class Property
     public function onPreUpdate()
     {
         $this->updated = new \DateTime("now");
-    }
-
-    /**
-     * Set created
-     *
-     * @param \DateTime $created
-     *
-     * @return Property
-     */
-    public function setCreated($created)
-    {
-        $this->created = $created;
-
-        return $this;
-    }
-
-    /**
-     * Get created
-     *
-     * @return \DateTime
-     */
-    public function getCreated()
-    {
-        return $this->created;
-    }
-
-    /**
-     * Set updated
-     *
-     * @param \DateTime $updated
-     *
-     * @return Property
-     */
-    public function setUpdated($updated)
-    {
-        $this->updated = $updated;
-
-        return $this;
-    }
-
-    /**
-     * Get updated
-     *
-     * @return \DateTime
-     */
-    public function getUpdated()
-    {
-        return $this->updated;
     }
 }

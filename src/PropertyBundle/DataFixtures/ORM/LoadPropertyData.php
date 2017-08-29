@@ -4,6 +4,7 @@ namespace PropertyBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
+use PropertyBundle\Entity\Gallery;
 use PropertyBundle\Entity\Property;
 
 /**
@@ -36,6 +37,26 @@ class LoadPropertyData implements FixtureInterface
         $property->setArchived(false);
         $manager->persist($property);
 
+        $gallery = new Gallery();
+        $gallery->setSort(1);
+        $gallery->setPath('imagePath1');
+        $gallery->setMain(true);
+        $gallery->setProperty($property);
+        $manager->persist($gallery);
+
+        $gallery = new Gallery();
+        $gallery->setSort(2);
+        $gallery->setPath('imagePath2');
+        $gallery->setProperty($property);
+        $manager->persist($gallery);
+
+        $gallery = new Gallery();
+        $gallery->setSort(3);
+        $gallery->setPath('imagePath3');
+        $gallery->setProperty($property);
+        $manager->persist($gallery);
+
+
         $property = new Property();
         $property->setKind('sale');
         $property->setAgentId(2);
@@ -54,6 +75,26 @@ class LoadPropertyData implements FixtureInterface
         $property->setEspc(false);
         $property->setArchived(false);
         $manager->persist($property);
+
+        $gallery = new Gallery();
+        $gallery->setSort(1);
+        $gallery->setPath('imagePath1');
+        $gallery->setMain(true);
+        $gallery->setProperty($property);
+        $manager->persist($gallery);
+
+        $gallery = new Gallery();
+        $gallery->setSort(2);
+        $gallery->setPath('imagePath2');
+        $gallery->setProperty($property);
+        $manager->persist($gallery);
+
+        $gallery = new Gallery();
+        $gallery->setSort(3);
+        $gallery->setPath('imagePath3');
+        $gallery->setProperty($property);
+        $manager->persist($gallery);
+
 
         $manager->flush();
     }
