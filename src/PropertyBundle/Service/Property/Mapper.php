@@ -29,6 +29,7 @@ class Mapper
 
         return [
             'id'           => $property->getId(),
+            'agent_id'     => $property->getAgentId(),
             'client_id'    => $property->getClientId(),
             'kind'         => $property->getKind(),
             'address'      => $address,
@@ -37,13 +38,15 @@ class Mapper
             'postcode'     => $property->getPostcode(),
             'city'         => $property->getCity(),
             'country'      => $property->getCountry(),
-            'agent_id'     => $property->getAgentId(),
             'subtype_id'   => $property->getSubType(),
             'price'        => $property->getPrice(),
             'sold_price'   => $property->getSoldPrice(),
             'espc'         => $property->getEspc(),
             'terms'        => $property->getTerms(),
             'archived'     => $property->getArchived(),
+            'online'       => $property->getOnline(),
+            'lat'          => $property->getLat(),
+            'lng'          => $property->getLng(),
         ];
     }
 

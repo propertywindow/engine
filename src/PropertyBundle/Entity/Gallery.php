@@ -39,16 +39,16 @@ class Gallery
     /**
      * @var string
      *
-     * @ORM\Column(name="overlay", type="string", length=255)
+     * @ORM\Column(name="overlay", type="string", length=255, nullable=true)
      */
     private $overlay;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="main", type="boolean")
+     * @ORM\Column(name="main", type="boolean", options={"default": false})
      */
-    private $main;
+    private $main = false;
 
     /**
      * @var int

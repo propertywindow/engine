@@ -346,7 +346,7 @@ class PropertyController extends Controller
             $this->get('jms_serializer')->serialize($property, 'json')
         );
 
-        // todo: also update Details, Gallery, GeneralNotes
+        // todo: also insert Details, Gallery, GeneralNotes
 
         return Mapper::fromProperty($property);
     }
@@ -508,15 +508,15 @@ class PropertyController extends Controller
         $id   = (int)$parameters['id'];
         $user = $this->userService->getUser($userId);
 
-        if ((int)$user->getTypeId() !== self::USER_ADMIN || (int)$user->getTypeId() !== self::USER_AGENT) {
+        if ((int)$user->getTypeId() === self::USER_ADMIN || self::USER_AGENT) {
+            $this->propertyService->deleteProperty($id);
+        } else {
             throw new NotAuthorizedException($userId);
         }
 
-        $this->propertyService->deleteProperty($id);
-
         // todo: link other property entities to property entity
         // todo: delete info from all tables, including logBundle
-        // todo: remove all photos apart from main from data folder and Gallery
+        // todo: remove all photos from data folder and Gallery
     }
 
     /**
