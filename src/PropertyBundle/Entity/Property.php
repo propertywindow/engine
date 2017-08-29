@@ -622,7 +622,6 @@ class Property
         return $this->archived;
     }
 
-
     /**
      * Gets triggered only on insert
      * @ORM\PrePersist
