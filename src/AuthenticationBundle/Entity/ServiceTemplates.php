@@ -108,7 +108,6 @@ class ServiceTemplates
 
     /**
      * Gets triggered only on insert
-
      * @ORM\PrePersist
      */
     public function onPrePersist()
@@ -118,7 +117,6 @@ class ServiceTemplates
 
     /**
      * Gets triggered every time on update
-
      * @ORM\PreUpdate
      */
     public function onPreUpdate()

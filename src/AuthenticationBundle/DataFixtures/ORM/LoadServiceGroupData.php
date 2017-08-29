@@ -130,9 +130,6 @@ class LoadServiceGroupData extends AbstractFixture implements OrderedFixtureInte
         $this->addReference('service_group_settings', $serviceGroup);
         $manager->persist($serviceGroup);
 
-
-        // todo: add visible
-
         $manager->flush();
     }
 

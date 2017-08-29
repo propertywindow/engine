@@ -29,12 +29,12 @@ class Service
      */
     private $templates;
 
+
     /**
-     * @var int
-     *
-     * @ORM\Column(name="group_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="ServiceGroup", inversedBy="services")
+     * @ORM\JoinColumn(name="group_id", referencedColumnName="id")
      */
-    private $groupId;
+    private $serviceGroup;
 
     /**
      * @var string
@@ -131,27 +131,27 @@ class Service
     }
 
     /**
-     * Set groupId
+     * Set serviceGroup
      *
-     * @param integer $groupId
+     * @param ServiceGroup $serviceGroup
      *
      * @return Service
      */
-    public function setGroupId($groupId)
+    public function setServiceGroup(ServiceGroup $serviceGroup = null)
     {
-        $this->groupId = $groupId;
+        $this->serviceGroup = $serviceGroup;
 
         return $this;
     }
 
     /**
-     * Get groupId
+     * Get serviceGroup
      *
-     * @return int
+     * @return ServiceGroup
      */
-    public function getGroupId()
+    public function getServiceGroup()
     {
-        return $this->groupId;
+        return $this->serviceGroup;
     }
 
     /**

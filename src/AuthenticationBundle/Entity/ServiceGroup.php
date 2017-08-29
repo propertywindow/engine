@@ -30,6 +30,11 @@ class ServiceGroup
     private $groupTemplates;
 
     /**
+     * @ORM\OneToMany(targetEntity="Service", mappedBy="serviceGroup")
+     */
+    private $services;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="en", type="string", length=255)
@@ -70,6 +75,7 @@ class ServiceGroup
     public function __construct()
     {
         $this->groupTemplates = new ArrayCollection();
+        $this->services       = new ArrayCollection();
     }
 
     /**
@@ -105,6 +111,42 @@ class ServiceGroup
     {
         return $this->groupTemplates;
     }
+
+
+    /**
+     * Add service
+     *
+     * @param Service $services
+     *
+     * @return ServiceGroup
+     */
+    public function addService(Service $services)
+    {
+        $this->services[] = $services;
+
+        return $this;
+    }
+
+    /**
+     * Remove service
+     *
+     * @param Service $service
+     */
+    public function removeService(Service $service)
+    {
+        $this->services->removeElement($service);
+    }
+
+    /**
+     * Get services
+     *
+     * @return Collection
+     */
+    public function getServices()
+    {
+        return $this->services;
+    }
+
 
     /**
      * Get id
@@ -190,7 +232,6 @@ class ServiceGroup
 
     /**
      * Gets triggered only on insert
-
      * @ORM\PrePersist
      */
     public function onPrePersist()
@@ -200,7 +241,6 @@ class ServiceGroup
 
     /**
      * Gets triggered every time on update
-
      * @ORM\PreUpdate
      */
     public function onPreUpdate()
