@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace AuthenticationBundle\Entity;
+namespace AgentBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * AgentGroup
  *
  * @ORM\Table(name="agent_group")
- * @ORM\Entity(repositoryClass="AuthenticationBundle\Repository\AgentGroupRepository")
+ * @ORM\Entity(repositoryClass="AgentBundle\Repository\AgentGroupRepository")
  * @ORM\HasLifecycleCallbacks
  */
 class AgentGroup

@@ -37,6 +37,11 @@ class LoadUserTypeData implements FixtureInterface
         $userType->setNl('klant');
         $manager->persist($userType);
 
+        $userType = new UserType();
+        $userType->setEn('api');
+        $userType->setNl('api');
+        $manager->persist($userType);
+
         $manager->flush();
     }
 }

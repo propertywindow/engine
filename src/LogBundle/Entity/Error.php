@@ -5,13 +5,13 @@ namespace LogBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * ErrorLog
+ * Error
  *
  * @ORM\Table(name="log_error")
- * @ORM\Entity(repositoryClass="LogBundle\Repository\ErrorLogRepository")
+ * @ORM\Entity(repositoryClass="LogBundle\Repository\ErrorRepository")
  * @ORM\HasLifecycleCallbacks
  */
-class ErrorLog
+class Error
 {
     /**
      * @var int
@@ -73,7 +73,7 @@ class ErrorLog
      *
      * @param integer $userId
      *
-     * @return ErrorLog
+     * @return Error
      */
     public function setUserId($userId)
     {
@@ -97,7 +97,7 @@ class ErrorLog
      *
      * @param string $action
      *
-     * @return ErrorLog
+     * @return Error
      */
     public function setAction($action)
     {
@@ -121,7 +121,7 @@ class ErrorLog
      *
      * @param string $oldValue
      *
-     * @return ErrorLog
+     * @return Error
      */
     public function setOldValue($oldValue)
     {
@@ -145,7 +145,7 @@ class ErrorLog
      *
      * @param string $newValue
      *
-     * @return ErrorLog
+     * @return Error
      */
     public function setNewValue($newValue)
     {

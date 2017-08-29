@@ -1,20 +1,23 @@
 app:
     resource: '@AppBundle/Controller/'
-    type: annotation
+    type:     annotation
 
 property:
     resource: "@PropertyBundle/Controller/"
+    type:     annotation
+
+agent:
+    resource: "@AgentBundle/Controller/"
+    type:     annotation
+
+authentication:
+    resource: "@AuthenticationBundle/Controller/"
     type:     annotation
 
 transparency:
     resource: "@TransparencyBundle/Controller/"
     type:     annotation
     prefix:   /transparency
-
-authentication:
-    resource: "@AuthenticationBundle/Controller/"
-    type:     annotation
-    prefix:   /authentication
 
 conversation:
     resource: "@ConversationBundle/Controller/"
@@ -45,8 +48,3 @@ email_alert:
     resource: "@EmailAlertBundle/Controller/"
     type:     annotation
     prefix:   /email_alert
-
-agent:
-    resource: "@AgentBundle/Controller/"
-    type:     annotation
-    prefix:   /agent

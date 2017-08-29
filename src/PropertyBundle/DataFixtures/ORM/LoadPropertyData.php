@@ -2,15 +2,17 @@
 
 namespace PropertyBundle\DataFixtures\ORM;
 
-use Doctrine\Common\DataFixtures\FixtureInterface;
-use Doctrine\Common\Persistence\ObjectManager;
+use PropertyBundle\Entity\Gallery;
 use PropertyBundle\Entity\Property;
+use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
 /**
  * Class LoadPropertyData
  * @package PropertyBundle\DataFixtures\ORM
  */
-class LoadPropertyData implements FixtureInterface
+class LoadPropertyData extends AbstractFixture implements OrderedFixtureInterface
 {
     /**
      * @param ObjectManager $manager
@@ -19,8 +21,9 @@ class LoadPropertyData implements FixtureInterface
     {
         $property = new Property();
         $property->setKind('sale');
-        $property->setAgentId(1);
-        $property->setStatus(1);
+        $property->setAgent($this->getReference('agent_1'));
+        $property->setClientId(1);
+        $property->setTerms(1);
         $property->setOnline(1);
         $property->setSubType(2);
         $property->setStreet('Graafsedijk');
@@ -35,10 +38,31 @@ class LoadPropertyData implements FixtureInterface
         $property->setArchived(false);
         $manager->persist($property);
 
+        $gallery = new Gallery();
+        $gallery->setSort(1);
+        $gallery->setPath('imagePath1');
+        $gallery->setMain(true);
+        $gallery->setProperty($property);
+        $manager->persist($gallery);
+
+        $gallery = new Gallery();
+        $gallery->setSort(2);
+        $gallery->setPath('imagePath2');
+        $gallery->setProperty($property);
+        $manager->persist($gallery);
+
+        $gallery = new Gallery();
+        $gallery->setSort(3);
+        $gallery->setPath('imagePath3');
+        $gallery->setProperty($property);
+        $manager->persist($gallery);
+
+
         $property = new Property();
         $property->setKind('sale');
-        $property->setAgentId(2);
-        $property->setStatus(1);
+        $property->setAgent($this->getReference('agent_2'));
+        $property->setClientId(1);
+        $property->setTerms(1);
         $property->setOnline(1);
         $property->setSubType(1);
         $property->setStreet('Portobello High Street');
@@ -53,6 +77,34 @@ class LoadPropertyData implements FixtureInterface
         $property->setArchived(false);
         $manager->persist($property);
 
+        $gallery = new Gallery();
+        $gallery->setSort(1);
+        $gallery->setPath('imagePath1');
+        $gallery->setMain(true);
+        $gallery->setProperty($property);
+        $manager->persist($gallery);
+
+        $gallery = new Gallery();
+        $gallery->setSort(2);
+        $gallery->setPath('imagePath2');
+        $gallery->setProperty($property);
+        $manager->persist($gallery);
+
+        $gallery = new Gallery();
+        $gallery->setSort(3);
+        $gallery->setPath('imagePath3');
+        $gallery->setProperty($property);
+        $manager->persist($gallery);
+
+
         $manager->flush();
+    }
+
+    /**
+     * @return integer
+     */
+    public function getOrder()
+    {
+        return 5;
     }
 }

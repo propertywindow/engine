@@ -5,13 +5,13 @@ namespace LogBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * ActivityLog
+ * Activity
  *
  * @ORM\Table(name="log_activity")
- * @ORM\Entity(repositoryClass="LogBundle\Repository\ActivityLogRepository")
+ * @ORM\Entity(repositoryClass="LogBundle\Repository\ActivityRepository")
  * @ORM\HasLifecycleCallbacks
  */
-class ActivityLog
+class Activity
 {
     /**
      * @var int
@@ -30,23 +30,37 @@ class ActivityLog
     private $userId;
 
     /**
-     * @var string
+     * @var int
      *
-     * @ORM\Column(name="action", type="string", length=255)
+     * @ORM\Column(name="action_id", type="integer", nullable=true)
      */
-    private $action;
+    private $actionId;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="old_value", type="blob")
+     * @ORM\Column(name="action_category", type="string", length=255, nullable=true)
+     */
+    private $actionCategory;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="action_name", type="string", length=255, nullable=true)
+     */
+    private $actionName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="old_value", type="json_array", nullable=true)
      */
     private $oldValue;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="new_value", type="blob")
+     * @ORM\Column(name="new_value", type="json_array")
      */
     private $newValue;
 
@@ -73,7 +87,7 @@ class ActivityLog
      *
      * @param integer $userId
      *
-     * @return ActivityLog
+     * @return Activity
      */
     public function setUserId($userId)
     {
@@ -93,35 +107,83 @@ class ActivityLog
     }
 
     /**
-     * Set action
+     * Set actionId
      *
-     * @param string $action
+     * @param integer $actionId
      *
-     * @return ActivityLog
+     * @return Activity
      */
-    public function setAction($action)
+    public function setActionId($actionId)
     {
-        $this->action = $action;
+        $this->actionId = $actionId;
 
         return $this;
     }
 
     /**
-     * Get action
+     * Get actionId
+     *
+     * @return int
+     */
+    public function getActionId()
+    {
+        return $this->actionId;
+    }
+
+    /**
+     * Set actionCategory
+     *
+     * @param string $actionCategory
+     *
+     * @return Activity
+     */
+    public function setActionCategory($actionCategory)
+    {
+        $this->actionCategory = $actionCategory;
+
+        return $this;
+    }
+
+    /**
+     * Get actionCategory
      *
      * @return string
      */
-    public function getAction()
+    public function getActionCategory()
     {
-        return $this->action;
+        return $this->actionCategory;
+    }
+
+    /**
+     * Set actionName
+     *
+     * @param string $actionName
+     *
+     * @return Activity
+     */
+    public function setActionName($actionName)
+    {
+        $this->actionName = $actionName;
+
+        return $this;
+    }
+
+    /**
+     * Get actionName
+     *
+     * @return string
+     */
+    public function getActionName()
+    {
+        return $this->actionName;
     }
 
     /**
      * Set oldValue
      *
-     * @param string $oldValue
+     * @param array $oldValue
      *
-     * @return ActivityLog
+     * @return Activity
      */
     public function setOldValue($oldValue)
     {
@@ -133,7 +195,7 @@ class ActivityLog
     /**
      * Get oldValue
      *
-     * @return string
+     * @return array
      */
     public function getOldValue()
     {
@@ -143,9 +205,9 @@ class ActivityLog
     /**
      * Set newValue
      *
-     * @param string $newValue
+     * @param array $newValue
      *
-     * @return ActivityLog
+     * @return Activity
      */
     public function setNewValue($newValue)
     {
@@ -157,7 +219,7 @@ class ActivityLog
     /**
      * Get newValue
      *
-     * @return string
+     * @return array
      */
     public function getNewValue()
     {

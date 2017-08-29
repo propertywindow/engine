@@ -35,23 +35,21 @@ class PropertyRepository extends EntityRepository
     }
 
     /**
-     * @param int $userId
+     * @param int $agentId
      *
      * @return Property[]
      *
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function listProperties(int $userId): array
+    public function listProperties(int $agentId): array
     {
-        // todo: get agentId from userId
-
         $qb = $this->getEntityManager()->createQueryBuilder()
                    ->select('p')
                    ->from('PropertyBundle:Property', 'p');
 
-        $qb->where("p.agentId = :userId")
+        $qb->where("p.agent = :agentId")
            ->orderBy('p.id', 'DESC')
-           ->setParameter('userId', $userId);
+           ->setParameter('agentId', $agentId);
 
         $results = $qb->getQuery()->getResult();
 
@@ -59,25 +57,23 @@ class PropertyRepository extends EntityRepository
     }
 
     /**
-     * @param int      $userId
-     * @param int|null $limit
-     * @param int|null $offset
+     * @param int[] $agentIds
+     * @param int   $limit
+     * @param int   $offset
      *
      * @return array First value Property[], second value the total count.
      */
-    public function listAllProperties($userId, ?int $limit, ?int $offset): array
+    public function listAllProperties($agentIds, int $limit, int $offset): array
     {
-        // todo: get properties from all agentIds in AgentGroup
-
         $qb = $this->getEntityManager()->createQueryBuilder()
                    ->select('p')
                    ->from('PropertyBundle:Property', 'p');
 
-        $qb->where("p.agentId = :userId")
+        $qb->where("p.agent IN (:agentIds)")
            ->orderBy('p.id', 'DESC')
            ->setFirstResult($offset)
            ->setMaxResults($limit)
-           ->setParameter('userId', $userId);
+           ->setParameter('agentIds', $agentIds);
 
         $pages = new Paginator($qb);
 

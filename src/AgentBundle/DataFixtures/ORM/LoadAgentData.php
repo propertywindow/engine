@@ -1,16 +1,17 @@
 <?php declare(strict_types=1);
 
-namespace AuthenticationBundle\DataFixtures\ORM;
+namespace AgentBundle\DataFixtures\ORM;
 
-use Doctrine\Common\DataFixtures\FixtureInterface;
+use AgentBundle\Entity\Agent;
+use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
-use AuthenticationBundle\Entity\Agent;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
 /**
  * Class LoadAgentData
- * @package AuthenticationBundle\DataFixtures\ORM
+ * @package AgentBundle\DataFixtures\ORM
  */
-class LoadAgentData implements FixtureInterface
+class LoadAgentData extends AbstractFixture implements OrderedFixtureInterface
 {
     /**
      * @param ObjectManager $manager
@@ -30,6 +31,7 @@ class LoadAgentData implements FixtureInterface
         $agent->setPropertyLimit(200);
         $agent->setEspc(false);
         $agent->setArchived(false);
+        $this->addReference('agent_1', $agent);
         $manager->persist($agent);
 
         $agent = new Agent();
@@ -45,8 +47,17 @@ class LoadAgentData implements FixtureInterface
         $agent->setPropertyLimit(500);
         $agent->setEspc(true);
         $agent->setArchived(false);
+        $this->addReference('agent_2', $agent);
         $manager->persist($agent);
 
         $manager->flush();
+    }
+
+    /**
+     * @return integer
+     */
+    public function getOrder()
+    {
+        return 2;
     }
 }

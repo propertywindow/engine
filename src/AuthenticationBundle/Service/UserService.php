@@ -37,6 +37,7 @@ class UserService
         $repository = $this->entityManager->getRepository('AuthenticationBundle:User');
         $user       = $repository->find($id);
 
+        /** @var User $user */
         if ($user === null) {
             throw new UserNotFoundException($id);
         }

@@ -2,9 +2,6 @@
 
 namespace PropertyBundle\Entity;
 
-use AgentBundle\Entity\Agent;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -26,20 +23,21 @@ class Property
     private $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="Gallery", mappedBy="property", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="Gallery", mappedBy="property")
      */
     private $images;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AgentBundle\Entity\Agent", inversedBy="properties")
-     * @ORM\JoinColumn(name="agent_id", referencedColumnName="id")
+     * @var int
+     *
+     * @ORM\Column(name="agentId", type="integer")
      */
-    private $agent;
+    private $agentId;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="client_id", type="integer")
+     * @ORM\Column(name="clientId", type="integer")
      */
     private $clientId;
 
@@ -163,14 +161,6 @@ class Property
     protected $updated;
 
     /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->images = new ArrayCollection();
-    }
-
-    /**
      * Get id
      *
      * @return int
@@ -181,61 +171,27 @@ class Property
     }
 
     /**
-     * Add image
+     * Set agentId
      *
-     * @param Gallery $image
+     * @param integer $agentId
      *
      * @return Property
      */
-    public function addImage(Gallery $image)
+    public function setAgentId($agentId)
     {
-        $this->images[] = $image;
+        $this->agentId = $agentId;
 
         return $this;
     }
 
     /**
-     * Remove image
+     * Get agentId
      *
-     * @param Gallery $image
+     * @return int
      */
-    public function removeImage(Gallery $image)
+    public function getAgentId()
     {
-        $this->images->removeElement($image);
-    }
-
-    /**
-     * Get images
-     *
-     * @return Collection
-     */
-    public function getImages()
-    {
-        return $this->images;
-    }
-
-    /**
-     * Set agent
-     *
-     * @param \AgentBundle\Entity\Agent $agent
-     *
-     * @return Property
-     */
-    public function setAgent(Agent $agent = null)
-    {
-        $this->agent = $agent;
-
-        return $this;
-    }
-
-    /**
-     * Get agent
-     *
-     * @return \AgentBundle\Entity\Agent
-     */
-    public function getAgent()
-    {
-        return $this->agent;
+        return $this->agentId;
     }
 
     /**
@@ -639,53 +595,5 @@ class Property
     public function onPreUpdate()
     {
         $this->updated = new \DateTime("now");
-    }
-
-    /**
-     * Set created
-     *
-     * @param \DateTime $created
-     *
-     * @return Property
-     */
-    public function setCreated($created)
-    {
-        $this->created = $created;
-
-        return $this;
-    }
-
-    /**
-     * Get created
-     *
-     * @return \DateTime
-     */
-    public function getCreated()
-    {
-        return $this->created;
-    }
-
-    /**
-     * Set updated
-     *
-     * @param \DateTime $updated
-     *
-     * @return Property
-     */
-    public function setUpdated($updated)
-    {
-        $this->updated = $updated;
-
-        return $this;
-    }
-
-    /**
-     * Get updated
-     *
-     * @return \DateTime
-     */
-    public function getUpdated()
-    {
-        return $this->updated;
     }
 }

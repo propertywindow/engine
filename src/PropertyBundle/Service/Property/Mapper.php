@@ -21,28 +21,37 @@ class Mapper
 
         switch ($country) {
             case "NL":
-                return [
-                    'id'           => $property->getId(),
-                    'address'      => $property->getStreet().' '.$property->getHouseNumber(),
-                    'street'       => $property->getStreet(),
-                    'house_number' => $property->getHouseNumber(),
-                    'postcode'     => $property->getPostcode(),
-                    'city'         => $property->getCity(),
-                    'agent_id'     => $property->getAgentId(),
-                    'subtype_id'   => $property->getSubType(),
-                ];
+                $address = $property->getStreet().' '.$property->getHouseNumber();
+                break;
+            case "GB":
+                $address = $property->getHouseNumber().' '.$property->getStreet();
+                break;
             default:
-                return [
-                    'id'           => $property->getId(),
-                    'address'      => $property->getHouseNumber().' '.$property->getStreet(),
-                    'street'       => $property->getStreet(),
-                    'house_number' => $property->getHouseNumber(),
-                    'postcode'     => $property->getPostcode(),
-                    'city'         => $property->getCity(),
-                    'agent_id'     => $property->getAgentId(),
-                    'subtype_id'   => $property->getSubType(),
-                ];
+                $address = $property->getStreet().' '.$property->getHouseNumber();
         }
+
+        return [
+            'id'           => $property->getId(),
+            'agent_id'     => $property->getAgent()->getId(),
+            'client_id'    => $property->getClientId(),
+            'kind'         => $property->getKind(),
+            'address'      => $address,
+            'street'       => $property->getStreet(),
+            'house_number' => $property->getHouseNumber(),
+            'postcode'     => $property->getPostcode(),
+            'city'         => $property->getCity(),
+            'country'      => $property->getCountry(),
+            'subtype_id'   => $property->getSubType(),
+            'price'        => $property->getPrice(),
+            'sold_price'   => $property->getSoldPrice(),
+            'espc'         => $property->getEspc(),
+            'terms'        => $property->getTerms(),
+            'archived'     => $property->getArchived(),
+            'online'       => $property->getOnline(),
+            'lat'          => $property->getLat(),
+            'lng'          => $property->getLng(),
+            'gallery'      => $property->getImages(),
+        ];
     }
 
     /**

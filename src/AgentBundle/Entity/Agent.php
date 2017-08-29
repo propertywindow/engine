@@ -1,14 +1,17 @@
 <?php declare(strict_types=1);
 
-namespace AuthenticationBundle\Entity;
+namespace AgentBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use PropertyBundle\Entity\Property;
 
 /**
  * Agent
  *
  * @ORM\Table(name="agent")
- * @ORM\Entity(repositoryClass="AuthenticationBundle\Repository\AgentRepository")
+ * @ORM\Entity(repositoryClass="AgentBundle\Repository\AgentRepository")
  * @ORM\HasLifecycleCallbacks
  */
 class Agent
@@ -21,6 +24,11 @@ class Agent
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
+    /**
+     * @ORM\OneToMany(targetEntity="PropertyBundle\Entity\Property", mappedBy="agent")
+     */
+    private $properties;
 
     /**
      * @var int
@@ -147,6 +155,48 @@ class Agent
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $updated;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->properties = new ArrayCollection();
+    }
+
+    /**
+     * Add property
+     *
+     * @param Property $properties
+     *
+     * @return Agent
+     */
+    public function addProperty(Property $properties)
+    {
+        $this->properties[] = $properties;
+
+        return $this;
+    }
+
+    /**
+     * Remove property
+     *
+     * @param Property $property
+     */
+    public function removeProperty(Property $property)
+    {
+        $this->properties->removeElement($property);
+    }
+
+    /**
+     * Get properties
+     *
+     * @return Collection
+     */
+    public function getProperties()
+    {
+        return $this->properties;
+    }
 
     /**
      * Get id

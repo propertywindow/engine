@@ -1,17 +1,17 @@
 <?php declare(strict_types=1);
 
-namespace AgentBundle\Entity;
+namespace PropertyBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Client
+ * Terms
  *
- * @ORM\Table(name="client")
- * @ORM\Entity(repositoryClass="AgentBundle\Repository\ClientRepository")
+ * @ORM\Table(name="property_terms")
+ * @ORM\Entity(repositoryClass="PropertyBundle\Repository\TermsRepository")
  * @ORM\HasLifecycleCallbacks
  */
-class Client
+class Terms
 {
     /**
      * @var int
@@ -23,18 +23,25 @@ class Client
     private $id;
 
     /**
-     * @var int
+     * @var string
      *
-     * @ORM\Column(name="user_id", type="integer")
+     * @ORM\Column(name="en", type="string", length=255)
      */
-    private $userId;
+    private $en;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nl", type="string", length=255)
+     */
+    private $nl;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="transparency", type="boolean")
+     * @ORM\Column(name="show_price", type="boolean", options={"default": false})
      */
-    private $transparency = false;
+    private $showPrice = false;
 
     /**
      * @var \DateTime $created
@@ -61,51 +68,75 @@ class Client
     }
 
     /**
-     * Set userId
+     * Set en
      *
-     * @param integer $userId
+     * @param string $en
      *
-     * @return Client
+     * @return Terms
      */
-    public function setUserId($userId)
+    public function setEn($en)
     {
-        $this->userId = $userId;
+        $this->en = $en;
 
         return $this;
     }
 
     /**
-     * Get userId
+     * Get en
      *
-     * @return int
+     * @return string
      */
-    public function getUserId()
+    public function getEn()
     {
-        return $this->userId;
+        return $this->en;
     }
 
     /**
-     * Set transparency
+     * Set nl
      *
-     * @param boolean $transparency
+     * @param string $nl
      *
-     * @return Client
+     * @return Terms
      */
-    public function setTransparency($transparency)
+    public function setNl($nl)
     {
-        $this->transparency = $transparency;
+        $this->nl = $nl;
 
         return $this;
     }
 
     /**
-     * Get transparency
+     * Get nl
+     *
+     * @return string
+     */
+    public function getNl()
+    {
+        return $this->nl;
+    }
+
+    /**
+     * Set showPrice
+     *
+     * @param boolean $showPrice
+     *
+     * @return Terms
+     */
+    public function setShowPrice($showPrice)
+    {
+        $this->showPrice = $showPrice;
+
+        return $this;
+    }
+
+    /**
+     * Get showPrice
      *
      * @return bool
      */
-    public function getTransparency()
+    public function getShowPrice()
     {
-        return $this->transparency;
+        return $this->showPrice;
     }
 
     /**
