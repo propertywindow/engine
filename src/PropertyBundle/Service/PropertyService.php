@@ -24,7 +24,6 @@ class PropertyService
         $this->entityManager = $entityManger;
     }
 
-
     /**
      * @param int $id
      *

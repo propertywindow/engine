@@ -373,8 +373,64 @@ class PropertyController extends Controller
             throw new NotAuthorizedException($userId);
         }
 
+        if (array_key_exists('client_id', $parameters) && $parameters['client_id'] !== null) {
+            $property->setClientId((int)$parameters['client_id']);
+        } else {
+            throw new InvalidArgumentException("client_id parameter not provided");
+        }
+
+        if (array_key_exists('kind', $parameters) && $parameters['kind'] !== null) {
+            $property->setKind((string)$parameters['kind']);
+        } else {
+            throw new InvalidArgumentException("kind parameter not provided");
+        }
+
+        if (array_key_exists('sub_type_id', $parameters) && $parameters['sub_type_id'] !== null) {
+            $property->setSubType((int)$parameters['sub_type_id']);
+        } else {
+            throw new InvalidArgumentException("sub_type_id parameter not provided");
+        }
+
         if (array_key_exists('street', $parameters) && $parameters['street'] !== null) {
             $property->setStreet((string)$parameters['street']);
+        } else {
+            throw new InvalidArgumentException("street parameter not provided");
+        }
+
+        if (array_key_exists('house_number', $parameters) && $parameters['house_number'] !== null) {
+            $property->setHouseNumber((string)$parameters['house_number']);
+        } else {
+            throw new InvalidArgumentException("house_number parameter not provided");
+        }
+
+        if (array_key_exists('postcode', $parameters) && $parameters['postcode'] !== null) {
+            $property->setPostcode((string)$parameters['postcode']);
+        } else {
+            throw new InvalidArgumentException("postcode parameter not provided");
+        }
+
+        if (array_key_exists('city', $parameters) && $parameters['city'] !== null) {
+            $property->setCity((string)$parameters['city']);
+        } else {
+            throw new InvalidArgumentException("city parameter not provided");
+        }
+
+        if (array_key_exists('country', $parameters) && $parameters['country'] !== null) {
+            $property->setCountry((string)$parameters['country']);
+        } else {
+            throw new InvalidArgumentException("country parameter not provided");
+        }
+
+        if (array_key_exists('lat', $parameters) && $parameters['lat'] !== null) {
+            $property->setLat((string)$parameters['lat']);
+        } else {
+            throw new InvalidArgumentException("lat parameter not provided");
+        }
+
+        if (array_key_exists('lng', $parameters) && $parameters['lng'] !== null) {
+            $property->setLng((string)$parameters['lng']);
+        } else {
+            throw new InvalidArgumentException("lng parameter not provided");
         }
 
         $updatedProperty = $this->propertyService->updateProperty($property);
@@ -390,8 +446,6 @@ class PropertyController extends Controller
 
         return Mapper::fromProperty($updatedProperty);
 
-        // todo: add other Property fields
-        // todo: make more fields mandatory
         // todo: also update Details, Gallery, GeneralNotes
     }
 
