@@ -2,6 +2,8 @@
 
 namespace AuthenticationBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -23,6 +25,11 @@ class ServiceGroup
     private $id;
 
     /**
+     * @ORM\OneToMany(targetEntity="ServiceGroupTemplates", mappedBy="serviceGroup")
+     */
+    private $groupTemplates;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="en", type="string", length=255)
@@ -37,6 +44,13 @@ class ServiceGroup
     private $nl;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="icon", type="string")
+     */
+    private $icon;
+
+    /**
      * @var \DateTime $created
      *
      * @ORM\Column(type="datetime")
@@ -49,6 +63,48 @@ class ServiceGroup
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $updated;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->groupTemplates = new ArrayCollection();
+    }
+
+    /**
+     * Add groupTemplate
+     *
+     * @param ServiceGroupTemplates $groupTemplates
+     *
+     * @return ServiceGroup
+     */
+    public function addGroupTemplate(ServiceGroupTemplates $groupTemplates)
+    {
+        $this->groupTemplates[] = $groupTemplates;
+
+        return $this;
+    }
+
+    /**
+     * Remove groupTemplate
+     *
+     * @param ServiceGroupTemplates $groupTemplate
+     */
+    public function removeGroupTemplate(ServiceGroupTemplates $groupTemplate)
+    {
+        $this->groupTemplates->removeElement($groupTemplate);
+    }
+
+    /**
+     * Get groupTemplates
+     *
+     * @return Collection
+     */
+    public function getGroupTemplates()
+    {
+        return $this->groupTemplates;
+    }
 
     /**
      * Get id
@@ -106,6 +162,30 @@ class ServiceGroup
     public function getNl()
     {
         return $this->nl;
+    }
+
+    /**
+     * Set icon
+     *
+     * @param string $icon
+     *
+     * @return ServiceGroup
+     */
+    public function setIcon($icon)
+    {
+        $this->icon = $icon;
+
+        return $this;
+    }
+
+    /**
+     * Get icon
+     *
+     * @return string
+     */
+    public function getIcon()
+    {
+        return $this->icon;
     }
 
     /**

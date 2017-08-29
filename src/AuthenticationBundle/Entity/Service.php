@@ -2,6 +2,8 @@
 
 namespace AuthenticationBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -21,6 +23,11 @@ class Service
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
+    /**
+     * @ORM\OneToMany(targetEntity="ServiceTemplates", mappedBy="service")
+     */
+    private $templates;
 
     /**
      * @var int
@@ -44,6 +51,13 @@ class Service
     private $nl;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="icon", type="string")
+     */
+    private $icon;
+
+    /**
      * @var \DateTime $created
      *
      * @ORM\Column(type="datetime")
@@ -56,6 +70,48 @@ class Service
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $updated;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->templates = new ArrayCollection();
+    }
+
+    /**
+     * Add template
+     *
+     * @param ServiceTemplates $templates
+     *
+     * @return Service
+     */
+    public function addTemplate(ServiceTemplates $templates)
+    {
+        $this->templates[] = $templates;
+
+        return $this;
+    }
+
+    /**
+     * Remove template
+     *
+     * @param ServiceTemplates $template
+     */
+    public function removeTemplate(ServiceTemplates $template)
+    {
+        $this->templates->removeElement($template);
+    }
+
+    /**
+     * Get templates
+     *
+     * @return Collection
+     */
+    public function getTemplates()
+    {
+        return $this->templates;
+    }
 
     /**
      * Get id
@@ -137,6 +193,30 @@ class Service
     public function getNl()
     {
         return $this->nl;
+    }
+
+    /**
+     * Set icon
+     *
+     * @param string $icon
+     *
+     * @return Service
+     */
+    public function setIcon($icon)
+    {
+        $this->icon = $icon;
+
+        return $this;
+    }
+
+    /**
+     * Get icon
+     *
+     * @return string
+     */
+    public function getIcon()
+    {
+        return $this->icon;
     }
 
     /**
