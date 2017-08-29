@@ -49,8 +49,8 @@ class ActivityService
      * @param int|null    $actionId
      * @param null|string $actionCategory
      * @param string      $actionName
-     * @param array|null  $oldValue
-     * @param array       $newValue
+     * @param string|null $oldValue
+     * @param string      $newValue
      *
      * @return Activity
      */
@@ -59,8 +59,8 @@ class ActivityService
         ?int $actionId,
         ?string $actionCategory,
         string $actionName,
-        ?array $oldValue,
-        array $newValue
+        ?string $oldValue,
+        string $newValue
     ) {
         $activity = new Activity();
 

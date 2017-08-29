@@ -59,6 +59,13 @@ doctrine:
         naming_strategy: doctrine.orm.naming_strategy.underscore
         auto_mapping: true
 
+# JMS Serializer
+jms_serializer:
+    visitors:
+        json:
+            options:
+                - JSON_UNESCAPED_SLASHES
+
 # Swiftmailer Configuration
 swiftmailer:
     transport: '%mailer_transport%'

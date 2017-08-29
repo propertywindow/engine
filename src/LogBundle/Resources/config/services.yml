@@ -1,7 +1,7 @@
 services:
     activity_service:
           class: LogBundle\Service\ActivityService
-          arguments: ["@doctrine.orm.entity_manager"]
+          arguments: ['@doctrine.orm.entity_manager']
     traffic_service:
           class: LogBundle\Service\TrafficService
-          arguments: ["@doctrine.orm.entity_manager"]
+          arguments: ['@doctrine.orm.entity_manager']

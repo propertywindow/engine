@@ -23,9 +23,6 @@ use PropertyBundle\Service\PropertyService;
 use PropertyBundle\Service\Property\Mapper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
-use Symfony\Component\Serializer\Serializer;
 
 /**
  * @Route(service="property_controller")
@@ -340,7 +337,7 @@ class PropertyController extends Controller
             'property',
             'create',
             null,
-            $parameters
+            $this->get('jms_serializer')->serialize($property, 'json')
         );
 
         // todo: check if address already exists with same clientId and archived = false
@@ -375,21 +372,19 @@ class PropertyController extends Controller
             $property->setStreet((string)$parameters['street']);
         }
 
-        $serializer = new Serializer([new GetSetMethodNormalizer()], ['json' => new JsonEncoder()]);
-        $oldValue   = (array)$serializer->serialize($property, 'json');
+        $updatedProperty = $this->propertyService->updateProperty($property);
 
         $this->activityService->createActivity(
             $userId,
             $id,
             'property',
             'update',
-            $oldValue,
-            $parameters
+            $this->get('jms_serializer')->serialize($property, 'json'),
+            $this->get('jms_serializer')->serialize($updatedProperty, 'json')
         );
 
-        return Mapper::fromProperty($this->propertyService->updateProperty($property));
+        return Mapper::fromProperty($updatedProperty);
 
-        // todo: make both oldValue and newValue proper json
         // todo: add other Property fields
         // todo: make more fields mandatory
         // todo: also update Details, Gallery, GeneralNotes
@@ -444,7 +439,6 @@ class PropertyController extends Controller
         $id   = (int)$parameters['id'];
         $user = $this->userService->getUser($userId);
 
-        // todo: doesn't work
         if ((int)$user->getTypeId() === self::USER_ADMIN || (int)$user->getTypeId() === self::USER_AGENT) {
             throw new NotAuthorizedException($userId);
         }

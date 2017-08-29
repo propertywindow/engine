@@ -51,14 +51,14 @@ class Activity
     private $actionName;
 
     /**
-     * @var array
+     * @var string
      *
      * @ORM\Column(name="old_value", type="json_array", nullable=true)
      */
     private $oldValue;
 
     /**
-     * @var array
+     * @var string
      *
      * @ORM\Column(name="new_value", type="json_array")
      */
