@@ -23,13 +23,16 @@ class Mapper
             case "NL":
                 $address = $property->getStreet().' '.$property->getHouseNumber();
                 break;
-            default:
+            case "GB":
                 $address = $property->getHouseNumber().' '.$property->getStreet();
+                break;
+            default:
+                $address = $property->getStreet().' '.$property->getHouseNumber();
         }
 
         return [
             'id'           => $property->getId(),
-            'agent_id'     => $property->getAgentId(),
+            'agent_id'     => $property->getAgent()->getId(),
             'client_id'    => $property->getClientId(),
             'kind'         => $property->getKind(),
             'address'      => $address,

@@ -2,6 +2,7 @@
 
 namespace PropertyBundle\Entity;
 
+use AgentBundle\Entity\Agent;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -25,21 +26,20 @@ class Property
     private $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="Gallery", mappedBy="property")
+     * @ORM\OneToMany(targetEntity="Gallery", mappedBy="property", cascade={"remove"})
      */
     private $images;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="agentId", type="integer")
+     * @ORM\ManyToOne(targetEntity="AgentBundle\Entity\Agent", inversedBy="properties")
+     * @ORM\JoinColumn(name="agent_id", referencedColumnName="id")
      */
-    private $agentId;
+    private $agent;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="clientId", type="integer")
+     * @ORM\Column(name="client_id", type="integer")
      */
     private $clientId;
 
@@ -215,27 +215,27 @@ class Property
     }
 
     /**
-     * Set agentId
+     * Set agent
      *
-     * @param integer $agentId
+     * @param \AgentBundle\Entity\Agent $agent
      *
      * @return Property
      */
-    public function setAgentId($agentId)
+    public function setAgent(Agent $agent = null)
     {
-        $this->agentId = $agentId;
+        $this->agent = $agent;
 
         return $this;
     }
 
     /**
-     * Get agentId
+     * Get agent
      *
-     * @return int
+     * @return \AgentBundle\Entity\Agent
      */
-    public function getAgentId()
+    public function getAgent()
     {
-        return $this->agentId;
+        return $this->agent;
     }
 
     /**

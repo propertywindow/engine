@@ -2,16 +2,17 @@
 
 namespace PropertyBundle\DataFixtures\ORM;
 
-use Doctrine\Common\DataFixtures\FixtureInterface;
-use Doctrine\Common\Persistence\ObjectManager;
 use PropertyBundle\Entity\Gallery;
 use PropertyBundle\Entity\Property;
+use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
 /**
  * Class LoadPropertyData
  * @package PropertyBundle\DataFixtures\ORM
  */
-class LoadPropertyData implements FixtureInterface
+class LoadPropertyData extends AbstractFixture implements OrderedFixtureInterface
 {
     /**
      * @param ObjectManager $manager
@@ -20,7 +21,7 @@ class LoadPropertyData implements FixtureInterface
     {
         $property = new Property();
         $property->setKind('sale');
-        $property->setAgentId(1);
+        $property->setAgent($this->getReference('agent_1'));
         $property->setClientId(1);
         $property->setTerms(1);
         $property->setOnline(1);
@@ -59,7 +60,7 @@ class LoadPropertyData implements FixtureInterface
 
         $property = new Property();
         $property->setKind('sale');
-        $property->setAgentId(2);
+        $property->setAgent($this->getReference('agent_2'));
         $property->setClientId(1);
         $property->setTerms(1);
         $property->setOnline(1);
@@ -97,5 +98,13 @@ class LoadPropertyData implements FixtureInterface
 
 
         $manager->flush();
+    }
+
+    /**
+     * @return integer
+     */
+    public function getOrder()
+    {
+        return 5;
     }
 }

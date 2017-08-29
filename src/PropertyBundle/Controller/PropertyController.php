@@ -217,7 +217,7 @@ class PropertyController extends Controller
 
         $property = $this->propertyService->getProperty($id);
 
-        if ($property->getAgentId() !== $user->getAgentId()) {
+        if ($property->getAgent()->getId() !== $user->getAgentId()) {
             throw new NotAuthorizedException($userId);
         }
 
@@ -252,9 +252,10 @@ class PropertyController extends Controller
      */
     private function getProperties(int $userId)
     {
-        $user = $this->userService->getUser($userId);
+        $user  = $this->userService->getUser($userId);
+        $agent = $this->agentService->getAgent((int)$user->getAgentId());
 
-        return Mapper::fromProperties(...$this->propertyService->listProperties((int)$user->getAgentId()));
+        return Mapper::fromProperties(...$this->propertyService->listProperties($agent->getId()));
     }
 
     /**
@@ -266,12 +267,13 @@ class PropertyController extends Controller
     private function getAllProperties(int $userId, array $parameters)
     {
         $limit  = array_key_exists('limit', $parameters) &&
-                  $parameters['limit'] !== null ? (int)$parameters['limit'] : null;
+                  $parameters['limit'] !== null ? (int)$parameters['limit'] : 50;
         $offset = array_key_exists('offset', $parameters) &&
-                  $parameters['offset'] !== null ? (int)$parameters['offset'] : null;
+                  $parameters['offset'] !== null ? (int)$parameters['offset'] : 0;
 
         $user     = $this->userService->getUser($userId);
-        $agentIds = $this->agentService->getAgentIdsFromGroup((int)$user->getAgentId());
+        $agent    = $this->agentService->getAgent((int)$user->getAgentId());
+        $agentIds = $this->agentService->getAgentIdsFromGroup((int)$agent->getId());
 
         list($properties, $count) = $this->propertyService->listAllProperties($agentIds, $limit, $offset);
 
@@ -333,9 +335,9 @@ class PropertyController extends Controller
             throw new PropertyAlreadyExistsException($parameters['client_id']);
         }
 
-        $parameters['agent_id'] = (int)$user->getAgentId();
-        $property               = $this->propertyService->createProperty($parameters);
-        $propertyId             = $property->getId();
+        $agent      = $this->agentService->getAgent((int)$user->getAgentId());
+        $property   = $this->propertyService->createProperty($parameters, $agent);
+        $propertyId = (int)$property->getId();
 
         $this->activityService->createActivity(
             $userId,
@@ -347,6 +349,7 @@ class PropertyController extends Controller
         );
 
         // todo: also insert Details, Gallery, GeneralNotes
+        // todo: create data folder
 
         return Mapper::fromProperty($property);
     }
@@ -369,7 +372,7 @@ class PropertyController extends Controller
         $id       = (int)$parameters['id'];
         $property = $this->propertyService->getProperty($id);
 
-        if ($property->getAgentId() !== $user->getAgentId()) {
+        if ($property->getAgent()->getId() !== $user->getAgentId()) {
             throw new NotAuthorizedException($userId);
         }
 
@@ -475,7 +478,7 @@ class PropertyController extends Controller
         $user     = $this->userService->getUser($userId);
         $property = $this->propertyService->getProperty($id);
 
-        if ($property->getAgentId() !== $user->getAgentId()) {
+        if ($property->getAgent()->getId() !== $user->getAgentId()) {
             throw new NotAuthorizedException($userId);
         }
 
@@ -514,8 +517,7 @@ class PropertyController extends Controller
             throw new NotAuthorizedException($userId);
         }
 
-        // todo: cascade entities
-        // todo: delete info from all tables, including logBundle
+        // todo: delete info from not cascading tables too, including logBundle
         // todo: remove all photos from data folder and Gallery
     }
 
@@ -540,7 +542,7 @@ class PropertyController extends Controller
         $user      = $this->userService->getUser($userId);
         $property  = $this->propertyService->getProperty($id);
 
-        if ($property->getAgentId() !== $user->getAgentId()) {
+        if ($property->getAgent()->getId() !== $user->getAgentId()) {
             throw new NotAuthorizedException($userId);
         }
 
@@ -577,7 +579,7 @@ class PropertyController extends Controller
         $user     = $this->userService->getUser($userId);
         $property = $this->propertyService->getProperty($id);
 
-        if ($property->getAgentId() !== $user->getAgentId()) {
+        if ($property->getAgent()->getId() !== $user->getAgentId()) {
             throw new NotAuthorizedException($userId);
         }
 

@@ -47,7 +47,7 @@ class PropertyRepository extends EntityRepository
                    ->select('p')
                    ->from('PropertyBundle:Property', 'p');
 
-        $qb->where("p.agentId = :agentId")
+        $qb->where("p.agent = :agentId")
            ->orderBy('p.id', 'DESC')
            ->setParameter('agentId', $agentId);
 
@@ -57,19 +57,19 @@ class PropertyRepository extends EntityRepository
     }
 
     /**
-     * @param int[]    $agentIds
-     * @param int|null $limit
-     * @param int|null $offset
+     * @param int[] $agentIds
+     * @param int   $limit
+     * @param int   $offset
      *
      * @return array First value Property[], second value the total count.
      */
-    public function listAllProperties($agentIds, ?int $limit, ?int $offset): array
+    public function listAllProperties($agentIds, int $limit, int $offset): array
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
                    ->select('p')
                    ->from('PropertyBundle:Property', 'p');
 
-        $qb->where("p.agentId IN (:agentIds)")
+        $qb->where("p.agent IN (:agentIds)")
            ->orderBy('p.id', 'DESC')
            ->setFirstResult($offset)
            ->setMaxResults($limit)

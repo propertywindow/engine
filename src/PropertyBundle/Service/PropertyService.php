@@ -2,6 +2,7 @@
 
 namespace PropertyBundle\Service;
 
+use AgentBundle\Entity\Agent;
 use Doctrine\ORM\EntityManagerInterface;
 use PropertyBundle\Entity\Property;
 use PropertyBundle\Exceptions\PropertyNotFoundException;
@@ -83,13 +84,13 @@ class PropertyService
     }
 
     /**
-     * @param int[]    $agentIds
-     * @param int|null $limit
-     * @param int|null $offset
+     * @param int[] $agentIds
+     * @param int   $limit
+     * @param int   $offset
      *
      * @return array|Property First value Property[], second value the total count.
      */
-    public function listAllProperties(array $agentIds, ?int $limit, ?int $offset)
+    public function listAllProperties(array $agentIds, int $limit, int $offset)
     {
         $repository = $this->entityManager->getRepository('PropertyBundle:Property');
 
@@ -99,16 +100,16 @@ class PropertyService
     /**
      * @param array $parameters
      *
-     * @return Property
+     * @param Agent $agent
      *
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @return Property
      */
-    public function createProperty(array $parameters)
+    public function createProperty(array $parameters, Agent $agent)
     {
         $property = new Property();
 
         $property->setKind($parameters['kind']);
-        $property->setAgentId($parameters['agent_id']);
+        $property->setAgent($agent);
         $property->setClientId($parameters['client_id']);
         $property->setStreet(ucfirst($parameters['street']));
         $property->setHouseNumber($parameters['house_number']);
