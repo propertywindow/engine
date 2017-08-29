@@ -29,6 +29,7 @@ class Mapper
 
         return [
             'id'           => $property->getId(),
+            'client_id'    => $property->getClientId(),
             'kind'         => $property->getKind(),
             'address'      => $address,
             'street'       => $property->getStreet(),
@@ -42,6 +43,7 @@ class Mapper
             'sold_price'   => $property->getSoldPrice(),
             'espc'         => $property->getEspc(),
             'terms'        => $property->getTerms(),
+            'archived'     => $property->getArchived(),
         ];
     }
 

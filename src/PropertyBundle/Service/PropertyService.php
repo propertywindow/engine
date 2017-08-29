@@ -46,6 +46,30 @@ class PropertyService
     }
 
     /**
+     * @param array $parameters
+     *
+     * @return bool
+     */
+    public function checkExistence(array $parameters)
+    {
+        $repository = $this->entityManager->getRepository('PropertyBundle:Property');
+        $property   = $repository->findOneBy(
+            [
+                'clientId'    => (int)$parameters['client_id'],
+                'postcode'    => $parameters['postcode'],
+                'houseNumber' => $parameters['house_number'],
+                'archived'    => false,
+            ]
+        );
+
+        if ($property === null) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * @param  int $agentId
      *
      * @return array|Property[] $properties

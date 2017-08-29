@@ -19,6 +19,7 @@ use AgentBundle\Service\AgentService;
 use LogBundle\Service\ActivityService;
 use LogBundle\Service\TrafficService;
 use PropertyBundle\Exceptions\PropertyNotFoundException;
+use PropertyBundle\Exceptions\PropertyAlreadyExistsException;
 use PropertyBundle\Service\PropertyService;
 use PropertyBundle\Service\Property\Mapper;
 use Symfony\Component\HttpFoundation\Request;
@@ -287,6 +288,7 @@ class PropertyController extends Controller
      * @return array $property
      *
      * @throws NotAuthorizedException
+     * @throws PropertyAlreadyExistsException
      */
     private function createProperty(int $userId, array $parameters)
     {
@@ -327,6 +329,10 @@ class PropertyController extends Controller
             throw new InvalidArgumentException("lng parameter not provided");
         }
 
+        if ($this->propertyService->checkExistence($parameters)) {
+            throw new PropertyAlreadyExistsException($parameters['client_id']);
+        }
+
         $parameters['agent_id'] = (int)$user->getAgentId();
         $property               = $this->propertyService->createProperty($parameters);
         $propertyId             = $property->getId();
@@ -340,7 +346,6 @@ class PropertyController extends Controller
             $this->get('jms_serializer')->serialize($property, 'json')
         );
 
-        // todo: check if address already exists with same clientId and archived = false
         // todo: also update Details, Gallery, GeneralNotes
 
         return Mapper::fromProperty($property);
@@ -418,7 +423,7 @@ class PropertyController extends Controller
             'property',
             'archive',
             null,
-            $parameters
+            $this->get('jms_serializer')->serialize($property, 'json')
         );
 
         // todo: remove all photos apart from main from data folder and Gallery
@@ -475,15 +480,15 @@ class PropertyController extends Controller
             throw new NotAuthorizedException($userId);
         }
 
-        $this->propertyService->setPropertySold($id, $soldPrice);
+        $updatedProperty = $this->propertyService->setPropertySold($id, $soldPrice);
 
         $this->activityService->createActivity(
             $userId,
             $id,
             'property',
             'update',
-            null,
-            $parameters
+            $this->get('jms_serializer')->serialize($property, 'json'),
+            $this->get('jms_serializer')->serialize($updatedProperty, 'json')
         );
     }
 
@@ -512,15 +517,15 @@ class PropertyController extends Controller
             throw new NotAuthorizedException($userId);
         }
 
-        $this->propertyService->toggleOnline($id, $online);
+        $updatedProperty = $this->propertyService->toggleOnline($id, $online);
 
         $this->activityService->createActivity(
             $userId,
             $id,
             'property',
             'update',
-            null,
-            $parameters
+            $this->get('jms_serializer')->serialize($property, 'json'),
+            $this->get('jms_serializer')->serialize($updatedProperty, 'json')
         );
     }
 }
