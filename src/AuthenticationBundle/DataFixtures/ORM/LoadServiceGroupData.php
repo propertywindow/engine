@@ -70,14 +70,14 @@ class LoadServiceGroupData extends AbstractFixture implements OrderedFixtureInte
         $serviceGroup = new ServiceGroup();
         $serviceGroup->setEn('Offers');
         $serviceGroup->setNl('Biedingen');
-        $serviceGroup->setIcon('zmdi zmdi-palette');
+        $serviceGroup->setIcon('');
         $this->addReference('service_group_offers', $serviceGroup);
         $manager->persist($serviceGroup);
 
         $serviceGroup = new ServiceGroup();
         $serviceGroup->setEn('Surveys');
         $serviceGroup->setNl('Surveys');
-        $serviceGroup->setIcon('zmdi zmdi-palette');
+        $serviceGroup->setIcon('');
         $this->addReference('service_group_surveys', $serviceGroup);
         $manager->persist($serviceGroup);
 
@@ -91,7 +91,7 @@ class LoadServiceGroupData extends AbstractFixture implements OrderedFixtureInte
         $serviceGroup = new ServiceGroup();
         $serviceGroup->setEn('Email Alerts');
         $serviceGroup->setNl('Email Notificaties');
-        $serviceGroup->setIcon('zmdi zmdi-palette');
+        $serviceGroup->setIcon('zmdi zmdi-alarm');
         $this->addReference('service_group_email_alerts', $serviceGroup);
         $manager->persist($serviceGroup);
 
@@ -112,7 +112,7 @@ class LoadServiceGroupData extends AbstractFixture implements OrderedFixtureInte
         $serviceGroup = new ServiceGroup();
         $serviceGroup->setEn('Invoices');
         $serviceGroup->setNl('Invoices');
-        $serviceGroup->setIcon('zmdi zmdi-palette');
+        $serviceGroup->setIcon('');
         $this->addReference('service_group_invoices', $serviceGroup);
         $manager->persist($serviceGroup);
 
@@ -126,7 +126,7 @@ class LoadServiceGroupData extends AbstractFixture implements OrderedFixtureInte
         $serviceGroup = new ServiceGroup();
         $serviceGroup->setEn('Settings');
         $serviceGroup->setNl('Instellingen');
-        $serviceGroup->setIcon('zmdi zmdi-palette');
+        $serviceGroup->setIcon('zmdi zmdi-settings');
         $this->addReference('service_group_settings', $serviceGroup);
         $manager->persist($serviceGroup);
 

@@ -2,3 +2,9 @@ services:
     user_service:
           class: AuthenticationBundle\Service\UserService
           arguments: ["@doctrine.orm.entity_manager"]
+    service_templates_service:
+              class: AuthenticationBundle\Service\ServiceTemplatesService
+              arguments: ["@doctrine.orm.entity_manager"]
+    service_templates_controller:
+          class: AuthenticationBundle\Controller\ServiceTemplatesController
+          arguments: ['@authenticator', '@service_templates_service', '@user_service']
