@@ -173,6 +173,10 @@ class ServiceTemplateController extends Controller
                 return $this->addToServiceTemplate($userId, $parameters);
             case "addToServiceGroupTemplate":
                 return $this->addToServiceGroupTemplate($userId, $parameters);
+            case "removeFromServiceTemplate":
+                return $this->removeFromServiceTemplate($userId, $parameters);
+            case "removeFromServiceGroupTemplate":
+                return $this->removeFromServiceGroupTemplate($userId, $parameters);
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
@@ -258,12 +262,13 @@ class ServiceTemplateController extends Controller
         }
 
         $user     = $this->userService->getUser($userId);
-        $userType = $this->userTypeService->getUserType((int)$parameters['user_type_id']);
-        $service  = $this->serviceService->getService((int)$parameters['service_id']);
 
         if ((int)$user->getTypeId() !== self::USER_ADMIN) {
             throw new NotAuthorizedException($userId);
         }
+
+        $userType = $this->userTypeService->getUserType((int)$parameters['user_type_id']);
+        $service  = $this->serviceService->getService((int)$parameters['service_id']);
 
         return Mapper::fromServiceTemplate($this->serviceTemplateService->addToServiceTemplate($userType, $service));
     }
@@ -286,15 +291,72 @@ class ServiceTemplateController extends Controller
         }
 
         $user         = $this->userService->getUser($userId);
-        $userType     = $this->userTypeService->getUserType((int)$parameters['user_type_id']);
-        $serviceGroup = $this->serviceService->getServiceGroup((int)$parameters['service_group_id']);
 
         if ((int)$user->getTypeId() !== self::USER_ADMIN) {
             throw new NotAuthorizedException($userId);
         }
 
+        $userType     = $this->userTypeService->getUserType((int)$parameters['user_type_id']);
+        $serviceGroup = $this->serviceService->getServiceGroup((int)$parameters['service_group_id']);
+
         return Mapper::fromServiceGroupTemplate(
             $this->serviceTemplateService->addToServiceGroupTemplate($userType, $serviceGroup)
         );
+    }
+
+    /**
+     * @param int   $userId
+     * @param array $parameters
+     *
+     * @throws NotAuthorizedException
+     */
+    private function removeFromServiceTemplate(int $userId, array $parameters)
+    {
+        if (!array_key_exists('user_type_id', $parameters)) {
+            throw new InvalidArgumentException("No argument provided");
+        }
+
+        if (!array_key_exists('service_id', $parameters)) {
+            throw new InvalidArgumentException("No argument provided");
+        }
+
+        $user     = $this->userService->getUser($userId);
+
+        if ((int)$user->getTypeId() !== self::USER_ADMIN) {
+            throw new NotAuthorizedException($userId);
+        }
+
+        $userType = $this->userTypeService->getUserType((int)$parameters['user_type_id']);
+        $service  = $this->serviceService->getService((int)$parameters['service_id']);
+
+        $this->serviceTemplateService->removeFromServiceTemplate($userType, $service);
+    }
+
+    /**
+     * @param int   $userId
+     * @param array $parameters
+     *
+     * @throws NotAuthorizedException
+     */
+    private function removeFromServiceGroupTemplate(int $userId, array $parameters)
+    {
+        if (!array_key_exists('user_type_id', $parameters)) {
+            throw new InvalidArgumentException("No argument provided");
+        }
+
+        if (!array_key_exists('service_group_id', $parameters)) {
+            throw new InvalidArgumentException("No argument provided");
+        }
+
+        $user         = $this->userService->getUser($userId);
+
+        if ((int)$user->getTypeId() !== self::USER_ADMIN) {
+            throw new NotAuthorizedException($userId);
+        }
+
+        $userType     = $this->userTypeService->getUserType((int)$parameters['user_type_id']);
+        $serviceGroup = $this->serviceService->getServiceGroup((int)$parameters['service_group_id']);
+
+        $this->serviceTemplateService->removeFromServiceGroupTemplate($userType, $serviceGroup);
     }
 }

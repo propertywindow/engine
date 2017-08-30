@@ -47,7 +47,7 @@ class ServiceTemplateService
 
         /** @var ServiceTemplate $serviceTemplate */
         if ($serviceTemplate === null) {
-            throw new TemplateNotFoundException($userType->getId());
+            throw new TemplateNotFoundException($serviceTemplate->getId());
         }
 
         return $serviceTemplate;
@@ -119,5 +119,55 @@ class ServiceTemplateService
         $this->entityManager->flush();
 
         return $serviceGroupTemplate;
+    }
+
+    /**
+     * @param UserType $userType
+     * @param Service  $service
+     *
+     * @throws TemplateNotFoundException
+     */
+    public function removeFromServiceTemplate(UserType $userType, Service $service)
+    {
+        $repository      = $this->entityManager->getRepository('AuthenticationBundle:ServiceTemplate');
+        $serviceTemplate = $repository->findOneBy(
+            [
+                'userType' => $userType,
+                'service'  => $service,
+            ]
+        );
+
+        /** @var ServiceTemplate $serviceTemplate */
+        if ($serviceTemplate === null) {
+            throw new TemplateNotFoundException($service->getId());
+        }
+
+        $this->entityManager->remove($serviceTemplate);
+        $this->entityManager->flush();
+    }
+
+    /**
+     * @param UserType     $userType
+     * @param ServiceGroup $serviceGroup
+     *
+     * @throws TemplateNotFoundException
+     */
+    public function removeFromServiceGroupTemplate(UserType $userType, ServiceGroup $serviceGroup)
+    {
+        $repository           = $this->entityManager->getRepository('AuthenticationBundle:ServiceGroupTemplate');
+        $serviceGroupTemplate = $repository->findOneBy(
+            [
+                'userType'     => $userType,
+                'serviceGroup' => $serviceGroup,
+            ]
+        );
+
+        /** @var ServiceGroupTemplate $serviceGroupTemplate */
+        if ($serviceGroupTemplate === null) {
+            throw new TemplateNotFoundException($serviceGroup->getId());
+        }
+
+        $this->entityManager->remove($serviceGroupTemplate);
+        $this->entityManager->flush();
     }
 }
