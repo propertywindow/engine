@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="service_group_template")
  * @ORM\Entity(repositoryClass="AuthenticationBundle\Repository\ServiceGroupTemplateRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class ServiceGroupTemplate
 {
@@ -28,9 +29,8 @@ class ServiceGroupTemplate
     private $serviceGroup;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="userType", type="integer")
+     * @ORM\ManyToOne(targetEntity="UserType", inversedBy="serviceGroupTemplates")
+     * @ORM\JoinColumn(name="user_type_id", referencedColumnName="id")
      */
     private $userType;
 
@@ -85,11 +85,11 @@ class ServiceGroupTemplate
     /**
      * Set userType
      *
-     * @param integer $userType
+     * @param userType
      *
      * @return ServiceGroupTemplate
      */
-    public function setUserType($userType)
+    public function setUserType(UserType $userType = null)
     {
         $this->userType = $userType;
 
@@ -99,7 +99,7 @@ class ServiceGroupTemplate
     /**
      * Get userType
      *
-     * @return int
+     * @return userType
      */
     public function getUserType()
     {

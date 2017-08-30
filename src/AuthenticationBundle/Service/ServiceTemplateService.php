@@ -3,6 +3,8 @@
 namespace AuthenticationBundle\Service;
 
 use AuthenticationBundle\Entity\Service;
+use AuthenticationBundle\Entity\ServiceGroup;
+use AuthenticationBundle\Entity\ServiceGroupTemplate;
 use AuthenticationBundle\Entity\ServiceTemplate;
 use AuthenticationBundle\Entity\UserType;
 use AuthenticationBundle\Exceptions\TemplateAlreadyHasServiceException;
@@ -83,5 +85,39 @@ class ServiceTemplateService
         $this->entityManager->flush();
 
         return $serviceTemplate;
+    }
+
+    /**
+     * @param UserType     $userType
+     * @param ServiceGroup $serviceGroup
+     *
+     * @return ServiceGroupTemplate $serviceGroupTemplate
+     *
+     * @throws TemplateAlreadyHasServiceException
+     */
+    public function addToServiceGroupTemplate(UserType $userType, ServiceGroup $serviceGroup)
+    {
+        $repository           = $this->entityManager->getRepository('AuthenticationBundle:ServiceGroupTemplate');
+        $serviceGroupTemplate = $repository->findOneBy(
+            [
+                'userType'     => $userType,
+                'serviceGroup' => $serviceGroup,
+            ]
+        );
+
+        /** @var ServiceGroupTemplate $serviceGroupTemplate */
+        if ($serviceGroupTemplate !== null) {
+            throw new TemplateAlreadyHasServiceException($userType->getEn(), $serviceGroup->getId());
+        }
+
+        $serviceGroupTemplate = new ServiceGroupTemplate();
+
+        $serviceGroupTemplate->setUserType($userType);
+        $serviceGroupTemplate->setServiceGroup($serviceGroup);
+
+        $this->entityManager->persist($serviceGroupTemplate);
+        $this->entityManager->flush();
+
+        return $serviceGroupTemplate;
     }
 }

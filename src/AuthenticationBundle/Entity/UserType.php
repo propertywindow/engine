@@ -27,7 +27,12 @@ class UserType
     /**
      * @ORM\OneToMany(targetEntity="ServiceTemplate", mappedBy="userType")
      */
-    private $templates;
+    private $serviceTemplates;
+
+    /**
+     * @ORM\OneToMany(targetEntity="ServiceGroupTemplate", mappedBy="userType")
+     */
+    private $serviceGroupTemplates;
 
     /**
      * @var string
@@ -62,41 +67,76 @@ class UserType
      */
     public function __construct()
     {
-        $this->templates = new ArrayCollection();
+        $this->serviceTemplates = new ArrayCollection();
+        $this->serviceGroupTemplates = new ArrayCollection();
     }
 
     /**
-     * Add template
+     * Add serviceTemplate
      *
-     * @param ServiceTemplate $templates
+     * @param ServiceTemplate $serviceTemplates
      *
      * @return UserType
      */
-    public function addTemplate(ServiceTemplate $templates)
+    public function addServiceTemplate(ServiceTemplate $serviceTemplates)
     {
-        $this->templates[] = $templates;
+        $this->serviceTemplates[] = $serviceTemplates;
 
         return $this;
     }
 
     /**
-     * Remove template
+     * Remove serviceTemplates
      *
-     * @param ServiceTemplate $template
+     * @param ServiceTemplate $serviceTemplate
      */
-    public function removeTemplate(ServiceTemplate $template)
+    public function removeServiceTemplate(ServiceTemplate $serviceTemplate)
     {
-        $this->templates->removeElement($template);
+        $this->serviceTemplates->removeElement($serviceTemplate);
     }
 
     /**
-     * Get templates
+     * Get serviceTemplates
      *
      * @return Collection
      */
-    public function getTemplates()
+    public function getServiceTemplates()
     {
-        return $this->templates;
+        return $this->serviceTemplates;
+    }
+
+    /**
+     * Add serviceGroupTemplate
+     *
+     * @param ServiceGroupTemplate $serviceGroupTemplates
+     *
+     * @return UserType
+     */
+    public function addServiceGroupTemplate(ServiceGroupTemplate $serviceGroupTemplates)
+    {
+        $this->serviceGroupTemplates[] = $serviceGroupTemplates;
+
+        return $this;
+    }
+
+    /**
+     * Remove serviceGroupTemplates
+     *
+     * @param ServiceGroupTemplate $serviceGroupTemplate
+     */
+    public function removeServiceGroupTemplate(ServiceGroupTemplate $serviceGroupTemplate)
+    {
+        $this->serviceGroupTemplates->removeElement($serviceGroupTemplate);
+    }
+
+    /**
+     * Get serviceGroupTemplates
+     *
+     * @return Collection
+     */
+    public function getServiceGroupTemplates()
+    {
+        return $this->serviceGroupTemplates;
     }
 
     /**

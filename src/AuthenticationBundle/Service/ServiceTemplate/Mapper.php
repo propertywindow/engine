@@ -2,6 +2,7 @@
 
 namespace AuthenticationBundle\Service\ServiceTemplate;
 
+use AuthenticationBundle\Entity\ServiceGroupTemplate;
 use AuthenticationBundle\Entity\ServiceTemplate;
 
 /**
@@ -19,11 +20,7 @@ class Mapper
     {
         return [
             'service_id'   => $serviceTemplate->getService()->getId(),
-            'service_group'   => $serviceTemplate->getService()->getServiceGroup()->getEn(),
-            'service_name' => $serviceTemplate->getService()->getEn(),
         ];
-
-        // todo: return just id for checking default box
     }
 
     /**
@@ -38,6 +35,33 @@ class Mapper
                 return self::fromServiceTemplate($serviceTemplate);
             },
             $serviceTemplates
+        );
+    }
+
+    /**
+     * @param ServiceGroupTemplate $serviceGroupTemplate
+     *
+     * @return array
+     */
+    public static function fromServiceGroupTemplate(ServiceGroupTemplate $serviceGroupTemplate): array
+    {
+        return [
+            'service_group_id'   => $serviceGroupTemplate->getServiceGroup()->getId(),
+        ];
+    }
+
+    /**
+     * @param ServiceGroupTemplate[] ...$serviceGroupTemplates
+     *
+     * @return array
+     */
+    public static function fromServiceGroupTemplates(ServiceGroupTemplate ...$serviceGroupTemplates): array
+    {
+        return array_map(
+            function (ServiceGroupTemplate $serviceGroupTemplate) {
+                return self::fromServiceGroupTemplate($serviceGroupTemplate);
+            },
+            $serviceGroupTemplates
         );
     }
 }

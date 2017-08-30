@@ -29,7 +29,7 @@ class ServiceTemplate
     private $service;
 
     /**
-     * @ORM\ManyToOne(targetEntity="UserType", inversedBy="templates")
+     * @ORM\ManyToOne(targetEntity="UserType", inversedBy="serviceTemplates")
      * @ORM\JoinColumn(name="user_type_id", referencedColumnName="id")
      */
     private $userType;
