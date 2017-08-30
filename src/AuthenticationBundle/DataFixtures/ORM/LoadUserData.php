@@ -2,15 +2,16 @@
 
 namespace AuthenticationBundle\DataFixtures\ORM;
 
-use Doctrine\Common\DataFixtures\FixtureInterface;
-use Doctrine\Common\Persistence\ObjectManager;
 use AuthenticationBundle\Entity\User;
+use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
 /**
  * Class LoadUserData
  * @package AuthenticationBundle\DataFixtures\ORM
  */
-class LoadUserData implements FixtureInterface
+class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
 {
     /**
      * @param ObjectManager $manager
@@ -63,5 +64,13 @@ class LoadUserData implements FixtureInterface
         $manager->persist($user);
 
         $manager->flush();
+    }
+
+    /**
+     * @return integer
+     */
+    public function getOrder()
+    {
+        return 4;
     }
 }

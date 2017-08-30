@@ -26,12 +26,13 @@ class ServiceTemplateService
 
     /**
      * @param int $id
+     * @param int $userTypeId
      *
      * @return ServiceTemplate $serviceTemplate
      *
      * @throws TemplateNotFoundException
      */
-    public function getServiceTemplate(int $id)
+    public function getServiceTemplate(int $id, int $userTypeId)
     {
         $repository      = $this->entityManager->getRepository('AuthenticationBundle:ServiceTemplate');
         $serviceTemplate = $repository->find($id);

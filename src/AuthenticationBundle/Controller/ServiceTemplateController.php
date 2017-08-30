@@ -151,7 +151,7 @@ class ServiceTemplateController extends Controller
     {
         switch ($method) {
             case "getServiceTemplate":
-                return $this->getServiceTemplate($parameters);
+                return $this->getServiceTemplate($userId, $parameters);
             case "getServiceTemplates":
                 return $this->getServiceTemplates($userId);
         }
@@ -160,20 +160,23 @@ class ServiceTemplateController extends Controller
     }
 
     /**
+     * @param int   $userId
      * @param array $parameters
      *
      * @return array
      * @throws TemplateNotFoundException
      */
-    private function getServiceTemplate(array $parameters)
+    private function getServiceTemplate(int $userId, array $parameters)
     {
         if (!array_key_exists('id', $parameters)) {
             throw new InvalidArgumentException("No argument provided");
         }
 
-        $id = (int)$parameters['id'];
+        $id         = (int)$parameters['id'];
+        $user       = $this->userService->getUser($userId);
+        $userTypeId = (int)$user->getTypeId();
 
-        return Mapper::fromServiceTemplate($this->serviceTemplateService->getServiceTemplate($id));
+        return Mapper::fromServiceTemplate($this->serviceTemplateService->getServiceTemplate($id, $userTypeId));
     }
 
     /**

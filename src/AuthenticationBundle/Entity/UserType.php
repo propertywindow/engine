@@ -2,6 +2,8 @@
 
 namespace AuthenticationBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -21,6 +23,11 @@ class UserType
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
+    /**
+     * @ORM\OneToMany(targetEntity="ServiceTemplate", mappedBy="userType")
+     */
+    private $templates;
 
     /**
      * @var string
@@ -49,6 +56,48 @@ class UserType
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $updated;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->templates = new ArrayCollection();
+    }
+
+    /**
+     * Add template
+     *
+     * @param ServiceTemplate $templates
+     *
+     * @return UserType
+     */
+    public function addTemplate(ServiceTemplate $templates)
+    {
+        $this->templates[] = $templates;
+
+        return $this;
+    }
+
+    /**
+     * Remove template
+     *
+     * @param ServiceTemplate $template
+     */
+    public function removeTemplate(ServiceTemplate $template)
+    {
+        $this->templates->removeElement($template);
+    }
+
+    /**
+     * Get templates
+     *
+     * @return Collection
+     */
+    public function getTemplates()
+    {
+        return $this->templates;
+    }
 
     /**
      * Get id
