@@ -70,6 +70,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setIcon('');
         $service->setVisible(true);
         $service->setServiceGroup($this->getReference('service_group_users'));
+        $this->addReference('service_types', $service);
         $manager->persist($service);
 
         $service = new Service();
@@ -78,6 +79,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setIcon('zmdi zmdi-lock');
         $service->setVisible(true);
         $service->setServiceGroup($this->getReference('service_group_users'));
+        $this->addReference('service_blacklist', $service);
         $manager->persist($service);
 
         $service = new Service();
@@ -86,6 +88,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setIcon('');
         $service->setVisible(true);
         $service->setServiceGroup($this->getReference('service_group_users'));
+        $this->addReference('service_users', $service);
         $manager->persist($service);
 
         $service = new Service();
@@ -94,6 +97,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setIcon('');
         $service->setVisible(false);
         $service->setServiceGroup($this->getReference('service_group_users'));
+        $this->addReference('service_impersonate', $service);
         $manager->persist($service);
 
         $service = new Service();

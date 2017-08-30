@@ -18,10 +18,12 @@ class Mapper
     public static function fromServiceTemplate(ServiceTemplate $serviceTemplate): array
     {
         return [
-            'id'        => $serviceTemplate->getId(),
-            'service'   => $serviceTemplate->getService(),
-            'user_type' => $serviceTemplate->getUserType(),
+            'service_id'   => $serviceTemplate->getService()->getId(),
+            'service_group'   => $serviceTemplate->getService()->getServiceGroup()->getEn(),
+            'service_name' => $serviceTemplate->getService()->getEn(),
         ];
+
+        // todo: return just id for checking default box
     }
 
     /**

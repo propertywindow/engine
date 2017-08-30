@@ -19,18 +19,39 @@ class LoadServiceTemplateData extends AbstractFixture implements OrderedFixtureI
     public function load(ObjectManager $manager)
     {
         $serviceTemplate = new ServiceTemplate();
-        $serviceTemplate->setService($this->getReference('service_view_property'));
+        $serviceTemplate->setService($this->getReference('service_types'));
         $serviceTemplate->setUserType($this->getReference('user_type_admin'));
+        $manager->persist($serviceTemplate);
+
+        $serviceTemplate = new ServiceTemplate();
+        $serviceTemplate->setService($this->getReference('service_blacklist'));
+        $serviceTemplate->setUserType($this->getReference('user_type_admin'));
+        $manager->persist($serviceTemplate);
+
+        $serviceTemplate = new ServiceTemplate();
+        $serviceTemplate->setService($this->getReference('service_users'));
+        $serviceTemplate->setUserType($this->getReference('user_type_admin'));
+        $manager->persist($serviceTemplate);
+
+        $serviceTemplate = new ServiceTemplate();
+        $serviceTemplate->setService($this->getReference('service_impersonate'));
+        $serviceTemplate->setUserType($this->getReference('user_type_admin'));
+        $manager->persist($serviceTemplate);
+
+
+        $serviceTemplate = new ServiceTemplate();
+        $serviceTemplate->setService($this->getReference('service_view_property'));
+        $serviceTemplate->setUserType($this->getReference('user_type_colleague'));
         $manager->persist($serviceTemplate);
 
         $serviceTemplate = new ServiceTemplate();
         $serviceTemplate->setService($this->getReference('service_add_property'));
-        $serviceTemplate->setUserType($this->getReference('user_type_admin'));
+        $serviceTemplate->setUserType($this->getReference('user_type_colleague'));
         $manager->persist($serviceTemplate);
 
         $serviceTemplate = new ServiceTemplate();
         $serviceTemplate->setService($this->getReference('service_edit_property'));
-        $serviceTemplate->setUserType($this->getReference('user_type_admin'));
+        $serviceTemplate->setUserType($this->getReference('user_type_colleague'));
         $manager->persist($serviceTemplate);
 
         $serviceTemplate = new ServiceTemplate();
@@ -40,7 +61,7 @@ class LoadServiceTemplateData extends AbstractFixture implements OrderedFixtureI
 
         $serviceTemplate = new ServiceTemplate();
         $serviceTemplate->setService($this->getReference('service_archive_property'));
-        $serviceTemplate->setUserType($this->getReference('user_type_admin'));
+        $serviceTemplate->setUserType($this->getReference('user_type_colleague'));
         $manager->persist($serviceTemplate);
 
         $manager->flush();

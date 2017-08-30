@@ -5,9 +5,12 @@ services:
     user_type_service:
           class: AuthenticationBundle\Service\UserTypeService
           arguments: ["@doctrine.orm.entity_manager"]
+    service_service:
+          class: AuthenticationBundle\Service\ServiceService
+          arguments: ["@doctrine.orm.entity_manager"]
     service_template_service:
-              class: AuthenticationBundle\Service\ServiceTemplateService
-              arguments: ["@doctrine.orm.entity_manager"]
+          class: AuthenticationBundle\Service\ServiceTemplateService
+          arguments: ["@doctrine.orm.entity_manager"]
     service_template_controller:
           class: AuthenticationBundle\Controller\ServiceTemplateController
-          arguments: ['@authenticator', '@service_template_service', '@user_service', '@user_type_service']
+          arguments: ['@authenticator', '@service_service', '@service_template_service', '@user_service', '@user_type_service']

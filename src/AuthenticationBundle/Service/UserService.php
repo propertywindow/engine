@@ -24,7 +24,6 @@ class UserService
         $this->entityManager = $entityManger;
     }
 
-
     /**
      * @param int $id
      *

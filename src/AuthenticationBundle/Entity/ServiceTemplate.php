@@ -107,7 +107,6 @@ class ServiceTemplate
     }
 
 
-
     /**
      * Gets triggered only on insert
 
