@@ -22,7 +22,7 @@ class LoadPropertyData extends AbstractFixture implements OrderedFixtureInterfac
         $property = new Property();
         $property->setKind('sale');
         $property->setAgent($this->getReference('agent_1'));
-        $property->setClientId(1);
+        $property->setClient($this->getReference('client_1'));
         $property->setTerms($this->getReference('term_fixed_price'));
         $property->setOnline(1);
         $property->setSubType(2);
@@ -61,7 +61,7 @@ class LoadPropertyData extends AbstractFixture implements OrderedFixtureInterfac
         $property = new Property();
         $property->setKind('sale');
         $property->setAgent($this->getReference('agent_2'));
-        $property->setClientId(1);
+        $property->setClient($this->getReference('client_1'));
         $property->setTerms($this->getReference('term_new'));
         $property->setOnline(1);
         $property->setSubType(1);

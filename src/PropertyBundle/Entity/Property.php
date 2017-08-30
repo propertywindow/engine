@@ -3,6 +3,7 @@
 namespace PropertyBundle\Entity;
 
 use AgentBundle\Entity\Agent;
+use AgentBundle\Entity\Client;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -37,11 +38,10 @@ class Property
     private $agent;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="client_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="AgentBundle\Entity\Client", inversedBy="properties")
+     * @ORM\JoinColumn(name="client_id", referencedColumnName="id")
      */
-    private $clientId;
+    private $client;
 
     /**
      * @var string
@@ -237,28 +237,29 @@ class Property
         return $this->agent;
     }
 
+
     /**
-     * Set clientId
+     * Set client
      *
-     * @param integer $clientId
+     * @param \AgentBundle\Entity\Client $client
      *
      * @return Property
      */
-    public function setClientId($clientId)
+    public function setClient(Client $client = null)
     {
-        $this->clientId = $clientId;
+        $this->client = $client;
 
         return $this;
     }
 
     /**
-     * Get clientId
+     * Get client
      *
-     * @return int
+     * @return \AgentBundle\Entity\Client
      */
-    public function getClientId()
+    public function getClient()
     {
-        return $this->clientId;
+        return $this->client;
     }
 
     /**

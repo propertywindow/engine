@@ -21,6 +21,7 @@ class LoadClientData extends AbstractFixture implements OrderedFixtureInterface
         $client = new Client();
         $client->setUserId(3);
         $client->setTransparency(true);
+        $this->addReference('client_1', $client);
         $manager->persist($client);
 
         $manager->flush();

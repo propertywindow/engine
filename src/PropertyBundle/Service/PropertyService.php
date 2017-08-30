@@ -111,7 +111,7 @@ class PropertyService
         $property->setKind($parameters['kind']);
         $property->setTerms($parameters['terms_id']);
         $property->setAgent($agent);
-        $property->setClientId($parameters['client_id']);
+        $property->setClient($parameters['client_id']);
         $property->setStreet(ucfirst($parameters['street']));
         $property->setHouseNumber($parameters['house_number']);
         $property->setPostcode($parameters['postcode']);
