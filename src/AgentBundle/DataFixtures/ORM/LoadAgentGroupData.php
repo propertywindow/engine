@@ -2,15 +2,16 @@
 
 namespace AgentBundle\DataFixtures\ORM;
 
-use Doctrine\Common\DataFixtures\FixtureInterface;
-use Doctrine\Common\Persistence\ObjectManager;
 use AgentBundle\Entity\AgentGroup;
+use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
 /**
  * Class LoadAgentGroupData
  * @package AgentBundle\DataFixtures\ORM
  */
-class LoadAgentGroupData implements FixtureInterface
+class LoadAgentGroupData extends AbstractFixture implements OrderedFixtureInterface
 {
     /**
      * @param ObjectManager $manager
@@ -22,5 +23,13 @@ class LoadAgentGroupData implements FixtureInterface
         $manager->persist($agentGroup);
 
         $manager->flush();
+    }
+
+    /**
+     * @return integer
+     */
+    public function getOrder()
+    {
+        return 10;
     }
 }

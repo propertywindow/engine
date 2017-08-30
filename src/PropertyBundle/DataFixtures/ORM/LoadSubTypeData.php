@@ -2,15 +2,16 @@
 
 namespace PropertyBundle\DataFixtures\ORM;
 
-use Doctrine\Common\DataFixtures\FixtureInterface;
-use Doctrine\Common\Persistence\ObjectManager;
 use PropertyBundle\Entity\SubType;
+use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
 /**
  * Class LoadSubTypeData
  * @package PropertyBundle\DataFixtures\ORM
  */
-class LoadSubTypeData implements FixtureInterface
+class LoadSubTypeData extends AbstractFixture implements OrderedFixtureInterface
 {
     /**
      * @param ObjectManager $manager
@@ -291,5 +292,13 @@ class LoadSubTypeData implements FixtureInterface
         $manager->persist($subType);
 
         $manager->flush();
+    }
+
+    /**
+     * @return integer
+     */
+    public function getOrder()
+    {
+        return 3;
     }
 }

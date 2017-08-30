@@ -18,6 +18,8 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
      */
     public function load(ObjectManager $manager)
     {
+        // Properties
+
         $service = new Service();
         $service->setEn('View Property');
         $service->setNl('Bekijk Woning');
@@ -63,6 +65,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $this->addReference('service_archive_property', $service);
         $manager->persist($service);
 
+        // Users
 
         $service = new Service();
         $service->setEn('Types');
@@ -156,6 +159,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setServiceGroup($this->getReference('service_group_users'));
         $manager->persist($service);
 
+        // Agents
 
         $service = new Service();
         $service->setEn('View Agent');
@@ -189,6 +193,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setServiceGroup($this->getReference('service_group_agents'));
         $manager->persist($service);
 
+        // Appointments
 
         $service = new Service();
         $service->setEn('View Appointment');
@@ -222,6 +227,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setServiceGroup($this->getReference('service_group_appointments'));
         $manager->persist($service);
 
+        // Viewings
 
         $service = new Service();
         $service->setEn('View Viewing');
@@ -255,6 +261,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setServiceGroup($this->getReference('service_group_viewings'));
         $manager->persist($service);
 
+        // Interest
 
         $service = new Service();
         $service->setEn('View Interest');
@@ -288,6 +295,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setServiceGroup($this->getReference('service_group_interest'));
         $manager->persist($service);
 
+        // Offers
 
         $service = new Service();
         $service->setEn('View Offer');
@@ -321,6 +329,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setServiceGroup($this->getReference('service_group_offers'));
         $manager->persist($service);
 
+        // Surveys
 
         $service = new Service();
         $service->setEn('View Survey');
@@ -354,6 +363,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setServiceGroup($this->getReference('service_group_surveys'));
         $manager->persist($service);
 
+        // Contacts
 
         $service = new Service();
         $service->setEn('Agencies');
@@ -368,7 +378,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setNl('Bekijk Agentschap');
         $service->setIcon('zmdi zmdi-search');
         $service->setVisible(false);
-        $service->setServiceGroup($this->getReference('service_group_surveys'));
+        $service->setServiceGroup($this->getReference('service_group_contacts'));
         $manager->persist($service);
 
         $service = new Service();
@@ -376,7 +386,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setNl('Agentschap toevoegen');
         $service->setIcon('zmdi zmdi-plus');
         $service->setVisible(false);
-        $service->setServiceGroup($this->getReference('service_group_surveys'));
+        $service->setServiceGroup($this->getReference('service_group_contacts'));
         $manager->persist($service);
 
         $service = new Service();
@@ -384,7 +394,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setNl('Bewerk Agentschap');
         $service->setIcon('zmdi zmdi-edit');
         $service->setVisible(false);
-        $service->setServiceGroup($this->getReference('service_group_surveys'));
+        $service->setServiceGroup($this->getReference('service_group_contacts'));
         $manager->persist($service);
 
         $service = new Service();
@@ -392,7 +402,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setNl('Verwijder Agentschap');
         $service->setIcon('zmdi zmdi-delete');
         $service->setVisible(false);
-        $service->setServiceGroup($this->getReference('service_group_surveys'));
+        $service->setServiceGroup($this->getReference('service_group_contacts'));
         $manager->persist($service);
 
         $service = new Service();
@@ -408,7 +418,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setNl('Bekijk Solicitor');
         $service->setIcon('zmdi zmdi-search');
         $service->setVisible(false);
-        $service->setServiceGroup($this->getReference('service_group_surveys'));
+        $service->setServiceGroup($this->getReference('service_group_contacts'));
         $manager->persist($service);
 
         $service = new Service();
@@ -416,7 +426,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setNl('Solicitor toevoegen');
         $service->setIcon('zmdi zmdi-plus');
         $service->setVisible(false);
-        $service->setServiceGroup($this->getReference('service_group_surveys'));
+        $service->setServiceGroup($this->getReference('service_group_contacts'));
         $manager->persist($service);
 
         $service = new Service();
@@ -424,7 +434,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setNl('Bewerk Solicitor');
         $service->setIcon('zmdi zmdi-edit');
         $service->setVisible(false);
-        $service->setServiceGroup($this->getReference('service_group_surveys'));
+        $service->setServiceGroup($this->getReference('service_group_contacts'));
         $manager->persist($service);
 
         $service = new Service();
@@ -432,7 +442,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setNl('Verwijder Solicitor');
         $service->setIcon('zmdi zmdi-delete');
         $service->setVisible(false);
-        $service->setServiceGroup($this->getReference('service_group_surveys'));
+        $service->setServiceGroup($this->getReference('service_group_contacts'));
         $manager->persist($service);
 
         $service = new Service();
@@ -448,7 +458,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setNl('Bekijk Surveyor');
         $service->setIcon('zmdi zmdi-search');
         $service->setVisible(false);
-        $service->setServiceGroup($this->getReference('service_group_surveys'));
+        $service->setServiceGroup($this->getReference('service_group_contacts'));
         $manager->persist($service);
 
         $service = new Service();
@@ -456,7 +466,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setNl('Surveyor toevoegen');
         $service->setIcon('zmdi zmdi-plus');
         $service->setVisible(false);
-        $service->setServiceGroup($this->getReference('service_group_surveys'));
+        $service->setServiceGroup($this->getReference('service_group_contacts'));
         $manager->persist($service);
 
         $service = new Service();
@@ -464,7 +474,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setNl('Bewerk Surveyor');
         $service->setIcon('zmdi zmdi-edit');
         $service->setVisible(false);
-        $service->setServiceGroup($this->getReference('service_group_surveys'));
+        $service->setServiceGroup($this->getReference('service_group_contacts'));
         $manager->persist($service);
 
         $service = new Service();
@@ -472,7 +482,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setNl('Verwijder Surveyor');
         $service->setIcon('zmdi zmdi-delete');
         $service->setVisible(false);
-        $service->setServiceGroup($this->getReference('service_group_surveys'));
+        $service->setServiceGroup($this->getReference('service_group_contacts'));
         $manager->persist($service);
 
         $service = new Service();
@@ -488,7 +498,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setNl('Bekijk Klant');
         $service->setIcon('zmdi zmdi-search');
         $service->setVisible(false);
-        $service->setServiceGroup($this->getReference('service_group_surveys'));
+        $service->setServiceGroup($this->getReference('service_group_contacts'));
         $manager->persist($service);
 
         $service = new Service();
@@ -496,7 +506,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setNl('Klant toevoegen');
         $service->setIcon('zmdi zmdi-plus');
         $service->setVisible(false);
-        $service->setServiceGroup($this->getReference('service_group_surveys'));
+        $service->setServiceGroup($this->getReference('service_group_contacts'));
         $manager->persist($service);
 
         $service = new Service();
@@ -504,7 +514,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setNl('Bewerk Klant');
         $service->setIcon('zmdi zmdi-edit');
         $service->setVisible(false);
-        $service->setServiceGroup($this->getReference('service_group_surveys'));
+        $service->setServiceGroup($this->getReference('service_group_contacts'));
         $manager->persist($service);
 
         $service = new Service();
@@ -512,7 +522,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setNl('Verwijder Klant');
         $service->setIcon('zmdi zmdi-delete');
         $service->setVisible(false);
-        $service->setServiceGroup($this->getReference('service_group_surveys'));
+        $service->setServiceGroup($this->getReference('service_group_contacts'));
         $manager->persist($service);
 
         $service = new Service();
@@ -528,7 +538,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setNl('Bekijk Koper');
         $service->setIcon('zmdi zmdi-search');
         $service->setVisible(false);
-        $service->setServiceGroup($this->getReference('service_group_surveys'));
+        $service->setServiceGroup($this->getReference('service_group_contacts'));
         $manager->persist($service);
 
         $service = new Service();
@@ -536,7 +546,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setNl('Koper toevoegen');
         $service->setIcon('zmdi zmdi-plus');
         $service->setVisible(false);
-        $service->setServiceGroup($this->getReference('service_group_surveys'));
+        $service->setServiceGroup($this->getReference('service_group_contacts'));
         $manager->persist($service);
 
         $service = new Service();
@@ -544,7 +554,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setNl('Bewerk Koper');
         $service->setIcon('zmdi zmdi-edit');
         $service->setVisible(false);
-        $service->setServiceGroup($this->getReference('service_group_surveys'));
+        $service->setServiceGroup($this->getReference('service_group_contacts'));
         $manager->persist($service);
 
         $service = new Service();
@@ -552,7 +562,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setNl('Verwijder Koper');
         $service->setIcon('zmdi zmdi-delete');
         $service->setVisible(false);
-        $service->setServiceGroup($this->getReference('service_group_surveys'));
+        $service->setServiceGroup($this->getReference('service_group_contacts'));
         $manager->persist($service);
 
         $service = new Service();
@@ -568,7 +578,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setNl('Bekijk Klant');
         $service->setIcon('zmdi zmdi-search');
         $service->setVisible(false);
-        $service->setServiceGroup($this->getReference('service_group_surveys'));
+        $service->setServiceGroup($this->getReference('service_group_contacts'));
         $manager->persist($service);
 
         $service = new Service();
@@ -576,7 +586,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setNl('Klant toevoegen');
         $service->setIcon('zmdi zmdi-plus');
         $service->setVisible(false);
-        $service->setServiceGroup($this->getReference('service_group_surveys'));
+        $service->setServiceGroup($this->getReference('service_group_contacts'));
         $manager->persist($service);
 
         $service = new Service();
@@ -584,7 +594,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setNl('Bewerk Klant');
         $service->setIcon('zmdi zmdi-edit');
         $service->setVisible(false);
-        $service->setServiceGroup($this->getReference('service_group_surveys'));
+        $service->setServiceGroup($this->getReference('service_group_contacts'));
         $manager->persist($service);
 
         $service = new Service();
@@ -592,9 +602,10 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setNl('Verwijder Klant');
         $service->setIcon('zmdi zmdi-delete');
         $service->setVisible(false);
-        $service->setServiceGroup($this->getReference('service_group_surveys'));
+        $service->setServiceGroup($this->getReference('service_group_contacts'));
         $manager->persist($service);
 
+        // Email Alerts
 
         $service = new Service();
         $service->setEn('View Applicant');
@@ -628,6 +639,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setServiceGroup($this->getReference('service_group_email_alerts'));
         $manager->persist($service);
 
+        // Inbox
 
         $service = new Service();
         $service->setEn('View Email');
@@ -661,6 +673,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setServiceGroup($this->getReference('service_group_inbox'));
         $manager->persist($service);
 
+        // Notifications
 
         $service = new Service();
         $service->setEn('View Notification');
@@ -694,6 +707,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setServiceGroup($this->getReference('service_group_notifications'));
         $manager->persist($service);
 
+        // Invoices
 
         $service = new Service();
         $service->setEn('Invoices');
@@ -727,6 +741,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setServiceGroup($this->getReference('service_group_invoices'));
         $manager->persist($service);
 
+        // Statistics
 
         $service = new Service();
         $service->setEn('Server');
@@ -816,6 +831,8 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setServiceGroup($this->getReference('service_group_statistics'));
         $manager->persist($service);
 
+        // Settings
+
         $service = new Service();
         $service->setEn('Templates');
         $service->setNl('Templates');
@@ -857,6 +874,6 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
      */
     public function getOrder()
     {
-        return 11;
+        return 21;
     }
 }

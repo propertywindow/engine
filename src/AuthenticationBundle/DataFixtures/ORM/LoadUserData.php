@@ -20,7 +20,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
     {
         $user = new User();
         $user->setUserType($this->getReference('user_type_admin'));
-        $user->setAgentId(1);
+        $user->setAgent($this->getReference('agent_1'));
         $user->setUsername('marc');
         $user->setPassword(md5('marc'));
         $user->setEmail('geurtsmarc@hotmail.com');
@@ -35,7 +35,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
 
         $user = new User();
         $user->setUserType($this->getReference('user_type_admin'));
-        $user->setAgentId(2);
+        $user->setAgent($this->getReference('agent_2'));
         $user->setUsername('iain');
         $user->setPassword(md5('iain'));
         $user->setEmail('iain@datacomputerservices.co.uk');
@@ -50,7 +50,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
 
         $user = new User();
         $user->setUserType($this->getReference('user_type_client'));
-        $user->setAgentId(1);
+        $user->setAgent($this->getReference('agent_1'));
         $user->setUsername('marc');
         $user->setPassword(md5('marc'));
         $user->setEmail('geurtsmarc@hotmail.com');
@@ -71,6 +71,6 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
      */
     public function getOrder()
     {
-        return 4;
+        return 16;
     }
 }

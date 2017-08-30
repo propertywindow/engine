@@ -2,6 +2,7 @@
 
 namespace AgentBundle\Entity;
 
+use AuthenticationBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -29,6 +30,11 @@ class Agent
      * @ORM\OneToMany(targetEntity="PropertyBundle\Entity\Property", mappedBy="agent")
      */
     private $properties;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AuthenticationBundle\Entity\User", mappedBy="agent")
+     */
+    private $users;
 
     /**
      * @var int
@@ -162,6 +168,7 @@ class Agent
     public function __construct()
     {
         $this->properties = new ArrayCollection();
+        $this->users      = new ArrayCollection();
     }
 
     /**
@@ -196,6 +203,40 @@ class Agent
     public function getProperties()
     {
         return $this->properties;
+    }
+
+    /**
+     * Add user
+     *
+     * @param User $users
+     *
+     * @return Agent
+     */
+    public function addUser(User $users)
+    {
+        $this->users[] = $users;
+
+        return $this;
+    }
+
+    /**
+     * Remove user
+     *
+     * @param User $user
+     */
+    public function removeUser(User $user)
+    {
+        $this->users->removeElement($user);
+    }
+
+    /**
+     * Get users
+     *
+     * @return Collection
+     */
+    public function getUsers()
+    {
+        return $this->users;
     }
 
     /**
@@ -594,7 +635,6 @@ class Agent
 
     /**
      * Gets triggered only on insert
-
      * @ORM\PrePersist
      */
     public function onPrePersist()
@@ -604,7 +644,6 @@ class Agent
 
     /**
      * Gets triggered every time on update
-
      * @ORM\PreUpdate
      */
     public function onPreUpdate()

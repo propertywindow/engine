@@ -72,6 +72,6 @@ class LoadServiceTemplateData extends AbstractFixture implements OrderedFixtureI
      */
     public function getOrder()
     {
-        return 12;
+        return 23;
     }
 }

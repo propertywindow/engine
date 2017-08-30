@@ -309,6 +309,9 @@ class PropertyController extends Controller
         if (!array_key_exists('sub_type_id', $parameters) && $parameters['sub_type_id'] !== null) {
             throw new InvalidArgumentException("sub_type_id parameter not provided");
         }
+        if (!array_key_exists('terms_id', $parameters) && $parameters['terms_id'] !== null) {
+            throw new InvalidArgumentException("terms_id parameter not provided");
+        }
         if (!array_key_exists('street', $parameters) && $parameters['street'] !== null) {
             throw new InvalidArgumentException("street parameter not provided");
         }
@@ -388,8 +391,8 @@ class PropertyController extends Controller
             $property->setSubType((int)$parameters['sub_type_id']);
         }
 
-        if (array_key_exists('terms', $parameters) && $parameters['terms'] !== null) {
-            $property->setTerms((int)$parameters['terms']);
+        if (array_key_exists('terms_id', $parameters) && $parameters['terms_id'] !== null) {
+            $property->setTerms((int)$parameters['terms_id']);
         }
 
         if (array_key_exists('online', $parameters) && $parameters['online'] !== null) {

@@ -23,7 +23,7 @@ class LoadPropertyData extends AbstractFixture implements OrderedFixtureInterfac
         $property->setKind('sale');
         $property->setAgent($this->getReference('agent_1'));
         $property->setClientId(1);
-        $property->setTerms(1);
+        $property->setTerms($this->getReference('term_fixed_price'));
         $property->setOnline(1);
         $property->setSubType(2);
         $property->setStreet('Graafsedijk');
@@ -62,7 +62,7 @@ class LoadPropertyData extends AbstractFixture implements OrderedFixtureInterfac
         $property->setKind('sale');
         $property->setAgent($this->getReference('agent_2'));
         $property->setClientId(1);
-        $property->setTerms(1);
+        $property->setTerms($this->getReference('term_new'));
         $property->setOnline(1);
         $property->setSubType(1);
         $property->setStreet('Portobello High Street');
@@ -105,6 +105,6 @@ class LoadPropertyData extends AbstractFixture implements OrderedFixtureInterfac
      */
     public function getOrder()
     {
-        return 5;
+        return 30;
     }
 }

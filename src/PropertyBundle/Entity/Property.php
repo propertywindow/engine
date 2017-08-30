@@ -51,11 +51,10 @@ class Property
     private $kind;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="terms", type="integer")
+     * @ORM\ManyToOne(targetEntity="Terms", inversedBy="properties")
+     * @ORM\JoinColumn(name="terms_id", referencedColumnName="id")
      */
-    private $terms = 1;
+    private $terms;
 
     /**
      * @var int
@@ -289,11 +288,11 @@ class Property
     /**
      * Set terms
      *
-     * @param integer $terms
+     * @param Terms $terms
      *
      * @return Property
      */
-    public function setTerms($terms)
+    public function setTerms(Terms $terms = null)
     {
         $this->terms = $terms;
 
@@ -303,7 +302,7 @@ class Property
     /**
      * Get terms
      *
-     * @return bool
+     * @return Terms
      */
     public function getTerms()
     {

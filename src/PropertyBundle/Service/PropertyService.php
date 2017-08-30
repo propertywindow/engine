@@ -109,6 +109,7 @@ class PropertyService
         $property = new Property();
 
         $property->setKind($parameters['kind']);
+        $property->setTerms($parameters['terms_id']);
         $property->setAgent($agent);
         $property->setClientId($parameters['client_id']);
         $property->setStreet(ucfirst($parameters['street']));
@@ -120,9 +121,6 @@ class PropertyService
         $property->setLat($parameters['lat']);
         $property->setLng($parameters['lng']);
 
-        if (array_key_exists('terms', $parameters) && $parameters['terms'] !== null) {
-            $property->setTerms((int)$parameters['terms']);
-        }
         if (array_key_exists('online', $parameters) && $parameters['online'] !== null) {
             $property->setOnline((bool)$parameters['online']);
         }

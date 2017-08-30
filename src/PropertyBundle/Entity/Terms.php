@@ -2,6 +2,8 @@
 
 namespace PropertyBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -21,6 +23,11 @@ class Terms
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Property", mappedBy="terms")
+     */
+    private $properties;
 
     /**
      * @var string
@@ -58,6 +65,14 @@ class Terms
     protected $updated;
 
     /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->properties = new ArrayCollection();
+    }
+
+    /**
      * Get id
      *
      * @return int
@@ -65,6 +80,40 @@ class Terms
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Add property
+     *
+     * @param Property $properties
+     *
+     * @return Terms
+     */
+    public function addProperty(Property $properties)
+    {
+        $this->properties[] = $properties;
+
+        return $this;
+    }
+
+    /**
+     * Remove property
+     *
+     * @param Property $property
+     */
+    public function removeProperty(Property $property)
+    {
+        $this->properties->removeElement($property);
+    }
+
+    /**
+     * Get properties
+     *
+     * @return Collection
+     */
+    public function getProperties()
+    {
+        return $this->properties;
     }
 
     /**

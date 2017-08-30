@@ -2,6 +2,7 @@
 
 namespace AuthenticationBundle\Entity;
 
+use AgentBundle\Entity\Agent;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -107,11 +108,10 @@ class User
     private $language = 'en';
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="agent_id", type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="AgentBundle\Entity\Agent", inversedBy="users")
+     * @ORM\JoinColumn(name="agent_id", referencedColumnName="id", nullable=true)
      */
-    private $agentId;
+    private $agent;
 
     /**
      * @ORM\ManyToOne(targetEntity="UserType", inversedBy="users")
@@ -446,31 +446,31 @@ class User
     }
 
     /**
-     * Set agentId
+     * Set agent
      *
-     * @param integer $agentId
+     * @param \AgentBundle\Entity\Agent $agent
      *
      * @return User
      */
-    public function setAgentId($agentId)
+    public function setAgent(Agent $agent = null)
     {
-        $this->agentId = $agentId;
+        $this->agent = $agent;
 
         return $this;
     }
 
     /**
-     * Get agentId
+     * Get agent
      *
-     * @return int
+     * @return \AgentBundle\Entity\Agent
      */
-    public function getAgentId()
+    public function getAgent()
     {
-        return $this->agentId;
+        return $this->agent;
     }
 
     /**
-     * Set UserType
+     * Set userType
      *
      * @param UserType $userType
      *
@@ -484,7 +484,7 @@ class User
     }
 
     /**
-     * Get UserType
+     * Get userType
      *
      * @return UserType
      */
@@ -543,7 +543,6 @@ class User
 
     /**
      * Gets triggered only on insert
-
      * @ORM\PrePersist
      */
     public function onPrePersist()
@@ -553,7 +552,6 @@ class User
 
     /**
      * Gets triggered every time on update
-
      * @ORM\PreUpdate
      */
     public function onPreUpdate()
