@@ -221,7 +221,7 @@ class PropertyController extends Controller
             throw new NotAuthorizedException($userId);
         }
 
-        if ($user->getTypeId() === self::USER_API) {
+        if ($user->getUserType()->getId() === self::USER_API) {
             if (!array_key_exists('ip', $parameters)) {
                 throw new InvalidArgumentException("No ip argument provided");
             }
@@ -296,7 +296,7 @@ class PropertyController extends Controller
     {
         $user = $this->userService->getUser($userId);
 
-        if ($user->getTypeId() === self::USER_CLIENT || $user->getTypeId() === self::USER_API) {
+        if ($user->getUserType()->getId() === self::USER_CLIENT || $user->getUserType()->getId() === self::USER_API) {
             throw new NotAuthorizedException($userId);
         }
 
@@ -511,7 +511,7 @@ class PropertyController extends Controller
         $id   = (int)$parameters['id'];
         $user = $this->userService->getUser($userId);
 
-        if ((int)$user->getTypeId() >= self::USER_AGENT) {
+        if ((int)$user->getUserType()->getId() >= self::USER_AGENT) {
             throw new NotAuthorizedException($userId);
         }
 

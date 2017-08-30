@@ -114,11 +114,10 @@ class User
     private $agentId;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="type_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="UserType", inversedBy="users")
+     * @ORM\JoinColumn(name="user_type_id", referencedColumnName="id")
      */
-    private $typeId;
+    private $userType;
 
     /**
      * @var string
@@ -471,27 +470,27 @@ class User
     }
 
     /**
-     * Set typeId
+     * Set UserType
      *
-     * @param integer $typeId
+     * @param UserType $userType
      *
      * @return User
      */
-    public function setTypeId($typeId)
+    public function setUserType(UserType $userType = null)
     {
-        $this->typeId = $typeId;
+        $this->userType = $userType;
 
         return $this;
     }
 
     /**
-     * Get typeId
+     * Get UserType
      *
-     * @return int
+     * @return UserType
      */
-    public function getTypeId()
+    public function getUserType()
     {
-        return $this->typeId;
+        return $this->userType;
     }
 
     /**

@@ -26,13 +26,18 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
  */
 class TypeController extends Controller
 {
-    private const PARSE_ERROR            = -32700;
-    private const INVALID_REQUEST        = -32600;
-    private const METHOD_NOT_FOUND       = -32601;
-    private const INVALID_PARAMS         = -32602;
-    private const INTERNAL_ERROR         = -32603;
-    private const USER_NOT_AUTHENTICATED = -32000;
-    private const TYPE_NOT_FOUND         = -32001;
+    private const         PARSE_ERROR            = -32700;
+    private const         INVALID_REQUEST        = -32600;
+    private const         METHOD_NOT_FOUND       = -32601;
+    private const         INVALID_PARAMS         = -32602;
+    private const         INTERNAL_ERROR         = -32603;
+    private const         USER_NOT_AUTHENTICATED = -32000;
+    private const         TYPE_NOT_FOUND         = -32001;
+    private const         USER_ADMIN             = 1;
+    private const         USER_AGENT             = 2;
+    private const         USER_COLLEAGUE         = 3;
+    private const         USER_CLIENT            = 4;
+    private const         USER_API               = 5;
 
     /**
      * @var Authenticator
@@ -189,9 +194,9 @@ class TypeController extends Controller
             throw new InvalidArgumentException("No argument provided");
         }
 
-        $userType = $this->userService->getUserType($userId);
+        $user = $this->userService->getUser($userId);
 
-        if ($userType !== 1) {
+        if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
             throw new NotAuthorizedException($userId);
         }
 

@@ -196,7 +196,7 @@ class ServiceTemplateController extends Controller
         $user      = $this->userService->getUser($userId);
         $userTypes = $this->userTypeService->getUserTypes();
 
-        if ((int)$user->getTypeId() !== self::USER_ADMIN) {
+        if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
             throw new NotAuthorizedException($userId);
         }
         foreach ($userTypes as $userType) {
@@ -237,7 +237,7 @@ class ServiceTemplateController extends Controller
         $user             = $this->userService->getUser($userId);
         $templateUserType = $this->userTypeService->getUserType($id);
 
-        if ((int)$user->getTypeId() !== self::USER_ADMIN) {
+        if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
             throw new NotAuthorizedException($userId);
         }
 
@@ -263,7 +263,7 @@ class ServiceTemplateController extends Controller
         $user             = $this->userService->getUser($userId);
         $templateUserType = $this->userTypeService->getUserType($id);
 
-        if ((int)$user->getTypeId() !== self::USER_ADMIN) {
+        if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
             throw new NotAuthorizedException($userId);
         }
 
@@ -291,7 +291,7 @@ class ServiceTemplateController extends Controller
 
         $user     = $this->userService->getUser($userId);
 
-        if ((int)$user->getTypeId() !== self::USER_ADMIN) {
+        if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
             throw new NotAuthorizedException($userId);
         }
 
@@ -320,7 +320,7 @@ class ServiceTemplateController extends Controller
 
         $user         = $this->userService->getUser($userId);
 
-        if ((int)$user->getTypeId() !== self::USER_ADMIN) {
+        if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
             throw new NotAuthorizedException($userId);
         }
 
@@ -350,7 +350,7 @@ class ServiceTemplateController extends Controller
 
         $user     = $this->userService->getUser($userId);
 
-        if ((int)$user->getTypeId() !== self::USER_ADMIN) {
+        if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
             throw new NotAuthorizedException($userId);
         }
 
@@ -378,7 +378,7 @@ class ServiceTemplateController extends Controller
 
         $user         = $this->userService->getUser($userId);
 
-        if ((int)$user->getTypeId() !== self::USER_ADMIN) {
+        if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
             throw new NotAuthorizedException($userId);
         }
 

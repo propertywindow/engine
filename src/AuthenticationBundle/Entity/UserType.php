@@ -35,6 +35,11 @@ class UserType
     private $serviceGroupTemplates;
 
     /**
+     * @ORM\OneToMany(targetEntity="User", mappedBy="userType")
+     */
+    private $users;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="en", type="string", length=255)
@@ -69,6 +74,7 @@ class UserType
     {
         $this->serviceTemplates = new ArrayCollection();
         $this->serviceGroupTemplates = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     /**
@@ -137,6 +143,40 @@ class UserType
     public function getServiceGroupTemplates()
     {
         return $this->serviceGroupTemplates;
+    }
+
+    /**
+     * Add User
+     *
+     * @param User $users
+     *
+     * @return UserType
+     */
+    public function addUser(User $users)
+    {
+        $this->users[] = $users;
+
+        return $this;
+    }
+
+    /**
+     * Remove User
+     *
+     * @param User $user
+     */
+    public function removeUser(User $user)
+    {
+        $this->users->removeElement($user);
+    }
+
+    /**
+     * Get User
+     *
+     * @return Collection
+     */
+    public function getUser()
+    {
+        return $this->users;
     }
 
     /**
