@@ -55,6 +55,30 @@ class ServiceTemplateService
 
     /**
      * @param UserType $userType
+     *
+     * @return ServiceGroupTemplate $serviceGroupTemplate
+     *
+     * @throws TemplateNotFoundException
+     */
+    public function getServiceGroupTemplate(UserType $userType)
+    {
+        $repository           = $this->entityManager->getRepository('AuthenticationBundle:ServiceGroupTemplate');
+        $serviceGroupTemplate = $repository->findBy(
+            [
+                'userType' => $userType,
+            ]
+        );
+
+        /** @var ServiceGroupTemplate $serviceGroupTemplate */
+        if ($serviceGroupTemplate === null) {
+            throw new TemplateNotFoundException($serviceGroupTemplate->getId());
+        }
+
+        return $serviceGroupTemplate;
+    }
+
+    /**
+     * @param UserType $userType
      * @param Service  $service
      *
      * @return ServiceTemplate $serviceTemplate

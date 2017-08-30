@@ -165,10 +165,12 @@ class ServiceTemplateController extends Controller
     private function invoke(int $userId, string $method, array $parameters = [])
     {
         switch ($method) {
-            case "getServiceTemplate":
-                return $this->getServiceTemplate($userId, $parameters);
             case "getServiceTemplates":
                 return $this->getServiceTemplates($userId);
+            case "getServiceTemplate":
+                return $this->getServiceTemplate($userId, $parameters);
+            case "getServiceGroupTemplate":
+                return $this->getServiceGroupTemplate($userId, $parameters);
             case "addToServiceTemplate":
                 return $this->addToServiceTemplate($userId, $parameters);
             case "addToServiceGroupTemplate":
@@ -180,32 +182,6 @@ class ServiceTemplateController extends Controller
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
-    }
-
-    /**
-     * @param int   $userId
-     * @param array $parameters
-     *
-     * @return array
-     * @throws NotAuthorizedException
-     */
-    private function getServiceTemplate(int $userId, array $parameters)
-    {
-        if (!array_key_exists('id', $parameters)) {
-            throw new InvalidArgumentException("No argument provided");
-        }
-
-        $id               = (int)$parameters['id'];
-        $user             = $this->userService->getUser($userId);
-        $templateUserType = $this->userTypeService->getUserType($id);
-
-        if ((int)$user->getTypeId() !== self::USER_ADMIN) {
-            throw new NotAuthorizedException($userId);
-        }
-
-        $template = $this->serviceTemplateService->getServiceTemplate($templateUserType);
-
-        return Mapper::fromServiceTemplates(...$template);
     }
 
     /**
@@ -242,6 +218,58 @@ class ServiceTemplateController extends Controller
         }
 
         return $template;
+    }
+
+    /**
+     * @param int   $userId
+     * @param array $parameters
+     *
+     * @return array
+     * @throws NotAuthorizedException
+     */
+    private function getServiceTemplate(int $userId, array $parameters)
+    {
+        if (!array_key_exists('id', $parameters)) {
+            throw new InvalidArgumentException("No argument provided");
+        }
+
+        $id               = (int)$parameters['id'];
+        $user             = $this->userService->getUser($userId);
+        $templateUserType = $this->userTypeService->getUserType($id);
+
+        if ((int)$user->getTypeId() !== self::USER_ADMIN) {
+            throw new NotAuthorizedException($userId);
+        }
+
+        $template = $this->serviceTemplateService->getServiceTemplate($templateUserType);
+
+        return Mapper::fromServiceTemplates(...$template);
+    }
+
+    /**
+     * @param int   $userId
+     * @param array $parameters
+     *
+     * @return array
+     * @throws NotAuthorizedException
+     */
+    private function getServiceGroupTemplate(int $userId, array $parameters)
+    {
+        if (!array_key_exists('id', $parameters)) {
+            throw new InvalidArgumentException("No argument provided");
+        }
+
+        $id               = (int)$parameters['id'];
+        $user             = $this->userService->getUser($userId);
+        $templateUserType = $this->userTypeService->getUserType($id);
+
+        if ((int)$user->getTypeId() !== self::USER_ADMIN) {
+            throw new NotAuthorizedException($userId);
+        }
+
+        $templateGroup = $this->serviceTemplateService->getServiceGroupTemplate($templateUserType);
+
+        return Mapper::fromServiceGroupTemplates(...$templateGroup);
     }
 
     /**

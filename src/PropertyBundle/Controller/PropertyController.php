@@ -511,11 +511,11 @@ class PropertyController extends Controller
         $id   = (int)$parameters['id'];
         $user = $this->userService->getUser($userId);
 
-        if ((int)$user->getTypeId() === self::USER_ADMIN || self::USER_AGENT) {
-            $this->propertyService->deleteProperty($id);
-        } else {
+        if ((int)$user->getTypeId() >= self::USER_AGENT) {
             throw new NotAuthorizedException($userId);
         }
+
+        $this->propertyService->deleteProperty($id);
 
         // todo: delete info from not cascading tables too, including logBundle
         // todo: remove all photos from data folder and Gallery
