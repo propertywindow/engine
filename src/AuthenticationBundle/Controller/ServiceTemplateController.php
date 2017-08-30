@@ -3,8 +3,10 @@
 namespace AuthenticationBundle\Controller;
 
 use AuthenticationBundle\Exceptions\TemplateNotFoundException;
-use AuthenticationBundle\Service\ServiceTemplatesService;
+use AuthenticationBundle\Service\ServiceTemplate\Mapper;
+use AuthenticationBundle\Service\ServiceTemplateService;
 use AuthenticationBundle\Service\UserService;
+use AuthenticationBundle\Service\UserTypeService;
 use Exception;
 use InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -20,9 +22,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 /**
- * @Route(service="service_templates_controller")
+ * @Route(service="service_template_controller")
  */
-class ServiceTemplatesController extends Controller
+class ServiceTemplateController extends Controller
 {
     private const PARSE_ERROR            = -32700;
     private const INVALID_REQUEST        = -32600;
@@ -38,9 +40,9 @@ class ServiceTemplatesController extends Controller
     private $authenticator;
 
     /**
-     * @var ServiceTemplatesService
+     * @var ServiceTemplateService
      */
-    private $serviceTemplatesService;
+    private $serviceTemplateService;
 
     /**
      * @var UserService
@@ -48,22 +50,30 @@ class ServiceTemplatesController extends Controller
     private $userService;
 
     /**
-     * @param Authenticator           $authenticator
-     * @param ServiceTemplatesService $serviceTemplatesService
-     * @param UserService             $userService
+     * @var UserTypeService
+     */
+    private $userTypeService;
+
+    /**
+     * @param Authenticator          $authenticator
+     * @param ServiceTemplateService $serviceTemplateService
+     * @param UserService            $userService
+     * @param UserTypeService        $userTypeService
      */
     public function __construct(
         Authenticator $authenticator,
-        ServiceTemplatesService $serviceTemplatesService,
-        UserService $userService
+        ServiceTemplateService $serviceTemplateService,
+        UserService $userService,
+        UserTypeService $userTypeService
     ) {
-        $this->authenticator           = $authenticator;
-        $this->serviceTemplatesService = $serviceTemplatesService;
-        $this->userService             = $userService;
+        $this->authenticator          = $authenticator;
+        $this->serviceTemplateService = $serviceTemplateService;
+        $this->userService            = $userService;
+        $this->userTypeService        = $userTypeService;
     }
 
     /**
-     * @Route("/services/templates" , name="service_templates")
+     * @Route("/services/template" , name="service_template")
      *
      * @param Request $httpRequest
      *
@@ -140,10 +150,10 @@ class ServiceTemplatesController extends Controller
     private function invoke(int $userId, string $method, array $parameters = [])
     {
         switch ($method) {
-            case "getTemplate":
-                return $this->getTemplate($parameters);
-            case "getTemplates":
-                return $this->getTemplates($parameters);
+            case "getServiceTemplate":
+                return $this->getServiceTemplate($parameters);
+            case "getServiceTemplates":
+                return $this->getServiceTemplates($userId);
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
@@ -155,7 +165,7 @@ class ServiceTemplatesController extends Controller
      * @return array
      * @throws TemplateNotFoundException
      */
-    private function getTemplate(array $parameters)
+    private function getServiceTemplate(array $parameters)
     {
         if (!array_key_exists('id', $parameters)) {
             throw new InvalidArgumentException("No argument provided");
@@ -163,17 +173,42 @@ class ServiceTemplatesController extends Controller
 
         $id = (int)$parameters['id'];
 
-        return Mapper::fromType($this->serviceTemplatesService->getTemplate($id));
+        return Mapper::fromServiceTemplate($this->serviceTemplateService->getServiceTemplate($id));
     }
 
     /**
-     * @param array $parameters
+     * @param int $userId
      *
      * @return array
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    private function getTemplates(array $parameters)
+    private function getServiceTemplates(int $userId)
     {
-        return Mapper::fromTypes(...$this->serviceTemplatesService->getTemplates());
+        $template   = [];
+        $user       = $this->userService->getUser($userId);
+        $userTypes  = $this->userTypeService->getUserTypes();
+        $userTypeId = (int)$user->getTypeId();
+
+        foreach ($userTypes as $userType) {
+            if ($userTypeId < $userType->getId()) {
+                switch ($user->getLanguage()) {
+                    case "nl":
+                        $description = $userType->getNl();
+                        break;
+                    case "en":
+                        $description = $userType->getEn();
+                        break;
+                    default:
+                        $description = $userType->getEn();
+                }
+
+                $template[] = [
+                    'id'          => $userType->getId(),
+                    'description' => $description,
+                ];
+            }
+        }
+
+        return $template;
     }
 }

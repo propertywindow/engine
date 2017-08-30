@@ -100,6 +100,13 @@ class User
     private $phone;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="language", type="string", length=2)
+     */
+    private $language = 'en';
+
+    /**
      * @var int
      *
      * @ORM\Column(name="agent_id", type="integer", nullable=true)
@@ -413,6 +420,30 @@ class User
     public function getPhone()
     {
         return $this->phone;
+    }
+
+    /**
+     * Set language
+     *
+     * @param string $language
+     *
+     * @return User
+     */
+    public function setLanguage($language)
+    {
+        $this->language = $language;
+
+        return $this;
+    }
+
+    /**
+     * Get language
+     *
+     * @return string
+     */
+    public function getLanguage()
+    {
+        return $this->language;
     }
 
     /**

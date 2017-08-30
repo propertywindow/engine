@@ -5,9 +5,9 @@ namespace AuthenticationBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * ServiceGroupTemplatesRepository
+ * ServiceTemplateRepository
  *
  */
-class ServiceGroupTemplatesRepository extends EntityRepository
+class ServiceTemplateRepository extends EntityRepository
 {
 }

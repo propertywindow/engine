@@ -25,7 +25,7 @@ class Service
     private $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="ServiceTemplates", mappedBy="service")
+     * @ORM\OneToMany(targetEntity="ServiceTemplate", mappedBy="service")
      */
     private $templates;
 
@@ -89,11 +89,11 @@ class Service
     /**
      * Add template
      *
-     * @param ServiceTemplates $templates
+     * @param ServiceTemplate $templates
      *
      * @return Service
      */
-    public function addTemplate(ServiceTemplates $templates)
+    public function addTemplate(ServiceTemplate $templates)
     {
         $this->templates[] = $templates;
 
@@ -103,9 +103,9 @@ class Service
     /**
      * Remove template
      *
-     * @param ServiceTemplates $template
+     * @param ServiceTemplate $template
      */
-    public function removeTemplate(ServiceTemplates $template)
+    public function removeTemplate(ServiceTemplate $template)
     {
         $this->templates->removeElement($template);
     }

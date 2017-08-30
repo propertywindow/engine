@@ -25,7 +25,7 @@ class ServiceGroup
     private $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="ServiceGroupTemplates", mappedBy="serviceGroup")
+     * @ORM\OneToMany(targetEntity="ServiceGroupTemplate", mappedBy="serviceGroup")
      */
     private $groupTemplates;
 
@@ -81,13 +81,13 @@ class ServiceGroup
     /**
      * Add groupTemplate
      *
-     * @param ServiceGroupTemplates $groupTemplates
+     * @param ServiceGroupTemplate $groupTemplate
      *
      * @return ServiceGroup
      */
-    public function addGroupTemplate(ServiceGroupTemplates $groupTemplates)
+    public function addGroupTemplate(ServiceGroupTemplate $groupTemplate)
     {
-        $this->groupTemplates[] = $groupTemplates;
+        $this->groupTemplates[] = $groupTemplate;
 
         return $this;
     }
@@ -95,9 +95,9 @@ class ServiceGroup
     /**
      * Remove groupTemplate
      *
-     * @param ServiceGroupTemplates $groupTemplate
+     * @param ServiceGroupTemplate $groupTemplate
      */
-    public function removeGroupTemplate(ServiceGroupTemplates $groupTemplate)
+    public function removeGroupTemplate(ServiceGroupTemplate $groupTemplate)
     {
         $this->groupTemplates->removeElement($groupTemplate);
     }

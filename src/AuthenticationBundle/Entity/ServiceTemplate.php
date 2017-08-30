@@ -5,12 +5,12 @@ namespace AuthenticationBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * ServiceGroupTemplates
+ * ServiceTemplates
  *
- * @ORM\Table(name="service_group_templates")
- * @ORM\Entity(repositoryClass="AuthenticationBundle\Repository\ServiceGroupTemplatesRepository")
+ * @ORM\Table(name="service_template")
+ * @ORM\Entity(repositoryClass="AuthenticationBundle\Repository\ServiceTemplateRepository")
  */
-class ServiceGroupTemplates
+class ServiceTemplate
 {
     /**
      * @var int
@@ -22,10 +22,10 @@ class ServiceGroupTemplates
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="ServiceGroup", inversedBy="groupTemplates")
-     * @ORM\JoinColumn(name="service_group_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="Service", inversedBy="templates")
+     * @ORM\JoinColumn(name="service_id", referencedColumnName="id")
      */
-    private $serviceGroup;
+    private $service;
 
     /**
      * @var int
@@ -59,27 +59,27 @@ class ServiceGroupTemplates
     }
 
     /**
-     * Set serviceGroup
+     * Set service
      *
-     * @param ServiceGroup
+     * @param Service
      *
-     * @return ServiceGroupTemplates
+     * @return ServiceTemplate
      */
-    public function setServiceGroup(ServiceGroup $serviceGroup = null)
+    public function setService(Service $service = null)
     {
-        $this->serviceGroup = $serviceGroup;
+        $this->service = $service;
 
         return $this;
     }
 
     /**
-     * Get serviceGroup
+     * Get service
      *
-     * @return ServiceGroup
+     * @return Service
      */
-    public function getServiceGroup()
+    public function getService()
     {
-        return $this->serviceGroup;
+        return $this->service;
     }
 
     /**
@@ -87,7 +87,7 @@ class ServiceGroupTemplates
      *
      * @param integer $userType
      *
-     * @return ServiceGroupTemplates
+     * @return ServiceTemplate
      */
     public function setUserType($userType)
     {
@@ -108,7 +108,6 @@ class ServiceGroupTemplates
 
     /**
      * Gets triggered only on insert
-
      * @ORM\PrePersist
      */
     public function onPrePersist()
@@ -118,7 +117,6 @@ class ServiceGroupTemplates
 
     /**
      * Gets triggered every time on update
-
      * @ORM\PreUpdate
      */
     public function onPreUpdate()
