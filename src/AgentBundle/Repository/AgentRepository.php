@@ -51,26 +51,27 @@ class AgentRepository extends EntityRepository
     }
 
     /**
-     * @param int $groupId
+     * @param int $agentGroupId
      *
      * @return int[] $ids
      *
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function getAgentIdsFromGroupId(int $groupId): array
+    public function getAgentIdsFromGroupId(int $agentGroupId): array
     {
         $ids = [];
         $qb  = $this->getEntityManager()->createQueryBuilder()
                     ->select('a')
                     ->from('AgentBundle:Agent', 'a');
 
-        $qb->where("a.groupId = :groupId")
+        $qb->where("a.agentGroup = :agentGroupId")
            ->orderBy('a.id', 'DESC')
-           ->setParameter('groupId', $groupId);
+           ->setParameter('agentGroupId', $agentGroupId);
 
         $agents = $qb->getQuery()->getResult();
 
         foreach ($agents as $agent) {
+            /** @var Agent $agent */
             $ids[] = $agent->getId();
         }
 

@@ -298,13 +298,12 @@ class PropertyController extends Controller
                   $parameters['offset'] !== null ? (int)$parameters['offset'] : 0;
 
         $user     = $this->userService->getUser($userId);
-        $agent    = $this->agentService->getAgent((int)$user->getAgent()->getId());
-        $agentIds = $this->agentService->getAgentIdsFromGroup((int)$agent->getId());
+        $agentIds = $this->agentService->getAgentIdsFromGroup((int)$user->getAgent()->getId());
 
         list($properties, $count) = $this->propertyService->listAllProperties($agentIds, $limit, $offset);
 
         return [
-            'properties' => Mapper::fromProperty(...$properties),
+            'properties' => Mapper::fromProperties(...$properties),
             'count'      => $count,
         ];
     }

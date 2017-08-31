@@ -23,11 +23,10 @@ class Agent
     private $id;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="group_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="AgentGroup")
+     * @ORM\JoinColumn(name="agent_group_id", referencedColumnName="id")
      */
-    private $groupId;
+    private $agentGroup;
 
     /**
      * @var string
@@ -159,27 +158,27 @@ class Agent
     }
 
     /**
-     * Set groupId
+     * Set agentGroup
      *
-     * @param integer $groupId
+     * @param AgentGroup $agentGroup
      *
      * @return Agent
      */
-    public function setGroupId($groupId)
+    public function setAgentGroup(AgentGroup $agentGroup = null)
     {
-        $this->groupId = $groupId;
+        $this->agentGroup = $agentGroup;
 
         return $this;
     }
 
     /**
-     * Get groupId
+     * Get agentGroup
      *
-     * @return int
+     * @return AgentGroup
      */
-    public function getGroupId()
+    public function getAgentGroup()
     {
-        return $this->groupId;
+        return $this->agentGroup;
     }
 
     /**

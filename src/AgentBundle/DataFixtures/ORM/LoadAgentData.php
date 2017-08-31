@@ -19,7 +19,7 @@ class LoadAgentData extends AbstractFixture implements OrderedFixtureInterface
     public function load(ObjectManager $manager)
     {
         $agent = new Agent();
-        $agent->setGroupId(1);
+        $agent->setAgentGroup($this->getReference('agent_group_1'));
         $agent->setName('The Agent NL');
         $agent->setStreet('Graafsedijk');
         $agent->setHouseNumber('19');
@@ -35,7 +35,7 @@ class LoadAgentData extends AbstractFixture implements OrderedFixtureInterface
         $manager->persist($agent);
 
         $agent = new Agent();
-        $agent->setGroupId(1);
+        $agent->setAgentGroup($this->getReference('agent_group_1'));
         $agent->setName('The Agent GB');
         $agent->setStreet('Portobello High Street');
         $agent->setHouseNumber('27');

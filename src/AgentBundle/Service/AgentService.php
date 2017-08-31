@@ -4,7 +4,6 @@ namespace AgentBundle\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
 use AgentBundle\Entity\Agent;
-use AgentBundle\Exceptions\AgentNotFoundException;
 
 /**
  * @package AgentBundle\Service
@@ -29,18 +28,11 @@ class AgentService
      * @param int $id
      *
      * @return Agent $agent
-     *
-     * @throws AgentNotFoundException
      */
     public function getAgent(int $id)
     {
         $repository = $this->entityManager->getRepository('AgentBundle:Agent');
-        $agent      = $repository->find($id);
-
-        /** @var Agent $agent */
-        if ($agent === null) {
-            throw new AgentNotFoundException($id);
-        }
+        $agent      = $repository->findById($id);
 
         return $agent;
     }
@@ -55,21 +47,6 @@ class AgentService
         return $repository->listAll();
     }
 
-
-    /**
-     * @param int $id
-     *
-     * @return int $groupId
-     */
-    public function getGroupId(int $id)
-    {
-        $repository = $this->entityManager->getRepository('AgentBundle:Agent');
-        $agent      = $repository->find($id);
-        $groupId    = (int)$agent->getGroupId();
-
-        return $groupId;
-    }
-
     /**
      * @param int $agentId
      *
@@ -77,9 +54,9 @@ class AgentService
      */
     public function getAgentIdsFromGroup(int $agentId)
     {
-        $groupId    = $this->getGroupId($agentId);
-        $repository = $this->entityManager->getRepository('AgentBundle:Agent');
-        $groupIds   = $repository->getAgentIdsFromGroupId($groupId);
+        $repository   = $this->entityManager->getRepository('AgentBundle:Agent');
+        $agent        = $repository->findById($agentId);
+        $groupIds     = $repository->getAgentIdsFromGroupId((int)$agent->getAgentGroup()->getId());
 
         return $groupIds;
     }
