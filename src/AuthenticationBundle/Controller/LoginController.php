@@ -3,6 +3,7 @@
 namespace AuthenticationBundle\Controller;
 
 use AgentBundle\Service\AgentService;
+use AuthenticationBundle\Exceptions\LoginFailedException;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use AuthenticationBundle\Exceptions\UserNotFoundException;
 use AuthenticationBundle\Service\BlacklistService;
@@ -169,17 +170,45 @@ class LoginController extends Controller
      *
      * @return array
      *
-     * @throws NotAuthorizedException
+     * @throws LoginFailedException
      */
     private function login(array $parameters)
     {
-        if (!array_key_exists('id', $parameters)) {
-            throw new InvalidArgumentException("No argument provided");
+        if (!array_key_exists('username', $parameters)) {
+            throw new InvalidArgumentException("No username argument provided");
+        }
+        if (!array_key_exists('password', $parameters)) {
+            throw new InvalidArgumentException("No password argument provided");
         }
 
-        $id = (int)$parameters['id'];
+        // todo: check possibility for getting ip address from call
 
-        // todo: update lastLogin and LoginLog and create userId session when successful, and blackList when false.
+        $username = (string)$parameters['username'];
+        $password = md5((string)$parameters['password']);
+        $user     = $this->userService->login($username, $password);
+
+        if ($user === null) {
+//            $this->blacklistService->createBlacklist('', '', '');
+
+            throw new LoginFailedException($username);
+        }
+
+        // todo: this->userService->updateLastLogin    (no parameters, just now)
+        // todo: update Loginlog
+
+        $timestamp      = time();
+        $secret         = $user->getPassword();
+        $signature      = hash_hmac("sha1", $timestamp."-".$user->getId(), $secret);
+        $payload        = [
+            "user"      => $user->getId(),
+            "password"  => $secret,
+            "timestamp" => $timestamp,
+            "signature" => $signature,
+        ];
+        $payloadJson    = json_encode($payload);
+        $payloadEncoded = base64_encode($payloadJson);
+
+        return ['Basic '.$payloadEncoded];
     }
 
     /**
@@ -197,7 +226,7 @@ class LoginController extends Controller
 
         $id = (int)$parameters['id'];
 
-        // todo: will check lastLogin for userId and return boolean.
+        // todo: will check lastLogin for userId and return boolean. // maybe move to just service
     }
 
     /**

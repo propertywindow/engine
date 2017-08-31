@@ -21,30 +21,35 @@ class LoadUserTypeData extends AbstractFixture implements OrderedFixtureInterfac
         $userType = new UserType();
         $userType->setEn('admin');
         $userType->setNl('beheerder');
+        $userType->setVisible(true);
         $this->addReference('user_type_admin', $userType);
         $manager->persist($userType);
 
         $userType = new UserType();
         $userType->setEn('agent');
         $userType->setNl('makelaar');
+        $userType->setVisible(true);
         $this->addReference('user_type_agent', $userType);
         $manager->persist($userType);
 
         $userType = new UserType();
         $userType->setEn('colleague');
         $userType->setNl('collega');
+        $userType->setVisible(true);
         $this->addReference('user_type_colleague', $userType);
         $manager->persist($userType);
 
         $userType = new UserType();
         $userType->setEn('client');
         $userType->setNl('klant');
+        $userType->setVisible(true);
         $this->addReference('user_type_client', $userType);
         $manager->persist($userType);
 
         $userType = new UserType();
         $userType->setEn('api');
         $userType->setNl('api');
+        $userType->setVisible(false);
         $this->addReference('user_type_api', $userType);
         $manager->persist($userType);
 

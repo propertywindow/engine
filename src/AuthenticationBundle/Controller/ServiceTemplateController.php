@@ -194,7 +194,7 @@ class ServiceTemplateController extends Controller
     {
         $template  = [];
         $user      = $this->userService->getUser($userId);
-        $userTypes = $this->userTypeService->getUserTypes();
+        $userTypes = $this->userTypeService->getUserTypes(true);
 
         if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
             throw new NotAuthorizedException($userId);

@@ -43,4 +43,24 @@ class UserService
 
         return $user;
     }
+
+    /**
+     * @param string $username
+     * @param string $password
+     *
+     * @return User $user
+     */
+    public function login(string $username, string $password)
+    {
+        $repository = $this->entityManager->getRepository('AuthenticationBundle:User');
+        $user       = $repository->findOneBy(
+            [
+                'username' => $username,
+                'password' => $password,
+                'active'   => true,
+            ]
+        );
+
+        return $user;
+    }
 }
