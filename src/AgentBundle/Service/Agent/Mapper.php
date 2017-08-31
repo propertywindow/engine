@@ -30,7 +30,7 @@ class Mapper
 
         return [
             'id'             => $agent->getId(),
-            'group_id'       => $agent->getGroupId(),
+            'group_id'       => $agent->getAgentGroup()->getId(),
             'name'           => $agent->getName(),
             'address'        => $address,
             'street'         => $agent->getStreet(),

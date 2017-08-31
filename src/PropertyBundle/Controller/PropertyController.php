@@ -2,8 +2,11 @@
 
 namespace PropertyBundle\Controller;
 
+use AgentBundle\Service\ClientService;
 use Exception;
 use InvalidArgumentException;
+use PropertyBundle\Service\KindService;
+use PropertyBundle\Service\TermsService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Security\Authenticator;
@@ -59,6 +62,11 @@ class PropertyController extends Controller
     private $userService;
 
     /**
+     * @var ClientService
+     */
+    private $clientService;
+
+    /**
      * @var AgentService
      */
     private $agentService;
@@ -74,27 +82,46 @@ class PropertyController extends Controller
     private $trafficService;
 
     /**
+     * @var KindService
+     */
+    private $kindService;
+
+    /**
+     * @var TermsService
+     */
+    private $termsService;
+
+    /**
      * @param Authenticator   $authenticator
      * @param PropertyService $propertyService
      * @param UserService     $userService
+     * @param ClientService   $clientService
      * @param AgentService    $agentService
      * @param ActivityService $activityService
      * @param TrafficService  $trafficService
+     * @param KindService     $kindService
+     * @param TermsService    $termsService
      */
     public function __construct(
         Authenticator $authenticator,
         PropertyService $propertyService,
         UserService $userService,
+        ClientService $clientService,
         AgentService $agentService,
         ActivityService $activityService,
-        TrafficService $trafficService
+        TrafficService $trafficService,
+        KindService $kindService,
+        TermsService $termsService
     ) {
         $this->authenticator   = $authenticator;
         $this->propertyService = $propertyService;
         $this->userService     = $userService;
+        $this->clientService   = $clientService;
         $this->agentService    = $agentService;
         $this->activityService = $activityService;
         $this->trafficService  = $trafficService;
+        $this->kindService     = $kindService;
+        $this->termsService    = $termsService;
     }
 
     /**
@@ -217,11 +244,11 @@ class PropertyController extends Controller
 
         $property = $this->propertyService->getProperty($id);
 
-        if ($property->getAgent()->getId() !== $user->getAgentId()) {
+        if ($property->getAgent()->getId() !== $user->getAgent()->getId()) {
             throw new NotAuthorizedException($userId);
         }
 
-        if ($user->getTypeId() === self::USER_API) {
+        if ($user->getUserType()->getId() === self::USER_API) {
             if (!array_key_exists('ip', $parameters)) {
                 throw new InvalidArgumentException("No ip argument provided");
             }
@@ -248,12 +275,11 @@ class PropertyController extends Controller
      * @param int $userId
      *
      * @return array
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     private function getProperties(int $userId)
     {
         $user  = $this->userService->getUser($userId);
-        $agent = $this->agentService->getAgent((int)$user->getAgentId());
+        $agent = $this->agentService->getAgent((int)$user->getAgent()->getId());
 
         return Mapper::fromProperties(...$this->propertyService->listProperties($agent->getId()));
     }
@@ -272,13 +298,12 @@ class PropertyController extends Controller
                   $parameters['offset'] !== null ? (int)$parameters['offset'] : 0;
 
         $user     = $this->userService->getUser($userId);
-        $agent    = $this->agentService->getAgent((int)$user->getAgentId());
-        $agentIds = $this->agentService->getAgentIdsFromGroup((int)$agent->getId());
+        $agentIds = $this->agentService->getAgentIdsFromGroup((int)$user->getAgent()->getId());
 
         list($properties, $count) = $this->propertyService->listAllProperties($agentIds, $limit, $offset);
 
         return [
-            'properties' => Mapper::fromProperty(...$properties),
+            'properties' => Mapper::fromProperties(...$properties),
             'count'      => $count,
         ];
     }
@@ -296,18 +321,21 @@ class PropertyController extends Controller
     {
         $user = $this->userService->getUser($userId);
 
-        if ($user->getTypeId() === self::USER_CLIENT || $user->getTypeId() === self::USER_API) {
+        if ($user->getUserType()->getId() === self::USER_CLIENT || $user->getUserType()->getId() === self::USER_API) {
             throw new NotAuthorizedException($userId);
         }
 
         if (!array_key_exists('client_id', $parameters) && $parameters['client_id'] !== null) {
             throw new InvalidArgumentException("client_id parameter not provided");
         }
-        if (!array_key_exists('kind', $parameters) && $parameters['kind'] !== null) {
+        if (!array_key_exists('kind_id', $parameters) && $parameters['kind_id'] !== null) {
             throw new InvalidArgumentException("kind parameter not provided");
         }
         if (!array_key_exists('sub_type_id', $parameters) && $parameters['sub_type_id'] !== null) {
             throw new InvalidArgumentException("sub_type_id parameter not provided");
+        }
+        if (!array_key_exists('terms_id', $parameters) && $parameters['terms_id'] !== null) {
+            throw new InvalidArgumentException("terms_id parameter not provided");
         }
         if (!array_key_exists('street', $parameters) && $parameters['street'] !== null) {
             throw new InvalidArgumentException("street parameter not provided");
@@ -335,8 +363,11 @@ class PropertyController extends Controller
             throw new PropertyAlreadyExistsException($parameters['client_id']);
         }
 
-        $agent      = $this->agentService->getAgent((int)$user->getAgentId());
-        $property   = $this->propertyService->createProperty($parameters, $agent);
+        $agent      = $this->agentService->getAgent((int)$user->getAgent()->getId());
+        $client     = $this->clientService->getClient($parameters['client_id']);
+        $kind       = $this->kindService->getKind($parameters['kind_id']);
+        $terms      = $this->termsService->getTerm($parameters['terms_id']);
+        $property   = $this->propertyService->createProperty($parameters, $agent, $client, $kind, $terms);
         $propertyId = (int)$property->getId();
 
         $this->activityService->createActivity(
@@ -372,24 +403,27 @@ class PropertyController extends Controller
         $id       = (int)$parameters['id'];
         $property = $this->propertyService->getProperty($id);
 
-        if ($property->getAgent()->getId() !== $user->getAgentId()) {
+        if ($property->getAgent()->getId() !== $user->getAgent()->getId()) {
             throw new NotAuthorizedException($userId);
         }
 
         if (array_key_exists('client_id', $parameters) && $parameters['client_id'] !== null) {
-            $property->setClientId((int)$parameters['client_id']);
+            $client = $this->clientService->getClient($parameters['client_id']);
+            $property->setClient($client);
         }
 
-        if (array_key_exists('kind', $parameters) && $parameters['kind'] !== null) {
-            $property->setKind((string)$parameters['kind']);
+        if (array_key_exists('kind_id', $parameters) && $parameters['kind_id'] !== null) {
+            $kind = $this->kindService->getKind($parameters['kind_id']);
+            $property->setKind($kind);
         }
 
         if (array_key_exists('sub_type_id', $parameters) && $parameters['sub_type_id'] !== null) {
             $property->setSubType((int)$parameters['sub_type_id']);
         }
 
-        if (array_key_exists('terms', $parameters) && $parameters['terms'] !== null) {
-            $property->setTerms((int)$parameters['terms']);
+        if (array_key_exists('terms_id', $parameters) && $parameters['terms_id'] !== null) {
+            $terms = $this->termsService->getTerm($parameters['terms_id']);
+            $property->setTerms($terms);
         }
 
         if (array_key_exists('online', $parameters) && $parameters['online'] !== null) {
@@ -478,7 +512,7 @@ class PropertyController extends Controller
         $user     = $this->userService->getUser($userId);
         $property = $this->propertyService->getProperty($id);
 
-        if ($property->getAgent()->getId() !== $user->getAgentId()) {
+        if ($property->getAgent()->getId() !== $user->getAgent()->getId()) {
             throw new NotAuthorizedException($userId);
         }
 
@@ -511,11 +545,11 @@ class PropertyController extends Controller
         $id   = (int)$parameters['id'];
         $user = $this->userService->getUser($userId);
 
-        if ((int)$user->getTypeId() === self::USER_ADMIN || self::USER_AGENT) {
-            $this->propertyService->deleteProperty($id);
-        } else {
+        if ((int)$user->getUserType()->getId() >= self::USER_AGENT) {
             throw new NotAuthorizedException($userId);
         }
+
+        $this->propertyService->deleteProperty($id);
 
         // todo: delete info from not cascading tables too, including logBundle
         // todo: remove all photos from data folder and Gallery
@@ -542,7 +576,7 @@ class PropertyController extends Controller
         $user      = $this->userService->getUser($userId);
         $property  = $this->propertyService->getProperty($id);
 
-        if ($property->getAgent()->getId() !== $user->getAgentId()) {
+        if ($property->getAgent()->getId() !== $user->getAgent()->getId()) {
             throw new NotAuthorizedException($userId);
         }
 
@@ -579,7 +613,7 @@ class PropertyController extends Controller
         $user     = $this->userService->getUser($userId);
         $property = $this->propertyService->getProperty($id);
 
-        if ($property->getAgent()->getId() !== $user->getAgentId()) {
+        if ($property->getAgent()->getId() !== $user->getAgent()->getId()) {
             throw new NotAuthorizedException($userId);
         }
 

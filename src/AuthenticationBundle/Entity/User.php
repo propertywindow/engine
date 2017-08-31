@@ -2,6 +2,7 @@
 
 namespace AuthenticationBundle\Entity;
 
+use AgentBundle\Entity\Agent;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -100,18 +101,23 @@ class User
     private $phone;
 
     /**
-     * @var int
+     * @var string
      *
-     * @ORM\Column(name="agent_id", type="integer", nullable=true)
+     * @ORM\Column(name="language", type="string", length=2)
      */
-    private $agentId;
+    private $language = 'en';
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="type_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="AgentBundle\Entity\Agent")
+     * @ORM\JoinColumn(name="agent_id", referencedColumnName="id")
      */
-    private $typeId;
+    private $agent;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="UserType")
+     * @ORM\JoinColumn(name="user_type_id", referencedColumnName="id")
+     */
+    private $userType;
 
     /**
      * @var string
@@ -416,51 +422,75 @@ class User
     }
 
     /**
-     * Set agentId
+     * Set language
      *
-     * @param integer $agentId
+     * @param string $language
      *
      * @return User
      */
-    public function setAgentId($agentId)
+    public function setLanguage($language)
     {
-        $this->agentId = $agentId;
+        $this->language = $language;
 
         return $this;
     }
 
     /**
-     * Get agentId
+     * Get language
      *
-     * @return int
+     * @return string
      */
-    public function getAgentId()
+    public function getLanguage()
     {
-        return $this->agentId;
+        return $this->language;
     }
 
     /**
-     * Set typeId
+     * Set agent
      *
-     * @param integer $typeId
+     * @param \AgentBundle\Entity\Agent $agent
      *
      * @return User
      */
-    public function setTypeId($typeId)
+    public function setAgent(Agent $agent = null)
     {
-        $this->typeId = $typeId;
+        $this->agent = $agent;
 
         return $this;
     }
 
     /**
-     * Get typeId
+     * Get agent
      *
-     * @return int
+     * @return \AgentBundle\Entity\Agent
      */
-    public function getTypeId()
+    public function getAgent()
     {
-        return $this->typeId;
+        return $this->agent;
+    }
+
+    /**
+     * Set userType
+     *
+     * @param UserType $userType
+     *
+     * @return User
+     */
+    public function setUserType(UserType $userType = null)
+    {
+        $this->userType = $userType;
+
+        return $this;
+    }
+
+    /**
+     * Get userType
+     *
+     * @return UserType
+     */
+    public function getUserType()
+    {
+        return $this->userType;
     }
 
     /**
@@ -513,7 +543,6 @@ class User
 
     /**
      * Gets triggered only on insert
-
      * @ORM\PrePersist
      */
     public function onPrePersist()
@@ -523,7 +552,6 @@ class User
 
     /**
      * Gets triggered every time on update
-
      * @ORM\PreUpdate
      */
     public function onPreUpdate()

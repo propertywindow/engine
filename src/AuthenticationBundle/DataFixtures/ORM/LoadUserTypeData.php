@@ -2,15 +2,16 @@
 
 namespace AuthenticationBundle\DataFixtures\ORM;
 
-use Doctrine\Common\DataFixtures\FixtureInterface;
-use Doctrine\Common\Persistence\ObjectManager;
 use AuthenticationBundle\Entity\UserType;
+use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
 /**
  * Class LoadUserTypeData
  * @package AuthenticationBundle\DataFixtures\ORM
  */
-class LoadUserTypeData implements FixtureInterface
+class LoadUserTypeData extends AbstractFixture implements OrderedFixtureInterface
 {
     /**
      * @param ObjectManager $manager
@@ -20,28 +21,41 @@ class LoadUserTypeData implements FixtureInterface
         $userType = new UserType();
         $userType->setEn('admin');
         $userType->setNl('beheerder');
+        $this->addReference('user_type_admin', $userType);
         $manager->persist($userType);
 
         $userType = new UserType();
         $userType->setEn('agent');
         $userType->setNl('makelaar');
+        $this->addReference('user_type_agent', $userType);
         $manager->persist($userType);
 
         $userType = new UserType();
         $userType->setEn('colleague');
         $userType->setNl('collega');
+        $this->addReference('user_type_colleague', $userType);
         $manager->persist($userType);
 
         $userType = new UserType();
         $userType->setEn('client');
         $userType->setNl('klant');
+        $this->addReference('user_type_client', $userType);
         $manager->persist($userType);
 
         $userType = new UserType();
         $userType->setEn('api');
         $userType->setNl('api');
+        $this->addReference('user_type_api', $userType);
         $manager->persist($userType);
 
         $manager->flush();
+    }
+
+    /**
+     * @return integer
+     */
+    public function getOrder()
+    {
+        return 15;
     }
 }

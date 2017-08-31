@@ -37,6 +37,13 @@ class ServiceGroup
     private $nl;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="icon", type="string")
+     */
+    private $icon;
+
+    /**
      * @var \DateTime $created
      *
      * @ORM\Column(type="datetime")
@@ -109,8 +116,31 @@ class ServiceGroup
     }
 
     /**
-     * Gets triggered only on insert
+     * Set icon
+     *
+     * @param string $icon
+     *
+     * @return ServiceGroup
+     */
+    public function setIcon($icon)
+    {
+        $this->icon = $icon;
 
+        return $this;
+    }
+
+    /**
+     * Get icon
+     *
+     * @return string
+     */
+    public function getIcon()
+    {
+        return $this->icon;
+    }
+
+    /**
+     * Gets triggered only on insert
      * @ORM\PrePersist
      */
     public function onPrePersist()
@@ -120,7 +150,6 @@ class ServiceGroup
 
     /**
      * Gets triggered every time on update
-
      * @ORM\PreUpdate
      */
     public function onPreUpdate()

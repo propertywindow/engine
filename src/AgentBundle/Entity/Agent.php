@@ -2,10 +2,7 @@
 
 namespace AgentBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use PropertyBundle\Entity\Property;
 
 /**
  * Agent
@@ -26,16 +23,10 @@ class Agent
     private $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="PropertyBundle\Entity\Property", mappedBy="agent")
+     * @ORM\ManyToOne(targetEntity="AgentGroup")
+     * @ORM\JoinColumn(name="agent_group_id", referencedColumnName="id")
      */
-    private $properties;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="group_id", type="integer")
-     */
-    private $groupId;
+    private $agentGroup;
 
     /**
      * @var string
@@ -157,48 +148,6 @@ class Agent
     protected $updated;
 
     /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->properties = new ArrayCollection();
-    }
-
-    /**
-     * Add property
-     *
-     * @param Property $properties
-     *
-     * @return Agent
-     */
-    public function addProperty(Property $properties)
-    {
-        $this->properties[] = $properties;
-
-        return $this;
-    }
-
-    /**
-     * Remove property
-     *
-     * @param Property $property
-     */
-    public function removeProperty(Property $property)
-    {
-        $this->properties->removeElement($property);
-    }
-
-    /**
-     * Get properties
-     *
-     * @return Collection
-     */
-    public function getProperties()
-    {
-        return $this->properties;
-    }
-
-    /**
      * Get id
      *
      * @return int
@@ -209,27 +158,27 @@ class Agent
     }
 
     /**
-     * Set groupId
+     * Set agentGroup
      *
-     * @param integer $groupId
+     * @param AgentGroup $agentGroup
      *
      * @return Agent
      */
-    public function setGroupId($groupId)
+    public function setAgentGroup(AgentGroup $agentGroup = null)
     {
-        $this->groupId = $groupId;
+        $this->agentGroup = $agentGroup;
 
         return $this;
     }
 
     /**
-     * Get groupId
+     * Get agentGroup
      *
-     * @return int
+     * @return AgentGroup
      */
-    public function getGroupId()
+    public function getAgentGroup()
     {
-        return $this->groupId;
+        return $this->agentGroup;
     }
 
     /**
@@ -594,7 +543,6 @@ class Agent
 
     /**
      * Gets triggered only on insert
-
      * @ORM\PrePersist
      */
     public function onPrePersist()
@@ -604,7 +552,6 @@ class Agent
 
     /**
      * Gets triggered every time on update
-
      * @ORM\PreUpdate
      */
     public function onPreUpdate()

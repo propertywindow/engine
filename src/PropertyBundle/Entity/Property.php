@@ -3,6 +3,7 @@
 namespace PropertyBundle\Entity;
 
 use AgentBundle\Entity\Agent;
+use AgentBundle\Entity\Client;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -31,31 +32,28 @@ class Property
     private $images;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AgentBundle\Entity\Agent", inversedBy="properties")
+     * @ORM\ManyToOne(targetEntity="AgentBundle\Entity\Agent")
      * @ORM\JoinColumn(name="agent_id", referencedColumnName="id")
      */
     private $agent;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="client_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="AgentBundle\Entity\Client")
+     * @ORM\JoinColumn(name="client_id", referencedColumnName="id")
      */
-    private $clientId;
+    private $client;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="kind", type="string", length=10)
+     * @ORM\ManyToOne(targetEntity="Kind", inversedBy="properties")
+     * @ORM\JoinColumn(name="kind_id", referencedColumnName="id")
      */
     private $kind;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="terms", type="integer")
+     * @ORM\ManyToOne(targetEntity="Terms")
+     * @ORM\JoinColumn(name="terms_id", referencedColumnName="id")
      */
-    private $terms = 1;
+    private $terms;
 
     /**
      * @var int
@@ -238,38 +236,53 @@ class Property
         return $this->agent;
     }
 
+
     /**
-     * Set clientId
+     * Set client
      *
-     * @param integer $clientId
+     * @param \AgentBundle\Entity\Client $client
      *
      * @return Property
      */
-    public function setClientId($clientId)
+    public function setClient(Client $client = null)
     {
-        $this->clientId = $clientId;
+        $this->client = $client;
 
         return $this;
     }
 
     /**
-     * Get clientId
+     * Get client
      *
-     * @return int
+     * @return \AgentBundle\Entity\Client
      */
-    public function getClientId()
+    public function getClient()
     {
-        return $this->clientId;
+        return $this->client;
     }
 
     /**
      * Set kind
      *
-     * @param string $kind
+     * @param Kind $kind
      *
      * @return Property
      */
-    public function setKind($kind)
+    public function setKind(Kind $kind = null)
+    {
+        $this->kind = $kind;
+
+        return $this;
+    }
+
+    /**
+     * Set kind
+     *
+     * @param int $kind
+     *
+     * @return Property
+     */
+    public function setKindId(Kind $kind = null)
     {
         $this->kind = $kind;
 
@@ -279,7 +292,7 @@ class Property
     /**
      * Get kind
      *
-     * @return string
+     * @return Kind
      */
     public function getKind()
     {
@@ -289,11 +302,11 @@ class Property
     /**
      * Set terms
      *
-     * @param integer $terms
+     * @param Terms $terms
      *
      * @return Property
      */
-    public function setTerms($terms)
+    public function setTerms(Terms $terms = null)
     {
         $this->terms = $terms;
 
@@ -303,7 +316,7 @@ class Property
     /**
      * Get terms
      *
-     * @return bool
+     * @return Terms
      */
     public function getTerms()
     {
@@ -622,7 +635,6 @@ class Property
         return $this->archived;
     }
 
-
     /**
      * Gets triggered only on insert
      * @ORM\PrePersist
@@ -642,20 +654,6 @@ class Property
     }
 
     /**
-     * Set created
-     *
-     * @param \DateTime $created
-     *
-     * @return Property
-     */
-    public function setCreated($created)
-    {
-        $this->created = $created;
-
-        return $this;
-    }
-
-    /**
      * Get created
      *
      * @return \DateTime
@@ -663,20 +661,6 @@ class Property
     public function getCreated()
     {
         return $this->created;
-    }
-
-    /**
-     * Set updated
-     *
-     * @param \DateTime $updated
-     *
-     * @return Property
-     */
-    public function setUpdated($updated)
-    {
-        $this->updated = $updated;
-
-        return $this;
     }
 
     /**

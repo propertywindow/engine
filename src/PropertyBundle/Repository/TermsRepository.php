@@ -16,10 +16,8 @@ class TermsRepository extends EntityRepository
      * @param int $id
      *
      * @return Terms
+     *
      * @throws TermsNotFoundException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     public function findById(int $id): Terms
     {

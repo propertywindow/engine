@@ -23,11 +23,10 @@ class Service
     private $id;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="group_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="ServiceGroup")
+     * @ORM\JoinColumn(name="group_id", referencedColumnName="id")
      */
-    private $groupId;
+    private $serviceGroup;
 
     /**
      * @var string
@@ -42,6 +41,20 @@ class Service
      * @ORM\Column(name="nl", type="string", length=255)
      */
     private $nl;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="icon", type="string")
+     */
+    private $icon;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="visible", type="boolean", options={"default": false})
+     */
+    private $visible = false;
 
     /**
      * @var \DateTime $created
@@ -68,27 +81,27 @@ class Service
     }
 
     /**
-     * Set groupId
+     * Set serviceGroup
      *
-     * @param integer $groupId
+     * @param ServiceGroup $serviceGroup
      *
      * @return Service
      */
-    public function setGroupId($groupId)
+    public function setServiceGroup(ServiceGroup $serviceGroup = null)
     {
-        $this->groupId = $groupId;
+        $this->serviceGroup = $serviceGroup;
 
         return $this;
     }
 
     /**
-     * Get groupId
+     * Get serviceGroup
      *
-     * @return int
+     * @return ServiceGroup
      */
-    public function getGroupId()
+    public function getServiceGroup()
     {
-        return $this->groupId;
+        return $this->serviceGroup;
     }
 
     /**
@@ -137,6 +150,54 @@ class Service
     public function getNl()
     {
         return $this->nl;
+    }
+
+    /**
+     * Set icon
+     *
+     * @param string $icon
+     *
+     * @return Service
+     */
+    public function setIcon($icon)
+    {
+        $this->icon = $icon;
+
+        return $this;
+    }
+
+    /**
+     * Set visible
+     *
+     * @param boolean $visible
+     *
+     * @return Service
+     */
+    public function setVisible($visible)
+    {
+        $this->visible = $visible;
+
+        return $this;
+    }
+
+    /**
+     * Get visible
+     *
+     * @return bool
+     */
+    public function getVisible()
+    {
+        return $this->visible;
+    }
+
+    /**
+     * Get icon
+     *
+     * @return string
+     */
+    public function getIcon()
+    {
+        return $this->icon;
     }
 
     /**

@@ -6,6 +6,7 @@ use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use AuthenticationBundle\Service\UserService;
 use Exception;
 use InvalidArgumentException;
+use PropertyBundle\Service\TypeService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Security\Authenticator;
@@ -26,13 +27,18 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
  */
 class SubTypeController extends Controller
 {
-    private const PARSE_ERROR            = -32700;
-    private const INVALID_REQUEST        = -32600;
-    private const METHOD_NOT_FOUND       = -32601;
-    private const INVALID_PARAMS         = -32602;
-    private const INTERNAL_ERROR         = -32603;
-    private const USER_NOT_AUTHENTICATED = -32000;
-    private const SUB_TYPE_NOT_FOUND     = -32001;
+    private const         PARSE_ERROR            = -32700;
+    private const         INVALID_REQUEST        = -32600;
+    private const         METHOD_NOT_FOUND       = -32601;
+    private const         INVALID_PARAMS         = -32602;
+    private const         INTERNAL_ERROR         = -32603;
+    private const         USER_NOT_AUTHENTICATED = -32000;
+    private const         SUB_TYPE_NOT_FOUND     = -32001;
+    private const         USER_ADMIN             = 1;
+    private const         USER_AGENT             = 2;
+    private const         USER_COLLEAGUE         = 3;
+    private const         USER_CLIENT            = 4;
+    private const         USER_API               = 5;
 
     /**
      * @var Authenticator
@@ -40,9 +46,14 @@ class SubTypeController extends Controller
     private $authenticator;
 
     /**
-     * @var SubTypeService
+     * @var TypeService
      */
     private $typeService;
+
+    /**
+     * @var SubTypeService
+     */
+    private $subTypeService;
 
     /**
      * @var UserService
@@ -51,14 +62,20 @@ class SubTypeController extends Controller
 
     /**
      * @param Authenticator  $authenticator
-     * @param SubTypeService $typeService
+     * @param TypeService    $typeService
+     * @param SubTypeService $subTypeService
      * @param UserService    $userService
      */
-    public function __construct(Authenticator $authenticator, SubTypeService $typeService, UserService $userService)
-    {
-        $this->authenticator = $authenticator;
-        $this->typeService   = $typeService;
-        $this->userService   = $userService;
+    public function __construct(
+        Authenticator $authenticator,
+        TypeService $typeService,
+        SubTypeService $subTypeService,
+        UserService $userService
+    ) {
+        $this->authenticator  = $authenticator;
+        $this->typeService    = $typeService;
+        $this->subTypeService = $subTypeService;
+        $this->userService    = $userService;
     }
 
     /**
@@ -67,7 +84,6 @@ class SubTypeController extends Controller
      * @param Request $httpRequest
      *
      * @return HttpResponse
-     * @throws \Doctrine\ORM\RuntimeException
      */
     public function requestHandler(Request $httpRequest)
     {
@@ -135,7 +151,6 @@ class SubTypeController extends Controller
      * @throws SubTypeNotFoundException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\RuntimeException
      * @throws \Doctrine\ORM\TransactionRequiredException
      */
     private function invoke(int $userId, string $method, array $parameters = [])
@@ -166,7 +181,7 @@ class SubTypeController extends Controller
 
         $id = (int)$parameters['id'];
 
-        return Mapper::fromSubType($this->typeService->getSubType($id));
+        return Mapper::fromSubType($this->subTypeService->getSubType($id));
     }
 
     /**
@@ -174,17 +189,18 @@ class SubTypeController extends Controller
      *
      * @return array
      * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\RuntimeException
      */
     private function getSubTypes(array $parameters)
     {
         $typeId = null;
 
-        if (array_key_exists('typeId', $parameters)) {
-            $typeId = (int)$parameters['typeId'];
+        if (!array_key_exists('type_id', $parameters)) {
+            throw new InvalidArgumentException("No type_id argument provided");
         }
 
-        return Mapper::fromSubTypes(...$this->typeService->getSubTypes($typeId));
+        $type = $this->typeService->getType((int)$parameters['type_id']);
+
+        return Mapper::fromSubTypes(...$this->subTypeService->getSubTypes($type));
     }
 
     /**
@@ -199,14 +215,14 @@ class SubTypeController extends Controller
             throw new InvalidArgumentException("No argument provided");
         }
 
-        $userType = $this->userService->getUserType($userId);
+        $user = $this->userService->getUser($userId);
 
-        if ($userType !== 1) {
+        if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
             throw new NotAuthorizedException($userId);
         }
 
         $id = (int)$parameters['id'];
 
-        $this->typeService->deleteSubType($id);
+        $this->subTypeService->deleteSubType($id);
     }
 }

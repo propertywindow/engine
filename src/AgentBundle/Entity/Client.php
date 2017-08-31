@@ -2,6 +2,7 @@
 
 namespace AgentBundle\Entity;
 
+use AuthenticationBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -23,11 +24,16 @@ class Client
     private $id;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="user_id", type="integer")
+     * @ORM\OneToOne(targetEntity="AuthenticationBundle\Entity\User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
-    private $userId;
+    protected $user;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Agent")
+     * @ORM\JoinColumn(name="agent_id", referencedColumnName="id")
+     */
+    private $agent;
 
     /**
      * @var bool
@@ -61,27 +67,51 @@ class Client
     }
 
     /**
-     * Set userId
+     * Set user
      *
-     * @param integer $userId
+     * @param \AuthenticationBundle\Entity\User $user
      *
      * @return Client
      */
-    public function setUserId($userId)
+    public function setUser(User $user = null)
     {
-        $this->userId = $userId;
+        $this->user = $user;
 
         return $this;
     }
 
     /**
-     * Get userId
+     * Get user
      *
-     * @return int
+     * @return \AuthenticationBundle\Entity\User
      */
-    public function getUserId()
+    public function getUser()
     {
-        return $this->userId;
+        return $this->user;
+    }
+
+    /**
+     * Set agent
+     *
+     * @param Agent $agent
+     *
+     * @return Client
+     */
+    public function setAgent(Agent $agent = null)
+    {
+        $this->agent = $agent;
+
+        return $this;
+    }
+
+    /**
+     * Get agent
+     *
+     * @return Agent
+     */
+    public function getAgent()
+    {
+        return $this->agent;
     }
 
     /**

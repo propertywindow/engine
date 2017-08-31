@@ -4,8 +4,8 @@ namespace PropertyBundle\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
 use PropertyBundle\Entity\SubType;
+use PropertyBundle\Entity\Type;
 use PropertyBundle\Exceptions\SubTypeDeleteException;
-use PropertyBundle\Exceptions\SubTypeNotFoundException;
 
 /**
  * @package PropertyBundle\Service
@@ -29,32 +29,25 @@ class SubTypeService
      * @param int $id
      *
      * @return SubType $subType
-     *
-     * @throws SubTypeNotFoundException
      */
     public function getSubType(int $id)
     {
         $repository = $this->entityManager->getRepository('PropertyBundle:SubType');
-        $subType    = $repository->find($id);
-
-        /** @var SubType $subType */
-        if ($subType === null) {
-            throw new SubTypeNotFoundException($id);
-        }
+        $subType    = $repository->findById($id);
 
         return $subType;
     }
 
     /**
-     * @param int|null $typeId
+     * @param Type $type
      *
      * @return SubType[]
      */
-    public function getSubTypes(?int $typeId)
+    public function getSubTypes(Type $type)
     {
         $repository = $this->entityManager->getRepository('PropertyBundle:SubType');
 
-        return $repository->listAll($typeId);
+        return $repository->listAll($type);
     }
 
     /**
@@ -89,24 +82,21 @@ class SubTypeService
     /**
      * @param int $id
      *
-     * @throws SubTypeNotFoundException
      * @throws SubTypeDeleteException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     public function deleteSubType(int $id)
     {
-        $subTypeRepository  = $this->entityManager->getRepository('PropertyBundle:SubType');
-        $type               = $subTypeRepository->findById($id);
+        $subTypeRepository = $this->entityManager->getRepository('PropertyBundle:SubType');
+        $subType           = $subTypeRepository->findById($id);
+
         $propertyRepository = $this->entityManager->getRepository('PropertyBundle:Property');
-        $subTypes           = $propertyRepository->findPropertiesWithSubType($type->getId());
+        $subTypes           = $propertyRepository->findPropertiesWithSubType($subType->getId());
 
         if (!empty($subTypes)) {
             throw new SubTypeDeleteException($id);
         }
 
-        $this->entityManager->remove($type);
+        $this->entityManager->remove($subType);
         $this->entityManager->flush();
     }
 }
