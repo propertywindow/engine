@@ -25,7 +25,7 @@ class Kind
     private $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="Property", mappedBy="terms")
+     * @ORM\OneToMany(targetEntity="Property", mappedBy="kind")
      */
     private $properties;
 

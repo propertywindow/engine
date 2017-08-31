@@ -17,9 +17,6 @@ class SubTypeRepository extends EntityRepository
      *
      * @return SubType
      * @throws SubTypeNotFoundException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     public function findById(int $id): SubType
     {
@@ -37,7 +34,6 @@ class SubTypeRepository extends EntityRepository
      * @param int|null $typeId
      *
      * @return SubType[]
-     * @throws \Doctrine\ORM\RuntimeException
      */
     public function listAll(?int $typeId): array
     {

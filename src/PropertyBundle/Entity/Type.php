@@ -2,6 +2,8 @@
 
 namespace PropertyBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -21,6 +23,11 @@ class Type
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
+    /**
+     * @ORM\OneToMany(targetEntity="SubType", mappedBy="type")
+     */
+    private $subTypes;
 
     /**
      * @var string
@@ -51,6 +58,14 @@ class Type
     protected $updated;
 
     /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->subTypes = new ArrayCollection();
+    }
+
+    /**
      * Get id
      *
      * @return int
@@ -58,6 +73,40 @@ class Type
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Add subType
+     *
+     * @param SubType $subTypes
+     *
+     * @return Type
+     */
+    public function addSubType(SubType $subTypes)
+    {
+        $this->subTypes[] = $subTypes;
+
+        return $this;
+    }
+
+    /**
+     * Remove subType
+     *
+     * @param SubType $subType
+     */
+    public function removeSubType(SubType $subType)
+    {
+        $this->subTypes->removeElement($subType);
+    }
+
+    /**
+     * Get subTypes
+     *
+     * @return Collection
+     */
+    public function getSubTypes()
+    {
+        return $this->subTypes;
     }
 
     /**

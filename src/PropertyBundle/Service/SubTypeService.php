@@ -29,18 +29,11 @@ class SubTypeService
      * @param int $id
      *
      * @return SubType $subType
-     *
-     * @throws SubTypeNotFoundException
      */
     public function getSubType(int $id)
     {
         $repository = $this->entityManager->getRepository('PropertyBundle:SubType');
-        $subType    = $repository->find($id);
-
-        /** @var SubType $subType */
-        if ($subType === null) {
-            throw new SubTypeNotFoundException($id);
-        }
+        $subType    = $repository->findById($id);
 
         return $subType;
     }
@@ -89,24 +82,21 @@ class SubTypeService
     /**
      * @param int $id
      *
-     * @throws SubTypeNotFoundException
      * @throws SubTypeDeleteException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     public function deleteSubType(int $id)
     {
-        $subTypeRepository  = $this->entityManager->getRepository('PropertyBundle:SubType');
-        $type               = $subTypeRepository->findById($id);
+        $subTypeRepository = $this->entityManager->getRepository('PropertyBundle:SubType');
+        $subType           = $subTypeRepository->findById($id);
+
         $propertyRepository = $this->entityManager->getRepository('PropertyBundle:Property');
-        $subTypes           = $propertyRepository->findPropertiesWithSubType($type->getId());
+        $subTypes           = $propertyRepository->findPropertiesWithSubType($subType->getId());
 
         if (!empty($subTypes)) {
             throw new SubTypeDeleteException($id);
         }
 
-        $this->entityManager->remove($type);
+        $this->entityManager->remove($subType);
         $this->entityManager->flush();
     }
 }

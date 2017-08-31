@@ -31,6 +31,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setPostcode('5437 NG');
         $user->setCity('Beers');
         $user->setCountry('NL');
+        $this->addReference('user_1', $user);
         $manager->persist($user);
 
         $user = new User();
@@ -46,6 +47,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setPostcode('EH15 1DE');
         $user->setCity('Edinburgh');
         $user->setCountry('GB');
+        $this->addReference('user_2', $user);
         $manager->persist($user);
 
         $user = new User();
@@ -61,6 +63,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setPostcode('5437 NG');
         $user->setCity('Beers');
         $user->setCountry('NL');
+        $this->addReference('user_3', $user);
         $manager->persist($user);
 
         $manager->flush();

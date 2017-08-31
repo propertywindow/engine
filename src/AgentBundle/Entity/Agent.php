@@ -37,6 +37,11 @@ class Agent
     private $users;
 
     /**
+     * @ORM\OneToMany(targetEntity="Client", mappedBy="agent")
+     */
+    private $clients;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="group_id", type="integer")
@@ -169,6 +174,7 @@ class Agent
     {
         $this->properties = new ArrayCollection();
         $this->users      = new ArrayCollection();
+        $this->clients    = new ArrayCollection();
     }
 
     /**
@@ -237,6 +243,40 @@ class Agent
     public function getUsers()
     {
         return $this->users;
+    }
+
+    /**
+     * Add client
+     *
+     * @param Client $clients
+     *
+     * @return Agent
+     */
+    public function addClient(Client $clients)
+    {
+        $this->clients[] = $clients;
+
+        return $this;
+    }
+
+    /**
+     * Remove client
+     *
+     * @param Client $client
+     */
+    public function removeClient(Client $client)
+    {
+        $this->clients->removeElement($client);
+    }
+
+    /**
+     * Get clients
+     *
+     * @return Collection
+     */
+    public function getClients()
+    {
+        return $this->clients;
     }
 
     /**

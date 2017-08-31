@@ -55,7 +55,7 @@ class PropertyService
         $repository = $this->entityManager->getRepository('PropertyBundle:Property');
         $property   = $repository->findOneBy(
             [
-                'clientId'    => (int)$parameters['client_id'],
+                'client'      => (int)$parameters['client_id'],
                 'postcode'    => $parameters['postcode'],
                 'houseNumber' => $parameters['house_number'],
                 'archived'    => false,
@@ -108,10 +108,15 @@ class PropertyService
     {
         $property = new Property();
 
-        $property->setKind($parameters['kind']);
-        $property->setTerms($parameters['terms_id']);
+        $kindReference   = $this->entityManager->getReference('PropertyBundle\Entity\Kind', $parameters['kind_id']);
+        $termsReference  = $this->entityManager->getReference('PropertyBundle\Entity\Terms', $parameters['terms_id']);
+        $clientReference = $this->entityManager->getReference('AgentBundle\Entity\Client', $parameters['client_id']);
+
+        $property->setKind($kindReference);
+        $property->setTerms($termsReference);
         $property->setAgent($agent);
-        $property->setClient($parameters['client_id']);
+        // todo: replace with client service
+        $property->setClient($clientReference);
         $property->setStreet(ucfirst($parameters['street']));
         $property->setHouseNumber($parameters['house_number']);
         $property->setPostcode($parameters['postcode']);

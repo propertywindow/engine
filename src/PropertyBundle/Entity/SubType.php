@@ -23,11 +23,10 @@ class SubType
     private $id;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="type_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="Type", inversedBy="subTypes")
+     * @ORM\JoinColumn(name="type_id", referencedColumnName="id")
      */
-    private $typeId;
+    private $type;
 
     /**
      * @var string
@@ -68,27 +67,27 @@ class SubType
     }
 
     /**
-     * Set typeId
+     * Set type
      *
-     * @param integer $typeId
+     * @param Type $type
      *
      * @return SubType
      */
-    public function setTypeId($typeId)
+    public function setType(Type $type = null)
     {
-        $this->typeId = $typeId;
+        $this->type = $type;
 
         return $this;
     }
 
     /**
-     * Get typeId
+     * Get type
      *
-     * @return int
+     * @return Type
      */
-    public function getTypeId()
+    public function getType()
     {
-        return $this->typeId;
+        return $this->type;
     }
 
     /**

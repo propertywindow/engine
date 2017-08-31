@@ -303,7 +303,7 @@ class PropertyController extends Controller
         if (!array_key_exists('client_id', $parameters) && $parameters['client_id'] !== null) {
             throw new InvalidArgumentException("client_id parameter not provided");
         }
-        if (!array_key_exists('kind', $parameters) && $parameters['kind'] !== null) {
+        if (!array_key_exists('kind_id', $parameters) && $parameters['kind_id'] !== null) {
             throw new InvalidArgumentException("kind parameter not provided");
         }
         if (!array_key_exists('sub_type_id', $parameters) && $parameters['sub_type_id'] !== null) {
@@ -337,6 +337,9 @@ class PropertyController extends Controller
         if ($this->propertyService->checkExistence($parameters)) {
             throw new PropertyAlreadyExistsException($parameters['client_id']);
         }
+
+        // todo: use client service to check if client exists other wise pass to property service
+        //ClientNotFoundException
 
         $agent      = $this->agentService->getAgent((int)$user->getAgent()->getId());
         $property   = $this->propertyService->createProperty($parameters, $agent);
@@ -383,8 +386,8 @@ class PropertyController extends Controller
             $property->setClient((int)$parameters['client_id']);
         }
 
-        if (array_key_exists('kind', $parameters) && $parameters['kind'] !== null) {
-            $property->setKind((string)$parameters['kind']);
+        if (array_key_exists('kind_id', $parameters) && $parameters['kind_id'] !== null) {
+            $property->setKind((string)$parameters['kind_id']);
         }
 
         if (array_key_exists('sub_type_id', $parameters) && $parameters['sub_type_id'] !== null) {

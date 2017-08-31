@@ -2,7 +2,6 @@
 
 namespace PropertyBundle\DataFixtures\ORM;
 
-use PropertyBundle\Entity\Gallery;
 use PropertyBundle\Entity\Property;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
