@@ -2,6 +2,7 @@
 
 namespace AuthenticationBundle\Entity;
 
+use AgentBundle\Entity\Agent;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -23,11 +24,16 @@ class Blacklist
     private $id;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="user_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="AuthenticationBundle\Entity\User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
-    private $userId;
+    protected $user;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AgentBundle\Entity\Agent")
+     * @ORM\JoinColumn(name="agent_id", referencedColumnName="id")
+     */
+    protected $agent;
 
     /**
      * @var string
@@ -41,7 +47,7 @@ class Blacklist
      *
      * @ORM\Column(name="amount", type="integer")
      */
-    private $amount;
+    private $amount = 1;
 
     /**
      * @var \DateTime $created
@@ -68,27 +74,51 @@ class Blacklist
     }
 
     /**
-     * Set userId
+     * Set user
      *
-     * @param integer $userId
+     * @param User $user
      *
      * @return Blacklist
      */
-    public function setUserId($userId)
+    public function setUser(User $user = null)
     {
-        $this->userId = $userId;
+        $this->user = $user;
 
         return $this;
     }
 
     /**
-     * Get userId
+     * Get user
      *
-     * @return int
+     * @return User
      */
-    public function getUserId()
+    public function getUser()
     {
-        return $this->userId;
+        return $this->user;
+    }
+
+    /**
+     * Set agent
+     *
+     * @param \AgentBundle\Entity\Agent $agent
+     *
+     * @return Blacklist
+     */
+    public function setAgent(Agent $agent = null)
+    {
+        $this->agent = $agent;
+
+        return $this;
+    }
+
+    /**
+     * Get agent
+     *
+     * @return \AgentBundle\Entity\Agent
+     */
+    public function getAgent()
+    {
+        return $this->agent;
     }
 
     /**
@@ -141,7 +171,6 @@ class Blacklist
 
     /**
      * Gets triggered only on insert
-
      * @ORM\PrePersist
      */
     public function onPrePersist()
@@ -151,11 +180,30 @@ class Blacklist
 
     /**
      * Gets triggered every time on update
-
      * @ORM\PreUpdate
      */
     public function onPreUpdate()
     {
         $this->updated = new \DateTime("now");
+    }
+
+    /**
+     * Get updated
+     *
+     * @return \DateTime
+     */
+    public function getUpdated()
+    {
+        return $this->updated;
+    }
+
+    /**
+     * Get created
+     *
+     * @return \DateTime
+     */
+    public function getCreated()
+    {
+        return $this->created;
     }
 }

@@ -40,14 +40,10 @@ class ClientRepository extends EntityRepository
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
                    ->select('s')
-                   ->from('AgentBundle:Client', 'c');
-
-        if (!empty($typeId)) {
-            $qb->where("c.agent = :agent");
-            $qb->setParameter('agent', $agent);
-        }
-
-        $qb->orderBy('c.id', 'ASC');
+                   ->from('AgentBundle:Client', 'c')
+                   ->where("c.agent = :agent")
+                   ->setParameter('agent', $agent)
+                   ->orderBy('c.id', 'ASC');
 
         $results = $qb->getQuery()->getResult();
 
