@@ -20,11 +20,11 @@ class LoadPropertyData extends AbstractFixture implements OrderedFixtureInterfac
     public function load(ObjectManager $manager)
     {
         $property = new Property();
-        $property->setKind('sale');
+        $property->setKind($this->getReference('kind_sale'));
         $property->setAgent($this->getReference('agent_1'));
         $property->setClient($this->getReference('client_1'));
         $property->setTerms($this->getReference('term_fixed_price'));
-        $property->setOnline(1);
+        $property->setOnline(true);
         $property->setSubType(2);
         $property->setStreet('Graafsedijk');
         $property->setHouseNumber('19');
@@ -36,34 +36,15 @@ class LoadPropertyData extends AbstractFixture implements OrderedFixtureInterfac
         $property->setLng(5.812249999999949);
         $property->setEspc(false);
         $property->setArchived(false);
+        $this->addReference('property_1', $property);
         $manager->persist($property);
 
-        $gallery = new Gallery();
-        $gallery->setSort(1);
-        $gallery->setPath('imagePath1');
-        $gallery->setMain(true);
-        $gallery->setProperty($property);
-        $manager->persist($gallery);
-
-        $gallery = new Gallery();
-        $gallery->setSort(2);
-        $gallery->setPath('imagePath2');
-        $gallery->setProperty($property);
-        $manager->persist($gallery);
-
-        $gallery = new Gallery();
-        $gallery->setSort(3);
-        $gallery->setPath('imagePath3');
-        $gallery->setProperty($property);
-        $manager->persist($gallery);
-
-
         $property = new Property();
-        $property->setKind('sale');
+        $property->setKind($this->getReference('kind_sale'));
         $property->setAgent($this->getReference('agent_2'));
         $property->setClient($this->getReference('client_1'));
         $property->setTerms($this->getReference('term_new'));
-        $property->setOnline(1);
+        $property->setOnline(true);
         $property->setSubType(1);
         $property->setStreet('Portobello High Street');
         $property->setHouseNumber('27');
@@ -75,27 +56,8 @@ class LoadPropertyData extends AbstractFixture implements OrderedFixtureInterfac
         $property->setLng(-3.1188563000000613);
         $property->setEspc(false);
         $property->setArchived(false);
+        $this->addReference('property_2', $property);
         $manager->persist($property);
-
-        $gallery = new Gallery();
-        $gallery->setSort(1);
-        $gallery->setPath('imagePath1');
-        $gallery->setMain(true);
-        $gallery->setProperty($property);
-        $manager->persist($gallery);
-
-        $gallery = new Gallery();
-        $gallery->setSort(2);
-        $gallery->setPath('imagePath2');
-        $gallery->setProperty($property);
-        $manager->persist($gallery);
-
-        $gallery = new Gallery();
-        $gallery->setSort(3);
-        $gallery->setPath('imagePath3');
-        $gallery->setProperty($property);
-        $manager->persist($gallery);
-
 
         $manager->flush();
     }

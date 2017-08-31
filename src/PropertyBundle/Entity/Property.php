@@ -44,9 +44,8 @@ class Property
     private $client;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="kind", type="string", length=10)
+     * @ORM\ManyToOne(targetEntity="Kind", inversedBy="properties")
+     * @ORM\JoinColumn(name="kind_id", referencedColumnName="id")
      */
     private $kind;
 
@@ -265,11 +264,11 @@ class Property
     /**
      * Set kind
      *
-     * @param string $kind
+     * @param Kind $kind
      *
      * @return Property
      */
-    public function setKind($kind)
+    public function setKind(Kind $kind = null)
     {
         $this->kind = $kind;
 
@@ -279,7 +278,7 @@ class Property
     /**
      * Get kind
      *
-     * @return string
+     * @return Kind
      */
     public function getKind()
     {
@@ -641,20 +640,6 @@ class Property
     }
 
     /**
-     * Set created
-     *
-     * @param \DateTime $created
-     *
-     * @return Property
-     */
-    public function setCreated($created)
-    {
-        $this->created = $created;
-
-        return $this;
-    }
-
-    /**
      * Get created
      *
      * @return \DateTime
@@ -662,20 +647,6 @@ class Property
     public function getCreated()
     {
         return $this->created;
-    }
-
-    /**
-     * Set updated
-     *
-     * @param \DateTime $updated
-     *
-     * @return Property
-     */
-    public function setUpdated($updated)
-    {
-        $this->updated = $updated;
-
-        return $this;
     }
 
     /**
