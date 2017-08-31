@@ -2,8 +2,11 @@
 
 namespace PropertyBundle\Controller;
 
+use AgentBundle\Service\ClientService;
 use Exception;
 use InvalidArgumentException;
+use PropertyBundle\Service\KindService;
+use PropertyBundle\Service\TermsService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Security\Authenticator;
@@ -59,6 +62,11 @@ class PropertyController extends Controller
     private $userService;
 
     /**
+     * @var ClientService
+     */
+    private $clientService;
+
+    /**
      * @var AgentService
      */
     private $agentService;
@@ -74,27 +82,46 @@ class PropertyController extends Controller
     private $trafficService;
 
     /**
+     * @var KindService
+     */
+    private $kindService;
+
+    /**
+     * @var TermsService
+     */
+    private $termsService;
+
+    /**
      * @param Authenticator   $authenticator
      * @param PropertyService $propertyService
      * @param UserService     $userService
+     * @param ClientService   $clientService
      * @param AgentService    $agentService
      * @param ActivityService $activityService
      * @param TrafficService  $trafficService
+     * @param KindService     $kindService
+     * @param TermsService    $termsService
      */
     public function __construct(
         Authenticator $authenticator,
         PropertyService $propertyService,
         UserService $userService,
+        ClientService $clientService,
         AgentService $agentService,
         ActivityService $activityService,
-        TrafficService $trafficService
+        TrafficService $trafficService,
+        KindService $kindService,
+        TermsService $termsService
     ) {
         $this->authenticator   = $authenticator;
         $this->propertyService = $propertyService;
         $this->userService     = $userService;
+        $this->clientService   = $clientService;
         $this->agentService    = $agentService;
         $this->activityService = $activityService;
         $this->trafficService  = $trafficService;
+        $this->kindService     = $kindService;
+        $this->termsService    = $termsService;
     }
 
     /**
@@ -248,7 +275,6 @@ class PropertyController extends Controller
      * @param int $userId
      *
      * @return array
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     private function getProperties(int $userId)
     {
@@ -338,11 +364,11 @@ class PropertyController extends Controller
             throw new PropertyAlreadyExistsException($parameters['client_id']);
         }
 
-        // todo: use client service to check if client exists other wise pass to property service
-        //ClientNotFoundException
-
         $agent      = $this->agentService->getAgent((int)$user->getAgent()->getId());
-        $property   = $this->propertyService->createProperty($parameters, $agent);
+        $client     = $this->clientService->getClient($parameters['client_id']);
+        $kind       = $this->kindService->getKind($parameters['kind_id']);
+        $terms      = $this->termsService->getTerm($parameters['terms_id']);
+        $property   = $this->propertyService->createProperty($parameters, $agent, $client, $kind, $terms);
         $propertyId = (int)$property->getId();
 
         $this->activityService->createActivity(
@@ -383,11 +409,13 @@ class PropertyController extends Controller
         }
 
         if (array_key_exists('client_id', $parameters) && $parameters['client_id'] !== null) {
-            $property->setClient((int)$parameters['client_id']);
+            $client = $this->clientService->getClient($parameters['client_id']);
+            $property->setClient($client);
         }
 
         if (array_key_exists('kind_id', $parameters) && $parameters['kind_id'] !== null) {
-            $property->setKind((string)$parameters['kind_id']);
+            $kind = $this->kindService->getKind($parameters['kind_id']);
+            $property->setKind($kind);
         }
 
         if (array_key_exists('sub_type_id', $parameters) && $parameters['sub_type_id'] !== null) {
@@ -395,7 +423,8 @@ class PropertyController extends Controller
         }
 
         if (array_key_exists('terms_id', $parameters) && $parameters['terms_id'] !== null) {
-            $property->setTerms((int)$parameters['terms_id']);
+            $terms = $this->termsService->getTerm($parameters['terms_id']);
+            $property->setTerms($terms);
         }
 
         if (array_key_exists('online', $parameters) && $parameters['online'] !== null) {

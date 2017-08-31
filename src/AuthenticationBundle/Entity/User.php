@@ -108,13 +108,13 @@ class User
     private $language = 'en';
 
     /**
-     * @ORM\ManyToOne(targetEntity="AgentBundle\Entity\Agent", inversedBy="users")
-     * @ORM\JoinColumn(name="agent_id", referencedColumnName="id", nullable=true)
+     * @ORM\ManyToOne(targetEntity="AgentBundle\Entity\Agent")
+     * @ORM\JoinColumn(name="agent_id", referencedColumnName="id")
      */
     private $agent;
 
     /**
-     * @ORM\ManyToOne(targetEntity="UserType", inversedBy="users")
+     * @ORM\ManyToOne(targetEntity="UserType")
      * @ORM\JoinColumn(name="user_type_id", referencedColumnName="id")
      */
     private $userType;

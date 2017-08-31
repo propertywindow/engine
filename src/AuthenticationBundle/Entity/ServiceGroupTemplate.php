@@ -23,13 +23,13 @@ class ServiceGroupTemplate
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="ServiceGroup", inversedBy="groupTemplates")
+     * @ORM\ManyToOne(targetEntity="ServiceGroup")
      * @ORM\JoinColumn(name="service_group_id", referencedColumnName="id")
      */
     private $serviceGroup;
 
     /**
-     * @ORM\ManyToOne(targetEntity="UserType", inversedBy="serviceGroupTemplates")
+     * @ORM\ManyToOne(targetEntity="UserType")
      * @ORM\JoinColumn(name="user_type_id", referencedColumnName="id")
      */
     private $userType;

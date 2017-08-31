@@ -6,6 +6,7 @@ use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use AuthenticationBundle\Service\UserService;
 use Exception;
 use InvalidArgumentException;
+use PropertyBundle\Service\TypeService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Security\Authenticator;
@@ -45,9 +46,14 @@ class SubTypeController extends Controller
     private $authenticator;
 
     /**
-     * @var SubTypeService
+     * @var TypeService
      */
     private $typeService;
+
+    /**
+     * @var SubTypeService
+     */
+    private $subTypeService;
 
     /**
      * @var UserService
@@ -56,14 +62,20 @@ class SubTypeController extends Controller
 
     /**
      * @param Authenticator  $authenticator
-     * @param SubTypeService $typeService
+     * @param TypeService    $typeService
+     * @param SubTypeService $subTypeService
      * @param UserService    $userService
      */
-    public function __construct(Authenticator $authenticator, SubTypeService $typeService, UserService $userService)
-    {
-        $this->authenticator = $authenticator;
-        $this->typeService   = $typeService;
-        $this->userService   = $userService;
+    public function __construct(
+        Authenticator $authenticator,
+        TypeService $typeService,
+        SubTypeService $subTypeService,
+        UserService $userService
+    ) {
+        $this->authenticator  = $authenticator;
+        $this->typeService    = $typeService;
+        $this->subTypeService = $subTypeService;
+        $this->userService    = $userService;
     }
 
     /**
@@ -72,7 +84,6 @@ class SubTypeController extends Controller
      * @param Request $httpRequest
      *
      * @return HttpResponse
-     * @throws \Doctrine\ORM\RuntimeException
      */
     public function requestHandler(Request $httpRequest)
     {
@@ -170,7 +181,7 @@ class SubTypeController extends Controller
 
         $id = (int)$parameters['id'];
 
-        return Mapper::fromSubType($this->typeService->getSubType($id));
+        return Mapper::fromSubType($this->subTypeService->getSubType($id));
     }
 
     /**
@@ -183,11 +194,13 @@ class SubTypeController extends Controller
     {
         $typeId = null;
 
-        if (array_key_exists('typeId', $parameters)) {
-            $typeId = (int)$parameters['typeId'];
+        if (!array_key_exists('type_id', $parameters)) {
+            throw new InvalidArgumentException("No type_id argument provided");
         }
 
-        return Mapper::fromSubTypes(...$this->typeService->getSubTypes($typeId));
+        $type = $this->typeService->getType((int)$parameters['type_id']);
+
+        return Mapper::fromSubTypes(...$this->subTypeService->getSubTypes($type));
     }
 
     /**
@@ -210,6 +223,6 @@ class SubTypeController extends Controller
 
         $id = (int)$parameters['id'];
 
-        $this->typeService->deleteSubType($id);
+        $this->subTypeService->deleteSubType($id);
     }
 }

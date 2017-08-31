@@ -3,10 +3,7 @@
 namespace AgentBundle\Entity;
 
 use AuthenticationBundle\Entity\User;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use PropertyBundle\Entity\Property;
 
 /**
  * Client
@@ -27,18 +24,13 @@ class Client
     private $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="PropertyBundle\Entity\Property", mappedBy="client")
-     */
-    private $properties;
-
-    /**
-     * @ORM\OneToOne(targetEntity="AuthenticationBundle\Entity\User", inversedBy="information")
+     * @ORM\OneToOne(targetEntity="AuthenticationBundle\Entity\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     protected $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Agent", inversedBy="clients")
+     * @ORM\ManyToOne(targetEntity="Agent")
      * @ORM\JoinColumn(name="agent_id", referencedColumnName="id")
      */
     private $agent;
@@ -65,14 +57,6 @@ class Client
     protected $updated;
 
     /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->properties = new ArrayCollection();
-    }
-
-    /**
      * Get id
      *
      * @return int
@@ -80,40 +64,6 @@ class Client
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Add property
-     *
-     * @param Property $properties
-     *
-     * @return Client
-     */
-    public function addProperty(Property $properties)
-    {
-        $this->properties[] = $properties;
-
-        return $this;
-    }
-
-    /**
-     * Remove property
-     *
-     * @param \PropertyBundle\Entity\Property $property
-     */
-    public function removeProperty(Property $property)
-    {
-        $this->properties->removeElement($property);
-    }
-
-    /**
-     * Get properties
-     *
-     * @return Collection
-     */
-    public function getProperties()
-    {
-        return $this->properties;
     }
 
     /**

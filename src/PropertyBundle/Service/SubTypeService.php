@@ -4,8 +4,8 @@ namespace PropertyBundle\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
 use PropertyBundle\Entity\SubType;
+use PropertyBundle\Entity\Type;
 use PropertyBundle\Exceptions\SubTypeDeleteException;
-use PropertyBundle\Exceptions\SubTypeNotFoundException;
 
 /**
  * @package PropertyBundle\Service
@@ -39,15 +39,15 @@ class SubTypeService
     }
 
     /**
-     * @param int|null $typeId
+     * @param Type $type
      *
      * @return SubType[]
      */
-    public function getSubTypes(?int $typeId)
+    public function getSubTypes(Type $type)
     {
         $repository = $this->entityManager->getRepository('PropertyBundle:SubType');
 
-        return $repository->listAll($typeId);
+        return $repository->listAll($type);
     }
 
     /**

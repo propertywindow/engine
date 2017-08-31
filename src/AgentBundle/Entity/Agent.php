@@ -2,11 +2,7 @@
 
 namespace AgentBundle\Entity;
 
-use AuthenticationBundle\Entity\User;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use PropertyBundle\Entity\Property;
 
 /**
  * Agent
@@ -25,21 +21,6 @@ class Agent
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
-    /**
-     * @ORM\OneToMany(targetEntity="PropertyBundle\Entity\Property", mappedBy="agent")
-     */
-    private $properties;
-
-    /**
-     * @ORM\OneToMany(targetEntity="AuthenticationBundle\Entity\User", mappedBy="agent")
-     */
-    private $users;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Client", mappedBy="agent")
-     */
-    private $clients;
 
     /**
      * @var int
@@ -166,118 +147,6 @@ class Agent
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $updated;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->properties = new ArrayCollection();
-        $this->users      = new ArrayCollection();
-        $this->clients    = new ArrayCollection();
-    }
-
-    /**
-     * Add property
-     *
-     * @param Property $properties
-     *
-     * @return Agent
-     */
-    public function addProperty(Property $properties)
-    {
-        $this->properties[] = $properties;
-
-        return $this;
-    }
-
-    /**
-     * Remove property
-     *
-     * @param Property $property
-     */
-    public function removeProperty(Property $property)
-    {
-        $this->properties->removeElement($property);
-    }
-
-    /**
-     * Get properties
-     *
-     * @return Collection
-     */
-    public function getProperties()
-    {
-        return $this->properties;
-    }
-
-    /**
-     * Add user
-     *
-     * @param User $users
-     *
-     * @return Agent
-     */
-    public function addUser(User $users)
-    {
-        $this->users[] = $users;
-
-        return $this;
-    }
-
-    /**
-     * Remove user
-     *
-     * @param User $user
-     */
-    public function removeUser(User $user)
-    {
-        $this->users->removeElement($user);
-    }
-
-    /**
-     * Get users
-     *
-     * @return Collection
-     */
-    public function getUsers()
-    {
-        return $this->users;
-    }
-
-    /**
-     * Add client
-     *
-     * @param Client $clients
-     *
-     * @return Agent
-     */
-    public function addClient(Client $clients)
-    {
-        $this->clients[] = $clients;
-
-        return $this;
-    }
-
-    /**
-     * Remove client
-     *
-     * @param Client $client
-     */
-    public function removeClient(Client $client)
-    {
-        $this->clients->removeElement($client);
-    }
-
-    /**
-     * Get clients
-     *
-     * @return Collection
-     */
-    public function getClients()
-    {
-        return $this->clients;
-    }
 
     /**
      * Get id

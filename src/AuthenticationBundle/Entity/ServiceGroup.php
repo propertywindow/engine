@@ -2,8 +2,6 @@
 
 namespace AuthenticationBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -23,16 +21,6 @@ class ServiceGroup
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
-    /**
-     * @ORM\OneToMany(targetEntity="ServiceGroupTemplate", mappedBy="serviceGroup")
-     */
-    private $groupTemplates;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Service", mappedBy="serviceGroup")
-     */
-    private $services;
 
     /**
      * @var string
@@ -68,85 +56,6 @@ class ServiceGroup
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $updated;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->groupTemplates = new ArrayCollection();
-        $this->services       = new ArrayCollection();
-    }
-
-    /**
-     * Add groupTemplate
-     *
-     * @param ServiceGroupTemplate $groupTemplate
-     *
-     * @return ServiceGroup
-     */
-    public function addGroupTemplate(ServiceGroupTemplate $groupTemplate)
-    {
-        $this->groupTemplates[] = $groupTemplate;
-
-        return $this;
-    }
-
-    /**
-     * Remove groupTemplate
-     *
-     * @param ServiceGroupTemplate $groupTemplate
-     */
-    public function removeGroupTemplate(ServiceGroupTemplate $groupTemplate)
-    {
-        $this->groupTemplates->removeElement($groupTemplate);
-    }
-
-    /**
-     * Get groupTemplates
-     *
-     * @return Collection
-     */
-    public function getGroupTemplates()
-    {
-        return $this->groupTemplates;
-    }
-
-
-    /**
-     * Add service
-     *
-     * @param Service $services
-     *
-     * @return ServiceGroup
-     */
-    public function addService(Service $services)
-    {
-        $this->services[] = $services;
-
-        return $this;
-    }
-
-    /**
-     * Remove service
-     *
-     * @param Service $service
-     */
-    public function removeService(Service $service)
-    {
-        $this->services->removeElement($service);
-    }
-
-    /**
-     * Get services
-     *
-     * @return Collection
-     */
-    public function getServices()
-    {
-        return $this->services;
-    }
-
 
     /**
      * Get id

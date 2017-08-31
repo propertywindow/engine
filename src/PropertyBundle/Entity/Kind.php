@@ -2,8 +2,6 @@
 
 namespace PropertyBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -23,11 +21,6 @@ class Kind
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Property", mappedBy="kind")
-     */
-    private $properties;
 
     /**
      * @var string
@@ -58,14 +51,6 @@ class Kind
     protected $updated;
 
     /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->properties = new ArrayCollection();
-    }
-
-    /**
      * Get id
      *
      * @return int
@@ -73,40 +58,6 @@ class Kind
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Add property
-     *
-     * @param Property $properties
-     *
-     * @return Kind
-     */
-    public function addProperty(Property $properties)
-    {
-        $this->properties[] = $properties;
-
-        return $this;
-    }
-
-    /**
-     * Remove property
-     *
-     * @param Property $property
-     */
-    public function removeProperty(Property $property)
-    {
-        $this->properties->removeElement($property);
-    }
-
-    /**
-     * Get properties
-     *
-     * @return Collection
-     */
-    public function getProperties()
-    {
-        return $this->properties;
     }
 
     /**

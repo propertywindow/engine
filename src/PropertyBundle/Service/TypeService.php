@@ -29,18 +29,11 @@ class TypeService
      * @param int $id
      *
      * @return Type $type
-     *
-     * @throws TypeNotFoundException
      */
     public function getType(int $id)
     {
         $repository = $this->entityManager->getRepository('PropertyBundle:Type');
-        $type       = $repository->find($id);
-
-        /** @var Type $type */
-        if ($type === null) {
-            throw new TypeNotFoundException($id);
-        }
+        $type       = $repository->findById($id);
 
         return $type;
     }
@@ -59,8 +52,6 @@ class TypeService
      * @param Type $type
      *
      * @return Type
-     *
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function createType(Type $type)
     {
@@ -74,8 +65,6 @@ class TypeService
      * @param Type $type
      *
      * @return Type
-     *
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function updateType(Type $type)
     {
@@ -88,16 +77,14 @@ class TypeService
      * @param int $id
      *
      * @throws TypeDeleteException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     public function deleteType(int $id)
     {
-        $typeRepository    = $this->entityManager->getRepository('PropertyBundle:Type');
-        $type              = $typeRepository->findById($id);
+        $typeRepository = $this->entityManager->getRepository('PropertyBundle:Type');
+        $type           = $typeRepository->findById($id);
+
         $subTypeRepository = $this->entityManager->getRepository('PropertyBundle:SubType');
-        $subTypes          = $subTypeRepository->listAll($type->getId());
+        $subTypes          = $subTypeRepository->listAll($type);
 
         if (!empty($subTypes)) {
             throw new TypeDeleteException($id);

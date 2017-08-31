@@ -32,13 +32,13 @@ class Property
     private $images;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AgentBundle\Entity\Agent", inversedBy="properties")
+     * @ORM\ManyToOne(targetEntity="AgentBundle\Entity\Agent")
      * @ORM\JoinColumn(name="agent_id", referencedColumnName="id")
      */
     private $agent;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AgentBundle\Entity\Client", inversedBy="properties")
+     * @ORM\ManyToOne(targetEntity="AgentBundle\Entity\Client")
      * @ORM\JoinColumn(name="client_id", referencedColumnName="id")
      */
     private $client;
@@ -50,7 +50,7 @@ class Property
     private $kind;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Terms", inversedBy="properties")
+     * @ORM\ManyToOne(targetEntity="Terms")
      * @ORM\JoinColumn(name="terms_id", referencedColumnName="id")
      */
     private $terms;
@@ -269,6 +269,20 @@ class Property
      * @return Property
      */
     public function setKind(Kind $kind = null)
+    {
+        $this->kind = $kind;
+
+        return $this;
+    }
+
+    /**
+     * Set kind
+     *
+     * @param int $kind
+     *
+     * @return Property
+     */
+    public function setKindId(Kind $kind = null)
     {
         $this->kind = $kind;
 

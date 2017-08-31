@@ -4,6 +4,7 @@ namespace PropertyBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use PropertyBundle\Entity\SubType;
+use PropertyBundle\Entity\Type;
 use PropertyBundle\Exceptions\SubTypeNotFoundException;
 
 /**
@@ -31,19 +32,19 @@ class SubTypeRepository extends EntityRepository
     }
 
     /**
-     * @param int|null $typeId
+     * @param Type $type
      *
      * @return SubType[]
      */
-    public function listAll(?int $typeId): array
+    public function listAll(Type $type): array
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
                    ->select('s')
                    ->from('PropertyBundle:SubType', 's');
 
-        if (!empty($typeId)) {
-            $qb->where("s.typeId = :typeId");
-            $qb->setParameter('typeId', $typeId);
+        if (!empty($type)) {
+            $qb->where("s.type = :type");
+            $qb->setParameter('type', $type);
         }
 
         $qb->orderBy('s.id', 'ASC');

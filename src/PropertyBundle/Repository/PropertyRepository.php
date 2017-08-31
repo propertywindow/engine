@@ -17,10 +17,8 @@ class PropertyRepository extends EntityRepository
      * @param int $id
      *
      * @return Property
+     *
      * @throws PropertyNotFoundException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     public function findById(int $id): Property
     {
@@ -38,8 +36,6 @@ class PropertyRepository extends EntityRepository
      * @param int $agentId
      *
      * @return Property[]
-     *
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function listProperties(int $agentId): array
     {
@@ -90,8 +86,6 @@ class PropertyRepository extends EntityRepository
      * @param int $subTypeId
      *
      * @return Property[]
-     *
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function findPropertiesWithSubType(int $subTypeId): array
     {

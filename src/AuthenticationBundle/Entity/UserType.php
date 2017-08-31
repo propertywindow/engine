@@ -2,8 +2,6 @@
 
 namespace AuthenticationBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -23,21 +21,6 @@ class UserType
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
-    /**
-     * @ORM\OneToMany(targetEntity="ServiceTemplate", mappedBy="userType")
-     */
-    private $serviceTemplates;
-
-    /**
-     * @ORM\OneToMany(targetEntity="ServiceGroupTemplate", mappedBy="userType")
-     */
-    private $serviceGroupTemplates;
-
-    /**
-     * @ORM\OneToMany(targetEntity="User", mappedBy="userType")
-     */
-    private $users;
 
     /**
      * @var string
@@ -66,118 +49,6 @@ class UserType
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $updated;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->serviceTemplates = new ArrayCollection();
-        $this->serviceGroupTemplates = new ArrayCollection();
-        $this->users = new ArrayCollection();
-    }
-
-    /**
-     * Add serviceTemplate
-     *
-     * @param ServiceTemplate $serviceTemplates
-     *
-     * @return UserType
-     */
-    public function addServiceTemplate(ServiceTemplate $serviceTemplates)
-    {
-        $this->serviceTemplates[] = $serviceTemplates;
-
-        return $this;
-    }
-
-    /**
-     * Remove serviceTemplates
-     *
-     * @param ServiceTemplate $serviceTemplate
-     */
-    public function removeServiceTemplate(ServiceTemplate $serviceTemplate)
-    {
-        $this->serviceTemplates->removeElement($serviceTemplate);
-    }
-
-    /**
-     * Get serviceTemplates
-     *
-     * @return Collection
-     */
-    public function getServiceTemplates()
-    {
-        return $this->serviceTemplates;
-    }
-
-    /**
-     * Add serviceGroupTemplate
-     *
-     * @param ServiceGroupTemplate $serviceGroupTemplates
-     *
-     * @return UserType
-     */
-    public function addServiceGroupTemplate(ServiceGroupTemplate $serviceGroupTemplates)
-    {
-        $this->serviceGroupTemplates[] = $serviceGroupTemplates;
-
-        return $this;
-    }
-
-    /**
-     * Remove serviceGroupTemplates
-     *
-     * @param ServiceGroupTemplate $serviceGroupTemplate
-     */
-    public function removeServiceGroupTemplate(ServiceGroupTemplate $serviceGroupTemplate)
-    {
-        $this->serviceGroupTemplates->removeElement($serviceGroupTemplate);
-    }
-
-    /**
-     * Get serviceGroupTemplates
-     *
-     * @return Collection
-     */
-    public function getServiceGroupTemplates()
-    {
-        return $this->serviceGroupTemplates;
-    }
-
-    /**
-     * Add User
-     *
-     * @param User $users
-     *
-     * @return UserType
-     */
-    public function addUser(User $users)
-    {
-        $this->users[] = $users;
-
-        return $this;
-    }
-
-    /**
-     * Remove User
-     *
-     * @param User $user
-     */
-    public function removeUser(User $user)
-    {
-        $this->users->removeElement($user);
-    }
-
-    /**
-     * Get User
-     *
-     * @return Collection
-     */
-    public function getUser()
-    {
-        return $this->users;
-    }
 
     /**
      * Get id

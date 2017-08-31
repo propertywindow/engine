@@ -2,6 +2,12 @@ services:
     property_service:
           class: PropertyBundle\Service\PropertyService
           arguments: ["@doctrine.orm.entity_manager"]
+    kind_service:
+          class: PropertyBundle\Service\KindService
+          arguments: ["@doctrine.orm.entity_manager"]
+    terms_service:
+          class: PropertyBundle\Service\TermsService
+          arguments: ["@doctrine.orm.entity_manager"]
     type_service:
           class: PropertyBundle\Service\TypeService
           arguments: ["@doctrine.orm.entity_manager"]
@@ -10,10 +16,10 @@ services:
           arguments: ["@doctrine.orm.entity_manager"]
     property_controller:
           class: PropertyBundle\Controller\PropertyController
-          arguments: ['@authenticator', '@property_service', '@user_service', '@agent_service', '@activity_service', '@traffic_service']
+          arguments: ['@authenticator', '@property_service', '@user_service', '@client_service', '@agent_service', '@activity_service','@traffic_service', '@kind_service', '@terms_service']
     type_controller:
           class: PropertyBundle\Controller\TypeController
           arguments: ['@authenticator', '@type_service', '@user_service']
     sub_type_controller:
           class: PropertyBundle\Controller\SubTypeController
-          arguments: ['@authenticator', '@sub_type_service', '@user_service']
+          arguments: ['@authenticator', '@type_service', '@sub_type_service', '@user_service']

@@ -3,8 +3,11 @@
 namespace PropertyBundle\Service;
 
 use AgentBundle\Entity\Agent;
+use AgentBundle\Entity\Client;
 use Doctrine\ORM\EntityManagerInterface;
+use PropertyBundle\Entity\Kind;
 use PropertyBundle\Entity\Property;
+use PropertyBundle\Entity\Terms;
 use PropertyBundle\Exceptions\PropertyNotFoundException;
 
 /**
@@ -29,18 +32,11 @@ class PropertyService
      * @param int $id
      *
      * @return Property $property
-     *
-     * @throws PropertyNotFoundException
      */
     public function getProperty(int $id)
     {
         $repository = $this->entityManager->getRepository('PropertyBundle:Property');
-        $property   = $repository->find($id);
-
-        /** @var Property $property */
-        if ($property === null) {
-            throw new PropertyNotFoundException($id);
-        }
+        $property   = $repository->findById($id);
 
         return $property;
     }
@@ -73,8 +69,6 @@ class PropertyService
      * @param  int $agentId
      *
      * @return array|Property[] $properties
-     *
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function listProperties(int $agentId): array
     {
@@ -98,29 +92,26 @@ class PropertyService
     }
 
     /**
-     * @param array $parameters
-     *
-     * @param Agent $agent
+     * @param array  $parameters
+     * @param Agent  $agent
+     * @param Client $client
+     * @param Kind   $kind
+     * @param Terms  $terms
      *
      * @return Property
      */
-    public function createProperty(array $parameters, Agent $agent)
+    public function createProperty(array $parameters, Agent $agent, Client $client, Kind $kind, Terms $terms)
     {
         $property = new Property();
 
-        $kindReference   = $this->entityManager->getReference('PropertyBundle\Entity\Kind', $parameters['kind_id']);
-        $termsReference  = $this->entityManager->getReference('PropertyBundle\Entity\Terms', $parameters['terms_id']);
-        $clientReference = $this->entityManager->getReference('AgentBundle\Entity\Client', $parameters['client_id']);
-
-        $property->setKind($kindReference);
-        $property->setTerms($termsReference);
+        $property->setKind($kind);
+        $property->setTerms($terms);
         $property->setAgent($agent);
-        // todo: replace with client service
-        $property->setClient($clientReference);
-        $property->setStreet(ucfirst($parameters['street']));
+        $property->setClient($client);
+        $property->setStreet(ucwords($parameters['street']));
         $property->setHouseNumber($parameters['house_number']);
         $property->setPostcode($parameters['postcode']);
-        $property->setCity(ucfirst($parameters['city']));
+        $property->setCity(ucwords($parameters['city']));
         $property->setCountry($parameters['country']);
         $property->setSubType($parameters['sub_type_id']);
         $property->setLat($parameters['lat']);
@@ -146,8 +137,6 @@ class PropertyService
      * @param Property $property
      *
      * @return Property
-     *
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function updateProperty(Property $property)
     {
@@ -160,9 +149,6 @@ class PropertyService
      * @param int $id
      *
      * @throws PropertyNotFoundException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     public function archiveProperty(int $id)
     {
@@ -178,9 +164,6 @@ class PropertyService
      * @param int $id
      *
      * @throws PropertyNotFoundException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     public function deleteProperty(int $id)
     {
@@ -200,6 +183,7 @@ class PropertyService
      * @param int $soldPrice
      *
      * @return Property
+     *
      * @throws PropertyNotFoundException
      */
     public function setPropertySold(int $id, int $soldPrice)
@@ -225,6 +209,7 @@ class PropertyService
      * @param bool $online
      *
      * @return Property
+     *
      * @throws PropertyNotFoundException
      */
     public function toggleOnline(int $id, bool $online)

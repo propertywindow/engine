@@ -18,14 +18,16 @@ class LoadClientData extends AbstractFixture implements OrderedFixtureInterface
      */
     public function load(ObjectManager $manager)
     {
-        $client = new Client();
-        $client->setUser($this->getReference('user_3'));
-        $client->setAgent($this->getReference('agent_1'));
-        $client->setTransparency(true);
-        $this->addReference('client_1', $client);
-        $manager->persist($client);
+        for ($i = 1; $i <= 5; $i++) {
+            $client = new Client();
+            $client->setUser($this->getReference('user_client_'.$i));
+            $client->setAgent($this->getReference('agent_1'));
+            $client->setTransparency(true);
+            $this->addReference('client_'.$i, $client);
+            $manager->persist($client);
 
-        $manager->flush();
+            $manager->flush();
+        }
     }
 
     /**

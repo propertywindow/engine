@@ -18,6 +18,8 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
      */
     public function load(ObjectManager $manager)
     {
+        // Admin Users
+
         $user = new User();
         $user->setUserType($this->getReference('user_type_admin'));
         $user->setAgent($this->getReference('agent_1'));
@@ -31,7 +33,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setPostcode('5437 NG');
         $user->setCity('Beers');
         $user->setCountry('NL');
-        $this->addReference('user_1', $user);
+        $this->addReference('user_admin_1', $user);
         $manager->persist($user);
 
         $user = new User();
@@ -47,11 +49,13 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setPostcode('EH15 1DE');
         $user->setCity('Edinburgh');
         $user->setCountry('GB');
-        $this->addReference('user_2', $user);
+        $this->addReference('user_admin_2', $user);
         $manager->persist($user);
 
 
-        for ($i = 3; $i <= 10; $i++) {
+        // Client Users
+
+        for ($i = 1; $i <= 5; $i++) {
             $path     = file_get_contents('https://randomuser.me/api/?nat=gb');
             $json     = json_decode($path, true);
             $fakeUser = $json['results'][0];
@@ -76,7 +80,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
                 $user->setCountry('GB');
                 $user->setPhone($fakeUser['phone']);
                 $user->setAvatar($fakeUser['picture']['large']);
-                $this->addReference('user_'.$i, $user);
+                $this->addReference('user_client_'.$i, $user);
                 $manager->persist($user);
             }
         }
