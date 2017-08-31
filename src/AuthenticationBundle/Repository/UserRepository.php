@@ -16,10 +16,8 @@ class UserRepository extends EntityRepository
      * @param int $id
      *
      * @return User
+     *
      * @throws UserNotFoundException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     public function findById(int $id): User
     {
@@ -37,6 +35,7 @@ class UserRepository extends EntityRepository
      * @param int $id
      *
      * @return int $userType
+     *
      * @throws UserNotFoundException
      */
     public function getUserType(int $id): int

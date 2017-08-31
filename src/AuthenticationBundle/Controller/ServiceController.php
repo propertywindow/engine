@@ -5,6 +5,7 @@ namespace AuthenticationBundle\Controller;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use AuthenticationBundle\Exceptions\ServiceNotFoundException;
 use AuthenticationBundle\Service\ServiceService;
+use AuthenticationBundle\Service\Service\Mapper;
 use AuthenticationBundle\Service\UserService;
 use Exception;
 use InvalidArgumentException;
@@ -149,6 +150,8 @@ class ServiceController extends Controller
         switch ($method) {
             case "getService":
                 return $this->getService($userId, $parameters);
+            case "getServiceGroup":
+                return $this->getServiceGroup($parameters);
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
@@ -168,7 +171,28 @@ class ServiceController extends Controller
             throw new InvalidArgumentException("No argument provided");
         }
 
-        $id   = (int)$parameters['id'];
-        $user = $this->userService->getUser($userId);
+        $id      = (int)$parameters['id'];
+        $user    = $this->userService->getUser($userId);
+        $service = $this->serviceService->getService($id);
+
+        return Mapper::fromService($service);
+    }
+
+    /**
+     * @param array $parameters
+     *
+     * @return array
+     * @throws NotAuthorizedException
+     */
+    private function getServiceGroup(array $parameters)
+    {
+        if (!array_key_exists('id', $parameters)) {
+            throw new InvalidArgumentException("No argument provided");
+        }
+
+        $id           = (int)$parameters['id'];
+        $serviceGroup = $this->serviceService->getServiceGroup($id);
+
+        return Mapper::fromServiceGroup($serviceGroup);
     }
 }

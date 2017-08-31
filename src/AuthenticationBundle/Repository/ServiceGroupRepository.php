@@ -2,6 +2,8 @@
 
 namespace AuthenticationBundle\Repository;
 
+use AuthenticationBundle\Entity\ServiceGroup;
+use AuthenticationBundle\Exceptions\ServiceGroupNotFoundException;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -10,4 +12,22 @@ use Doctrine\ORM\EntityRepository;
  */
 class ServiceGroupRepository extends EntityRepository
 {
+    /**
+     * @param int $id
+     *
+     * @return ServiceGroup
+     *
+     * @throws ServiceGroupNotFoundException
+     */
+    public function findById(int $id): ServiceGroup
+    {
+        $result = $this->find($id);
+
+        if ($result === null) {
+            throw new ServiceGroupNotFoundException($id);
+        }
+
+        /** @var ServiceGroup $result */
+        return $result;
+    }
 }

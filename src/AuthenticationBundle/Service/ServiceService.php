@@ -3,10 +3,8 @@
 namespace AuthenticationBundle\Service;
 
 use AuthenticationBundle\Entity\ServiceGroup;
-use AuthenticationBundle\Exceptions\ServiceGroupNotFoundException;
 use Doctrine\ORM\EntityManagerInterface;
 use AuthenticationBundle\Entity\Service;
-use AuthenticationBundle\Exceptions\ServiceNotFoundException;
 
 /**
  * @package AuthenticationBundle\Service
@@ -30,18 +28,11 @@ class ServiceService
      * @param int $id
      *
      * @return Service $service
-     *
-     * @throws ServiceNotFoundException
      */
     public function getService(int $id)
     {
         $repository = $this->entityManager->getRepository('AuthenticationBundle:Service');
-        $service    = $repository->find($id);
-
-        /** @var Service $service */
-        if ($service === null) {
-            throw new ServiceNotFoundException($id);
-        }
+        $service    = $repository->findById($id);
 
         return $service;
     }
@@ -50,18 +41,11 @@ class ServiceService
      * @param int $id
      *
      * @return ServiceGroup $serviceGroup
-     *
-     * @throws ServiceGroupNotFoundException
      */
     public function getServiceGroup(int $id)
     {
         $repository   = $this->entityManager->getRepository('AuthenticationBundle:ServiceGroup');
-        $serviceGroup = $repository->find($id);
-
-        /** @var ServiceGroup $serviceGroup */
-        if ($serviceGroup === null) {
-            throw new ServiceGroupNotFoundException($id);
-        }
+        $serviceGroup = $repository->findById($id);
 
         return $serviceGroup;
     }
