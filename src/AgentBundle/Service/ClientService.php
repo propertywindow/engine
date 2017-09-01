@@ -53,11 +53,11 @@ class ClientService
      * @param Client $client
      *
      * @return Client
-     *
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function createClient(Client $client)
     {
+        // todo: create user to in clientController
+
         $this->entityManager->persist($client);
         $this->entityManager->flush();
 
@@ -68,8 +68,6 @@ class ClientService
      * @param Client $client
      *
      * @return Client
-     *
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function updateClient(Client $client)
     {

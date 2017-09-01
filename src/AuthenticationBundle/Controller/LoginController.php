@@ -192,20 +192,20 @@ class LoginController extends Controller
      */
     private function login(array $parameters, string $ipAddress)
     {
-        if (!array_key_exists('username', $parameters)) {
-            throw new InvalidArgumentException("No username argument provided");
+        if (!array_key_exists('email', $parameters)) {
+            throw new InvalidArgumentException("No email argument provided");
         }
         if (!array_key_exists('password', $parameters)) {
             throw new InvalidArgumentException("No password argument provided");
         }
 
-        $username = (string)$parameters['username'];
+        $email    = (string)$parameters['email'];
         $password = md5((string)$parameters['password']);
-        $user     = $this->userService->login($username, $password);
+        $user     = $this->userService->login($email, $password);
 
         if ($user === null) {
             $attemptedAgent = null;
-            $attemptedUser  = $this->userService->getUserByUsername($username);
+            $attemptedUser  = $this->userService->getUserByEmail($email);
 
             if ($attemptedUser) {
                 $attemptedAgent = $attemptedUser->getAgent();
@@ -213,7 +213,12 @@ class LoginController extends Controller
 
             $this->blacklistService->createBlacklist($ipAddress, $attemptedUser, $attemptedAgent);
 
-            throw new LoginFailedException($username);
+            throw new LoginFailedException($email);
+        }
+
+        $blacklist = $this->blacklistService->checkBlacklist($ipAddress);
+        if ($blacklist) {
+            $this->blacklistService->removeBlacklist($blacklist->getId());
         }
 
         $this->loginService->createLogin(
@@ -235,24 +240,6 @@ class LoginController extends Controller
         $payloadEncoded = base64_encode($payloadJson);
 
         return ['Basic '.$payloadEncoded];
-    }
-
-    /**
-     * @param array $parameters
-     *
-     * @return array
-     *
-     * @throws NotAuthorizedException
-     */
-    private function firstLogin(array $parameters)
-    {
-        if (!array_key_exists('id', $parameters)) {
-            throw new InvalidArgumentException("No argument provided");
-        }
-
-        $id = (int)$parameters['id'];
-
-        // todo: will check lastLogin for userId and return boolean. // maybe move to just mapper
     }
 
     /**

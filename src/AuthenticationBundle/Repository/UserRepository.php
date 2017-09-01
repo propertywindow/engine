@@ -2,6 +2,7 @@
 
 namespace AuthenticationBundle\Repository;
 
+use AgentBundle\Entity\Agent;
 use Doctrine\ORM\EntityRepository;
 use AuthenticationBundle\Entity\User;
 use AuthenticationBundle\Exceptions\UserNotFoundException;
@@ -29,6 +30,25 @@ class UserRepository extends EntityRepository
 
         /** @var User $result */
         return $result;
+    }
+
+    /**
+     * @param Agent $agent
+     *
+     * @return User[]
+     */
+    public function listAll(Agent $agent): array
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder()
+                   ->select('u')
+                   ->from('AuthenticationBundle:User', 'u')
+                   ->where("u.agent = :agent")
+                   ->setParameter('agent', $agent)
+                   ->orderBy('u.id', 'ASC');
+
+        $results = $qb->getQuery()->getResult();
+
+        return $results;
     }
 
     /**

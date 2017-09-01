@@ -23,9 +23,8 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user = new User();
         $user->setUserType($this->getReference('user_type_admin'));
         $user->setAgent($this->getReference('agent_1'));
-        $user->setUsername('marc');
-        $user->setPassword(md5('marc'));
         $user->setEmail('geurtsmarc@hotmail.com');
+        $user->setPassword(md5('marc'));
         $user->setFirstName('Marc');
         $user->setLastName('Geurts');
         $user->setStreet('Graafsedijk');
@@ -40,9 +39,8 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user = new User();
         $user->setUserType($this->getReference('user_type_admin'));
         $user->setAgent($this->getReference('agent_2'));
-        $user->setUsername('iain');
-        $user->setPassword(md5('iain'));
         $user->setEmail('iain@datacomputerservices.co.uk');
+        $user->setPassword(md5('iain'));
         $user->setFirstName('Iain');
         $user->setLastName('Anderson');
         $user->setStreet('Portobello High Street');
@@ -70,9 +68,8 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
                 $user = new User();
                 $user->setUserType($this->getReference('user_type_client'));
                 $user->setAgent($this->getReference('agent_1'));
-                $user->setUsername($fakeUser['login']['username']);
-                $user->setPassword($fakeUser['login']['md5']);
                 $user->setEmail($fakeUser['email']);
+                $user->setPassword($fakeUser['login']['md5']);
                 $user->setFirstName(ucfirst($fakeUser['name']['first']));
                 $user->setLastName(ucfirst($fakeUser['name']['last']));
                 $user->setStreet(ucwords($street));

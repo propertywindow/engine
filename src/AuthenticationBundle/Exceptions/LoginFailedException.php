@@ -12,15 +12,15 @@ class LoginFailedException extends Exception
     /**
      * @var string
      */
-    private $username;
+    private $email;
 
     /**
-     * @param string $username
+     * @param string $email
      */
-    public function __construct(string $username)
+    public function __construct(string $email)
     {
-        $this->username = $username;
+        $this->email = $email;
 
-        parent::__construct(sprintf("Could not login with username: %s", $username));
+        parent::__construct(sprintf("Could not login with email: %s", $email));
     }
 }
