@@ -5,3 +5,6 @@ services:
     traffic_service:
           class: LogBundle\Service\TrafficService
           arguments: ['@doctrine.orm.entity_manager']
+    login_service:
+          class: LogBundle\Service\LoginService
+          arguments: ['@doctrine.orm.entity_manager']

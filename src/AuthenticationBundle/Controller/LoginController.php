@@ -10,6 +10,7 @@ use AuthenticationBundle\Service\BlacklistService;
 use AuthenticationBundle\Service\UserService;
 use Exception;
 use InvalidArgumentException;
+use LogBundle\Service\LoginService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Security\Authenticator;
@@ -19,6 +20,7 @@ use AppBundle\Exceptions\CouldNotAuthenticateUserException;
 use AppBundle\Exceptions\JsonRpc\CouldNotParseJsonRequestException;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcRequestException;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 /**
@@ -60,30 +62,52 @@ class LoginController extends Controller
     private $agentService;
 
     /**
+     * @var LoginService
+     */
+    private $loginService;
+
+    /**
      * @param Authenticator    $authenticator
      * @param BlacklistService $blacklistService
      * @param UserService      $userService
      * @param AgentService     $agentService
+     * @param LoginService     $loginService
      */
     public function __construct(
         Authenticator $authenticator,
         BlacklistService $blacklistService,
         UserService $userService,
-        AgentService $agentService
+        AgentService $agentService,
+        LoginService $loginService
     ) {
         $this->authenticator    = $authenticator;
         $this->blacklistService = $blacklistService;
         $this->userService      = $userService;
         $this->agentService     = $agentService;
+        $this->loginService     = $loginService;
     }
 
     /**
      * @Route("/authentication/login" , name="login")
      *
+     * @param Request $request
+     *
      * @return HttpResponse
+     *
+     * @throws CouldNotAuthenticateUserException
      */
-    public function requestHandler()
+    public function requestHandler(Request $request)
     {
+        $ipAddress = $request->getClientIp();
+        $blacklist = $this->blacklistService->checkBlacklist($ipAddress);
+
+        if ($blacklist && $blacklist->getAmount() >= 5) {
+            throw new CouldNotAuthenticateUserException("You're IP address ($ipAddress) has been blocked");
+        }
+
+        // todo: move requestHandler to generic place/service and call from here, add all errors there too
+        // todo: give them all nice numbers tooooo
+
         $id = null;
         try {
             $jsonString = file_get_contents('php://input');
@@ -108,7 +132,7 @@ class LoginController extends Controller
                 $parameters = $jsonArray['params'];
             }
 
-            $jsonRpcResponse = Response::success($id, $this->invoke($method, $parameters));
+            $jsonRpcResponse = Response::success($id, $this->invoke($method, $ipAddress, $parameters));
         } catch (CouldNotParseJsonRequestException $ex) {
             $jsonRpcResponse = Response::failure($id, new Error(self::PARSE_ERROR, $ex->getMessage()));
         } catch (InvalidJsonRpcRequestException $ex) {
@@ -138,41 +162,35 @@ class LoginController extends Controller
 
     /**
      * @param string $method
+     * @param string $ipAddress
      * @param array  $parameters
      *
      * @return array
+     *
      * @throws InvalidJsonRpcMethodException
-     * @throws UserNotFoundException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      */
-    private function invoke(string $method, array $parameters = [])
+    private function invoke(string $method, string $ipAddress, array $parameters = [])
     {
         switch ($method) {
             case "login":
-                return $this->login($parameters);
-            case "firstLogin":
-                return $this->firstLogin($parameters);
+                return $this->login($parameters, $ipAddress);
             case "checkLogin":
                 return $this->checkLogin($parameters);
             case "impersonate":
                 return $this->impersonate($parameters);
-            case "timeOut":
-                return $this->timeOut($parameters);
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
     }
 
     /**
-     * @param array $parameters
+     * @param array  $parameters
+     * @param string $ipAddress
      *
      * @return array
-     *
      * @throws LoginFailedException
      */
-    private function login(array $parameters)
+    private function login(array $parameters, string $ipAddress)
     {
         if (!array_key_exists('username', $parameters)) {
             throw new InvalidArgumentException("No username argument provided");
@@ -181,20 +199,28 @@ class LoginController extends Controller
             throw new InvalidArgumentException("No password argument provided");
         }
 
-        // todo: check possibility for getting ip address from call
-
         $username = (string)$parameters['username'];
         $password = md5((string)$parameters['password']);
         $user     = $this->userService->login($username, $password);
 
         if ($user === null) {
-//            $this->blacklistService->createBlacklist('', '', '');
+            $attemptedAgent = null;
+            $attemptedUser  = $this->userService->getUserByUsername($username);
+
+            if ($attemptedUser) {
+                $attemptedAgent = $attemptedUser->getAgent();
+            }
+
+            $this->blacklistService->createBlacklist($ipAddress, $attemptedUser, $attemptedAgent);
 
             throw new LoginFailedException($username);
         }
 
-        // todo: this->userService->updateLastLogin    (no parameters, just now)
-        // todo: update Loginlog
+        $this->loginService->createLogin(
+            $user,
+            $user->getAgent(),
+            $ipAddress
+        );
 
         $timestamp      = time();
         $secret         = $user->getPassword();
@@ -226,7 +252,7 @@ class LoginController extends Controller
 
         $id = (int)$parameters['id'];
 
-        // todo: will check lastLogin for userId and return boolean. // maybe move to just service
+        // todo: will check lastLogin for userId and return boolean. // maybe move to just mapper
     }
 
     /**
@@ -244,7 +270,8 @@ class LoginController extends Controller
 
         $id = (int)$parameters['id'];
 
-        // todo: check for userId session and needs to update OnlineNow timestamp when successful, will return userId.
+        // todo: check for userId and needs to update OnlineNow timestamp when successful, will return userId.
+        // todo: maybe move outside loginController?
     }
 
     /**
@@ -263,23 +290,5 @@ class LoginController extends Controller
         $id = (int)$parameters['id'];
 
         // todo: check if allowed to impersonate
-    }
-
-    /**
-     * @param array $parameters
-     *
-     * @return array
-     *
-     * @throws NotAuthorizedException
-     */
-    private function timeOut(array $parameters)
-    {
-        if (!array_key_exists('id', $parameters)) {
-            throw new InvalidArgumentException("No argument provided");
-        }
-
-        $id = (int)$parameters['id'];
-
-        // todo: compare to last time
     }
 }

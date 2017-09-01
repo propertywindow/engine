@@ -25,4 +25,4 @@ services:
           arguments: ['@authenticator', '@blacklist_service', '@user_service', '@agent_service']
     login_controller:
           class: AuthenticationBundle\Controller\LoginController
-          arguments: ['@authenticator', '@blacklist_service', '@user_service', '@agent_service']
+          arguments: ['@authenticator', '@blacklist_service', '@user_service', '@agent_service', '@login_service']

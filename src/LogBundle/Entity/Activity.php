@@ -2,6 +2,7 @@
 
 namespace LogBundle\Entity;
 
+use AuthenticationBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -23,11 +24,10 @@ class Activity
     private $id;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="user_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="AuthenticationBundle\Entity\User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
-    private $userId;
+    protected $user;
 
     /**
      * @var int
@@ -83,27 +83,27 @@ class Activity
     }
 
     /**
-     * Set userId
+     * Set user
      *
-     * @param integer $userId
+     * @param \AuthenticationBundle\Entity\User $user
      *
      * @return Activity
      */
-    public function setUserId($userId)
+    public function setUser(User $user = null)
     {
-        $this->userId = $userId;
+        $this->user = $user;
 
         return $this;
     }
 
     /**
-     * Get userId
+     * Get user
      *
-     * @return int
+     * @return \AuthenticationBundle\Entity\User
      */
-    public function getUserId()
+    public function getUser()
     {
-        return $this->userId;
+        return $this->user;
     }
 
     /**
@@ -195,7 +195,7 @@ class Activity
     /**
      * Get oldValue
      *
-     * @return array
+     * @return string
      */
     public function getOldValue()
     {
@@ -219,7 +219,7 @@ class Activity
     /**
      * Get newValue
      *
-     * @return array
+     * @return string
      */
     public function getNewValue()
     {

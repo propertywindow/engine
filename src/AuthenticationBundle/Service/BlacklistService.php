@@ -51,23 +51,39 @@ class BlacklistService
     }
 
     /**
-     * @param string $ip
-     * @param User   $user
-     * @param Agent  $agent
+     * @param string $ipAddress
+     *
+     * @return Blacklist $service
+     */
+    public function checkBlacklist(string $ipAddress)
+    {
+        $repository = $this->entityManager->getRepository('AuthenticationBundle:Blacklist');
+        $blacklist  = $repository->findOneBy(['ip' => $ipAddress]);
+
+        return $blacklist;
+    }
+
+    /**
+     * @param string     $ipAddress
+     * @param null|User  $user
+     * @param null|Agent $agent
      *
      * @return Blacklist
      */
-    public function createBlacklist(string $ip, User $user, Agent $agent)
+    public function createBlacklist(string $ipAddress, ?User $user, ?Agent $agent)
     {
         $repository = $this->entityManager->getRepository('AuthenticationBundle:Blacklist');
-        $blacklist  = $repository->findOneBy(['ip' => $ip]);
+        $blacklist  = $repository->findOneBy(['ip' => $ipAddress]);
 
         if ($blacklist === null) {
             $blacklist = new Blacklist();
 
-            $blacklist->setUser($user);
-            $blacklist->setAgent($agent);
-            $blacklist->setIp($ip);
+            if ($user) {
+                $blacklist->setUser($user);
+                $blacklist->setAgent($agent);
+            }
+
+            $blacklist->setIp($ipAddress);
 
             $this->entityManager->persist($blacklist);
         } else {

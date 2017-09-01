@@ -3,6 +3,7 @@
 namespace AppBundle\Security;
 
 use AppBundle\Exceptions\CouldNotAuthenticateUserException;
+use AuthenticationBundle\Service\BlacklistService;
 use Symfony\Component\HttpFoundation\Request;
 use AuthenticationBundle\Service\UserService;
 
@@ -21,15 +22,22 @@ class Authenticator
     /**
      * @var UserService
      */
-    private $service;
+    private $userService;
 
     /**
-     * @param string      $environment
-     * @param UserService $service
+     * @var UserService
      */
-    public function __construct($environment, UserService $service)
+    private $blacklistService;
+
+    /**
+     * @param string           $environment
+     * @param UserService      $userService
+     * @param BlacklistService $blacklistService
+     */
+    public function __construct($environment, UserService $userService, BlacklistService $blacklistService)
     {
-        $this->service = $service;
+        $this->userService      = $userService;
+        $this->blacklistService = $blacklistService;
 
         if ($environment === "dev") {
             $this->strict = false;
@@ -47,6 +55,13 @@ class Authenticator
      */
     public function authenticate(Request $request): int
     {
+        $ipAddress = $request->getClientIp();
+        $blacklist = $this->blacklistService->checkBlacklist($ipAddress);
+
+        if ($blacklist && $blacklist->getAmount() >= 5) {
+            throw new CouldNotAuthenticateUserException("You're IP address ($ipAddress) has been blocked");
+        }
+
         $headers = $request->headers;
         if (!$headers->has('Authorization')) {
             throw new CouldNotAuthenticateUserException("No authorization header provided");
@@ -79,7 +94,7 @@ class Authenticator
             return $userId;
         }
 
-        $user = $this->service->getUser($userId);
+        $user = $this->userService->getUser($userId);
 
         if (empty($user)) {
             throw new CouldNotAuthenticateUserException("No user found");

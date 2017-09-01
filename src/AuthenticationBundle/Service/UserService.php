@@ -46,6 +46,19 @@ class UserService
 
     /**
      * @param string $username
+     *
+     * @return User $user
+     */
+    public function getUserByUsername(string $username)
+    {
+        $repository = $this->entityManager->getRepository('AuthenticationBundle:User');
+        $user       = $repository->findOneBy(['username' => $username]);
+
+        return $user;
+    }
+
+    /**
+     * @param string $username
      * @param string $password
      *
      * @return User $user
@@ -60,6 +73,11 @@ class UserService
                 'active'   => true,
             ]
         );
+
+        if ($user) {
+            $user->setLastLogin(new \DateTime());
+            $this->entityManager->flush();
+        }
 
         return $user;
     }

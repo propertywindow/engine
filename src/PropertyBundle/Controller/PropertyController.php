@@ -371,7 +371,7 @@ class PropertyController extends Controller
         $propertyId = (int)$property->getId();
 
         $this->activityService->createActivity(
-            $userId,
+            $user,
             $propertyId,
             'property',
             'create',
@@ -483,7 +483,7 @@ class PropertyController extends Controller
         $updatedProperty = $this->propertyService->updateProperty($property);
 
         $this->activityService->createActivity(
-            $userId,
+            $user,
             $id,
             'property',
             'update',
@@ -519,7 +519,7 @@ class PropertyController extends Controller
         $this->propertyService->archiveProperty($id);
 
         $this->activityService->createActivity(
-            $userId,
+            $user,
             $id,
             'property',
             'archive',
@@ -583,7 +583,7 @@ class PropertyController extends Controller
         $updatedProperty = $this->propertyService->setPropertySold($id, $soldPrice);
 
         $this->activityService->createActivity(
-            $userId,
+            $user,
             $id,
             'property',
             'update',
@@ -620,7 +620,7 @@ class PropertyController extends Controller
         $updatedProperty = $this->propertyService->toggleOnline($id, $online);
 
         $this->activityService->createActivity(
-            $userId,
+            $user,
             $id,
             'property',
             'update',

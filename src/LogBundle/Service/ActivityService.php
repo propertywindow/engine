@@ -2,6 +2,7 @@
 
 namespace LogBundle\Service;
 
+use AuthenticationBundle\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use LogBundle\Entity\Activity;
 use LogBundle\Exceptions\ActivityNotFoundException;
@@ -45,26 +46,26 @@ class ActivityService
     }
 
     /**
-     * @param int         $userId
+     * @param User        $user
      * @param int|null    $actionId
      * @param null|string $actionCategory
      * @param string      $actionName
-     * @param string|null $oldValue
-     * @param string      $newValue
+     * @param array|null $oldValue
+     * @param array      $newValue
      *
      * @return Activity
      */
     public function createActivity(
-        int $userId,
+        User $user,
         ?int $actionId,
         ?string $actionCategory,
         string $actionName,
-        ?string $oldValue,
-        string $newValue
+        ?array $oldValue,
+        array $newValue
     ) {
         $activity = new Activity();
 
-        $activity->setUserId($userId);
+        $activity->setUser($user);
         $activity->setActionId($actionId);
         $activity->setActionCategory($actionCategory);
         $activity->setActionName($actionName);
