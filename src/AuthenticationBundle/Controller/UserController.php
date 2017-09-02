@@ -4,6 +4,7 @@ namespace AuthenticationBundle\Controller;
 
 use AgentBundle\Service\AgentService;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
+use AuthenticationBundle\Exceptions\UserAlreadyExistException;
 use AuthenticationBundle\Exceptions\UserNotFoundException;
 use AuthenticationBundle\Service\User\Mapper;
 use AuthenticationBundle\Service\UserService;
@@ -221,6 +222,7 @@ class UserController extends Controller
      * @return array $user
      *
      * @throws NotAuthorizedException
+     * @throws UserAlreadyExistException
      */
     private function createUser(int $userId, array $parameters)
     {
@@ -232,9 +234,6 @@ class UserController extends Controller
 
         if (!array_key_exists('email', $parameters) && $parameters['email'] !== null) {
             throw new InvalidArgumentException("email parameter not provided");
-        }
-        if (!array_key_exists('password', $parameters) && $parameters['password'] !== null) {
-            throw new InvalidArgumentException("password parameter not provided");
         }
         if (!array_key_exists('first_name', $parameters) && $parameters['first_name'] !== null) {
             throw new InvalidArgumentException("first_name parameter not provided");
@@ -264,8 +263,12 @@ class UserController extends Controller
             throw new InvalidArgumentException("user_type_id parameter not provided");
         }
 
-        // todo: check if email already exist
+        if ($this->userService->getUserByEmail($parameters['email'])) {
+            throw new UserAlreadyExistException($parameters['email']);
+        }
+
         // todo: email validation
+        // todo: send invitation email
 
         $agent    = $this->agentService->getAgent($parameters['agent_id']);
         $userType = $this->userTypeService->getUserType($parameters['user_type_id']);

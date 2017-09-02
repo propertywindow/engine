@@ -64,7 +64,6 @@ class UserService
         $user = new User();
 
         $user->setEmail(strtolower($parameters['email']));
-        $user->setPassword(md5($parameters['password']));
         $user->setFirstName(ucfirst($parameters['first_name']));
         $user->setLastName(ucfirst($parameters['last_name']));
         $user->setStreet(ucwords($parameters['street']));
