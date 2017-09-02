@@ -106,7 +106,7 @@ class LoginController extends Controller
         }
 
         // todo: move requestHandler to generic place/service and call from here, add all errors there too
-        // todo: give them all nice numbers tooooo
+        // todo: give them all nice numbers to
 
         $id = null;
         try {

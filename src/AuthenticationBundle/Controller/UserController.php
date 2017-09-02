@@ -164,6 +164,8 @@ class UserController extends Controller
                 return $this->createUser($userId, $parameters);
             case "updateUser":
                 return $this->updateUser($userId, $parameters);
+            case "setPassword":
+                return $this->setPassword($userId, $parameters);
             case "disableUser":
                 return $this->disableUser($userId, $parameters);
             case "deleteUser":
@@ -285,8 +287,8 @@ class UserController extends Controller
             throw new InvalidArgumentException("Identifier not provided");
         }
 
-        $id         = (int)$parameters['id'];
-        $user       = $this->userService->getUser($userId);
+        $id   = (int)$parameters['id'];
+        $user = $this->userService->getUser($userId);
 
         $updateUser = $this->userService->getUser($id);
 
@@ -337,6 +339,34 @@ class UserController extends Controller
 
 
         return Mapper::fromUser($this->userService->updateUser($updateUser));
+    }
+
+    /**
+     * @param int   $userId
+     * @param array $parameters
+     *
+     * @throws NotAuthorizedException
+     */
+    private function setPassword(int $userId, array $parameters)
+    {
+        if (!array_key_exists('id', $parameters)) {
+            throw new InvalidArgumentException("No argument provided");
+        }
+        if (!array_key_exists('password', $parameters) && $parameters['password'] !== null) {
+            throw new InvalidArgumentException("password parameter not provided");
+        }
+
+        $id         = (int)$parameters['id'];
+        $user       = $this->userService->getUser($userId);
+        $updateUser = $this->userService->getUser($id);
+
+        if ($updateUser->getId() !== $user->getId()) {
+            throw new NotAuthorizedException($userId);
+        }
+
+        $updateUser->setPassword(md5((string)$parameters['password']));
+
+        $this->userService->updateUser($updateUser);
     }
 
     /**

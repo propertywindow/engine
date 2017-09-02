@@ -75,10 +75,7 @@ class UserService
 
         $user->setAgent($agent);
         $user->setUserType($userType);
-
-        if (array_key_exists('active', $parameters) && $parameters['active'] !== null) {
-            $user->setActive((bool)$parameters['active']);
-        }
+        $user->setActive(false);
 
         if (array_key_exists('phone', $parameters) && $parameters['phone'] !== null) {
             $user->setPhone((string)$parameters['phone']);
