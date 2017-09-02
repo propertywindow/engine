@@ -74,15 +74,15 @@ class UserController extends Controller
      * @param Authenticator   $authenticator
      * @param UserService     $userService
      * @param AgentService    $agentService
-     * @param MailService     $userTypeService
-     * @param UserTypeService $mailService
+     * @param UserTypeService $userTypeService
+     * @param MailService     $mailService
      */
     public function __construct(
         Authenticator $authenticator,
         UserService $userService,
         AgentService $agentService,
-        MailService $userTypeService,
-        UserTypeService $mailService
+        UserTypeService $userTypeService,
+        MailService $mailService
     ) {
         $this->authenticator   = $authenticator;
         $this->userService     = $userService;
