@@ -41,6 +41,8 @@ class UserController extends Controller
     private const         USER_COLLEAGUE         = 3;
     private const         USER_CLIENT            = 4;
     private const         USER_API               = 5;
+    private const         EMAIL_FROM_EMAIL       = 'no-reply@propertywindow.nl';
+    private const         EMAIL_FROM_NAME        = 'Property Window';
 
     /**
      * @var Authenticator
@@ -236,6 +238,9 @@ class UserController extends Controller
         if (!array_key_exists('email', $parameters) && $parameters['email'] !== null) {
             throw new InvalidArgumentException("email parameter not provided");
         }
+        if (!filter_var($parameters['email'], FILTER_VALIDATE_EMAIL)) {
+            throw new InvalidArgumentException("email parameter not valid");
+        }
         if (!array_key_exists('first_name', $parameters) && $parameters['first_name'] !== null) {
             throw new InvalidArgumentException("first_name parameter not provided");
         }
@@ -271,22 +276,31 @@ class UserController extends Controller
         $agent       = $this->agentService->getAgent($parameters['agent_id']);
         $userType    = $this->userTypeService->getUserType($parameters['user_type_id']);
         $createdUser = $this->userService->createUser($parameters, $agent, $userType);
+        $password    = $this->randomPassword();
+
+        // todo: generate random password, send with email, and update user
 
         $message = Swift_Message::newInstance()
                                 ->setSubject('Invitation to create an account')
-                                ->setFrom(['no-reply@propertywindow.nl' => 'Property Window'])
-                                ->setTo('geurtsmarc@hotmail.com')
+                                ->setFrom([self::EMAIL_FROM_EMAIL => self::EMAIL_FROM_NAME])
+                                ->setTo($createdUser->getEmail())
                                 ->setBody(
                                     $this->renderView(
                                         'AuthenticationBundle:Emails:Registration.html.twig',
-                                        ['name' => $parameters['first_name']]
+                                        [
+                                            'name'     => $parameters['first_name'],
+                                            'password' => $password,
+                                        ]
                                     ),
                                     'text/html'
                                 )
                                 ->addPart(
                                     $this->renderView(
                                         'AuthenticationBundle:Emails:Registration.txt.twig',
-                                        ['name' => $parameters['first_name']]
+                                        [
+                                            'name'     => $parameters['first_name'],
+                                            'password' => $password,
+                                        ]
                                     ),
                                     'text/plain'
                                 );
@@ -295,7 +309,8 @@ class UserController extends Controller
             // todo: add to mail log
         }
 
-        // todo: email validation
+        $createdUser->setPassword(md5($password));
+        $this->userService->updateUser($createdUser);
 
         return Mapper::fromUser($createdUser);
     }
@@ -439,5 +454,18 @@ class UserController extends Controller
         }
 
         $this->userService->deleteUser($id);
+    }
+
+    private function randomPassword()
+    {
+        $alphabet    = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789";
+        $pass        = []; //remember to declare $pass as an array
+        $alphaLength = strlen($alphabet) - 1; //put the length -1 in cache
+        for ($i = 0; $i < 8; $i++) {
+            $n      = rand(0, $alphaLength);
+            $pass[] = $alphabet[$n];
+        }
+
+        return implode($pass); //turn the array into a string
     }
 }
