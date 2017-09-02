@@ -11,6 +11,7 @@ use AuthenticationBundle\Service\UserService;
 use AuthenticationBundle\Service\UserTypeService;
 use Exception;
 use InvalidArgumentException;
+use Swift_Message;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Security\Authenticator;
@@ -267,13 +268,36 @@ class UserController extends Controller
             throw new UserAlreadyExistException($parameters['email']);
         }
 
+        $agent       = $this->agentService->getAgent($parameters['agent_id']);
+        $userType    = $this->userTypeService->getUserType($parameters['user_type_id']);
+        $createdUser = $this->userService->createUser($parameters, $agent, $userType);
+
+        $message = Swift_Message::newInstance()
+                                ->setSubject('Invitation to create an account')
+                                ->setFrom(['no-reply@propertywindow.nl' => 'Property Window'])
+                                ->setTo('geurtsmarc@hotmail.com')
+                                ->setBody(
+                                    $this->renderView(
+                                        'AuthenticationBundle:Emails:Registration.html.twig',
+                                        ['name' => $parameters['first_name']]
+                                    ),
+                                    'text/html'
+                                )
+                                ->addPart(
+                                    $this->renderView(
+                                        'AuthenticationBundle:Emails:Registration.txt.twig',
+                                        ['name' => $parameters['first_name']]
+                                    ),
+                                    'text/plain'
+                                );
+
+        if ($this->get('mailer')->send($message)) {
+            // todo: add to mail log
+        }
+
         // todo: email validation
-        // todo: send invitation email
 
-        $agent    = $this->agentService->getAgent($parameters['agent_id']);
-        $userType = $this->userTypeService->getUserType($parameters['user_type_id']);
-
-        return Mapper::fromUser($this->userService->createUser($parameters, $agent, $userType));
+        return Mapper::fromUser($createdUser);
     }
 
     /**
