@@ -51,13 +51,6 @@ class Mail
     private $subject;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="message", type="blob")
-     */
-    private $message;
-
-    /**
      * @var \DateTime $created
      *
      * @ORM\Column(type="datetime")
@@ -168,30 +161,6 @@ class Mail
     public function getSubject()
     {
         return $this->subject;
-    }
-
-    /**
-     * Set message
-     *
-     * @param string $message
-     *
-     * @return Mail
-     */
-    public function setMessage($message)
-    {
-        $this->message = $message;
-
-        return $this;
-    }
-
-    /**
-     * Get message
-     *
-     * @return string
-     */
-    public function getMessage()
-    {
-        return $this->message;
     }
 
     /**

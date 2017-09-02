@@ -28,4 +28,4 @@ services:
           arguments: ['@authenticator', '@blacklist_service', '@user_service', '@agent_service', '@login_service']
     user_controller:
           class: AuthenticationBundle\Controller\UserController
-          arguments: ['@authenticator', '@user_service', '@agent_service', '@user_type_service']
+          arguments: ['@authenticator', '@user_service', '@agent_service', '@user_type_service', '@mail_service']

@@ -222,6 +222,8 @@ class LoginController extends Controller
             $this->blacklistService->removeBlacklist($blacklist->getId());
         }
 
+        // todo: add check for firstLogin and allow active to be false?
+
         $this->loginService->createLogin(
             $user,
             $user->getAgent(),
@@ -277,6 +279,7 @@ class LoginController extends Controller
 
         $id = (int)$parameters['id'];
 
-        // todo: check if allowed to impersonate
+        // todo: check if allowed to impersonate, return new token but keep old user_id
+        // todo: login, but not update lastlogin
     }
 }

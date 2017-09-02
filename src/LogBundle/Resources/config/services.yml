@@ -8,3 +8,6 @@ services:
     login_service:
           class: LogBundle\Service\LoginService
           arguments: ['@doctrine.orm.entity_manager']
+    mail_service:
+          class: LogBundle\Service\LoginService
+          arguments: ['@doctrine.orm.entity_manager']

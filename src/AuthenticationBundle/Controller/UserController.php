@@ -11,6 +11,7 @@ use AuthenticationBundle\Service\UserService;
 use AuthenticationBundle\Service\UserTypeService;
 use Exception;
 use InvalidArgumentException;
+use LogBundle\Service\MailService;
 use Swift_Message;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -65,21 +66,29 @@ class UserController extends Controller
     private $userTypeService;
 
     /**
+     * @var MailService
+     */
+    private $mailService;
+
+    /**
      * @param Authenticator   $authenticator
      * @param UserService     $userService
      * @param AgentService    $agentService
-     * @param UserTypeService $userTypeService
+     * @param MailService     $userTypeService
+     * @param UserTypeService $mailService
      */
     public function __construct(
         Authenticator $authenticator,
         UserService $userService,
         AgentService $agentService,
-        UserTypeService $userTypeService
+        MailService $userTypeService,
+        UserTypeService $mailService
     ) {
         $this->authenticator   = $authenticator;
         $this->userService     = $userService;
         $this->agentService    = $agentService;
         $this->userTypeService = $userTypeService;
+        $this->mailService     = $mailService;
     }
 
     /**
@@ -193,13 +202,15 @@ class UserController extends Controller
             throw new InvalidArgumentException("No argument provided");
         }
 
-        // todo: check authorized
+        $id      = (int)$parameters['id'];
+        $user    = $this->userService->getUser($id);
+        $getUser = $this->userService->getUser($userId);
 
-        $id   = (int)$parameters['id'];
-        $user = $this->userService->getUser($id);
+        if ($getUser->getAgent()->getId() !== $user->getAgent()->getId()) {
+            throw new NotAuthorizedException($userId);
+        }
 
-
-        return Mapper::fromUser($user);
+        return Mapper::fromUser($getUser);
     }
 
     /**
@@ -210,8 +221,6 @@ class UserController extends Controller
      */
     private function getUsers(int $userId)
     {
-        // todo: check authorized
-
         $user  = $this->userService->getUser($userId);
         $users = $this->userService->getUsers($user->getAgent());
 
@@ -273,15 +282,13 @@ class UserController extends Controller
             throw new UserAlreadyExistException($parameters['email']);
         }
 
-        $agent       = $this->agentService->getAgent($parameters['agent_id']);
         $userType    = $this->userTypeService->getUserType($parameters['user_type_id']);
-        $createdUser = $this->userService->createUser($parameters, $agent, $userType);
+        $createdUser = $this->userService->createUser($parameters, $user->getAgent(), $userType);
         $password    = $this->randomPassword();
-
-        // todo: generate random password, send with email, and update user
+        $subject     = 'Invitation to create an account';
 
         $message = Swift_Message::newInstance()
-                                ->setSubject('Invitation to create an account')
+                                ->setSubject($subject)
                                 ->setFrom([self::EMAIL_FROM_EMAIL => self::EMAIL_FROM_NAME])
                                 ->setTo($createdUser->getEmail())
                                 ->setBody(
@@ -306,7 +313,7 @@ class UserController extends Controller
                                 );
 
         if ($this->get('mailer')->send($message)) {
-            // todo: add to mail log
+            $this->mailService->createMail($user, $user->getAgent(), $createdUser->getEmail(), $subject);
         }
 
         $createdUser->setPassword(md5($password));
@@ -334,7 +341,6 @@ class UserController extends Controller
 
         $updateUser = $this->userService->getUser($id);
 
-        // todo: admin is allowed always
         if ($updateUser->getAgent()->getId() !== $user->getAgent()->getId()) {
             throw new NotAuthorizedException($userId);
         }
@@ -456,16 +462,19 @@ class UserController extends Controller
         $this->userService->deleteUser($id);
     }
 
+    /**
+     * @return string
+     */
     private function randomPassword()
     {
         $alphabet    = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789";
-        $pass        = []; //remember to declare $pass as an array
-        $alphaLength = strlen($alphabet) - 1; //put the length -1 in cache
-        for ($i = 0; $i < 8; $i++) {
+        $pass        = [];
+        $alphaLength = strlen($alphabet) - 1;
+        for ($i = 0; $i < 10; $i++) {
             $n      = rand(0, $alphaLength);
             $pass[] = $alphabet[$n];
         }
 
-        return implode($pass); //turn the array into a string
+        return implode($pass);
     }
 }
