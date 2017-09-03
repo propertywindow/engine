@@ -2,17 +2,13 @@
 
 namespace AuthenticationBundle\Controller;
 
-use AgentBundle\Service\AgentService;
+use AppBundle\Controller\BaseController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use AuthenticationBundle\Exceptions\BlacklistNotFoundException;
 use AuthenticationBundle\Service\Blacklist\Mapper;
-use AuthenticationBundle\Service\BlacklistService;
-use AuthenticationBundle\Service\UserService;
 use Exception;
 use InvalidArgumentException;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use AppBundle\Security\Authenticator;
 use AppBundle\Models\JsonRpc\Error;
 use AppBundle\Models\JsonRpc\Response;
 use AppBundle\Exceptions\CouldNotAuthenticateUserException;
@@ -25,59 +21,8 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 /**
  * @Route(service="blacklist_controller")
  */
-class BlacklistController extends Controller
+class BlacklistController extends BaseController
 {
-    private const         PARSE_ERROR            = -32700;
-    private const         INVALID_REQUEST        = -32600;
-    private const         METHOD_NOT_FOUND       = -32601;
-    private const         INVALID_PARAMS         = -32602;
-    private const         INTERNAL_ERROR         = -32603;
-    private const         USER_NOT_AUTHENTICATED = -32000;
-    private const         BLACKLIST_NOT_FOUND    = -32001;
-    private const         USER_ADMIN             = 1;
-    private const         USER_AGENT             = 2;
-    private const         USER_COLLEAGUE         = 3;
-    private const         USER_CLIENT            = 4;
-    private const         USER_API               = 5;
-
-    /**
-     * @var Authenticator
-     */
-    private $authenticator;
-
-    /**
-     * @var BlacklistService
-     */
-    private $blacklistService;
-
-    /**
-     * @var UserService
-     */
-    private $userService;
-
-    /**
-     * @var AgentService
-     */
-    private $agentService;
-
-    /**
-     * @param Authenticator    $authenticator
-     * @param BlacklistService $blacklistService
-     * @param UserService      $userService
-     * @param AgentService     $agentService
-     */
-    public function __construct(
-        Authenticator $authenticator,
-        BlacklistService $blacklistService,
-        UserService $userService,
-        AgentService $agentService
-    ) {
-        $this->authenticator    = $authenticator;
-        $this->blacklistService = $blacklistService;
-        $this->userService      = $userService;
-        $this->agentService     = $agentService;
-    }
-
     /**
      * @Route("/authentication/blacklist" , name="blacklist")
      *

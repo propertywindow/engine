@@ -2,14 +2,10 @@
 
 namespace PropertyBundle\Controller;
 
-use AgentBundle\Service\ClientService;
+use AppBundle\Controller\BaseController;
 use Exception;
 use InvalidArgumentException;
-use PropertyBundle\Service\KindService;
-use PropertyBundle\Service\TermsService;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use AppBundle\Security\Authenticator;
 use AppBundle\Models\JsonRpc\Error;
 use AppBundle\Models\JsonRpc\Response;
 use AppBundle\Exceptions\CouldNotAuthenticateUserException;
@@ -17,13 +13,8 @@ use AppBundle\Exceptions\JsonRpc\CouldNotParseJsonRequestException;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcRequestException;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
-use AuthenticationBundle\Service\UserService;
-use AgentBundle\Service\AgentService;
-use LogBundle\Service\ActivityService;
-use LogBundle\Service\TrafficService;
 use PropertyBundle\Exceptions\PropertyNotFoundException;
 use PropertyBundle\Exceptions\PropertyAlreadyExistsException;
-use PropertyBundle\Service\PropertyService;
 use PropertyBundle\Service\Property\Mapper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
@@ -31,99 +22,8 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 /**
  * @Route(service="property_controller")
  */
-class PropertyController extends Controller
+class PropertyController extends BaseController
 {
-    private const         PARSE_ERROR            = -32700;
-    private const         INVALID_REQUEST        = -32600;
-    private const         METHOD_NOT_FOUND       = -32601;
-    private const         INVALID_PARAMS         = -32602;
-    private const         INTERNAL_ERROR         = -32603;
-    private const         USER_NOT_AUTHENTICATED = -32000;
-    private const         PROPERTY_NOT_FOUND     = -32001;
-    private const         USER_ADMIN             = 1;
-    private const         USER_AGENT             = 2;
-    private const         USER_COLLEAGUE         = 3;
-    private const         USER_CLIENT            = 4;
-    private const         USER_API               = 5;
-
-    /**
-     * @var Authenticator
-     */
-    private $authenticator;
-
-    /**
-     * @var PropertyService
-     */
-    private $propertyService;
-
-    /**
-     * @var UserService
-     */
-    private $userService;
-
-    /**
-     * @var ClientService
-     */
-    private $clientService;
-
-    /**
-     * @var AgentService
-     */
-    private $agentService;
-
-    /**
-     * @var ActivityService
-     */
-    private $activityService;
-
-    /**
-     * @var TrafficService
-     */
-    private $trafficService;
-
-    /**
-     * @var KindService
-     */
-    private $kindService;
-
-    /**
-     * @var TermsService
-     */
-    private $termsService;
-
-    /**
-     * @param Authenticator   $authenticator
-     * @param PropertyService $propertyService
-     * @param UserService     $userService
-     * @param ClientService   $clientService
-     * @param AgentService    $agentService
-     * @param ActivityService $activityService
-     * @param TrafficService  $trafficService
-     * @param KindService     $kindService
-     * @param TermsService    $termsService
-     */
-    public function __construct(
-        Authenticator $authenticator,
-        PropertyService $propertyService,
-        UserService $userService,
-        ClientService $clientService,
-        AgentService $agentService,
-        ActivityService $activityService,
-        TrafficService $trafficService,
-        KindService $kindService,
-        TermsService $termsService
-    ) {
-        $this->authenticator   = $authenticator;
-        $this->propertyService = $propertyService;
-        $this->userService     = $userService;
-        $this->clientService   = $clientService;
-        $this->agentService    = $agentService;
-        $this->activityService = $activityService;
-        $this->trafficService  = $trafficService;
-        $this->kindService     = $kindService;
-        $this->termsService    = $termsService;
-    }
-
     /**
      * @Route("/property" , name="property")
      *

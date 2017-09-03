@@ -16,10 +16,10 @@ services:
           arguments: ["@doctrine.orm.entity_manager"]
     property_controller:
           class: PropertyBundle\Controller\PropertyController
-          arguments: ['@authenticator', '@property_service', '@user_service', '@client_service', '@agent_service', '@activity_service','@traffic_service', '@kind_service', '@terms_service']
+          autowire: true
     type_controller:
           class: PropertyBundle\Controller\TypeController
-          arguments: ['@authenticator', '@type_service', '@user_service']
+          autowire: true
     sub_type_controller:
           class: PropertyBundle\Controller\SubTypeController
-          arguments: ['@authenticator', '@type_service', '@sub_type_service', '@user_service']
+          autowire: true

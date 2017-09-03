@@ -105,10 +105,6 @@ class LoginController extends Controller
             throw new CouldNotAuthenticateUserException("You're IP address ($ipAddress) has been blocked");
         }
 
-        // todo: move requestHandler to generic place/service and call from here, add all errors there too
-        // todo: give them all nice numbers to
-        // todo: create baseController and extend controllers for all
-
         $id = null;
         try {
             $jsonString = file_get_contents('php://input');

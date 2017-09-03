@@ -2,13 +2,14 @@
 
 namespace AgentBundle\Controller;
 
+use AppBundle\Controller\BaseController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
-use AuthenticationBundle\Service\UserService;
+use AuthenticationBundle\Exceptions\UserAlreadyExistException;
+use AuthenticationBundle\Exceptions\UserNotFoundException;
 use Exception;
 use InvalidArgumentException;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Swift_Message;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use AppBundle\Security\Authenticator;
 use AppBundle\Models\JsonRpc\Error;
 use AppBundle\Models\JsonRpc\Response;
 use AppBundle\Exceptions\CouldNotAuthenticateUserException;
@@ -16,7 +17,6 @@ use AppBundle\Exceptions\JsonRpc\CouldNotParseJsonRequestException;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcRequestException;
 use AgentBundle\Exceptions\AgentNotFoundException;
-use AgentBundle\Service\AgentService;
 use AgentBundle\Service\Agent\Mapper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
@@ -24,48 +24,8 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 /**
  * @Route(service="agent_controller")
  */
-class AgentController extends Controller
+class AgentController extends BaseController
 {
-    private const         PARSE_ERROR            = -32700;
-    private const         INVALID_REQUEST        = -32600;
-    private const         METHOD_NOT_FOUND       = -32601;
-    private const         INVALID_PARAMS         = -32602;
-    private const         INTERNAL_ERROR         = -32603;
-    private const         USER_NOT_AUTHENTICATED = -32000;
-    private const         AGENT_NOT_FOUND        = -32001;
-    private const         USER_ADMIN             = 1;
-    private const         USER_AGENT             = 2;
-    private const         USER_COLLEAGUE         = 3;
-    private const         USER_CLIENT            = 4;
-    private const         USER_API               = 5;
-
-    /**
-     * @var Authenticator
-     */
-    private $authenticator;
-
-    /**
-     * @var AgentService
-     */
-    private $agentService;
-
-    /**
-     * @var UserService
-     */
-    private $userService;
-
-    /**
-     * @param Authenticator $authenticator
-     * @param AgentService  $agentService
-     * @param UserService   $userService
-     */
-    public function __construct(Authenticator $authenticator, AgentService $agentService, UserService $userService)
-    {
-        $this->authenticator = $authenticator;
-        $this->agentService  = $agentService;
-        $this->userService   = $userService;
-    }
-
     /**
      * @Route("/agent" , name="agent")
      *
@@ -136,7 +96,7 @@ class AgentController extends Controller
      *
      * @return array
      * @throws InvalidJsonRpcMethodException
-     * @throws AgentNotFoundException
+     * @throws UserNotFoundException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
@@ -148,8 +108,10 @@ class AgentController extends Controller
                 return $this->getAgent($parameters);
             case "getAgents":
                 return $this->getAgents($userId);
+            case "createAgent":
+                return $this->createAgent($userId, $parameters);
             case "deleteAgent":
-                return $this->deleteAgent($parameters, $userId);
+                return $this->deleteAgent($userId, $parameters);
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
@@ -190,12 +152,109 @@ class AgentController extends Controller
     }
 
     /**
-     * @param array $parameters
      * @param int   $userId
+     * @param array $parameters
+     *
+     * @return array $user
+     *
+     * @throws NotAuthorizedException
+     * @throws UserAlreadyExistException
+     */
+    private function createAgent(int $userId, array $parameters)
+    {
+        // todo: create agent, and then user
+
+        $user = $this->userService->getUser($userId);
+
+        if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
+            throw new NotAuthorizedException($userId);
+        }
+
+        if (!array_key_exists('email', $parameters) && $parameters['email'] !== null) {
+            throw new InvalidArgumentException("email parameter not provided");
+        }
+        if (!filter_var($parameters['email'], FILTER_VALIDATE_EMAIL)) {
+            throw new InvalidArgumentException("email parameter not valid");
+        }
+        if (!array_key_exists('first_name', $parameters) && $parameters['first_name'] !== null) {
+            throw new InvalidArgumentException("first_name parameter not provided");
+        }
+        if (!array_key_exists('last_name', $parameters) && $parameters['last_name'] !== null) {
+            throw new InvalidArgumentException("last_name parameter not provided");
+        }
+        if (!array_key_exists('street', $parameters) && $parameters['street'] !== null) {
+            throw new InvalidArgumentException("street parameter not provided");
+        }
+        if (!array_key_exists('house_number', $parameters) && $parameters['house_number'] !== null) {
+            throw new InvalidArgumentException("house_number parameter not provided");
+        }
+        if (!array_key_exists('postcode', $parameters) && $parameters['postcode'] !== null) {
+            throw new InvalidArgumentException("postcode parameter not provided");
+        }
+        if (!array_key_exists('city', $parameters) && $parameters['city'] !== null) {
+            throw new InvalidArgumentException("city parameter not provided");
+        }
+        if (!array_key_exists('country', $parameters) && $parameters['country'] !== null) {
+            throw new InvalidArgumentException("country parameter not provided");
+        }
+        if (!array_key_exists('agent_id', $parameters) && $parameters['agent_id'] !== null) {
+            throw new InvalidArgumentException("agent_id parameter not provided");
+        }
+        if (!array_key_exists('user_type_id', $parameters) && $parameters['user_type_id'] !== null) {
+            throw new InvalidArgumentException("user_type_id parameter not provided");
+        }
+
+        if ($this->userService->getUserByEmail($parameters['email'])) {
+            throw new UserAlreadyExistException($parameters['email']);
+        }
+
+        $userType    = $this->userTypeService->getUserType($parameters['user_type_id']);
+        $createdUser = $this->userService->createUser($parameters, $user->getAgent(), $userType);
+        $password    = $this->randomPassword();
+        $subject     = 'Invitation to create an account';
+
+        $message = Swift_Message::newInstance()
+                                ->setSubject($subject)
+                                ->setFrom([self::EMAIL_FROM_EMAIL => self::EMAIL_FROM_NAME])
+                                ->setTo($createdUser->getEmail())
+                                ->setBody(
+                                    $this->renderView(
+                                        'AuthenticationBundle:Emails:Registration.html.twig',
+                                        [
+                                            'name'     => $parameters['first_name'],
+                                            'password' => $password,
+                                        ]
+                                    ),
+                                    'text/html'
+                                )
+                                ->addPart(
+                                    $this->renderView(
+                                        'AuthenticationBundle:Emails:Registration.txt.twig',
+                                        [
+                                            'name'     => $parameters['first_name'],
+                                            'password' => $password,
+                                        ]
+                                    ),
+                                    'text/plain'
+                                );
+
+        if ($this->get('mailer')->send($message)) {
+            $this->mailService->createMail($user, $user->getAgent(), $createdUser->getEmail(), $subject);
+        }
+
+        $createdUser->setPassword(md5($password));
+        $this->userService->updateUser($createdUser);
+
+        return Mapper::fromAgent($createdUser);
+    }
+
+    /**
+     * @param int   $userId
+     * @param array $parameters
      *
      * @throws NotAuthorizedException
      */
-    private function deleteAgent(array $parameters, int $userId)
+    private function deleteAgent(int $userId, array $parameters)
     {
         if (!array_key_exists('id', $parameters)) {
             throw new InvalidArgumentException("No argument provided");

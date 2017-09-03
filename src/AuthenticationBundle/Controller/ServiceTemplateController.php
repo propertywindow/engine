@@ -2,18 +2,13 @@
 
 namespace AuthenticationBundle\Controller;
 
+use AppBundle\Controller\BaseController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use AuthenticationBundle\Exceptions\TemplateNotFoundException;
-use AuthenticationBundle\Service\ServiceService;
 use AuthenticationBundle\Service\ServiceTemplate\Mapper;
-use AuthenticationBundle\Service\ServiceTemplateService;
-use AuthenticationBundle\Service\UserService;
-use AuthenticationBundle\Service\UserTypeService;
 use Exception;
 use InvalidArgumentException;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use AppBundle\Security\Authenticator;
 use AppBundle\Models\JsonRpc\Error;
 use AppBundle\Models\JsonRpc\Response;
 use AppBundle\Exceptions\CouldNotAuthenticateUserException;
@@ -26,67 +21,8 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 /**
  * @Route(service="service_template_controller")
  */
-class ServiceTemplateController extends Controller
+class ServiceTemplateController extends BaseController
 {
-    private const         PARSE_ERROR            = -32700;
-    private const         INVALID_REQUEST        = -32600;
-    private const         METHOD_NOT_FOUND       = -32601;
-    private const         INVALID_PARAMS         = -32602;
-    private const         INTERNAL_ERROR         = -32603;
-    private const         USER_NOT_AUTHENTICATED = -32000;
-    private const         TEMPLATE_NOT_FOUND     = -32001;
-    private const         USER_ADMIN             = 1;
-    private const         USER_AGENT             = 2;
-    private const         USER_COLLEAGUE         = 3;
-    private const         USER_CLIENT            = 4;
-    private const         USER_API               = 5;
-
-    /**
-     * @var Authenticator
-     */
-    private $authenticator;
-
-    /**
-     * @var ServiceService
-     */
-    private $serviceService;
-
-    /**
-     * @var ServiceTemplateService
-     */
-    private $serviceTemplateService;
-
-    /**
-     * @var UserService
-     */
-    private $userService;
-
-    /**
-     * @var UserTypeService
-     */
-    private $userTypeService;
-
-    /**
-     * @param Authenticator          $authenticator
-     * @param ServiceService         $serviceService
-     * @param ServiceTemplateService $serviceTemplateService
-     * @param UserService            $userService
-     * @param UserTypeService        $userTypeService
-     */
-    public function __construct(
-        Authenticator $authenticator,
-        ServiceService $serviceService,
-        ServiceTemplateService $serviceTemplateService,
-        UserService $userService,
-        UserTypeService $userTypeService
-    ) {
-        $this->authenticator          = $authenticator;
-        $this->serviceService         = $serviceService;
-        $this->serviceTemplateService = $serviceTemplateService;
-        $this->userService            = $userService;
-        $this->userTypeService        = $userTypeService;
-    }
-
     /**
      * @Route("/services/template" , name="service_template")
      *

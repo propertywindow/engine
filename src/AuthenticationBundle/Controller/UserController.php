@@ -2,20 +2,15 @@
 
 namespace AuthenticationBundle\Controller;
 
-use AgentBundle\Service\AgentService;
+use AppBundle\Controller\BaseController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use AuthenticationBundle\Exceptions\UserAlreadyExistException;
 use AuthenticationBundle\Exceptions\UserNotFoundException;
 use AuthenticationBundle\Service\User\Mapper;
-use AuthenticationBundle\Service\UserService;
-use AuthenticationBundle\Service\UserTypeService;
 use Exception;
 use InvalidArgumentException;
-use LogBundle\Service\MailService;
 use Swift_Message;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use AppBundle\Security\Authenticator;
 use AppBundle\Models\JsonRpc\Error;
 use AppBundle\Models\JsonRpc\Response;
 use AppBundle\Exceptions\CouldNotAuthenticateUserException;
@@ -28,69 +23,8 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 /**
  * @Route(service="user_controller")
  */
-class UserController extends Controller
+class UserController extends BaseController
 {
-    private const         PARSE_ERROR            = -32700;
-    private const         INVALID_REQUEST        = -32600;
-    private const         METHOD_NOT_FOUND       = -32601;
-    private const         INVALID_PARAMS         = -32602;
-    private const         INTERNAL_ERROR         = -32603;
-    private const         USER_NOT_AUTHENTICATED = -32000;
-    private const         USER_NOT_FOUND         = -32001;
-    private const         USER_ADMIN             = 1;
-    private const         USER_AGENT             = 2;
-    private const         USER_COLLEAGUE         = 3;
-    private const         USER_CLIENT            = 4;
-    private const         USER_API               = 5;
-    private const         EMAIL_FROM_EMAIL       = 'no-reply@propertywindow.nl';
-    private const         EMAIL_FROM_NAME        = 'Property Window';
-
-    /**
-     * @var Authenticator
-     */
-    private $authenticator;
-
-    /**
-     * @var UserService
-     */
-    private $userService;
-
-    /**
-     * @var AgentService
-     */
-    private $agentService;
-
-    /**
-     * @var UserTypeService
-     */
-    private $userTypeService;
-
-    /**
-     * @var MailService
-     */
-    private $mailService;
-
-    /**
-     * @param Authenticator   $authenticator
-     * @param UserService     $userService
-     * @param AgentService    $agentService
-     * @param UserTypeService $userTypeService
-     * @param MailService     $mailService
-     */
-    public function __construct(
-        Authenticator $authenticator,
-        UserService $userService,
-        AgentService $agentService,
-        UserTypeService $userTypeService,
-        MailService $mailService
-    ) {
-        $this->authenticator   = $authenticator;
-        $this->userService     = $userService;
-        $this->agentService    = $agentService;
-        $this->userTypeService = $userTypeService;
-        $this->mailService     = $mailService;
-    }
-
     /**
      * @Route("/authentication/user" , name="user")
      *
@@ -461,21 +395,5 @@ class UserController extends Controller
         }
 
         $this->userService->deleteUser($id);
-    }
-
-    /**
-     * @return string
-     */
-    private function randomPassword()
-    {
-        $alphabet    = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789";
-        $pass        = [];
-        $alphaLength = strlen($alphabet) - 1;
-        for ($i = 0; $i < 10; $i++) {
-            $n      = rand(0, $alphaLength);
-            $pass[] = $alphabet[$n];
-        }
-
-        return implode($pass);
     }
 }

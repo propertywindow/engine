@@ -2,13 +2,11 @@
 
 namespace PropertyBundle\Controller;
 
+use AppBundle\Controller\BaseController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
-use AuthenticationBundle\Service\UserService;
 use Exception;
 use InvalidArgumentException;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use AppBundle\Security\Authenticator;
 use AppBundle\Models\JsonRpc\Error;
 use AppBundle\Models\JsonRpc\Response;
 use AppBundle\Exceptions\CouldNotAuthenticateUserException;
@@ -16,7 +14,6 @@ use AppBundle\Exceptions\JsonRpc\CouldNotParseJsonRequestException;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcRequestException;
 use PropertyBundle\Exceptions\TypeNotFoundException;
-use PropertyBundle\Service\TypeService;
 use PropertyBundle\Service\Type\Mapper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
@@ -24,48 +21,8 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 /**
  * @Route(service="type_controller")
  */
-class TypeController extends Controller
+class TypeController extends BaseController
 {
-    private const         PARSE_ERROR            = -32700;
-    private const         INVALID_REQUEST        = -32600;
-    private const         METHOD_NOT_FOUND       = -32601;
-    private const         INVALID_PARAMS         = -32602;
-    private const         INTERNAL_ERROR         = -32603;
-    private const         USER_NOT_AUTHENTICATED = -32000;
-    private const         TYPE_NOT_FOUND         = -32001;
-    private const         USER_ADMIN             = 1;
-    private const         USER_AGENT             = 2;
-    private const         USER_COLLEAGUE         = 3;
-    private const         USER_CLIENT            = 4;
-    private const         USER_API               = 5;
-
-    /**
-     * @var Authenticator
-     */
-    private $authenticator;
-
-    /**
-     * @var TypeService
-     */
-    private $typeService;
-
-    /**
-     * @var UserService
-     */
-    private $userService;
-
-    /**
-     * @param Authenticator $authenticator
-     * @param TypeService   $typeService
-     * @param UserService   $userService
-     */
-    public function __construct(Authenticator $authenticator, TypeService $typeService, UserService $userService)
-    {
-        $this->authenticator = $authenticator;
-        $this->typeService   = $typeService;
-        $this->userService   = $userService;
-    }
-
     /**
      * @Route("/property/type" , name="type")
      *

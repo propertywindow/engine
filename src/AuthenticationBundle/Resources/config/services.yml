@@ -16,16 +16,16 @@ services:
           arguments: ["@doctrine.orm.entity_manager"]
     service_controller:
           class: AuthenticationBundle\Controller\ServiceController
-          arguments: ['@authenticator', '@service_service', '@user_service']
+          autowire: true
     service_template_controller:
           class: AuthenticationBundle\Controller\ServiceTemplateController
-          arguments: ['@authenticator', '@service_service', '@service_template_service', '@user_service', '@user_type_service']
+          autowire: true
     blacklist_controller:
           class: AuthenticationBundle\Controller\BlacklistController
-          arguments: ['@authenticator', '@blacklist_service', '@user_service', '@agent_service']
+          autowire: true
     login_controller:
           class: AuthenticationBundle\Controller\LoginController
           arguments: ['@authenticator', '@blacklist_service', '@user_service', '@agent_service', '@login_service']
     user_controller:
           class: AuthenticationBundle\Controller\UserController
-          arguments: ['@authenticator', '@user_service', '@agent_service', '@user_type_service', '@mail_service']
+          autowire: true
