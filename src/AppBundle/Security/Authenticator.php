@@ -90,25 +90,29 @@ class Authenticator
         $timestamp = $decoded['timestamp'];
         $signature = $decoded['signature'];
 
-        if (!$this->strict) {
-            return $userId;
-        }
-
         $user = $this->userService->getUser($userId);
 
         if (empty($user)) {
             throw new CouldNotAuthenticateUserException("No user found");
         }
 
+        if (!$user->getActive()) {
+            throw new CouldNotAuthenticateUserException("User is not activated");
+        }
+
         $secret = $user->getPassword();
 
-        if (md5($password) !== $secret) {
+        if ($password !== $secret) {
             throw new CouldNotAuthenticateUserException("Password incorrect");
         }
 
 
         if (hash_hmac('sha1', $timestamp."-".$userId, $secret) !== $signature) {
             throw new CouldNotAuthenticateUserException("User not recognized");
+        }
+
+        if (!$this->strict) {
+            return $userId;
         }
 
         $now                = time();

@@ -413,6 +413,7 @@ class UserController extends Controller
         }
 
         $updateUser->setPassword(md5((string)$parameters['password']));
+        $updateUser->setActive(true);
 
         $this->userService->updateUser($updateUser);
     }
