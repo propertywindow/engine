@@ -11,8 +11,10 @@ use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcRequestException;
 use AppBundle\Security\Authenticator;
 use AuthenticationBundle\Service\BlacklistService;
 use AuthenticationBundle\Service\ServiceService;
+use AuthenticationBundle\Service\ServiceServiceGroup;
 use AuthenticationBundle\Service\ServiceTemplateService;
 use AuthenticationBundle\Service\UserService;
+use AuthenticationBundle\Service\UserSettingsService;
 use AuthenticationBundle\Service\UserTypeService;
 use LogBundle\Service\ActivityService;
 use LogBundle\Service\LoginService;
@@ -71,6 +73,11 @@ class BaseController extends Controller
     public $userService;
 
     /**
+     * @var UserSettingsService
+     */
+    public $userSettingsService;
+
+    /**
      * @var BlacklistService
      */
     public $blacklistService;
@@ -84,6 +91,11 @@ class BaseController extends Controller
      * @var ServiceService
      */
     public $serviceService;
+
+    /**
+     * @var ServiceServiceGroup
+     */
+    public $serviceServiceGroup;
 
     /**
      * @var ServiceTemplateService
@@ -144,9 +156,11 @@ class BaseController extends Controller
      * @param Authenticator          $authenticator
      * @param AgentService           $agentService
      * @param UserService            $userService
+     * @param UserSettingsService    $userSettingsService
      * @param BlacklistService       $blacklistService
      * @param UserTypeService        $userTypeService
      * @param ServiceService         $serviceService
+     * @param ServiceServiceGroup    $serviceServiceGroup
      * @param ServiceTemplateService $serviceTemplateService
      * @param MailService            $mailService
      * @param PropertyService        $propertyService
@@ -163,9 +177,11 @@ class BaseController extends Controller
         Authenticator $authenticator,
         AgentService $agentService,
         UserService $userService,
+        UserSettingsService $userSettingsService,
         BlacklistService $blacklistService,
         UserTypeService $userTypeService,
         ServiceService $serviceService,
+        ServiceServiceGroup $serviceServiceGroup,
         ServiceTemplateService $serviceTemplateService,
         MailService $mailService,
         PropertyService $propertyService,
@@ -181,9 +197,11 @@ class BaseController extends Controller
         $this->authenticator          = $authenticator;
         $this->agentService           = $agentService;
         $this->userService            = $userService;
+        $this->userSettingsService    = $userSettingsService;
         $this->blacklistService       = $blacklistService;
         $this->userTypeService        = $userTypeService;
         $this->serviceService         = $serviceService;
+        $this->serviceServiceGroup    = $serviceServiceGroup;
         $this->serviceTemplateService = $serviceTemplateService;
         $this->mailService            = $mailService;
         $this->propertyService        = $propertyService;

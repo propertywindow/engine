@@ -188,6 +188,8 @@ class AgentController extends BaseController
         $agent      = $this->agentService->createAgent($parameters, $agentGroup);
         $userType   = $this->userTypeService->getUserType(2);
 
+        // todo: add folder for agent in data folder
+
         $createdUser = $this->userService->createUser($parameters, $agent, $userType);
 
         $password    = $this->randomPassword();
@@ -249,7 +251,7 @@ class AgentController extends BaseController
 
         $id = (int)$parameters['id'];
 
-        // todo: check for users and properties before deleting
+        // todo: check for users and properties before deleting, just warning
 
         $this->agentService->deleteAgent($id);
     }

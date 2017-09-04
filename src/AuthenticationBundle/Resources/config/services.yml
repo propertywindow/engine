@@ -2,6 +2,9 @@ services:
     user_service:
           class: AuthenticationBundle\Service\UserService
           arguments: ["@doctrine.orm.entity_manager"]
+    user_settings_service:
+          class: AuthenticationBundle\Service\UserSettingsService
+          arguments: ["@doctrine.orm.entity_manager"]
     user_type_service:
           class: AuthenticationBundle\Service\UserTypeService
           arguments: ["@doctrine.orm.entity_manager"]
@@ -11,11 +14,17 @@ services:
     service_service:
           class: AuthenticationBundle\Service\ServiceService
           arguments: ["@doctrine.orm.entity_manager"]
+    service_service_group:
+              class: AuthenticationBundle\Service\ServiceServiceGroup
+              arguments: ["@doctrine.orm.entity_manager"]
     service_template_service:
           class: AuthenticationBundle\Service\ServiceTemplateService
           arguments: ["@doctrine.orm.entity_manager"]
     service_controller:
           class: AuthenticationBundle\Controller\ServiceController
+          autowire: true
+    service_group_controller:
+          class: AuthenticationBundle\Controller\ServiceGroupController
           autowire: true
     service_template_controller:
           class: AuthenticationBundle\Controller\ServiceTemplateController

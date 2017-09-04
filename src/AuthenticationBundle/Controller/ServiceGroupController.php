@@ -5,7 +5,7 @@ namespace AuthenticationBundle\Controller;
 use AppBundle\Controller\BaseController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use AuthenticationBundle\Exceptions\ServiceNotFoundException;
-use AuthenticationBundle\Service\Service\Mapper;
+use AuthenticationBundle\Service\ServiceGroup\Mapper;
 use Exception;
 use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -19,12 +19,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 /**
- * @Route(service="service_controller")
+ * @Route(service="service_group_controller")
  */
-class ServiceController extends BaseController
+class ServiceGroupController extends BaseController
 {
     /**
-     * @Route("/services/service" , name="service")
+     * @Route("/services/service_group" , name="service_group")
      *
      * @param Request $httpRequest
      *
@@ -79,15 +79,14 @@ class ServiceController extends BaseController
     private function invoke(int $userId, string $method, array $parameters = [])
     {
         switch ($method) {
-            case "getService":
-                return $this->getService($userId, $parameters);
-            case "getServices":
-                return $this->getServices($userId, $parameters);
+            case "getServiceGroup":
+                return $this->getServiceGroup($userId, $parameters);
+            case "getServiceGroups":
+                return $this->getServiceGroups($userId);
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
     }
-
 
     /**
      * @param int   $userId
@@ -96,35 +95,31 @@ class ServiceController extends BaseController
      * @return array
      * @throws NotAuthorizedException
      */
-    private function getService(int $userId, array $parameters)
+    private function getServiceGroup(int $userId, array $parameters)
     {
         if (!array_key_exists('id', $parameters)) {
             throw new InvalidArgumentException("No argument provided");
         }
 
         $id           = (int)$parameters['id'];
-        $service      = $this->serviceService->getService($id);
+        $serviceGroup = $this->serviceServiceGroup->getServiceGroup($id);
         $userSettings = $this->userSettingsService->getSettings($userId);
 
-        return Mapper::fromService($userSettings->getLanguage(), $service);
+        return Mapper::fromServiceGroup($userSettings->getLanguage(), $serviceGroup);
     }
 
     /**
-     * @param int   $userId
-     * @param array $parameters
+     * @param int $userId
      *
      * @return array
+     *
      * @throws NotAuthorizedException
      */
-    private function getServices(int $userId, array $parameters)
+    private function getServiceGroups(int $userId)
     {
-        if (!array_key_exists('service_group_id', $parameters)) {
-            throw new InvalidArgumentException("No argument provided");
-        }
-
-        $serviceGroup = $this->serviceServiceGroup->getServiceGroup($parameters['service_group_id']);
         $userSettings = $this->userSettingsService->getSettings($userId);
 
-        return Mapper::fromServices($userSettings->getLanguage(), ...$this->serviceService->getServices($serviceGroup));
+        return Mapper::fromServiceGroups($userSettings->getLanguage(), ...
+            $this->serviceServiceGroup->getServiceGroups());
     }
 }

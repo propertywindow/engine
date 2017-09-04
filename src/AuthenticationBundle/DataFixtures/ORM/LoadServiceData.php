@@ -21,6 +21,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         // Properties
 
         $service = new Service();
+        $service->setFunctionName('getProperty');
         $service->setEn('View Property');
         $service->setNl('Bekijk Woning');
         $service->setIcon('zmdi zmdi-search');
@@ -30,6 +31,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $manager->persist($service);
 
         $service = new Service();
+        $service->setFunctionName('createProperty');
         $service->setEn('Add Property');
         $service->setNl('Woning Toevoegen');
         $service->setIcon('zmdi zmdi-plus');
@@ -39,6 +41,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $manager->persist($service);
 
         $service = new Service();
+        $service->setFunctionName('updateProperty');
         $service->setEn('Edit Property');
         $service->setNl('Bewerk Woning');
         $service->setIcon('');
@@ -48,6 +51,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $manager->persist($service);
 
         $service = new Service();
+        $service->setFunctionName('deleteProperty');
         $service->setEn('Delete Property');
         $service->setNl('Verwijder Woning');
         $service->setIcon('zmdi zmdi-delete');
@@ -57,6 +61,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $manager->persist($service);
 
         $service = new Service();
+        $service->setFunctionName('archiveProperty');
         $service->setEn('Archive Property');
         $service->setNl('Archiveer Woning');
         $service->setIcon('');
