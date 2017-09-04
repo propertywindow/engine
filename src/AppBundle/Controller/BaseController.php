@@ -4,6 +4,10 @@ namespace AppBundle\Controller;
 
 use AgentBundle\Service\AgentService;
 use AgentBundle\Service\ClientService;
+use AppBundle\Exceptions\CouldNotAuthenticateUserException;
+use AppBundle\Exceptions\JsonRpc\CouldNotParseJsonRequestException;
+use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
+use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcRequestException;
 use AppBundle\Security\Authenticator;
 use AuthenticationBundle\Service\BlacklistService;
 use AuthenticationBundle\Service\ServiceService;
@@ -11,6 +15,7 @@ use AuthenticationBundle\Service\ServiceTemplateService;
 use AuthenticationBundle\Service\UserService;
 use AuthenticationBundle\Service\UserTypeService;
 use LogBundle\Service\ActivityService;
+use LogBundle\Service\LoginService;
 use LogBundle\Service\MailService;
 use LogBundle\Service\TrafficService;
 use PropertyBundle\Service\KindService;
@@ -20,6 +25,7 @@ use PropertyBundle\Service\TermsService;
 use PropertyBundle\Service\TypeService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @Route(service="base_controller")
@@ -129,6 +135,11 @@ class BaseController extends Controller
     public $subTypeService;
 
     /**
+     * @var LoginService
+     */
+    public $loginService;
+
+    /**
      * @param Authenticator          $authenticator
      * @param AgentService           $agentService
      * @param UserService            $userService
@@ -145,6 +156,7 @@ class BaseController extends Controller
      * @param TermsService           $termsService
      * @param TypeService            $typeService
      * @param SubTypeService         $subTypeService
+     * @param LoginService           $loginService
      */
     public function __construct(
         Authenticator $authenticator,
@@ -162,7 +174,8 @@ class BaseController extends Controller
         KindService $kindService,
         TermsService $termsService,
         TypeService $typeService,
-        SubTypeService $subTypeService
+        SubTypeService $subTypeService,
+        LoginService $loginService
     ) {
         $this->authenticator          = $authenticator;
         $this->agentService           = $agentService;
@@ -180,6 +193,7 @@ class BaseController extends Controller
         $this->termsService           = $termsService;
         $this->typeService            = $typeService;
         $this->subTypeService         = $subTypeService;
+        $this->loginService           = $loginService;
     }
 
     /**
@@ -196,5 +210,60 @@ class BaseController extends Controller
         }
 
         return implode($pass);
+    }
+
+    /**
+     * @param Request $httpRequest
+     * @param bool    $authenticate
+     *
+     * @return array
+     * @throws CouldNotAuthenticateUserException
+     * @throws CouldNotParseJsonRequestException
+     * @throws InvalidJsonRpcMethodException
+     * @throws InvalidJsonRpcRequestException
+     */
+    public function prepareRequest(Request $httpRequest, bool $authenticate = true)
+    {
+        $id     = null;
+        $userId = null;
+
+        if ($authenticate) {
+            $userId = $this->authenticator->authenticate($httpRequest);
+        }
+
+        $ipAddress = $httpRequest->getClientIp();
+        $blacklist = $this->blacklistService->checkBlacklist($ipAddress);
+
+        if ($blacklist && $blacklist->getAmount() >= 5) {
+            throw new CouldNotAuthenticateUserException("You're IP address ($ipAddress) has been blocked");
+        }
+
+        $jsonString = file_get_contents('php://input');
+        $jsonArray  = json_decode($jsonString, true);
+
+        if ($jsonArray === null) {
+            throw new CouldNotParseJsonRequestException("Could not parse JSON-RPC request");
+        }
+
+        if ($jsonArray['jsonrpc'] !== '2.0') {
+            throw new InvalidJsonRpcRequestException("Request does not match JSON-RPC 2.0 specification");
+        }
+
+        $id     = $jsonArray['id'];
+        $method = $jsonArray['method'];
+        if (empty($method)) {
+            throw new InvalidJsonRpcMethodException("No request method found");
+        }
+
+        $parameters = [];
+        if (array_key_exists('params', $jsonArray)) {
+            $parameters = $jsonArray['params'];
+        }
+
+        if ($authenticate) {
+            return [$id, $userId, $method, $parameters];
+        } else {
+            return [$id, $method, $parameters];
+        }
     }
 }

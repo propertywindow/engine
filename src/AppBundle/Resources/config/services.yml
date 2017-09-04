@@ -4,4 +4,4 @@ services:
           arguments: ['%kernel.environment%', '@user_service', '@blacklist_service']
     base_controller:
           class: AppBundle\Controller\BaseController
-          arguments: ['@authenticator', '@agent_service', '@user_service', '@blacklist_service', '@user_type_service', '@service_service', '@service_template_service', '@mail_service', '@property_service', '@client_service', '@activity_service','@traffic_service', '@kind_service', '@terms_service', '@type_service', '@sub_type_service']
+          autowire: true

@@ -55,13 +55,6 @@ class Authenticator
      */
     public function authenticate(Request $request): int
     {
-        $ipAddress = $request->getClientIp();
-        $blacklist = $this->blacklistService->checkBlacklist($ipAddress);
-
-        if ($blacklist && $blacklist->getAmount() >= 5) {
-            throw new CouldNotAuthenticateUserException("You're IP address ($ipAddress) has been blocked");
-        }
-
         $headers = $request->headers;
         if (!$headers->has('Authorization')) {
             throw new CouldNotAuthenticateUserException("No authorization header provided");

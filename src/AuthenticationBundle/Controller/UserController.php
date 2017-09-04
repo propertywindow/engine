@@ -36,29 +36,7 @@ class UserController extends BaseController
     {
         $id = null;
         try {
-            $userId = $this->authenticator->authenticate($httpRequest);
-
-            $jsonString = file_get_contents('php://input');
-            $jsonArray  = json_decode($jsonString, true);
-
-            if ($jsonArray === null) {
-                throw new CouldNotParseJsonRequestException("Could not parse JSON-RPC request");
-            }
-
-            if ($jsonArray['jsonrpc'] !== '2.0') {
-                throw new InvalidJsonRpcRequestException("Request does not match JSON-RPC 2.0 specification");
-            }
-
-            $id     = $jsonArray['id'];
-            $method = $jsonArray['method'];
-            if (empty($method)) {
-                throw new InvalidJsonRpcMethodException("No request method found");
-            }
-
-            $parameters = [];
-            if (array_key_exists('params', $jsonArray)) {
-                $parameters = $jsonArray['params'];
-            }
+            list($id, $userId, $method, $parameters) = $this->prepareRequest($httpRequest);
 
             $jsonRpcResponse = Response::success($id, $this->invoke($userId, $method, $parameters));
         } catch (CouldNotParseJsonRequestException $ex) {

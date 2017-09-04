@@ -37,29 +37,7 @@ class AgentController extends BaseController
     {
         $id = null;
         try {
-            $userId = $this->authenticator->authenticate($httpRequest);
-
-            $jsonString = file_get_contents('php://input');
-            $jsonArray  = json_decode($jsonString, true);
-
-            if ($jsonArray === null) {
-                throw new CouldNotParseJsonRequestException("Could not parse JSON-RPC request");
-            }
-
-            if ($jsonArray['jsonrpc'] !== '2.0') {
-                throw new InvalidJsonRpcRequestException("Request does not match JSON-RPC 2.0 specification");
-            }
-
-            $id     = $jsonArray['id'];
-            $method = $jsonArray['method'];
-            if (empty($method)) {
-                throw new InvalidJsonRpcMethodException("No request method found");
-            }
-
-            $parameters = [];
-            if (array_key_exists('params', $jsonArray)) {
-                $parameters = $jsonArray['params'];
-            }
+            list($id, $userId, $method, $parameters) = $this->prepareRequest($httpRequest);
 
             $jsonRpcResponse = Response::success($id, $this->invoke($userId, $method, $parameters));
         } catch (CouldNotParseJsonRequestException $ex) {
@@ -162,7 +140,7 @@ class AgentController extends BaseController
      */
     private function createAgent(int $userId, array $parameters)
     {
-        // todo: create agent, and then user
+        // todo: create agent, and then user (for user don't use code here, just call service)
 
         $user = $this->userService->getUser($userId);
 
@@ -245,7 +223,7 @@ class AgentController extends BaseController
         $createdUser->setPassword(md5($password));
         $this->userService->updateUser($createdUser);
 
-        return Mapper::fromAgent($createdUser);
+        return Mapper::fromUser($createdUser);
     }
 
     /**
