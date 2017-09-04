@@ -8,7 +8,6 @@ use AuthenticationBundle\Exceptions\UserAlreadyExistException;
 use AuthenticationBundle\Exceptions\UserNotFoundException;
 use Exception;
 use InvalidArgumentException;
-use Swift_Message;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Error;
 use AppBundle\Models\JsonRpc\Response;
@@ -18,6 +17,7 @@ use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcRequestException;
 use AgentBundle\Exceptions\AgentNotFoundException;
 use AgentBundle\Service\Agent\Mapper;
+use Swift_Message;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
@@ -140,14 +140,18 @@ class AgentController extends BaseController
      */
     private function createAgent(int $userId, array $parameters)
     {
-        // todo: create agent, and then user (for user don't use code here, just call service)
-
         $user = $this->userService->getUser($userId);
 
         if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
             throw new NotAuthorizedException($userId);
         }
 
+        if (!array_key_exists('agent_group_id', $parameters) && $parameters['agent_group_id'] !== null) {
+            throw new InvalidArgumentException("agent_group_id parameter not provided");
+        }
+        if (!array_key_exists('name', $parameters) && $parameters['name'] !== null) {
+            throw new InvalidArgumentException("name parameter not provided");
+        }
         if (!array_key_exists('email', $parameters) && $parameters['email'] !== null) {
             throw new InvalidArgumentException("email parameter not provided");
         }
@@ -175,19 +179,17 @@ class AgentController extends BaseController
         if (!array_key_exists('country', $parameters) && $parameters['country'] !== null) {
             throw new InvalidArgumentException("country parameter not provided");
         }
-        if (!array_key_exists('agent_id', $parameters) && $parameters['agent_id'] !== null) {
-            throw new InvalidArgumentException("agent_id parameter not provided");
-        }
-        if (!array_key_exists('user_type_id', $parameters) && $parameters['user_type_id'] !== null) {
-            throw new InvalidArgumentException("user_type_id parameter not provided");
-        }
 
         if ($this->userService->getUserByEmail($parameters['email'])) {
             throw new UserAlreadyExistException($parameters['email']);
         }
 
-        $userType    = $this->userTypeService->getUserType($parameters['user_type_id']);
-        $createdUser = $this->userService->createUser($parameters, $user->getAgent(), $userType);
+        $agentGroup = $this->agentService->getAgentGroup($parameters['agent_group_id']);
+        $agent      = $this->agentService->createAgent($parameters, $agentGroup);
+        $userType   = $this->userTypeService->getUserType(2);
+
+        $createdUser = $this->userService->createUser($parameters, $agent, $userType);
+
         $password    = $this->randomPassword();
         $subject     = 'Invitation to create an account';
 
@@ -217,13 +219,14 @@ class AgentController extends BaseController
                                 );
 
         if ($this->get('mailer')->send($message)) {
-            $this->mailService->createMail($user, $user->getAgent(), $createdUser->getEmail(), $subject);
+            $this->mailService->createMail($user, $agent, $createdUser->getEmail(), $subject);
         }
 
         $createdUser->setPassword(md5($password));
         $this->userService->updateUser($createdUser);
 
-        return Mapper::fromUser($createdUser);
+
+        return Mapper::fromAgent($agent);
     }
 
     /**
@@ -245,6 +248,8 @@ class AgentController extends BaseController
         }
 
         $id = (int)$parameters['id'];
+
+        // todo: check for users and properties before deleting
 
         $this->agentService->deleteAgent($id);
     }
