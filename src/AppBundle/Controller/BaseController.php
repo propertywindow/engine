@@ -46,6 +46,7 @@ class BaseController extends Controller
     public const          PROPERTY_NOT_FOUND     = -32006;
     public const          TYPE_NOT_FOUND         = -32007;
     public const          SUB_TYPE_NOT_FOUND     = -32008;
+    public const          LOG_NOT_FOUND          = -32009;
     public const          USER_ADMIN             = 1;
     public const          USER_AGENT             = 2;
     public const          USER_COLLEAGUE         = 3;

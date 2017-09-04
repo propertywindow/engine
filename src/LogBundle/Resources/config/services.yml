@@ -11,3 +11,6 @@ services:
     mail_service:
           class: LogBundle\Service\MailService
           arguments: ['@doctrine.orm.entity_manager']
+    activity_controller:
+          class: LogBundle\Controller\ActivityController
+          autowire: true
