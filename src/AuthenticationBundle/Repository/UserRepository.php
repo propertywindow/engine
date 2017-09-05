@@ -3,6 +3,7 @@
 namespace AuthenticationBundle\Repository;
 
 use AgentBundle\Entity\Agent;
+use AuthenticationBundle\Entity\UserType;
 use Doctrine\ORM\EntityRepository;
 use AuthenticationBundle\Entity\User;
 use AuthenticationBundle\Exceptions\UserNotFoundException;
@@ -44,6 +45,28 @@ class UserRepository extends EntityRepository
                    ->from('AuthenticationBundle:User', 'u')
                    ->where("u.agent = :agent")
                    ->setParameter('agent', $agent)
+                   ->orderBy('u.id', 'ASC');
+
+        $results = $qb->getQuery()->getResult();
+
+        return $results;
+    }
+
+    /**
+     * @param Agent    $agent
+     * @param UserType $userType
+     *
+     * @return User[]
+     */
+    public function listColleagues(Agent $agent, UserType $userType): array
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder()
+                   ->select('u')
+                   ->from('AuthenticationBundle:User', 'u')
+                   ->where("u.agent = :agent")
+                   ->andWhere('u.userType = :userType')
+                   ->setParameter('agent', $agent)
+                   ->setParameter('userType', $userType)
                    ->orderBy('u.id', 'ASC');
 
         $results = $qb->getQuery()->getResult();

@@ -54,15 +54,7 @@ class PropertyController extends BaseController
             $jsonRpcResponse = Response::failure($id, new Error(self::INTERNAL_ERROR, $ex->getMessage()));
         }
 
-        $httpResponse = HttpResponse::create(
-            json_encode($jsonRpcResponse),
-            200,
-            [
-                'Content-Type' => 'application/json',
-            ]
-        );
-
-        return $httpResponse;
+        return $this->createResponse($jsonRpcResponse);
     }
 
     /**
@@ -117,8 +109,9 @@ class PropertyController extends BaseController
             throw new InvalidArgumentException("No argument provided");
         }
 
-        $id   = (int)$parameters['id'];
-        $user = $this->userService->getUser($userId);
+        $id           = (int)$parameters['id'];
+        $user         = $this->userService->getUser($userId);
+        $userSettings = $this->userSettingsService->getSettings($userId);
 
         $property = $this->propertyService->getProperty($id);
 
@@ -146,7 +139,7 @@ class PropertyController extends BaseController
             );
         }
 
-        return Mapper::fromProperty($property);
+        return Mapper::fromProperty($userSettings->getLanguage(), $property);
     }
 
     /**
@@ -156,10 +149,12 @@ class PropertyController extends BaseController
      */
     private function getProperties(int $userId)
     {
-        $user  = $this->userService->getUser($userId);
-        $agent = $this->agentService->getAgent((int)$user->getAgent()->getId());
+        $user         = $this->userService->getUser($userId);
+        $userSettings = $this->userSettingsService->getSettings($userId);
+        $agent        = $this->agentService->getAgent((int)$user->getAgent()->getId());
 
-        return Mapper::fromProperties(...$this->propertyService->listProperties($agent->getId()));
+        return Mapper::fromProperties($userSettings->getLanguage(), ...
+            $this->propertyService->listProperties($agent->getId()));
     }
 
     /**
@@ -175,13 +170,14 @@ class PropertyController extends BaseController
         $offset = array_key_exists('offset', $parameters) &&
                   $parameters['offset'] !== null ? (int)$parameters['offset'] : 0;
 
-        $user     = $this->userService->getUser($userId);
-        $agentIds = $this->agentService->getAgentIdsFromGroup((int)$user->getAgent()->getId());
+        $user         = $this->userService->getUser($userId);
+        $userSettings = $this->userSettingsService->getSettings($userId);
+        $agentIds     = $this->agentService->getAgentIdsFromGroup((int)$user->getAgent()->getId());
 
         list($properties, $count) = $this->propertyService->listAllProperties($agentIds, $limit, $offset);
 
         return [
-            'properties' => Mapper::fromProperties(...$properties),
+            'properties' => Mapper::fromProperties($userSettings->getLanguage(), ...$properties),
             'count'      => $count,
         ];
     }
@@ -197,7 +193,8 @@ class PropertyController extends BaseController
      */
     private function createProperty(int $userId, array $parameters)
     {
-        $user = $this->userService->getUser($userId);
+        $user         = $this->userService->getUser($userId);
+        $userSettings = $this->userSettingsService->getSettings($userId);
 
         if ($user->getUserType()->getId() === self::USER_CLIENT || $user->getUserType()->getId() === self::USER_API) {
             throw new NotAuthorizedException($userId);
@@ -260,7 +257,7 @@ class PropertyController extends BaseController
         // todo: also insert Details, Gallery, GeneralNotes
         // todo: create data folder
 
-        return Mapper::fromProperty($property);
+        return Mapper::fromProperty($userSettings->getLanguage(), $property);
     }
 
     /**
@@ -277,9 +274,10 @@ class PropertyController extends BaseController
             throw new InvalidArgumentException("Identifier not provided");
         }
 
-        $user     = $this->userService->getUser($userId);
-        $id       = (int)$parameters['id'];
-        $property = $this->propertyService->getProperty($id);
+        $user         = $this->userService->getUser($userId);
+        $userSettings = $this->userSettingsService->getSettings($userId);
+        $id           = (int)$parameters['id'];
+        $property     = $this->propertyService->getProperty($id);
 
         if ($property->getAgent()->getId() !== $user->getAgent()->getId()) {
             throw new NotAuthorizedException($userId);
@@ -369,7 +367,7 @@ class PropertyController extends BaseController
             $this->get('jms_serializer')->serialize($updatedProperty, 'json')
         );
 
-        return Mapper::fromProperty($updatedProperty);
+        return Mapper::fromProperty($userSettings->getLanguage(), $updatedProperty);
 
         // todo: also update Details, Gallery, GeneralNotes
     }

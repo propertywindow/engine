@@ -48,12 +48,12 @@ class Authenticator
 
     /**
      * @param Request $request
+     * @param bool    $impersonate
      *
      * @return int
-     *
      * @throws CouldNotAuthenticateUserException
      */
-    public function authenticate(Request $request): int
+    public function authenticate(Request $request, bool $impersonate): int
     {
         $headers = $request->headers;
         if (!$headers->has('Authorization')) {
@@ -104,6 +104,11 @@ class Authenticator
             throw new CouldNotAuthenticateUserException("User not recognized");
         }
 
+        if (!$impersonate) {
+            $user->setLastOnline(new \DateTime());
+            $this->userService->updateUser($user);
+        }
+
         if (!$this->strict) {
             return $userId;
         }
@@ -113,7 +118,11 @@ class Authenticator
         $tenMinutesInFuture = $now + (10 * 60);
 
         if ($timestamp > $tenMinutesInFuture || $timestamp < $tenMinutesInPast) {
-            throw new CouldNotAuthenticateUserException("Token is expired");
+            if ($user->getLastOnline()) {
+                if ($user->getLastOnline()->getTimestamp() < $tenMinutesInPast) {
+                    throw new CouldNotAuthenticateUserException("Token is expired");
+                }
+            }
         }
 
         return $userId;

@@ -55,15 +55,7 @@ class UserController extends BaseController
             $jsonRpcResponse = Response::failure($id, new Error(self::INTERNAL_ERROR, $ex->getMessage()));
         }
 
-        $httpResponse = HttpResponse::create(
-            json_encode($jsonRpcResponse),
-            200,
-            [
-                'Content-Type' => 'application/json',
-            ]
-        );
-
-        return $httpResponse;
+        return $this->createResponse($jsonRpcResponse);
     }
 
     /**
@@ -85,6 +77,8 @@ class UserController extends BaseController
                 return $this->getUserById($userId, $parameters);
             case "getUsers":
                 return $this->getUsers($userId);
+            case "getColleagues":
+                return $this->getColleagues($userId);
             case "createUser":
                 return $this->createUser($userId, $parameters);
             case "updateUser":
@@ -135,6 +129,21 @@ class UserController extends BaseController
     {
         $user  = $this->userService->getUser($userId);
         $users = $this->userService->getUsers($user->getAgent());
+
+        return Mapper::fromUsers(...$users);
+    }
+
+    /**
+     * @param int $userId
+     *
+     * @return array
+     * @throws NotAuthorizedException
+     */
+    private function getColleagues(int $userId)
+    {
+        $user  = $this->userService->getUser($userId);
+        $userType = $this->userTypeService->getUserType(3);
+        $users = $this->userService->getColleagues($user->getAgent(), $userType);
 
         return Mapper::fromUsers(...$users);
     }
@@ -229,6 +238,7 @@ class UserController extends BaseController
         }
 
         $createdUser->setPassword(md5($password));
+        $createdUser->setActive(true);
         $this->userService->updateUser($createdUser);
 
         return Mapper::fromUser($createdUser);

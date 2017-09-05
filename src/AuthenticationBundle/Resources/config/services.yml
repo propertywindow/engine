@@ -38,3 +38,6 @@ services:
     user_controller:
           class: AuthenticationBundle\Controller\UserController
           autowire: true
+    menu_controller:
+          class: AuthenticationBundle\Controller\MenuController
+          autowire: true

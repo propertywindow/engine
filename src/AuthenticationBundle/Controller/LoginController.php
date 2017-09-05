@@ -56,15 +56,7 @@ class LoginController extends BaseController
             $jsonRpcResponse = Response::failure($id, new Error(self::INTERNAL_ERROR, $ex->getMessage()));
         }
 
-        $httpResponse = HttpResponse::create(
-            json_encode($jsonRpcResponse),
-            200,
-            [
-                'Content-Type' => 'application/json',
-            ]
-        );
-
-        return $httpResponse;
+        return $this->createResponse($jsonRpcResponse);
     }
 
     /**
@@ -80,9 +72,7 @@ class LoginController extends BaseController
     {
         switch ($method) {
             case "login":
-                return $this->login($parameters, $ipAddress);
-            case "checkLogin":
-                return $this->checkLogin($parameters);
+                return $this->login($ipAddress, $parameters);
             case "impersonate":
                 return $this->impersonate($parameters);
         }
@@ -91,13 +81,14 @@ class LoginController extends BaseController
     }
 
     /**
-     * @param array  $parameters
      * @param string $ipAddress
+     * @param array  $parameters
      *
      * @return array
+     *
      * @throws LoginFailedException
      */
-    private function login(array $parameters, string $ipAddress)
+    private function login(string $ipAddress, array $parameters)
     {
         if (!array_key_exists('email', $parameters)) {
             throw new InvalidArgumentException("No email argument provided");
@@ -128,8 +119,6 @@ class LoginController extends BaseController
             $this->blacklistService->removeBlacklist($blacklist->getId());
         }
 
-        // todo: add check for firstLogin and allow active to be false?
-
         $this->loginService->createLogin(
             $user,
             $user->getAgent(),
@@ -148,27 +137,9 @@ class LoginController extends BaseController
         $payloadJson    = json_encode($payload);
         $payloadEncoded = base64_encode($payloadJson);
 
-        return ['Basic '.$payloadEncoded];
+        return [$user->getId(), $payloadEncoded];
     }
 
-    /**
-     * @param array $parameters
-     *
-     * @return array
-     *
-     * @throws NotAuthorizedException
-     */
-    private function checkLogin(array $parameters)
-    {
-        if (!array_key_exists('id', $parameters)) {
-            throw new InvalidArgumentException("No argument provided");
-        }
-
-        $id = (int)$parameters['id'];
-
-        // todo: check for userId and needs to update OnlineNow timestamp when successful, will return userId.
-        // todo: maybe move outside loginController?
-    }
 
     /**
      * @param array $parameters
@@ -185,7 +156,7 @@ class LoginController extends BaseController
 
         $id = (int)$parameters['id'];
 
-        // todo: check if allowed to impersonate, return new token but keep old user_id
-        // todo: login, but not update lastlogin
+        // todo: check if allowed to impersonate
+        // todo: maybe move to seperate controller because of $impersonate bool with authorization
     }
 }

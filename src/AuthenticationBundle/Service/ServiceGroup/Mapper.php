@@ -11,7 +11,7 @@ use AuthenticationBundle\Entity\ServiceGroup;
 class Mapper
 {
     /**
-     * @param string  $language
+     * @param string       $language
      * @param ServiceGroup $serviceGroup
      *
      * @return array
@@ -30,11 +30,12 @@ class Mapper
             'id'          => $serviceGroup->getId(),
             'description' => $description,
             'icon'        => $serviceGroup->getIcon(),
+            'url'         => $serviceGroup->getUrl(),
         ];
     }
 
     /**
-     * @param string    $language
+     * @param string         $language
      * @param ServiceGroup[] ...$serviceGroups
      *
      * @return array

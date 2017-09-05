@@ -41,12 +41,26 @@ class UserService
     /**
      * @param Agent $agent
      *
-     * @return User $user
+     * @return User[] $user
      */
     public function getUsers(Agent $agent)
     {
         $repository = $this->entityManager->getRepository('AuthenticationBundle:User');
         $user       = $repository->listAll($agent);
+
+        return $user;
+    }
+
+    /**
+     * @param Agent    $agent
+     * @param UserType $userType
+     *
+     * @return User[] $user
+     */
+    public function getColleagues(Agent $agent, UserType $userType)
+    {
+        $repository = $this->entityManager->getRepository('AuthenticationBundle:User');
+        $user       = $repository->listColleagues($agent, $userType);
 
         return $user;
     }
@@ -159,6 +173,7 @@ class UserService
 
         if ($user) {
             $user->setLastLogin(new \DateTime());
+            $user->setLastOnline(new \DateTime());
             $this->entityManager->flush();
         }
 

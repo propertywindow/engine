@@ -8,6 +8,7 @@ use AppBundle\Exceptions\CouldNotAuthenticateUserException;
 use AppBundle\Exceptions\JsonRpc\CouldNotParseJsonRequestException;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcRequestException;
+use AppBundle\Models\JsonRpc\Response;
 use AppBundle\Security\Authenticator;
 use AuthenticationBundle\Service\BlacklistService;
 use AuthenticationBundle\Service\ServiceService;
@@ -16,6 +17,8 @@ use AuthenticationBundle\Service\ServiceTemplateService;
 use AuthenticationBundle\Service\UserService;
 use AuthenticationBundle\Service\UserSettingsService;
 use AuthenticationBundle\Service\UserTypeService;
+use PropertyBundle\Service\GalleryService;
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use LogBundle\Service\ActivityService;
 use LogBundle\Service\LoginService;
 use LogBundle\Service\MailService;
@@ -148,6 +151,11 @@ class BaseController extends Controller
     public $subTypeService;
 
     /**
+     * @var GalleryService
+     */
+    public $galleryService;
+
+    /**
      * @var LoginService
      */
     public $loginService;
@@ -171,6 +179,7 @@ class BaseController extends Controller
      * @param TermsService           $termsService
      * @param TypeService            $typeService
      * @param SubTypeService         $subTypeService
+     * @param GalleryService         $galleryService
      * @param LoginService           $loginService
      */
     public function __construct(
@@ -192,6 +201,7 @@ class BaseController extends Controller
         TermsService $termsService,
         TypeService $typeService,
         SubTypeService $subTypeService,
+        GalleryService $galleryService,
         LoginService $loginService
     ) {
         $this->authenticator          = $authenticator;
@@ -212,6 +222,7 @@ class BaseController extends Controller
         $this->termsService           = $termsService;
         $this->typeService            = $typeService;
         $this->subTypeService         = $subTypeService;
+        $this->galleryService         = $galleryService;
         $this->loginService           = $loginService;
     }
 
@@ -234,6 +245,7 @@ class BaseController extends Controller
     /**
      * @param Request $httpRequest
      * @param bool    $authenticate
+     * @param bool    $impersonate
      *
      * @return array
      * @throws CouldNotAuthenticateUserException
@@ -241,13 +253,13 @@ class BaseController extends Controller
      * @throws InvalidJsonRpcMethodException
      * @throws InvalidJsonRpcRequestException
      */
-    public function prepareRequest(Request $httpRequest, bool $authenticate = true)
+    public function prepareRequest(Request $httpRequest, bool $authenticate = true, bool $impersonate = false)
     {
         $id     = null;
         $userId = null;
 
         if ($authenticate) {
-            $userId = $this->authenticator->authenticate($httpRequest);
+            $userId = $this->authenticator->authenticate($httpRequest, $impersonate);
         }
 
         $ipAddress = $httpRequest->getClientIp();
@@ -284,5 +296,29 @@ class BaseController extends Controller
         } else {
             return [$id, $method, $parameters];
         }
+    }
+
+    /**
+     * @param Response $jsonRpcResponse
+     *
+     * @return HttpResponse
+     */
+    public function createResponse(Response $jsonRpcResponse)
+    {
+        $httpResponse = HttpResponse::create(
+            json_encode($jsonRpcResponse),
+            200,
+            [
+                'Content-Type' => 'application/json'
+            ]
+        );
+
+        $responseHeaders = $httpResponse->headers;
+
+        $responseHeaders->set('Access-Control-Allow-Headers', 'origin, content-type, accept, authorization');
+        $responseHeaders->set('Access-Control-Allow-Origin', '*');
+        $responseHeaders->set('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, PATCH, OPTIONS');
+
+        return $httpResponse;
     }
 }

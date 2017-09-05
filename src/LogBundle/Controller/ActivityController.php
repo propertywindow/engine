@@ -7,6 +7,7 @@ use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use Exception;
 use InvalidArgumentException;
 use LogBundle\Exceptions\ActivityNotFoundException;
+use LogBundle\Service\Activity\Mapper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Error;
 use AppBundle\Models\JsonRpc\Response;
@@ -52,15 +53,7 @@ class ActivityController extends BaseController
             $jsonRpcResponse = Response::failure($id, new Error(self::INTERNAL_ERROR, $ex->getMessage()));
         }
 
-        $httpResponse = HttpResponse::create(
-            json_encode($jsonRpcResponse),
-            200,
-            [
-                'Content-Type' => 'application/json',
-            ]
-        );
-
-        return $httpResponse;
+        return $this->createResponse($jsonRpcResponse);
     }
 
     /**
@@ -76,10 +69,12 @@ class ActivityController extends BaseController
     private function invoke(int $userId, string $method, array $parameters = [])
     {
         switch ($method) {
-            case "getLog":
-                return $this->getLog($userId, $parameters);
-            case "getLogs":
-                return $this->getLogs($userId);
+            case "getActivity":
+                return $this->getActivity($userId, $parameters);
+            case "getActivityFromUser":
+                return $this->getActivityFromUser($userId);
+            case "getActivities":
+                return $this->getActivities($userId);
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
@@ -93,7 +88,7 @@ class ActivityController extends BaseController
      *
      * @throws NotAuthorizedException
      */
-    private function getLog(int $userId, array $parameters)
+    private function getActivity(int $userId, array $parameters)
     {
         if (!array_key_exists('id', $parameters)) {
             throw new InvalidArgumentException("No argument provided");
@@ -106,8 +101,7 @@ class ActivityController extends BaseController
             throw new NotAuthorizedException($userId);
         }
 
-
-//        return Mapper::fromLog($this->activityService->getActivity($id));
+        return Mapper::fromActivity($this->activityService->getActivity($id));
     }
 
     /**
@@ -117,7 +111,7 @@ class ActivityController extends BaseController
      *
      * @throws NotAuthorizedException
      */
-    private function getLogs(int $userId)
+    private function getActivityFromUser(int $userId)
     {
         $user = $this->userService->getUser($userId);
 
@@ -125,6 +119,24 @@ class ActivityController extends BaseController
             throw new NotAuthorizedException($userId);
         }
 
-//        return Mapper::fromLogs(...$this->activityService->getActivity());
+        return Mapper::fromActivities(...$this->activityService->getActivityFromUser($user));
+    }
+
+    /**
+     * @param int $userId
+     *
+     * @return array
+     *
+     * @throws NotAuthorizedException
+     */
+    private function getActivities(int $userId)
+    {
+        $user = $this->userService->getUser($userId);
+
+        if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
+            throw new NotAuthorizedException($userId);
+        }
+
+        return Mapper::fromActivities(...$this->activityService->getActivities($user->getAgent()));
     }
 }

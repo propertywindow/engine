@@ -1,9 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace PropertyBundle\Controller;
+namespace AuthenticationBundle\Controller;
 
 use AppBundle\Controller\BaseController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
+use AuthenticationBundle\Exceptions\ServiceNotFoundException;
+use AuthenticationBundle\Service\Menu\Mapper;
 use Exception;
 use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -13,18 +15,16 @@ use AppBundle\Exceptions\CouldNotAuthenticateUserException;
 use AppBundle\Exceptions\JsonRpc\CouldNotParseJsonRequestException;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcRequestException;
-use PropertyBundle\Exceptions\SubTypeNotFoundException;
-use PropertyBundle\Service\SubType\Mapper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 /**
- * @Route(service="sub_type_controller")
+ * @Route(service="menu_controller")
  */
-class SubTypeController extends BaseController
+class MenuController extends BaseController
 {
     /**
-     * @Route("/property/subtype" , name="subtype")
+     * @Route("/services/menu" , name="menu")
      *
      * @param Request $httpRequest
      *
@@ -47,8 +47,8 @@ class SubTypeController extends BaseController
             $jsonRpcResponse = Response::failure($id, new Error(self::INVALID_PARAMS, $ex->getMessage()));
         } catch (CouldNotAuthenticateUserException $ex) {
             $jsonRpcResponse = Response::failure($id, new Error(self::USER_NOT_AUTHENTICATED, $ex->getMessage()));
-        } catch (SubTypeNotFoundException $ex) {
-            $jsonRpcResponse = Response::failure($id, new Error(self::SUB_TYPE_NOT_FOUND, $ex->getMessage()));
+        } catch (ServiceNotFoundException $ex) {
+            $jsonRpcResponse = Response::failure($id, new Error(self::SERVICE_NOT_FOUND, $ex->getMessage()));
         } catch (Exception $ex) {
             $jsonRpcResponse = Response::failure($id, new Error(self::INTERNAL_ERROR, $ex->getMessage()));
         }
@@ -63,7 +63,7 @@ class SubTypeController extends BaseController
      *
      * @return array
      * @throws InvalidJsonRpcMethodException
-     * @throws SubTypeNotFoundException
+     * @throws ServiceNotFoundException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
@@ -71,73 +71,24 @@ class SubTypeController extends BaseController
     private function invoke(int $userId, string $method, array $parameters = [])
     {
         switch ($method) {
-            case "getSubType":
-                return $this->getSubType($parameters);
-            case "getSubTypes":
-                return $this->getSubTypes($parameters);
-            case "deleteSubType":
-                return $this->deleteSubType($parameters, $userId);
+            case "getMenu":
+                return $this->getMenu($userId);
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
     }
 
     /**
-     * @param array $parameters
+     * @param int $userId
      *
      * @return array
-     * @throws SubTypeNotFoundException
-     */
-    private function getSubType(array $parameters)
-    {
-        if (!array_key_exists('id', $parameters)) {
-            throw new InvalidArgumentException("No argument provided");
-        }
-
-        $id = (int)$parameters['id'];
-
-        return Mapper::fromSubType($this->subTypeService->getSubType($id));
-    }
-
-    /**
-     * @param array $parameters
-     *
-     * @return array
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
-    private function getSubTypes(array $parameters)
-    {
-        $typeId = null;
-
-        if (!array_key_exists('type_id', $parameters)) {
-            throw new InvalidArgumentException("No type_id argument provided");
-        }
-
-        $type = $this->typeService->getType((int)$parameters['type_id']);
-
-        return Mapper::fromSubTypes(...$this->subTypeService->getSubTypes($type));
-    }
-
-    /**
-     * @param array $parameters
-     * @param int   $userId
      *
      * @throws NotAuthorizedException
      */
-    private function deleteSubType(array $parameters, int $userId)
+    private function getMenu(int $userId)
     {
-        if (!array_key_exists('id', $parameters)) {
-            throw new InvalidArgumentException("No argument provided");
-        }
+        $userSettings = $this->userSettingsService->getSettings($userId);
 
-        $user = $this->userService->getUser($userId);
-
-        if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
-            throw new NotAuthorizedException($userId);
-        }
-
-        $id = (int)$parameters['id'];
-
-        $this->subTypeService->deleteSubType($id);
+        return Mapper::fromMenus($userSettings->getLanguage(), ...$this->serviceServiceGroup->getServiceGroups());
     }
 }

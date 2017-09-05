@@ -53,15 +53,7 @@ class ServiceController extends BaseController
             $jsonRpcResponse = Response::failure($id, new Error(self::INTERNAL_ERROR, $ex->getMessage()));
         }
 
-        $httpResponse = HttpResponse::create(
-            json_encode($jsonRpcResponse),
-            200,
-            [
-                'Content-Type' => 'application/json',
-            ]
-        );
-
-        return $httpResponse;
+        return $this->createResponse($jsonRpcResponse);
     }
 
     /**
@@ -87,7 +79,6 @@ class ServiceController extends BaseController
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
     }
-
 
     /**
      * @param int   $userId

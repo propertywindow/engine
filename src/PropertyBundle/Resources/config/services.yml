@@ -14,6 +14,9 @@ services:
     sub_type_service:
           class: PropertyBundle\Service\SubTypeService
           arguments: ["@doctrine.orm.entity_manager"]
+    gallery_service:
+          class: PropertyBundle\Service\GalleryService
+          arguments: ["@doctrine.orm.entity_manager"]
     property_controller:
           class: PropertyBundle\Controller\PropertyController
           autowire: true

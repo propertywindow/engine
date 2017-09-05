@@ -225,6 +225,7 @@ class AgentController extends BaseController
         }
 
         $createdUser->setPassword(md5($password));
+        $createdUser->setActive(true);
         $this->userService->updateUser($createdUser);
 
 

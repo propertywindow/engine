@@ -124,6 +124,13 @@ class User
     private $lastLogin;
 
     /**
+     * @var \datetime
+     *
+     * @ORM\Column(name="last_online", type="datetime", length=255, nullable=true)
+     */
+    private $lastOnline;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="active", type="boolean", options={"default": false})
@@ -488,6 +495,30 @@ class User
     public function getLastLogin()
     {
         return $this->lastLogin;
+    }
+
+    /**
+     * Set lastOnline
+     *
+     * @param \datetime $lastOnline
+     *
+     * @return User
+     */
+    public function setLastOnline($lastOnline)
+    {
+        $this->lastOnline = $lastOnline;
+
+        return $this;
+    }
+
+    /**
+     * Get lastOnline
+     *
+     * @return \datetime
+     */
+    public function getLastOnline()
+    {
+        return $this->lastOnline;
     }
 
     /**

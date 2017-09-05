@@ -40,7 +40,8 @@ RUN docker-php-ext-enable xdebug \
 
 # Set your timezone here
 RUN rm /etc/localtime
-RUN ln -s /usr/share/zoneinfo/Europe/London /etc/localtime
+#RUN ln -s /usr/share/zoneinfo/Europe/London /etc/localtime
+RUN ln -s /usr/share/zoneinfo/Europe/Amsterdam /etc/localtime
 RUN "date"
 
 # Cleanup

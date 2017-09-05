@@ -33,6 +33,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setCity('Beers');
         $user->setCountry('NL');
         $user->setActive(true);
+        $user->setAvatar('https://bitbucket.org/account/geurtsmarc/avatar/250');
         $this->addReference('user_admin_1', $user);
         $manager->persist($user);
 
@@ -54,6 +55,8 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
 
 
         // Client Users
+
+        // todo: only in dev environment
 
         for ($i = 1; $i <= 5; $i++) {
             $path     = file_get_contents('https://randomuser.me/api/?nat=gb');

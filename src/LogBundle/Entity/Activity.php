@@ -2,6 +2,7 @@
 
 namespace LogBundle\Entity;
 
+use AgentBundle\Entity\Agent;
 use AuthenticationBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -28,6 +29,12 @@ class Activity
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     protected $user;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AgentBundle\Entity\Agent")
+     * @ORM\JoinColumn(name="agent_id", referencedColumnName="id", nullable=true)
+     */
+    protected $agent;
 
     /**
      * @var int
@@ -107,6 +114,30 @@ class Activity
     }
 
     /**
+     * Set agent
+     *
+     * @param \AgentBundle\Entity\Agent $agent
+     *
+     * @return Activity
+     */
+    public function setAgent(Agent $agent = null)
+    {
+        $this->agent = $agent;
+
+        return $this;
+    }
+
+    /**
+     * Get agent
+     *
+     * @return \AgentBundle\Entity\Agent
+     */
+    public function getAgent()
+    {
+        return $this->agent;
+    }
+
+    /**
      * Set actionId
      *
      * @param integer $actionId
@@ -181,7 +212,7 @@ class Activity
     /**
      * Set oldValue
      *
-     * @param array $oldValue
+     * @param string $oldValue
      *
      * @return Activity
      */
@@ -205,7 +236,7 @@ class Activity
     /**
      * Set newValue
      *
-     * @param array $newValue
+     * @param string $newValue
      *
      * @return Activity
      */
@@ -224,6 +255,16 @@ class Activity
     public function getNewValue()
     {
         return $this->newValue;
+    }
+
+    /**
+     * Get created
+     *
+     * @return \DateTime
+     */
+    public function getCreated()
+    {
+        return $this->created;
     }
 
     /**

@@ -23,7 +23,7 @@ class Service
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="ServiceGroup")
+     * @ORM\ManyToOne(targetEntity="ServiceGroup", inversedBy="services")
      * @ORM\JoinColumn(name="group_id", referencedColumnName="id")
      */
     private $serviceGroup;
