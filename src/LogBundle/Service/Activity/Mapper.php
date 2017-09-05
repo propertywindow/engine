@@ -24,8 +24,8 @@ class Mapper
             'user_name' => $activity->getUser()->getFirstName().' '.$activity->getUser()->getLastName(),
             'category'  => $activity->getActionCategory(),
             'action'    => $activity->getActionName(),
-            'old'       => $activity->getOldValue(),
-            'new'       => $activity->getNewValue(),
+            'old_value' => $activity->getOldValue(),
+            'new_value' => $activity->getNewValue(),
             'datetime'  => $activity->getCreated()->format('Y-m-d H:i:s'),
         ];
     }
