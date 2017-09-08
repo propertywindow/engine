@@ -41,7 +41,7 @@ class LoadTermsData extends AbstractFixture implements OrderedFixtureInterface
 
         $terms = new Terms();
         $terms->setEn('Offers around');
-        $terms->setNl('Bod rond');
+        $terms->setNl('Bieden rond');
         $terms->setShowPrice(true);
         $this->addReference('term_offer_around', $terms);
         $manager->persist($terms);

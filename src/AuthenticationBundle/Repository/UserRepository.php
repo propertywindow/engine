@@ -64,7 +64,7 @@ class UserRepository extends EntityRepository
                    ->select('u')
                    ->from('AuthenticationBundle:User', 'u')
                    ->where("u.agent = :agent")
-                   ->andWhere('u.userType = :userType')
+                   ->andWhere('u.userType <= :userType')
                    ->setParameter('agent', $agent)
                    ->setParameter('userType', $userType)
                    ->orderBy('u.id', 'ASC');

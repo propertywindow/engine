@@ -3,6 +3,7 @@
 namespace AgentBundle\Service;
 
 use AgentBundle\Entity\Agent;
+use AuthenticationBundle\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use AgentBundle\Entity\Client;
 
@@ -50,13 +51,22 @@ class ClientService
     }
 
     /**
-     * @param Client $client
+     * @param array $parameters
+     * @param User  $user
+     * @param Agent $agent
      *
      * @return Client
      */
-    public function createClient(Client $client)
+    public function createClient(array $parameters, User $user, Agent $agent)
     {
-        // todo: create user to in clientController
+        $client = new Client();
+
+        $client->setAgent($agent);
+        $client->setUser($user);
+
+        if (array_key_exists('transparency', $parameters) && $parameters['transparency'] !== null) {
+            $client->setTransparency($parameters['transparency']);
+        }
 
         $this->entityManager->persist($client);
         $this->entityManager->flush();

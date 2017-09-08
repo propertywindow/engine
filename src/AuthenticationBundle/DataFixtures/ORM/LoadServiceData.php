@@ -36,6 +36,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setNl('Woning Toevoegen');
         $service->setIcon('zmdi zmdi-plus');
         $service->setVisible(false);
+        $service->setUrl('/properties/add');
         $service->setServiceGroup($this->getReference('service_group_properties'));
         $this->addReference('service_add_property', $service);
         $manager->persist($service);
@@ -46,6 +47,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setNl('Bewerk Woning');
         $service->setIcon('');
         $service->setVisible(false);
+        $service->setUrl('/properties/edit/');
         $service->setServiceGroup($this->getReference('service_group_properties'));
         $this->addReference('service_edit_property', $service);
         $manager->persist($service);
@@ -56,6 +58,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setNl('Verwijder Woning');
         $service->setIcon('zmdi zmdi-delete');
         $service->setVisible(false);
+        $service->setUrl('/properties/delete/');
         $service->setServiceGroup($this->getReference('service_group_properties'));
         $this->addReference('service_delete_property', $service);
         $manager->persist($service);
@@ -66,6 +69,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setNl('Archiveer Woning');
         $service->setIcon('');
         $service->setVisible(false);
+        $service->setUrl('/properties/archive/');
         $service->setServiceGroup($this->getReference('service_group_properties'));
         $this->addReference('service_archive_property', $service);
         $manager->persist($service);
