@@ -19,12 +19,12 @@ class LoadUserSettingsData extends AbstractFixture implements OrderedFixtureInte
     public function load(ObjectManager $manager)
     {
         $userSettings = new UserSettings();
-        $userSettings->setUser($this->getReference('user_admin_1'));
+        $userSettings->setUser($this->getReference('user_1'));
         $userSettings->setLanguage('nl');
         $manager->persist($userSettings);
 
         $userSettings = new UserSettings();
-        $userSettings->setUser($this->getReference('user_admin_2'));
+        $userSettings->setUser($this->getReference('user_2'));
         $userSettings->setLanguage('en');
         $manager->persist($userSettings);
 

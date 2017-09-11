@@ -11,8 +11,9 @@ use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcRequestException;
 use AppBundle\Models\JsonRpc\Response;
 use AppBundle\Security\Authenticator;
 use AuthenticationBundle\Service\BlacklistService;
+use AuthenticationBundle\Service\ServiceMapService;
 use AuthenticationBundle\Service\ServiceService;
-use AuthenticationBundle\Service\ServiceServiceGroup;
+use AuthenticationBundle\Service\ServiceGroupService;
 use AuthenticationBundle\Service\ServiceTemplateService;
 use AuthenticationBundle\Service\UserService;
 use AuthenticationBundle\Service\UserSettingsService;
@@ -96,14 +97,19 @@ class BaseController extends Controller
     public $serviceService;
 
     /**
-     * @var ServiceServiceGroup
+     * @var ServiceGroupService
      */
-    public $serviceServiceGroup;
+    public $serviceGroupService;
 
     /**
      * @var ServiceTemplateService
      */
     public $serviceTemplateService;
+
+    /**
+     * @var ServiceMapService
+     */
+    public $serviceMapService;
 
     /**
      * @var MailService
@@ -168,8 +174,9 @@ class BaseController extends Controller
      * @param BlacklistService       $blacklistService
      * @param UserTypeService        $userTypeService
      * @param ServiceService         $serviceService
-     * @param ServiceServiceGroup    $serviceServiceGroup
+     * @param ServiceGroupService    $serviceGroupService
      * @param ServiceTemplateService $serviceTemplateService
+     * @param ServiceMapService      $serviceMapService
      * @param MailService            $mailService
      * @param PropertyService        $propertyService
      * @param ClientService          $clientService
@@ -190,8 +197,9 @@ class BaseController extends Controller
         BlacklistService $blacklistService,
         UserTypeService $userTypeService,
         ServiceService $serviceService,
-        ServiceServiceGroup $serviceServiceGroup,
+        ServiceGroupService $serviceGroupService,
         ServiceTemplateService $serviceTemplateService,
+        ServiceMapService $serviceMapService,
         MailService $mailService,
         PropertyService $propertyService,
         ClientService $clientService,
@@ -211,8 +219,9 @@ class BaseController extends Controller
         $this->blacklistService       = $blacklistService;
         $this->userTypeService        = $userTypeService;
         $this->serviceService         = $serviceService;
-        $this->serviceServiceGroup    = $serviceServiceGroup;
+        $this->serviceGroupService    = $serviceGroupService;
         $this->serviceTemplateService = $serviceTemplateService;
+        $this->serviceMapService      = $serviceMapService;
         $this->mailService            = $mailService;
         $this->propertyService        = $propertyService;
         $this->clientService          = $clientService;
@@ -309,7 +318,7 @@ class BaseController extends Controller
             json_encode($jsonRpcResponse),
             200,
             [
-                'Content-Type' => 'application/json'
+                'Content-Type' => 'application/json',
             ]
         );
 

@@ -150,13 +150,38 @@ class LoginController extends BaseController
      */
     private function impersonate(array $parameters)
     {
-        if (!array_key_exists('id', $parameters)) {
+        if (!array_key_exists('user_id', $parameters)) {
+            throw new InvalidArgumentException("No argument provided");
+        }
+        if (!array_key_exists('impersonate_id', $parameters)) {
             throw new InvalidArgumentException("No argument provided");
         }
 
-        $id = (int)$parameters['id'];
+        $userId        = (int)$parameters['user_id'];
+        $impersonateId = (int)$parameters['impersonate_id'];
+        $user          = $this->userService->getUser($userId);
+        $impersonate   = $this->userService->getUser($impersonateId);
 
-        // todo: check if allowed to impersonate
-        // todo: maybe move to seperate controller because of $impersonate bool with authorization
+        if ((int)$user->getUserType()->getId() >= self::USER_AGENT) {
+            throw new NotAuthorizedException($userId);
+        }
+
+        if ($user->getAgent() !== $impersonate->getAgent()) {
+            throw new NotAuthorizedException($userId);
+        }
+
+        $timestamp      = time();
+        $secret         = $impersonate->getPassword();
+        $signature      = hash_hmac("sha1", $timestamp."-".$impersonate->getId(), $secret);
+        $payload        = [
+            "user"      => $impersonate->getId(),
+            "password"  => $secret,
+            "timestamp" => $timestamp,
+            "signature" => $signature,
+        ];
+        $payloadJson    = json_encode($payload);
+        $payloadEncoded = base64_encode($payloadJson);
+
+        return [$impersonate->getId(), $impersonate->getEmail(), $payloadEncoded];
     }
 }

@@ -128,7 +128,7 @@ class UserController extends BaseController
     private function getUsers(int $userId)
     {
         $user  = $this->userService->getUser($userId);
-        $users = $this->userService->getUsers($user->getAgent());
+        $users = $this->userService->getUsers($user);
 
         return Mapper::fromUsers(...$users);
     }
@@ -141,9 +141,9 @@ class UserController extends BaseController
      */
     private function getColleagues(int $userId)
     {
-        $user  = $this->userService->getUser($userId);
+        $user     = $this->userService->getUser($userId);
         $userType = $this->userTypeService->getUserType(3);
-        $users = $this->userService->getColleagues($user->getAgent(), $userType);
+        $users    = $this->userService->getColleagues($user, $userType);
 
         return Mapper::fromUsers(...$users);
     }

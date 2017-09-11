@@ -34,17 +34,19 @@ class UserRepository extends EntityRepository
     }
 
     /**
-     * @param Agent $agent
+     * @param User $user
      *
      * @return User[]
      */
-    public function listAll(Agent $agent): array
+    public function listAll(User $user): array
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
                    ->select('u')
                    ->from('AuthenticationBundle:User', 'u')
                    ->where("u.agent = :agent")
-                   ->setParameter('agent', $agent)
+                   ->andWhere('u.id != :userId')
+                   ->setParameter('agent', $user->getAgent())
+                   ->setParameter('userId', $user->getId())
                    ->orderBy('u.id', 'ASC');
 
         $results = $qb->getQuery()->getResult();
@@ -53,19 +55,19 @@ class UserRepository extends EntityRepository
     }
 
     /**
-     * @param Agent    $agent
+     * @param User $user
      * @param UserType $userType
      *
      * @return User[]
      */
-    public function listColleagues(Agent $agent, UserType $userType): array
+    public function listColleagues(User $user, UserType $userType): array
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
                    ->select('u')
                    ->from('AuthenticationBundle:User', 'u')
                    ->where("u.agent = :agent")
                    ->andWhere('u.userType <= :userType')
-                   ->setParameter('agent', $agent)
+                   ->setParameter('agent', $user->getAgent())
                    ->setParameter('userType', $userType)
                    ->orderBy('u.id', 'ASC');
 

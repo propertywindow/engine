@@ -34,12 +34,12 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setCountry('NL');
         $user->setActive(true);
         $user->setAvatar('https://bitbucket.org/account/geurtsmarc/avatar/250');
-        $this->addReference('user_admin_1', $user);
+        $this->addReference('user_1', $user);
         $manager->persist($user);
 
         $user = new User();
-        $user->setUserType($this->getReference('user_type_admin'));
-        $user->setAgent($this->getReference('agent_2'));
+        $user->setUserType($this->getReference('user_type_colleague'));
+        $user->setAgent($this->getReference('agent_1'));
         $user->setEmail('iain@datacomputerservices.co.uk');
         $user->setPassword(md5('iain'));
         $user->setFirstName('Iain');
@@ -50,7 +50,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setCity('Edinburgh');
         $user->setCountry('GB');
         $user->setActive(true);
-        $this->addReference('user_admin_2', $user);
+        $this->addReference('user_2', $user);
         $manager->persist($user);
 
         // todo: only in dev environment

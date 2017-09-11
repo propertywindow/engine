@@ -14,11 +14,14 @@ services:
     service_service:
           class: AuthenticationBundle\Service\ServiceService
           arguments: ["@doctrine.orm.entity_manager"]
-    service_service_group:
-              class: AuthenticationBundle\Service\ServiceServiceGroup
-              arguments: ["@doctrine.orm.entity_manager"]
+    service_group_service:
+          class: AuthenticationBundle\Service\ServiceGroupService
+          arguments: ["@doctrine.orm.entity_manager"]
     service_template_service:
           class: AuthenticationBundle\Service\ServiceTemplateService
+          arguments: ["@doctrine.orm.entity_manager"]
+    service_map_service:
+          class: AuthenticationBundle\Service\ServiceMapService
           arguments: ["@doctrine.orm.entity_manager"]
     service_controller:
           class: AuthenticationBundle\Controller\ServiceController

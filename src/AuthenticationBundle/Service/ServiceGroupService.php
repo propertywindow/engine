@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 /**
  * @package AuthenticationBundle\Service
  */
-class ServiceServiceGroup
+class ServiceGroupService
 {
     /**
      * @var EntityManagerInterface

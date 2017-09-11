@@ -231,7 +231,7 @@ class ServiceTemplateController extends BaseController
         }
 
         $userType     = $this->userTypeService->getUserType((int)$parameters['user_type_id']);
-        $serviceGroup = $this->serviceServiceGroup->getServiceGroup((int)$parameters['service_group_id']);
+        $serviceGroup = $this->serviceGroupService->getServiceGroup((int)$parameters['service_group_id']);
 
         return Mapper::fromServiceGroupTemplate(
             $this->serviceTemplateService->addToServiceGroupTemplate($userType, $serviceGroup)
@@ -289,7 +289,7 @@ class ServiceTemplateController extends BaseController
         }
 
         $userType     = $this->userTypeService->getUserType((int)$parameters['user_type_id']);
-        $serviceGroup = $this->serviceServiceGroup->getServiceGroup((int)$parameters['service_group_id']);
+        $serviceGroup = $this->serviceGroupService->getServiceGroup((int)$parameters['service_group_id']);
 
         $this->serviceTemplateService->removeFromServiceGroupTemplate($userType, $serviceGroup);
     }

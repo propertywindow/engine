@@ -2,6 +2,7 @@
 
 namespace AuthenticationBundle\Entity;
 
+use AgentBundle\Entity\Agent;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -23,18 +24,16 @@ class ServiceGroupMap
     private $id;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="agent_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true)
      */
-    private $agentId;
+    protected $user;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="group_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="ServiceGroup")
+     * @ORM\JoinColumn(name="service_group_id", referencedColumnName="id")
      */
-    private $groupId;
+    private $serviceGroup;
 
     /**
      * @var \DateTime $created
@@ -61,51 +60,51 @@ class ServiceGroupMap
     }
 
     /**
-     * Set agentId
+     * Set user
      *
-     * @param integer $agentId
+     * @param User $user
      *
      * @return ServiceGroupMap
      */
-    public function setAgentId($agentId)
+    public function setUser(User $user = null)
     {
-        $this->agentId = $agentId;
+        $this->user = $user;
 
         return $this;
     }
 
     /**
-     * Get agentId
+     * Get user
      *
-     * @return int
+     * @return User
      */
-    public function getAgentId()
+    public function getUser()
     {
-        return $this->agentId;
+        return $this->user;
     }
 
     /**
-     * Set groupId
+     * Set serviceGroup
      *
-     * @param integer $groupId
+     * @param ServiceGroup
      *
      * @return ServiceGroupMap
      */
-    public function setGroupId($groupId)
+    public function setServiceGroup(ServiceGroup $serviceGroup = null)
     {
-        $this->groupId = $groupId;
+        $this->serviceGroup = $serviceGroup;
 
         return $this;
     }
 
     /**
-     * Get groupId
+     * Get serviceGroup
      *
-     * @return int
+     * @return ServiceGroup
      */
-    public function getGroupId()
+    public function getServiceGroup()
     {
-        return $this->groupId;
+        return $this->serviceGroup;
     }
 
     /**

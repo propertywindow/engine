@@ -94,7 +94,7 @@ class ServiceGroupController extends BaseController
         }
 
         $id           = (int)$parameters['id'];
-        $serviceGroup = $this->serviceServiceGroup->getServiceGroup($id);
+        $serviceGroup = $this->serviceGroupService->getServiceGroup($id);
         $userSettings = $this->userSettingsService->getSettings($userId);
 
         return Mapper::fromServiceGroup($userSettings->getLanguage(), $serviceGroup);
@@ -112,6 +112,6 @@ class ServiceGroupController extends BaseController
         $userSettings = $this->userSettingsService->getSettings($userId);
 
         return Mapper::fromServiceGroups($userSettings->getLanguage(), ...
-            $this->serviceServiceGroup->getServiceGroups());
+            $this->serviceGroupService->getServiceGroups());
     }
 }

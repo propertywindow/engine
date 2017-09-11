@@ -113,7 +113,7 @@ class ServiceController extends BaseController
             throw new InvalidArgumentException("No argument provided");
         }
 
-        $serviceGroup = $this->serviceServiceGroup->getServiceGroup($parameters['service_group_id']);
+        $serviceGroup = $this->serviceGroupService->getServiceGroup($parameters['service_group_id']);
         $userSettings = $this->userSettingsService->getSettings($userId);
 
         return Mapper::fromServices($userSettings->getLanguage(), ...$this->serviceService->getServices($serviceGroup));

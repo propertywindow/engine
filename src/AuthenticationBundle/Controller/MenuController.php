@@ -87,8 +87,10 @@ class MenuController extends BaseController
      */
     private function getMenu(int $userId)
     {
+        $user         = $this->userService->getUser($userId);
         $userSettings = $this->userSettingsService->getSettings($userId);
+        $services     = $this->serviceMapService->getAuthorizedServiceGroups($user);
 
-        return Mapper::fromMenus($userSettings->getLanguage(), ...$this->serviceServiceGroup->getServiceGroups());
+        return Mapper::fromMenus($userSettings->getLanguage(), ...$services);
     }
 }
