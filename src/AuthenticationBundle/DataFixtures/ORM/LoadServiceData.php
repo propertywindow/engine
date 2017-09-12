@@ -79,7 +79,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service = new Service();
         $service->setEn('Types');
         $service->setNl('Types');
-        $service->setIcon('');
+        $service->setIcon('zmdi zmdi-label');
         $service->setUrl('/users/types');
         $service->setVisible(true);
         $service->setServiceGroup($this->getReference('service_group_users'));
@@ -99,7 +99,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service = new Service();
         $service->setEn('Users');
         $service->setNl('Gebruikers');
-        $service->setIcon('');
+        $service->setIcon('zmdi zmdi-accounts-list');
         $service->setUrl('/users/users');
         $service->setVisible(true);
         $service->setServiceGroup($this->getReference('service_group_users'));

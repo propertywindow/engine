@@ -57,7 +57,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
 
         // Colleague Users
 
-        for ($i = 1; $i <= 10; $i++) {
+        for ($i = 1; $i <= 15; $i++) {
             $path     = file_get_contents('https://randomuser.me/api/?nat=gb');
             $json     = json_decode($path, true);
             $fakeUser = $json['results'][0];
