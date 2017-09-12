@@ -3,7 +3,6 @@
 namespace AuthenticationBundle\Service\Service;
 
 use AuthenticationBundle\Entity\Service;
-use AuthenticationBundle\Entity\ServiceGroup;
 
 /**
  * Class Mapper
@@ -12,63 +11,43 @@ use AuthenticationBundle\Entity\ServiceGroup;
 class Mapper
 {
     /**
+     * @param string  $language
      * @param Service $service
      *
      * @return array
      */
-    public static function fromService(Service $service): array
+    public static function fromService(string $language, Service $service): array
     {
-        // todo: get language from user and make switch case
+        switch ($language) {
+            case "nl":
+                $description = $service->getNl();
+                break;
+            default:
+                $description = $service->getEn();
+        }
 
         return [
             'id'          => $service->getId(),
-            'description' => $service->getEn(),
+            'description' => $description,
             'icon'        => $service->getIcon(),
+            'url'         => $service->getUrl(),
             'visible'     => $service->getVisible(),
         ];
     }
 
     /**
+     * @param string    $language
      * @param Service[] ...$services
      *
      * @return array
      */
-    public static function fromServices(Service ...$services): array
+    public static function fromServices(string $language, Service ...$services): array
     {
         return array_map(
-            function (Service $service) {
-                return self::fromService($service);
+            function (Service $service) use ($language) {
+                return self::fromService($language, $service);
             },
             $services
-        );
-    }
-
-    /**
-     * @param ServiceGroup $serviceGroup
-     *
-     * @return array
-     */
-    public static function fromServiceGroup(ServiceGroup $serviceGroup): array
-    {
-        return [
-            'id'          => $serviceGroup->getId(),
-            'description' => $serviceGroup->getEn(),
-            'icon'        => $serviceGroup->getIcon(),
-        ];
-    }
-
-    /**
-     * @param ServiceGroup[] ...$serviceGroups
-     *
-     * @return array
-     */
-    public static function fromServicesGroup(ServiceGroup ...$serviceGroups): array
-    {
-        return array_map(
-            function (ServiceGroup $serviceGroup) {
-                return self::fromServiceGroup($serviceGroup);
-            },
-            $serviceGroups
         );
     }
 }

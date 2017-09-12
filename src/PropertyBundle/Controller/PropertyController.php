@@ -2,14 +2,10 @@
 
 namespace PropertyBundle\Controller;
 
-use AgentBundle\Service\ClientService;
+use AppBundle\Controller\BaseController;
 use Exception;
 use InvalidArgumentException;
-use PropertyBundle\Service\KindService;
-use PropertyBundle\Service\TermsService;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use AppBundle\Security\Authenticator;
 use AppBundle\Models\JsonRpc\Error;
 use AppBundle\Models\JsonRpc\Response;
 use AppBundle\Exceptions\CouldNotAuthenticateUserException;
@@ -17,13 +13,8 @@ use AppBundle\Exceptions\JsonRpc\CouldNotParseJsonRequestException;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcRequestException;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
-use AuthenticationBundle\Service\UserService;
-use AgentBundle\Service\AgentService;
-use LogBundle\Service\ActivityService;
-use LogBundle\Service\TrafficService;
 use PropertyBundle\Exceptions\PropertyNotFoundException;
 use PropertyBundle\Exceptions\PropertyAlreadyExistsException;
-use PropertyBundle\Service\PropertyService;
 use PropertyBundle\Service\Property\Mapper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
@@ -31,99 +22,8 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 /**
  * @Route(service="property_controller")
  */
-class PropertyController extends Controller
+class PropertyController extends BaseController
 {
-    private const         PARSE_ERROR            = -32700;
-    private const         INVALID_REQUEST        = -32600;
-    private const         METHOD_NOT_FOUND       = -32601;
-    private const         INVALID_PARAMS         = -32602;
-    private const         INTERNAL_ERROR         = -32603;
-    private const         USER_NOT_AUTHENTICATED = -32000;
-    private const         PROPERTY_NOT_FOUND     = -32001;
-    private const         USER_ADMIN             = 1;
-    private const         USER_AGENT             = 2;
-    private const         USER_COLLEAGUE         = 3;
-    private const         USER_CLIENT            = 4;
-    private const         USER_API               = 5;
-
-    /**
-     * @var Authenticator
-     */
-    private $authenticator;
-
-    /**
-     * @var PropertyService
-     */
-    private $propertyService;
-
-    /**
-     * @var UserService
-     */
-    private $userService;
-
-    /**
-     * @var ClientService
-     */
-    private $clientService;
-
-    /**
-     * @var AgentService
-     */
-    private $agentService;
-
-    /**
-     * @var ActivityService
-     */
-    private $activityService;
-
-    /**
-     * @var TrafficService
-     */
-    private $trafficService;
-
-    /**
-     * @var KindService
-     */
-    private $kindService;
-
-    /**
-     * @var TermsService
-     */
-    private $termsService;
-
-    /**
-     * @param Authenticator   $authenticator
-     * @param PropertyService $propertyService
-     * @param UserService     $userService
-     * @param ClientService   $clientService
-     * @param AgentService    $agentService
-     * @param ActivityService $activityService
-     * @param TrafficService  $trafficService
-     * @param KindService     $kindService
-     * @param TermsService    $termsService
-     */
-    public function __construct(
-        Authenticator $authenticator,
-        PropertyService $propertyService,
-        UserService $userService,
-        ClientService $clientService,
-        AgentService $agentService,
-        ActivityService $activityService,
-        TrafficService $trafficService,
-        KindService $kindService,
-        TermsService $termsService
-    ) {
-        $this->authenticator   = $authenticator;
-        $this->propertyService = $propertyService;
-        $this->userService     = $userService;
-        $this->clientService   = $clientService;
-        $this->agentService    = $agentService;
-        $this->activityService = $activityService;
-        $this->trafficService  = $trafficService;
-        $this->kindService     = $kindService;
-        $this->termsService    = $termsService;
-    }
-
     /**
      * @Route("/property" , name="property")
      *
@@ -135,29 +35,7 @@ class PropertyController extends Controller
     {
         $id = null;
         try {
-            $userId = $this->authenticator->authenticate($httpRequest);
-
-            $jsonString = file_get_contents('php://input');
-            $jsonArray  = json_decode($jsonString, true);
-
-            if ($jsonArray === null) {
-                throw new CouldNotParseJsonRequestException("Could not parse JSON-RPC request");
-            }
-
-            if ($jsonArray['jsonrpc'] !== '2.0') {
-                throw new InvalidJsonRpcRequestException("Request does not match JSON-RPC 2.0 specification");
-            }
-
-            $id     = $jsonArray['id'];
-            $method = $jsonArray['method'];
-            if (empty($method)) {
-                throw new InvalidJsonRpcMethodException("No request method found");
-            }
-
-            $parameters = [];
-            if (array_key_exists('params', $jsonArray)) {
-                $parameters = $jsonArray['params'];
-            }
+            list($id, $userId, $method, $parameters) = $this->prepareRequest($httpRequest);
 
             $jsonRpcResponse = Response::success($id, $this->invoke($userId, $method, $parameters));
         } catch (CouldNotParseJsonRequestException $ex) {
@@ -176,15 +54,7 @@ class PropertyController extends Controller
             $jsonRpcResponse = Response::failure($id, new Error(self::INTERNAL_ERROR, $ex->getMessage()));
         }
 
-        $httpResponse = HttpResponse::create(
-            json_encode($jsonRpcResponse),
-            200,
-            [
-                'Content-Type' => 'application/json',
-            ]
-        );
-
-        return $httpResponse;
+        return $this->createResponse($jsonRpcResponse);
     }
 
     /**
@@ -239,8 +109,9 @@ class PropertyController extends Controller
             throw new InvalidArgumentException("No argument provided");
         }
 
-        $id   = (int)$parameters['id'];
-        $user = $this->userService->getUser($userId);
+        $id           = (int)$parameters['id'];
+        $user         = $this->userService->getUser($userId);
+        $userSettings = $this->userSettingsService->getSettings($userId);
 
         $property = $this->propertyService->getProperty($id);
 
@@ -268,7 +139,7 @@ class PropertyController extends Controller
             );
         }
 
-        return Mapper::fromProperty($property);
+        return Mapper::fromProperty($userSettings->getLanguage(), $property);
     }
 
     /**
@@ -278,10 +149,12 @@ class PropertyController extends Controller
      */
     private function getProperties(int $userId)
     {
-        $user  = $this->userService->getUser($userId);
-        $agent = $this->agentService->getAgent((int)$user->getAgent()->getId());
+        $user         = $this->userService->getUser($userId);
+        $userSettings = $this->userSettingsService->getSettings($userId);
+        $agent        = $this->agentService->getAgent((int)$user->getAgent()->getId());
 
-        return Mapper::fromProperties(...$this->propertyService->listProperties($agent->getId()));
+        return Mapper::fromProperties($userSettings->getLanguage(), ...
+            $this->propertyService->listProperties($agent->getId()));
     }
 
     /**
@@ -297,13 +170,14 @@ class PropertyController extends Controller
         $offset = array_key_exists('offset', $parameters) &&
                   $parameters['offset'] !== null ? (int)$parameters['offset'] : 0;
 
-        $user     = $this->userService->getUser($userId);
-        $agentIds = $this->agentService->getAgentIdsFromGroup((int)$user->getAgent()->getId());
+        $user         = $this->userService->getUser($userId);
+        $userSettings = $this->userSettingsService->getSettings($userId);
+        $agentIds     = $this->agentService->getAgentIdsFromGroup((int)$user->getAgent()->getId());
 
         list($properties, $count) = $this->propertyService->listAllProperties($agentIds, $limit, $offset);
 
         return [
-            'properties' => Mapper::fromProperties(...$properties),
+            'properties' => Mapper::fromProperties($userSettings->getLanguage(), ...$properties),
             'count'      => $count,
         ];
     }
@@ -319,7 +193,8 @@ class PropertyController extends Controller
      */
     private function createProperty(int $userId, array $parameters)
     {
-        $user = $this->userService->getUser($userId);
+        $user         = $this->userService->getUser($userId);
+        $userSettings = $this->userSettingsService->getSettings($userId);
 
         if ($user->getUserType()->getId() === self::USER_CLIENT || $user->getUserType()->getId() === self::USER_API) {
             throw new NotAuthorizedException($userId);
@@ -371,7 +246,7 @@ class PropertyController extends Controller
         $propertyId = (int)$property->getId();
 
         $this->activityService->createActivity(
-            $userId,
+            $user,
             $propertyId,
             'property',
             'create',
@@ -382,7 +257,7 @@ class PropertyController extends Controller
         // todo: also insert Details, Gallery, GeneralNotes
         // todo: create data folder
 
-        return Mapper::fromProperty($property);
+        return Mapper::fromProperty($userSettings->getLanguage(), $property);
     }
 
     /**
@@ -399,9 +274,10 @@ class PropertyController extends Controller
             throw new InvalidArgumentException("Identifier not provided");
         }
 
-        $user     = $this->userService->getUser($userId);
-        $id       = (int)$parameters['id'];
-        $property = $this->propertyService->getProperty($id);
+        $user         = $this->userService->getUser($userId);
+        $userSettings = $this->userSettingsService->getSettings($userId);
+        $id           = (int)$parameters['id'];
+        $property     = $this->propertyService->getProperty($id);
 
         if ($property->getAgent()->getId() !== $user->getAgent()->getId()) {
             throw new NotAuthorizedException($userId);
@@ -483,7 +359,7 @@ class PropertyController extends Controller
         $updatedProperty = $this->propertyService->updateProperty($property);
 
         $this->activityService->createActivity(
-            $userId,
+            $user,
             $id,
             'property',
             'update',
@@ -491,7 +367,7 @@ class PropertyController extends Controller
             $this->get('jms_serializer')->serialize($updatedProperty, 'json')
         );
 
-        return Mapper::fromProperty($updatedProperty);
+        return Mapper::fromProperty($userSettings->getLanguage(), $updatedProperty);
 
         // todo: also update Details, Gallery, GeneralNotes
     }
@@ -519,7 +395,7 @@ class PropertyController extends Controller
         $this->propertyService->archiveProperty($id);
 
         $this->activityService->createActivity(
-            $userId,
+            $user,
             $id,
             'property',
             'archive',
@@ -583,7 +459,7 @@ class PropertyController extends Controller
         $updatedProperty = $this->propertyService->setPropertySold($id, $soldPrice);
 
         $this->activityService->createActivity(
-            $userId,
+            $user,
             $id,
             'property',
             'update',
@@ -620,7 +496,7 @@ class PropertyController extends Controller
         $updatedProperty = $this->propertyService->toggleOnline($id, $online);
 
         $this->activityService->createActivity(
-            $userId,
+            $user,
             $id,
             'property',
             'update',

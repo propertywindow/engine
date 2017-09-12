@@ -276,20 +276,6 @@ class Property
     }
 
     /**
-     * Set kind
-     *
-     * @param int $kind
-     *
-     * @return Property
-     */
-    public function setKindId(Kind $kind = null)
-    {
-        $this->kind = $kind;
-
-        return $this;
-    }
-
-    /**
      * Get kind
      *
      * @return Kind

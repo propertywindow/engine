@@ -23,18 +23,16 @@ class ServiceMap
     private $id;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="user_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="AuthenticationBundle\Entity\User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true)
      */
-    private $userId;
+    protected $user;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="service_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="Service")
+     * @ORM\JoinColumn(name="service_id", referencedColumnName="id")
      */
-    private $serviceId;
+    private $service;
 
     /**
      * @var \DateTime $created
@@ -61,51 +59,51 @@ class ServiceMap
     }
 
     /**
-     * Set userId
+     * Set user
      *
-     * @param integer $userId
+     * @param User $user
      *
      * @return ServiceMap
      */
-    public function setUserId($userId)
+    public function setUser(User $user = null)
     {
-        $this->userId = $userId;
+        $this->user = $user;
 
         return $this;
     }
 
     /**
-     * Get userId
+     * Get user
      *
-     * @return int
+     * @return User
      */
-    public function getUserId()
+    public function getUser()
     {
-        return $this->userId;
+        return $this->user;
     }
 
     /**
-     * Set serviceId
+     * Set service
      *
-     * @param integer $serviceId
+     * @param Service
      *
      * @return ServiceMap
      */
-    public function setServiceId($serviceId)
+    public function setService(Service $service = null)
     {
-        $this->serviceId = $serviceId;
+        $this->service = $service;
 
         return $this;
     }
 
     /**
-     * Get serviceId
+     * Get service
      *
-     * @return int
+     * @return Service
      */
-    public function getServiceId()
+    public function getService()
     {
-        return $this->serviceId;
+        return $this->service;
     }
 
     /**

@@ -23,10 +23,17 @@ class Service
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="ServiceGroup")
+     * @ORM\ManyToOne(targetEntity="ServiceGroup", inversedBy="services")
      * @ORM\JoinColumn(name="group_id", referencedColumnName="id")
      */
     private $serviceGroup;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="function_name", type="string", length=255, nullable=true)
+     */
+    private $functionName;
 
     /**
      * @var string
@@ -48,6 +55,13 @@ class Service
      * @ORM\Column(name="icon", type="string")
      */
     private $icon;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="url", type="string", length=255, nullable=true)
+     */
+    private $url;
 
     /**
      * @var bool
@@ -102,6 +116,30 @@ class Service
     public function getServiceGroup()
     {
         return $this->serviceGroup;
+    }
+
+    /**
+     * Set functionName
+     *
+     * @param string $functionName
+     *
+     * @return Service
+     */
+    public function setFunctionName($functionName)
+    {
+        $this->functionName = $functionName;
+
+        return $this;
+    }
+
+    /**
+     * Get functionName
+     *
+     * @return string
+     */
+    public function getFunctionName()
+    {
+        return $this->functionName;
     }
 
     /**
@@ -164,6 +202,30 @@ class Service
         $this->icon = $icon;
 
         return $this;
+    }
+
+    /**
+     * Set url
+     *
+     * @param string $url
+     *
+     * @return Service
+     */
+    public function setUrl($url)
+    {
+        $this->url = $url;
+
+        return $this;
+    }
+
+    /**
+     * Get url
+     *
+     * @return string
+     */
+    public function getUrl()
+    {
+        return $this->url;
     }
 
     /**

@@ -25,13 +25,13 @@ class Blacklist
 
     /**
      * @ORM\ManyToOne(targetEntity="AuthenticationBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true)
      */
     protected $user;
 
     /**
      * @ORM\ManyToOne(targetEntity="AgentBundle\Entity\Agent")
-     * @ORM\JoinColumn(name="agent_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="agent_id", referencedColumnName="id", nullable=true)
      */
     protected $agent;
 

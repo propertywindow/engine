@@ -41,11 +41,10 @@ class PropertyRepository extends EntityRepository
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
                    ->select('p')
-                   ->from('PropertyBundle:Property', 'p');
-
-        $qb->where("p.agent = :agentId")
-           ->orderBy('p.id', 'DESC')
-           ->setParameter('agentId', $agentId);
+                   ->from('PropertyBundle:Property', 'p')
+                   ->where('p.agent = :agentId')
+                   ->orderBy('p.id', 'DESC')
+                   ->setParameter('agentId', $agentId);
 
         $results = $qb->getQuery()->getResult();
 

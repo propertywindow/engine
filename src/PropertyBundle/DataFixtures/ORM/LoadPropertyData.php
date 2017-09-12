@@ -58,6 +58,46 @@ class LoadPropertyData extends AbstractFixture implements OrderedFixtureInterfac
         $this->addReference('property_2', $property);
         $manager->persist($property);
 
+        $property = new Property();
+        $property->setKind($this->getReference('kind_sale'));
+        $property->setAgent($this->getReference('agent_1'));
+        $property->setClient($this->getReference('client_2'));
+        $property->setTerms($this->getReference('term_new'));
+        $property->setOnline(true);
+        $property->setSubType(12);
+        $property->setStreet('Silverbuthall Road');
+        $property->setHouseNumber('56');
+        $property->setPostcode('TD9 7BN');
+        $property->setCity('Hawick');
+        $property->setCountry('GB');
+        $property->setPrice(90000);
+        $property->setLat(55.4324969);
+        $property->setLng(-2.7873451000000387);
+        $property->setEspc(false);
+        $property->setArchived(false);
+        $this->addReference('property_3', $property);
+        $manager->persist($property);
+
+        $property = new Property();
+        $property->setKind($this->getReference('kind_sale'));
+        $property->setAgent($this->getReference('agent_1'));
+        $property->setClient($this->getReference('client_3'));
+        $property->setTerms($this->getReference('term_new'));
+        $property->setOnline(true);
+        $property->setSubType(12);
+        $property->setStreet('Borthaugh Road');
+        $property->setHouseNumber('26');
+        $property->setPostcode('TD9 0BZ');
+        $property->setCity('Hawick');
+        $property->setCountry('GB');
+        $property->setPrice(105000);
+        $property->setLat(55.4180338);
+        $property->setLng(-2.8005752000000257);
+        $property->setEspc(false);
+        $property->setArchived(false);
+        $this->addReference('property_4', $property);
+        $manager->persist($property);
+
         $manager->flush();
     }
 

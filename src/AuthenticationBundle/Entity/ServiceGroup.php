@@ -2,6 +2,8 @@
 
 namespace AuthenticationBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -21,6 +23,11 @@ class ServiceGroup
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Service", mappedBy="serviceGroup", cascade={"remove"})
+     */
+    private $services;
 
     /**
      * @var string
@@ -44,6 +51,13 @@ class ServiceGroup
     private $icon;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="url", type="string", length=255, nullable=true)
+     */
+    private $url;
+
+    /**
      * @var \DateTime $created
      *
      * @ORM\Column(type="datetime")
@@ -58,6 +72,14 @@ class ServiceGroup
     protected $updated;
 
     /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->services = new ArrayCollection();
+    }
+
+    /**
      * Get id
      *
      * @return int
@@ -65,6 +87,40 @@ class ServiceGroup
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Add service
+     *
+     * @param Service $service
+     *
+     * @return ServiceGroup
+     */
+    public function addService(Service $service)
+    {
+        $this->services[] = $service;
+
+        return $this;
+    }
+
+    /**
+     * Remove service
+     *
+     * @param Service $service
+     */
+    public function removeService(Service $service)
+    {
+        $this->services->removeElement($service);
+    }
+
+    /**
+     * Get services
+     *
+     * @return Collection
+     */
+    public function getServices()
+    {
+        return $this->services;
     }
 
     /**
@@ -137,6 +193,30 @@ class ServiceGroup
     public function getIcon()
     {
         return $this->icon;
+    }
+
+    /**
+     * Set url
+     *
+     * @param string $url
+     *
+     * @return ServiceGroup
+     */
+    public function setUrl($url)
+    {
+        $this->url = $url;
+
+        return $this;
+    }
+
+    /**
+     * Get url
+     *
+     * @return string
+     */
+    public function getUrl()
+    {
+        return $this->url;
     }
 
     /**

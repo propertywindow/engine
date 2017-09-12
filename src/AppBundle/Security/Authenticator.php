@@ -3,6 +3,7 @@
 namespace AppBundle\Security;
 
 use AppBundle\Exceptions\CouldNotAuthenticateUserException;
+use AuthenticationBundle\Service\BlacklistService;
 use Symfony\Component\HttpFoundation\Request;
 use AuthenticationBundle\Service\UserService;
 
@@ -21,15 +22,22 @@ class Authenticator
     /**
      * @var UserService
      */
-    private $service;
+    private $userService;
 
     /**
-     * @param string      $environment
-     * @param UserService $service
+     * @var UserService
      */
-    public function __construct($environment, UserService $service)
+    private $blacklistService;
+
+    /**
+     * @param string           $environment
+     * @param UserService      $userService
+     * @param BlacklistService $blacklistService
+     */
+    public function __construct($environment, UserService $userService, BlacklistService $blacklistService)
     {
-        $this->service = $service;
+        $this->userService      = $userService;
+        $this->blacklistService = $blacklistService;
 
         if ($environment === "dev") {
             $this->strict = false;
@@ -40,12 +48,12 @@ class Authenticator
 
     /**
      * @param Request $request
+     * @param bool    $impersonate
      *
      * @return int
-     *
      * @throws CouldNotAuthenticateUserException
      */
-    public function authenticate(Request $request): int
+    public function authenticate(Request $request, bool $impersonate): int
     {
         $headers = $request->headers;
         if (!$headers->has('Authorization')) {
@@ -75,19 +83,19 @@ class Authenticator
         $timestamp = $decoded['timestamp'];
         $signature = $decoded['signature'];
 
-        if (!$this->strict) {
-            return $userId;
-        }
-
-        $user = $this->service->getUser($userId);
+        $user = $this->userService->getUser($userId);
 
         if (empty($user)) {
             throw new CouldNotAuthenticateUserException("No user found");
         }
 
+        if (!$user->getActive()) {
+            throw new CouldNotAuthenticateUserException("User is not activated");
+        }
+
         $secret = $user->getPassword();
 
-        if (md5($password) !== $secret) {
+        if ($password !== $secret) {
             throw new CouldNotAuthenticateUserException("Password incorrect");
         }
 
@@ -96,12 +104,25 @@ class Authenticator
             throw new CouldNotAuthenticateUserException("User not recognized");
         }
 
+        if (!$impersonate) {
+            $user->setLastOnline(new \DateTime());
+            $this->userService->updateUser($user);
+        }
+
+        if (!$this->strict) {
+            return $userId;
+        }
+
         $now                = time();
         $tenMinutesInPast   = $now - (10 * 60);
         $tenMinutesInFuture = $now + (10 * 60);
 
         if ($timestamp > $tenMinutesInFuture || $timestamp < $tenMinutesInPast) {
-            throw new CouldNotAuthenticateUserException("Token is expired");
+            if ($user->getLastOnline()) {
+                if ($user->getLastOnline()->getTimestamp() < $tenMinutesInPast) {
+                    throw new CouldNotAuthenticateUserException("Token is expired");
+                }
+            }
         }
 
         return $userId;

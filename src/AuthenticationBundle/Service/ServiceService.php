@@ -38,15 +38,14 @@ class ServiceService
     }
 
     /**
-     * @param int $id
+     * @param ServiceGroup $serviceGroup
      *
-     * @return ServiceGroup $serviceGroup
+     * @return array|Service[]
      */
-    public function getServiceGroup(int $id)
+    public function getServices(ServiceGroup $serviceGroup)
     {
-        $repository   = $this->entityManager->getRepository('AuthenticationBundle:ServiceGroup');
-        $serviceGroup = $repository->findById($id);
+        $repository = $this->entityManager->getRepository('AuthenticationBundle:Service');
 
-        return $serviceGroup;
+        return $repository->listAll($serviceGroup);
     }
 }

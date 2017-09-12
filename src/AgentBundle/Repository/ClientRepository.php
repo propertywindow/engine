@@ -39,7 +39,7 @@ class ClientRepository extends EntityRepository
     public function listAll(Agent $agent): array
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
-                   ->select('s')
+                   ->select('c')
                    ->from('AgentBundle:Client', 'c')
                    ->where("c.agent = :agent")
                    ->setParameter('agent', $agent)

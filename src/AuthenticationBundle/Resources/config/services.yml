@@ -2,6 +2,9 @@ services:
     user_service:
           class: AuthenticationBundle\Service\UserService
           arguments: ["@doctrine.orm.entity_manager"]
+    user_settings_service:
+          class: AuthenticationBundle\Service\UserSettingsService
+          arguments: ["@doctrine.orm.entity_manager"]
     user_type_service:
           class: AuthenticationBundle\Service\UserTypeService
           arguments: ["@doctrine.orm.entity_manager"]
@@ -11,15 +14,33 @@ services:
     service_service:
           class: AuthenticationBundle\Service\ServiceService
           arguments: ["@doctrine.orm.entity_manager"]
+    service_group_service:
+          class: AuthenticationBundle\Service\ServiceGroupService
+          arguments: ["@doctrine.orm.entity_manager"]
     service_template_service:
           class: AuthenticationBundle\Service\ServiceTemplateService
           arguments: ["@doctrine.orm.entity_manager"]
+    service_map_service:
+          class: AuthenticationBundle\Service\ServiceMapService
+          arguments: ["@doctrine.orm.entity_manager"]
     service_controller:
           class: AuthenticationBundle\Controller\ServiceController
-          arguments: ['@authenticator', '@service_service', '@user_service']
+          autowire: true
+    service_group_controller:
+          class: AuthenticationBundle\Controller\ServiceGroupController
+          autowire: true
     service_template_controller:
           class: AuthenticationBundle\Controller\ServiceTemplateController
-          arguments: ['@authenticator', '@service_service', '@service_template_service', '@user_service', '@user_type_service']
+          autowire: true
     blacklist_controller:
           class: AuthenticationBundle\Controller\BlacklistController
-          arguments: ['@authenticator', '@blacklist_service', '@user_service', '@agent_service']
+          autowire: true
+    login_controller:
+          class: AuthenticationBundle\Controller\LoginController
+          autowire: true
+    user_controller:
+          class: AuthenticationBundle\Controller\UserController
+          autowire: true
+    menu_controller:
+          class: AuthenticationBundle\Controller\MenuController
+          autowire: true

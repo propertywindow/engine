@@ -4,6 +4,8 @@ namespace AuthenticationBundle\Entity;
 
 use AgentBundle\Entity\Agent;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * User
@@ -11,6 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="AuthenticationBundle\Repository\UserRepository")
  * @ORM\HasLifecycleCallbacks
+ * @UniqueEntity("email")
  */
 class User
 {
@@ -26,23 +29,17 @@ class User
     /**
      * @var string
      *
-     * @ORM\Column(name="username", type="string", length=255)
-     */
-    private $username;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="password", type="string", length=255)
-     */
-    private $password;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="email", type="string", length=255)
+     * @ORM\Column(name="email", type="string", length=255, unique=true)
+     * @Assert\Email()
      */
     private $email;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="password", type="string", length=255, nullable=true)
+     */
+    private $password;
 
     /**
      * @var string
@@ -101,13 +98,6 @@ class User
     private $phone;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="language", type="string", length=2)
-     */
-    private $language = 'en';
-
-    /**
      * @ORM\ManyToOne(targetEntity="AgentBundle\Entity\Agent")
      * @ORM\JoinColumn(name="agent_id", referencedColumnName="id")
      */
@@ -134,6 +124,20 @@ class User
     private $lastLogin;
 
     /**
+     * @var \datetime
+     *
+     * @ORM\Column(name="last_online", type="datetime", length=255, nullable=true)
+     */
+    private $lastOnline;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="active", type="boolean", options={"default": false})
+     */
+    private $active = false;
+
+    /**
      * @var \DateTime $created
      *
      * @ORM\Column(type="datetime")
@@ -158,27 +162,27 @@ class User
     }
 
     /**
-     * Set username
+     * Set email
      *
-     * @param string $username
+     * @param string $email
      *
      * @return User
      */
-    public function setUsername($username)
+    public function setEmail($email)
     {
-        $this->username = $username;
+        $this->email = $email;
 
         return $this;
     }
 
     /**
-     * Get username
+     * Get email
      *
      * @return string
      */
-    public function getUsername()
+    public function getEmail()
     {
-        return $this->username;
+        return $this->email;
     }
 
     /**
@@ -203,30 +207,6 @@ class User
     public function getPassword()
     {
         return $this->password;
-    }
-
-    /**
-     * Set email
-     *
-     * @param string $email
-     *
-     * @return User
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    /**
-     * Get email
-     *
-     * @return string
-     */
-    public function getEmail()
-    {
-        return $this->email;
     }
 
     /**
@@ -422,30 +402,6 @@ class User
     }
 
     /**
-     * Set language
-     *
-     * @param string $language
-     *
-     * @return User
-     */
-    public function setLanguage($language)
-    {
-        $this->language = $language;
-
-        return $this;
-    }
-
-    /**
-     * Get language
-     *
-     * @return string
-     */
-    public function getLanguage()
-    {
-        return $this->language;
-    }
-
-    /**
      * Set agent
      *
      * @param \AgentBundle\Entity\Agent $agent
@@ -539,6 +495,54 @@ class User
     public function getLastLogin()
     {
         return $this->lastLogin;
+    }
+
+    /**
+     * Set lastOnline
+     *
+     * @param \datetime $lastOnline
+     *
+     * @return User
+     */
+    public function setLastOnline($lastOnline)
+    {
+        $this->lastOnline = $lastOnline;
+
+        return $this;
+    }
+
+    /**
+     * Get lastOnline
+     *
+     * @return \datetime
+     */
+    public function getLastOnline()
+    {
+        return $this->lastOnline;
+    }
+
+    /**
+     * Set active
+     *
+     * @param boolean $active
+     *
+     * @return User
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
+
+        return $this;
+    }
+
+    /**
+     * Get active
+     *
+     * @return bool
+     */
+    public function getActive()
+    {
+        return $this->active;
     }
 
     /**

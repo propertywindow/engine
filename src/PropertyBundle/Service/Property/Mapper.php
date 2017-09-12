@@ -2,6 +2,7 @@
 
 namespace PropertyBundle\Service\Property;
 
+use PropertyBundle\Entity\Gallery;
 use PropertyBundle\Entity\Property;
 
 /**
@@ -11,15 +12,17 @@ use PropertyBundle\Entity\Property;
 class Mapper
 {
     /**
+     * @param string   $language
      * @param Property $property
      *
      * @return array
      */
-    public static function fromProperty(Property $property): array
+    public static function fromProperty(string $language, Property $property): array
     {
-        $country = $property->getCountry();
+        $photo   = null;
+        $gallery = [];
 
-        switch ($country) {
+        switch ($property->getCountry()) {
             case "NL":
                 $address = $property->getStreet().' '.$property->getHouseNumber();
                 break;
@@ -30,12 +33,35 @@ class Mapper
                 $address = $property->getStreet().' '.$property->getHouseNumber();
         }
 
+        switch ($language) {
+            case "nl":
+                $terms = $property->getTerms()->getNl();
+                break;
+            case "en":
+                $terms = $property->getTerms()->getEn();
+                break;
+            default:
+                $terms = $property->getTerms()->getEn();
+        }
+
+        $images = $property->getImages()->getValues();
+
+        foreach ($images as $image) {
+            /** @var Gallery $image */
+            if ($image->getMain()) {
+                $photo = $image->getPath();
+            } else {
+                $gallery[] = $image->getPath();
+            }
+        }
+
         return [
             'id'           => $property->getId(),
             'agent_id'     => $property->getAgent()->getId(),
             'client_id'    => $property->getClient()->getId(),
             'kind_id'      => $property->getKind()->getId(),
             'terms_id'     => $property->getTerms()->getId(),
+            'terms'        => $terms,
             'address'      => $address,
             'street'       => $property->getStreet(),
             'house_number' => $property->getHouseNumber(),
@@ -50,20 +76,22 @@ class Mapper
             'online'       => $property->getOnline(),
             'lat'          => $property->getLat(),
             'lng'          => $property->getLng(),
-            'gallery'      => $property->getImages(),
+            'photo'        => $photo,
+            //            'gallery'      => $gallery,
         ];
     }
 
     /**
+     * @param string     $language
      * @param Property[] ...$properties
      *
      * @return array
      */
-    public static function fromProperties(Property ...$properties): array
+    public static function fromProperties(string $language, Property ...$properties): array
     {
         return array_map(
-            function (Property $property) {
-                return self::fromProperty($property);
+            function (Property $property) use ($language) {
+                return self::fromProperty($language, $property);
             },
             $properties
         );

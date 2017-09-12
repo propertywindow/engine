@@ -37,6 +37,13 @@ class UserType
     private $nl;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="visible", type="boolean", options={"default": false})
+     */
+    private $visible = false;
+
+    /**
      * @var \DateTime $created
      *
      * @ORM\Column(type="datetime")
@@ -106,6 +113,30 @@ class UserType
     public function getNl()
     {
         return $this->nl;
+    }
+
+    /**
+     * Set visible
+     *
+     * @param boolean $visible
+     *
+     * @return UserType
+     */
+    public function setVisible($visible)
+    {
+        $this->visible = $visible;
+
+        return $this;
+    }
+
+    /**
+     * Get visible
+     *
+     * @return bool
+     */
+    public function getVisible()
+    {
+        return $this->visible;
     }
 
     /**

@@ -20,13 +20,13 @@ class LoadAgentData extends AbstractFixture implements OrderedFixtureInterface
     {
         $agent = new Agent();
         $agent->setAgentGroup($this->getReference('agent_group_1'));
-        $agent->setName('The Agent NL');
+        $agent->setName('Property Window NL');
         $agent->setStreet('Graafsedijk');
         $agent->setHouseNumber('19');
         $agent->setPostcode('5437 NG');
         $agent->setCity('Beers');
         $agent->setCountry('NL');
-        $agent->setEmail('geurtsmarc@hotmail.com');
+        $agent->setEmail('info@propertywindow.nl');
         $agent->setPhone('0611839156');
         $agent->setPropertyLimit(200);
         $agent->setEspc(false);
@@ -36,13 +36,13 @@ class LoadAgentData extends AbstractFixture implements OrderedFixtureInterface
 
         $agent = new Agent();
         $agent->setAgentGroup($this->getReference('agent_group_1'));
-        $agent->setName('The Agent GB');
+        $agent->setName('Property Window GB');
         $agent->setStreet('Portobello High Street');
         $agent->setHouseNumber('27');
         $agent->setPostcode('EH15 1DE');
         $agent->setCity('Edinburgh');
         $agent->setCountry('GB');
-        $agent->setEmail('iain@datacomputerservices.co.uk');
+        $agent->setEmail('info@propertywindow.com');
         $agent->setPhone('07947254956');
         $agent->setPropertyLimit(500);
         $agent->setEspc(true);

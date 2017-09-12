@@ -2,6 +2,8 @@
 
 namespace LogBundle\Entity;
 
+use AgentBundle\Entity\Agent;
+use AuthenticationBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -23,11 +25,16 @@ class Login
     private $id;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="user_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="AuthenticationBundle\Entity\User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
-    private $userId;
+    protected $user;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AgentBundle\Entity\Agent")
+     * @ORM\JoinColumn(name="agent_id", referencedColumnName="id")
+     */
+    protected $agent;
 
     /**
      * @var string
@@ -55,27 +62,51 @@ class Login
     }
 
     /**
-     * Set userId
+     * Set user
      *
-     * @param integer $userId
+     * @param \AuthenticationBundle\Entity\User $user
      *
      * @return Login
      */
-    public function setUserId($userId)
+    public function setUser(User $user = null)
     {
-        $this->userId = $userId;
+        $this->user = $user;
 
         return $this;
     }
 
     /**
-     * Get userId
+     * Get user
      *
-     * @return int
+     * @return \AuthenticationBundle\Entity\User
      */
-    public function getUserId()
+    public function getUser()
     {
-        return $this->userId;
+        return $this->user;
+    }
+
+    /**
+     * Set agent
+     *
+     * @param \AgentBundle\Entity\Agent $agent
+     *
+     * @return Login
+     */
+    public function setAgent(Agent $agent = null)
+    {
+        $this->agent = $agent;
+
+        return $this;
+    }
+
+    /**
+     * Get agent
+     *
+     * @return \AgentBundle\Entity\Agent
+     */
+    public function getAgent()
+    {
+        return $this->agent;
     }
 
     /**

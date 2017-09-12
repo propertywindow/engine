@@ -30,4 +30,19 @@ class ServiceGroupRepository extends EntityRepository
         /** @var ServiceGroup $result */
         return $result;
     }
+
+    /**
+     * @return ServiceGroup[]
+     */
+    public function listAll(): array
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder()
+                   ->select('s')
+                   ->from('AuthenticationBundle:ServiceGroup', 's')
+                   ->orderBy('s.id', 'ASC');
+
+        $results = $qb->getQuery()->getResult();
+
+        return $results;
+    }
 }

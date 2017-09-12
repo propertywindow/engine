@@ -7,4 +7,7 @@ services:
           arguments: ["@doctrine.orm.entity_manager"]
     agent_controller:
           class: AgentBundle\Controller\AgentController
-          arguments: ['@authenticator', '@agent_service', '@user_service']
+          autowire: true
+    client_controller:
+          class: AgentBundle\Controller\ClientController
+          autowire: true

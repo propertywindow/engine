@@ -14,6 +14,10 @@ authentication:
     resource: "@AuthenticationBundle/Controller/"
     type:     annotation
 
+log:
+    resource: "@LogBundle/Controller/"
+    type:     annotation
+
 transparency:
     resource: "@TransparencyBundle/Controller/"
     type:     annotation
@@ -23,11 +27,6 @@ conversation:
     resource: "@ConversationBundle/Controller/"
     type:     annotation
     prefix:   /conversation
-
-log:
-    resource: "@LogBundle/Controller/"
-    type:     annotation
-    prefix:   /log
 
 appointment:
     resource: "@AppointmentBundle/Controller/"

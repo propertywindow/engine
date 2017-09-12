@@ -2,14 +2,11 @@
 
 namespace PropertyBundle\Controller;
 
+use AppBundle\Controller\BaseController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
-use AuthenticationBundle\Service\UserService;
 use Exception;
 use InvalidArgumentException;
-use PropertyBundle\Service\TypeService;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use AppBundle\Security\Authenticator;
 use AppBundle\Models\JsonRpc\Error;
 use AppBundle\Models\JsonRpc\Response;
 use AppBundle\Exceptions\CouldNotAuthenticateUserException;
@@ -17,7 +14,6 @@ use AppBundle\Exceptions\JsonRpc\CouldNotParseJsonRequestException;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcRequestException;
 use PropertyBundle\Exceptions\SubTypeNotFoundException;
-use PropertyBundle\Service\SubTypeService;
 use PropertyBundle\Service\SubType\Mapper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
@@ -25,59 +21,8 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 /**
  * @Route(service="sub_type_controller")
  */
-class SubTypeController extends Controller
+class SubTypeController extends BaseController
 {
-    private const         PARSE_ERROR            = -32700;
-    private const         INVALID_REQUEST        = -32600;
-    private const         METHOD_NOT_FOUND       = -32601;
-    private const         INVALID_PARAMS         = -32602;
-    private const         INTERNAL_ERROR         = -32603;
-    private const         USER_NOT_AUTHENTICATED = -32000;
-    private const         SUB_TYPE_NOT_FOUND     = -32001;
-    private const         USER_ADMIN             = 1;
-    private const         USER_AGENT             = 2;
-    private const         USER_COLLEAGUE         = 3;
-    private const         USER_CLIENT            = 4;
-    private const         USER_API               = 5;
-
-    /**
-     * @var Authenticator
-     */
-    private $authenticator;
-
-    /**
-     * @var TypeService
-     */
-    private $typeService;
-
-    /**
-     * @var SubTypeService
-     */
-    private $subTypeService;
-
-    /**
-     * @var UserService
-     */
-    private $userService;
-
-    /**
-     * @param Authenticator  $authenticator
-     * @param TypeService    $typeService
-     * @param SubTypeService $subTypeService
-     * @param UserService    $userService
-     */
-    public function __construct(
-        Authenticator $authenticator,
-        TypeService $typeService,
-        SubTypeService $subTypeService,
-        UserService $userService
-    ) {
-        $this->authenticator  = $authenticator;
-        $this->typeService    = $typeService;
-        $this->subTypeService = $subTypeService;
-        $this->userService    = $userService;
-    }
-
     /**
      * @Route("/property/subtype" , name="subtype")
      *
@@ -89,29 +34,7 @@ class SubTypeController extends Controller
     {
         $id = null;
         try {
-            $userId = $this->authenticator->authenticate($httpRequest);
-
-            $jsonString = file_get_contents('php://input');
-            $jsonArray  = json_decode($jsonString, true);
-
-            if ($jsonArray === null) {
-                throw new CouldNotParseJsonRequestException("Could not parse JSON-RPC request");
-            }
-
-            if ($jsonArray['jsonrpc'] !== '2.0') {
-                throw new InvalidJsonRpcRequestException("Request does not match JSON-RPC 2.0 specification");
-            }
-
-            $id     = $jsonArray['id'];
-            $method = $jsonArray['method'];
-            if (empty($method)) {
-                throw new InvalidJsonRpcMethodException("No request method found");
-            }
-
-            $parameters = [];
-            if (array_key_exists('params', $jsonArray)) {
-                $parameters = $jsonArray['params'];
-            }
+            list($id, $userId, $method, $parameters) = $this->prepareRequest($httpRequest);
 
             $jsonRpcResponse = Response::success($id, $this->invoke($userId, $method, $parameters));
         } catch (CouldNotParseJsonRequestException $ex) {
@@ -130,15 +53,7 @@ class SubTypeController extends Controller
             $jsonRpcResponse = Response::failure($id, new Error(self::INTERNAL_ERROR, $ex->getMessage()));
         }
 
-        $httpResponse = HttpResponse::create(
-            json_encode($jsonRpcResponse),
-            200,
-            [
-                'Content-Type' => 'application/json',
-            ]
-        );
-
-        return $httpResponse;
+        return $this->createResponse($jsonRpcResponse);
     }
 
     /**

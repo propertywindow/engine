@@ -2,6 +2,8 @@
 
 namespace LogBundle\Service;
 
+use AgentBundle\Entity\Agent;
+use AuthenticationBundle\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use LogBundle\Entity\Activity;
 use LogBundle\Exceptions\ActivityNotFoundException;
@@ -28,24 +30,44 @@ class ActivityService
      * @param int $id
      *
      * @return Activity $activity
-     *
-     * @throws ActivityNotFoundException
      */
     public function getActivity(int $id)
     {
         $repository = $this->entityManager->getRepository('LogBundle:Activity');
-        $activity   = $repository->find($id);
-
-        /** @var Activity $activity */
-        if ($activity === null) {
-            throw new ActivityNotFoundException($id);
-        }
+        $activity   = $repository->findById($id);
 
         return $activity;
     }
 
     /**
-     * @param int         $userId
+     * @param Agent $agent
+     *
+     * @return Activity[]
+     */
+    public function getActivities(Agent $agent)
+    {
+        $repository = $this->entityManager->getRepository('LogBundle:Activity');
+
+        return $repository->findByAgent($agent);
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return Activity $activity
+     *
+     * @throws ActivityNotFoundException
+     */
+    public function getActivityFromUser(User $user)
+    {
+        $repository = $this->entityManager->getRepository('LogBundle:Activity');
+        $activity   = $repository->findByUser($user);
+
+        return $activity;
+    }
+
+    /**
+     * @param User        $user
      * @param int|null    $actionId
      * @param null|string $actionCategory
      * @param string      $actionName
@@ -55,7 +77,7 @@ class ActivityService
      * @return Activity
      */
     public function createActivity(
-        int $userId,
+        User $user,
         ?int $actionId,
         ?string $actionCategory,
         string $actionName,
@@ -64,7 +86,8 @@ class ActivityService
     ) {
         $activity = new Activity();
 
-        $activity->setUserId($userId);
+        $activity->setUser($user);
+        $activity->setAgent($user->getAgent());
         $activity->setActionId($actionId);
         $activity->setActionCategory($actionCategory);
         $activity->setActionName($actionName);

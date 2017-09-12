@@ -25,34 +25,4 @@ class DefaultController extends Controller
 
         return new Response('Property Window Engine');
     }
-
-    /**
-     * @Route("/token/{userId}")
-     *
-     * @param int $userId
-     *
-     * @return Response
-     */
-    public function tokenAction($userId)
-    {
-        if (empty($userId)) {
-            throw $this->createAccessDeniedException('You did not pass an user id!');
-        }
-        
-        $repository     = $this->getDoctrine()->getRepository('AuthenticationBundle:User');
-        $user           = $repository->find($userId);
-        $timestamp      = time();
-        $secret         = $user->getUsername(); // because of md5
-        $signature      = hash_hmac("sha1", $timestamp."-".$userId, $secret);
-        $payload        = [
-            "user"      => $userId,
-            "password"  => $secret,
-            "timestamp" => $timestamp,
-            "signature" => $signature,
-        ];
-        $payloadJson    = json_encode($payload);
-        $payloadEncoded = base64_encode($payloadJson);
-
-        return new Response('Basic '.$payloadEncoded);
-    }
 }
