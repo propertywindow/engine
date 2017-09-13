@@ -75,6 +75,8 @@ class ActivityController extends BaseController
                 return $this->getActivityFromUser($userId);
             case "getActivities":
                 return $this->getActivities($userId);
+            case "getPropertyChanges":
+                return $this->getPropertyChanges($userId, $parameters);
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
@@ -108,16 +110,10 @@ class ActivityController extends BaseController
      * @param int $userId
      *
      * @return array
-     *
-     * @throws NotAuthorizedException
      */
     private function getActivityFromUser(int $userId)
     {
         $user = $this->userService->getUser($userId);
-
-        if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
-            throw new NotAuthorizedException($userId);
-        }
 
         return Mapper::fromActivities(...$this->activityService->getActivityFromUser($user));
     }
@@ -138,5 +134,34 @@ class ActivityController extends BaseController
         }
 
         return Mapper::fromActivities(...$this->activityService->getActivities($user->getAgent()));
+    }
+
+
+    /**
+     * @param int $userId
+     * @param array $parameters
+     *
+     * @return array
+     */
+    private function getPropertyChanges(int $userId, array $parameters)
+    {
+        if (!array_key_exists('type', $parameters)) {
+            throw new InvalidArgumentException("No argument provided");
+        }
+
+        $user = $this->userService->getUser($userId);
+
+        switch ($parameters['type']) {
+            case "create":
+                $activities = $this->activityService->findPropertiesByAgent($user->getAgent(), $parameters['type']);
+                break;
+            case "update":
+                $activities = $this->activityService->findPropertiesByAgent($user->getAgent(), $parameters['type']);
+                break;
+            default:
+                $activities = $this->activityService->findPropertiesByAgent($user->getAgent(), 'create');
+        }
+
+        return Mapper::fromActivities(...$activities);
     }
 }

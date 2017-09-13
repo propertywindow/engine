@@ -18,18 +18,52 @@ class LoadUserSettingsData extends AbstractFixture implements OrderedFixtureInte
      */
     public function load(ObjectManager $manager)
     {
-        $userSettings = new UserSettings();
-        $userSettings->setUser($this->getReference('user_1'));
-        $userSettings->setLanguage('nl');
-        $manager->persist($userSettings);
+        // Property Window
 
         $userSettings = new UserSettings();
-        $userSettings->setUser($this->getReference('user_2'));
+        $userSettings->setUser($this->getReference('user_propertywindow_admin_1'));
         $userSettings->setLanguage('en');
         $manager->persist($userSettings);
 
         $userSettings = new UserSettings();
-        $userSettings->setUser($this->getReference('user_client_1'));
+        $userSettings->setUser($this->getReference('user_propertywindow_admin_2'));
+        $userSettings->setLanguage('en');
+        $manager->persist($userSettings);
+
+        // Annan
+
+        $userSettings = new UserSettings();
+        $userSettings->setUser($this->getReference('user_annan_agent_1'));
+        $userSettings->setLanguage('en');
+        $manager->persist($userSettings);
+
+        $userSettings = new UserSettings();
+        $userSettings->setUser($this->getReference('user_annan_colleague_1'));
+        $userSettings->setLanguage('en');
+        $manager->persist($userSettings);
+
+        $userSettings = new UserSettings();
+        $userSettings->setUser($this->getReference('user_annan_colleague_2'));
+        $userSettings->setLanguage('en');
+        $manager->persist($userSettings);
+
+        $userSettings = new UserSettings();
+        $userSettings->setUser($this->getReference('user_annan_colleague_3'));
+        $userSettings->setLanguage('en');
+        $manager->persist($userSettings);
+
+        $userSettings = new UserSettings();
+        $userSettings->setUser($this->getReference('user_annan_colleague_4'));
+        $userSettings->setLanguage('en');
+        $manager->persist($userSettings);
+
+        $userSettings = new UserSettings();
+        $userSettings->setUser($this->getReference('user_annan_colleague_5'));
+        $userSettings->setLanguage('en');
+        $manager->persist($userSettings);
+
+        $userSettings = new UserSettings();
+        $userSettings->setUser($this->getReference('user_annan_colleague_6'));
         $userSettings->setLanguage('en');
         $manager->persist($userSettings);
 

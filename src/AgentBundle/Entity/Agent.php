@@ -31,9 +31,9 @@ class Agent
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="office", type="string", length=255)
      */
-    private $name;
+    private $office;
 
     /**
      * @var string
@@ -80,7 +80,7 @@ class Agent
     /**
      * @var string
      *
-     * @ORM\Column(name="house_number", type="string", length=5)
+     * @ORM\Column(name="house_number", type="string", length=10)
      */
     private $houseNumber;
 
@@ -182,27 +182,27 @@ class Agent
     }
 
     /**
-     * Set name
+     * Set office
      *
-     * @param string $name
+     * @param string $office
      *
      * @return Agent
      */
-    public function setName($name)
+    public function setOffice($office)
     {
-        $this->name = $name;
+        $this->office = $office;
 
         return $this;
     }
 
     /**
-     * Get name
+     * Get office
      *
      * @return string
      */
-    public function getName()
+    public function getOffice()
     {
-        return $this->name;
+        return $this->office;
     }
 
     /**

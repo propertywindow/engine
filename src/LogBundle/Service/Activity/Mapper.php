@@ -19,14 +19,15 @@ class Mapper
     {
 
         return [
-            'id'        => $activity->getId(),
-            'user_id'   => $activity->getUser()->getId(),
-            'user_name' => $activity->getUser()->getFirstName().' '.$activity->getUser()->getLastName(),
-            'category'  => $activity->getActionCategory(),
-            'action'    => $activity->getActionName(),
-            'old_value' => $activity->getOldValue(),
-            'new_value' => $activity->getNewValue(),
-            'datetime'  => $activity->getCreated()->format('Y-m-d H:i:s'),
+            'id'              => $activity->getId(),
+            'user_id'         => $activity->getUser()->getId(),
+            'user_name'       => $activity->getUser()->getFirstName().' '.$activity->getUser()->getLastName(),
+            'action_category' => $activity->getActionCategory(),
+            'action_name'     => $activity->getActionName(),
+            'action_id'       => $activity->getActionId(),
+            'old_value'       => $activity->getOldValue(),
+            'new_value'       => $activity->getNewValue(),
+            'datetime'        => $activity->getCreated()->format('Y-m-d H:i:s'),
         ];
     }
 

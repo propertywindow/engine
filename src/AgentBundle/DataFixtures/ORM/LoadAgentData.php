@@ -20,14 +20,14 @@ class LoadAgentData extends AbstractFixture implements OrderedFixtureInterface
     {
         $agent = new Agent();
         $agent->setAgentGroup($this->getReference('agent_group_1'));
-        $agent->setName('Property Window NL');
-        $agent->setStreet('Graafsedijk');
-        $agent->setHouseNumber('19');
-        $agent->setPostcode('5437 NG');
-        $agent->setCity('Beers');
-        $agent->setCountry('NL');
-        $agent->setEmail('info@propertywindow.nl');
-        $agent->setPhone('0611839156');
+        $agent->setOffice('Edinburgh');
+        $agent->setStreet('Portobello High Street');
+        $agent->setHouseNumber('27');
+        $agent->setPostcode('EH15 1DE');
+        $agent->setCity('Edinburgh');
+        $agent->setCountry('GB');
+        $agent->setEmail('info@propertywindow.com');
+        $agent->setPhone('01316571666');
         $agent->setPropertyLimit(200);
         $agent->setEspc(false);
         $agent->setArchived(false);
@@ -35,23 +35,108 @@ class LoadAgentData extends AbstractFixture implements OrderedFixtureInterface
         $manager->persist($agent);
 
         $agent = new Agent();
-        $agent->setAgentGroup($this->getReference('agent_group_1'));
-        $agent->setName('Property Window GB');
-        $agent->setStreet('Portobello High Street');
-        $agent->setHouseNumber('27');
-        $agent->setPostcode('EH15 1DE');
-        $agent->setCity('Edinburgh');
+        $agent->setAgentGroup($this->getReference('agent_group_2'));
+        $agent->setOffice('Main');
+        $agent->setStreet('High Street');
+        $agent->setHouseNumber('13');
+        $agent->setPostcode('TD9 9DH');
+        $agent->setCity('Hawick');
         $agent->setCountry('GB');
-        $agent->setEmail('info@propertywindow.com');
-        $agent->setPhone('07947254956');
+        $agent->setEmail('joliver@gandjoliver.co.uk');
+        $agent->setPhone('01450372791');
         $agent->setPropertyLimit(500);
-        $agent->setEspc(true);
+        $agent->setEspc(false);
         $agent->setArchived(false);
         $this->addReference('agent_2', $agent);
         $manager->persist($agent);
 
+        $agent = new Agent();
+        $agent->setAgentGroup($this->getReference('agent_group_3'));
+        $agent->setOffice('Newington');
+        $agent->setStreet('St Patrick Street');
+        $agent->setHouseNumber('3');
+        $agent->setPostcode('EH8 9ES');
+        $agent->setCity('Edinburgh');
+        $agent->setCountry('GB');
+        $agent->setEmail('newington@deansproperties.co.uk');
+        $agent->setPhone('01316671900');
+        $agent->setPropertyLimit(100);
+        $agent->setEspc(true);
+        $agent->setArchived(false);
+        $this->addReference('agent_3', $agent);
+        $manager->persist($agent);
+
+        $agent = new Agent();
+        $agent->setAgentGroup($this->getReference('agent_group_3'));
+        $agent->setOffice('Corstorphine');
+        $agent->setStreet('St Johns Road');
+        $agent->setHouseNumber('135-137');
+        $agent->setPostcode('EH12 7SB');
+        $agent->setCity('Edinburgh');
+        $agent->setCountry('GB');
+        $agent->setEmail('corstorphine@deansproperties.co.uk');
+        $agent->setPhone('01316671900');
+        $agent->setPropertyLimit(100);
+        $agent->setEspc(true);
+        $agent->setArchived(false);
+        $this->addReference('agent_4', $agent);
+        $manager->persist($agent);
+
+        $agent = new Agent();
+        $agent->setAgentGroup($this->getReference('agent_group_3'));
+        $agent->setOffice('South Queensferry');
+        $agent->setStreet('High Street');
+        $agent->setHouseNumber('31A');
+        $agent->setPostcode('EH30 9PP');
+        $agent->setCity('Edinburgh');
+        $agent->setCountry('GB');
+        $agent->setEmail('southqueensferry@deansproperties.co.uk');
+        $agent->setPhone('01316671900');
+        $agent->setPropertyLimit(100);
+        $agent->setEspc(true);
+        $agent->setArchived(false);
+        $this->addReference('agent_5', $agent);
+        $manager->persist($agent);
+
+        $agent = new Agent();
+        $agent->setAgentGroup($this->getReference('agent_group_4'));
+        $agent->setOffice('Edinburgh');
+        $agent->setStreet('Portobello High Street');
+        $agent->setHouseNumber('229');
+        $agent->setPostcode('EH15 2AN');
+        $agent->setCity('Edinburgh');
+        $agent->setCountry('GB');
+        $agent->setEmail('edinburgh@annan.co.uk');
+        $agent->setPhone('01316692121');
+        $agent->setFax('01316691155');
+        $agent->setPropertyLimit(100);
+        $agent->setEspc(true);
+        $agent->setArchived(false);
+        $this->addReference('agent_6', $agent);
+        $manager->persist($agent);
+
+        $agent = new Agent();
+        $agent->setAgentGroup($this->getReference('agent_group_4'));
+        $agent->setOffice('East Lothian');
+        $agent->setStreet('High Street');
+        $agent->setHouseNumber('84');
+        $agent->setPostcode('EH21 7BX');
+        $agent->setCity('Musselburgh');
+        $agent->setCountry('GB');
+        $agent->setEmail('lothian@annan.co.uk');
+        $agent->setPhone('01316658080');
+        $agent->setFax('01316691155');
+        $agent->setPropertyLimit(100);
+        $agent->setEspc(true);
+        $agent->setArchived(false);
+        $this->addReference('agent_7', $agent);
+        $manager->persist($agent);
+
         $manager->flush();
     }
+
+
+
 
     /**
      * @return integer

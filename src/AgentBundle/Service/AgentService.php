@@ -87,7 +87,7 @@ class AgentService
         $agent = new Agent();
 
         $agent->setAgentGroup($agentGroup);
-        $agent->setName($parameters['name']);
+        $agent->setOffice($parameters['office']);
         $agent->setStreet(ucwords($parameters['street']));
         $agent->setHouseNumber($parameters['house_number']);
         $agent->setPostcode($parameters['postcode']);

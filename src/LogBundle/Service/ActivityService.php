@@ -52,6 +52,19 @@ class ActivityService
     }
 
     /**
+     * @param Agent $agent
+     * @param string $type
+     *
+     * @return Activity[]
+     */
+    public function findPropertiesByAgent(Agent $agent, string $type)
+    {
+        $repository = $this->entityManager->getRepository('LogBundle:Activity');
+
+        return $repository->findPropertiesByAgent($agent, $type);
+    }
+
+    /**
      * @param User $user
      *
      * @return Activity $activity

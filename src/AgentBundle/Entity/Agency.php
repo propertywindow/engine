@@ -46,7 +46,7 @@ class Agency
     /**
      * @var string
      *
-     * @ORM\Column(name="house_number", type="string", length=5)
+     * @ORM\Column(name="house_number", type="string", length=10)
      */
     private $houseNumber;
 

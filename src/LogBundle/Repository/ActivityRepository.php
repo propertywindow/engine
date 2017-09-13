@@ -69,4 +69,29 @@ class ActivityRepository extends EntityRepository
 
         return $results;
     }
+
+    /**
+     * @param Agent  $agent
+     * @param string $type
+     *
+     * @return Activity[]
+     */
+    public function findPropertiesByAgent(Agent $agent, string $type): array
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder()
+                   ->select('a')
+                   ->from('LogBundle:Activity', 'a')
+                   ->where('a.agent = :agent')
+                   ->andWhere('a.actionCategory = :property')
+                   ->andWhere('a.actionName = :type')
+                   ->setParameter('agent', $agent)
+                   ->setParameter('type', $type)
+                   ->setParameter('property', 'property')
+                   ->orderBy('a.created', 'DESC')
+                   ->setMaxResults(5);
+
+        $results = $qb->getQuery()->getResult();
+
+        return $results;
+    }
 }

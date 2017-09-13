@@ -141,8 +141,12 @@ class AgentController extends BaseController
         if (!array_key_exists('agent_group_id', $parameters) && $parameters['agent_group_id'] !== null) {
             throw new InvalidArgumentException("agent_group_id parameter not provided");
         }
+        // todo: agent_group_id OR name,with id just get name
         if (!array_key_exists('name', $parameters) && $parameters['name'] !== null) {
             throw new InvalidArgumentException("name parameter not provided");
+        }
+        if (!array_key_exists('office', $parameters) && $parameters['office'] !== null) {
+            throw new InvalidArgumentException("office parameter not provided");
         }
         if (!array_key_exists('email', $parameters) && $parameters['email'] !== null) {
             throw new InvalidArgumentException("email parameter not provided");

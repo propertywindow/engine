@@ -19,13 +19,23 @@ class LoadAgentGroupData extends AbstractFixture implements OrderedFixtureInterf
     public function load(ObjectManager $manager)
     {
         $agentGroup = new AgentGroup();
-        $agentGroup->setName('DATA Computer Services');
+        $agentGroup->setName('Property Window');
         $this->addReference('agent_group_1', $agentGroup);
         $manager->persist($agentGroup);
 
         $agentGroup = new AgentGroup();
-        $agentGroup->setName('The Agent Group');
+        $agentGroup->setName('Geo. & Jas. Oliver W.S.');
         $this->addReference('agent_group_2', $agentGroup);
+        $manager->persist($agentGroup);
+
+        $agentGroup = new AgentGroup();
+        $agentGroup->setName('Deans Solicitors & Estate Agents LLP');
+        $this->addReference('agent_group_3', $agentGroup);
+        $manager->persist($agentGroup);
+
+        $agentGroup = new AgentGroup();
+        $agentGroup->setName('Annan Solicitors & Estate Agents');
+        $this->addReference('agent_group_4', $agentGroup);
         $manager->persist($agentGroup);
 
         $manager->flush();
