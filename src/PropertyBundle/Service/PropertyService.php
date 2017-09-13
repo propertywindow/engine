@@ -7,6 +7,7 @@ use AgentBundle\Entity\Client;
 use Doctrine\ORM\EntityManagerInterface;
 use PropertyBundle\Entity\Kind;
 use PropertyBundle\Entity\Property;
+use PropertyBundle\Entity\SubType;
 use PropertyBundle\Entity\Terms;
 use PropertyBundle\Exceptions\PropertyNotFoundException;
 
@@ -92,28 +93,35 @@ class PropertyService
     }
 
     /**
-     * @param array  $parameters
-     * @param Agent  $agent
-     * @param Client $client
-     * @param Kind   $kind
-     * @param Terms  $terms
+     * @param array   $parameters
+     * @param Agent   $agent
+     * @param Client  $client
+     * @param Kind    $kind
+     * @param Terms   $terms
+     * @param Subtype $subType
      *
      * @return Property
      */
-    public function createProperty(array $parameters, Agent $agent, Client $client, Kind $kind, Terms $terms)
-    {
+    public function createProperty(
+        array $parameters,
+        Agent $agent,
+        Client $client,
+        Kind $kind,
+        Terms $terms,
+        SubType $subType
+    ) {
         $property = new Property();
 
         $property->setKind($kind);
         $property->setTerms($terms);
         $property->setAgent($agent);
         $property->setClient($client);
+        $property->setSubType($subType);
         $property->setStreet(ucwords($parameters['street']));
         $property->setHouseNumber($parameters['house_number']);
         $property->setPostcode($parameters['postcode']);
         $property->setCity(ucwords($parameters['city']));
         $property->setCountry($parameters['country']);
-        $property->setSubType($parameters['sub_type_id']);
         $property->setLat($parameters['lat']);
         $property->setLng($parameters['lng']);
 

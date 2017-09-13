@@ -35,13 +35,16 @@ class Mapper
 
         switch ($language) {
             case "nl":
-                $terms = $property->getTerms()->getNl();
+                $terms   = $property->getTerms()->getNl();
+                $subType = $property->getSubType()->getNl();
                 break;
             case "en":
-                $terms = $property->getTerms()->getEn();
+                $terms   = $property->getTerms()->getEn();
+                $subType = $property->getSubType()->getEn();
                 break;
             default:
-                $terms = $property->getTerms()->getEn();
+                $terms   = $property->getTerms()->getEn();
+                $subType = $property->getSubType()->getEn();
         }
 
         $images = $property->getImages()->getValues();
@@ -62,13 +65,14 @@ class Mapper
             'kind_id'      => $property->getKind()->getId(),
             'terms_id'     => $property->getTerms()->getId(),
             'terms'        => $terms,
+            'subtype_id'   => $property->getSubType()->getId(),
+            'subtype'      => $subType,
             'address'      => $address,
             'street'       => $property->getStreet(),
             'house_number' => $property->getHouseNumber(),
             'postcode'     => $property->getPostcode(),
             'city'         => $property->getCity(),
             'country'      => $property->getCountry(),
-            'subtype_id'   => $property->getSubType(),
             'price'        => $property->getPrice(),
             'sold_price'   => $property->getSoldPrice(),
             'espc'         => $property->getEspc(),

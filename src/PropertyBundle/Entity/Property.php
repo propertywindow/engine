@@ -56,9 +56,8 @@ class Property
     private $terms;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="sub_type", type="integer")
+     * @ORM\ManyToOne(targetEntity="SubType")
+     * @ORM\JoinColumn(name="sub_type_id", referencedColumnName="id")
      */
     private $subType;
 
@@ -312,11 +311,11 @@ class Property
     /**
      * Set subType
      *
-     * @param integer $subType
+     * @param SubType $subType
      *
      * @return Property
      */
-    public function setSubType($subType)
+    public function setSubType(SubType $subType = null)
     {
         $this->subType = $subType;
 
@@ -326,7 +325,7 @@ class Property
     /**
      * Get subType
      *
-     * @return int
+     * @return SubType
      */
     public function getSubType()
     {

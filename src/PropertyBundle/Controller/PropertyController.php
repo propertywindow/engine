@@ -242,7 +242,8 @@ class PropertyController extends BaseController
         $client     = $this->clientService->getClient($parameters['client_id']);
         $kind       = $this->kindService->getKind($parameters['kind_id']);
         $terms      = $this->termsService->getTerm($parameters['terms_id']);
-        $property   = $this->propertyService->createProperty($parameters, $agent, $client, $kind, $terms);
+        $subType    = $this->subTypeService->getSubType($parameters['sub_type_id']);
+        $property   = $this->propertyService->createProperty($parameters, $agent, $client, $kind, $terms, $subType);
         $propertyId = (int)$property->getId();
 
         $this->activityService->createActivity(
@@ -294,7 +295,8 @@ class PropertyController extends BaseController
         }
 
         if (array_key_exists('sub_type_id', $parameters) && $parameters['sub_type_id'] !== null) {
-            $property->setSubType((int)$parameters['sub_type_id']);
+            $subType = $this->subTypeService->getSubType($parameters['sub_type_id']);
+            $property->setSubType($subType);
         }
 
         if (array_key_exists('terms_id', $parameters) && $parameters['terms_id'] !== null) {

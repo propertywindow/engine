@@ -23,8 +23,8 @@ class LoadPropertyData extends AbstractFixture implements OrderedFixtureInterfac
         $property->setAgent($this->getReference('agent_6'));
         $property->setClient($this->getReference('client_annan_1'));
         $property->setTerms($this->getReference('term_offers_over'));
+        $property->setSubType($this->getReference('sub_type_end_terraced_house'));
         $property->setOnline(true);
-        $property->setSubType(2);
         $property->setStreet('Dalkeith Street');
         $property->setHouseNumber('3');
         $property->setPostcode('EH15 2HP');
