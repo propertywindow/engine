@@ -185,7 +185,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
 
         $user = new User();
         $user->setUserType($this->getReference('user_type_client'));
-        $user->setAgent($this->getReference('agent_7'));
+        $user->setAgent($this->getReference('agent_6'));
         $user->setEmail('carolyn.clarke@example.com');
         $user->setPassword(md5('slugger'));
         $user->setFirstName('Carolyn');
@@ -198,6 +198,40 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setPhone('0776291407');
         $user->setActive(true);
         $this->addReference('user_annan_client_1', $user);
+        $manager->persist($user);
+
+        $user = new User();
+        $user->setUserType($this->getReference('user_type_client'));
+        $user->setAgent($this->getReference('agent_6'));
+        $user->setEmail('shane.rogers@example.com');
+        $user->setPassword(md5('homepage'));
+        $user->setFirstName('Shane');
+        $user->setLastName('Rogers');
+        $user->setStreet('North road');
+        $user->setHouseNumber('4337');
+        $user->setPostcode('M4 4GP');
+        $user->setCity('Birmingham');
+        $user->setCountry('GB');
+        $user->setPhone('0760070775');
+        $user->setActive(true);
+        $this->addReference('user_annan_client_2', $user);
+        $manager->persist($user);
+
+        $user = new User();
+        $user->setUserType($this->getReference('user_type_client'));
+        $user->setAgent($this->getReference('agent_6'));
+        $user->setEmail('peter.parker@example.com');
+        $user->setPassword(md5('zero'));
+        $user->setFirstName('Peter');
+        $user->setLastName('Parker');
+        $user->setStreet('Park avenue');
+        $user->setHouseNumber('3034');
+        $user->setPostcode('IC9F 6JX');
+        $user->setCity('Nottingham');
+        $user->setCountry('GB');
+        $user->setPhone('0726923361');
+        $user->setActive(true);
+        $this->addReference('user_annan_client_3', $user);
         $manager->persist($user);
 
 

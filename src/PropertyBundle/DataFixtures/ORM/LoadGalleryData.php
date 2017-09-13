@@ -18,30 +18,37 @@ class LoadGalleryData extends AbstractFixture implements OrderedFixtureInterface
      */
     public function load(ObjectManager $manager)
     {
-        $gallery = new Gallery();
-        $gallery->setSort(1);
-        $gallery->setPath('http://www.live.web-print.co.uk/Client_38/593eafc1_1_1lo.jpg');
-        $gallery->setMain(true);
-        $gallery->setProperty($this->getReference('property_annan_1'));
-        $manager->persist($gallery);
+        // Annan Properties
 
-        $gallery = new Gallery();
-        $gallery->setSort(2);
-        $gallery->setPath('http://www.live.web-print.co.uk/Client_38/593eafc1_1_3lo.jpg');
-        $gallery->setProperty($this->getReference('property_annan_1'));
-        $manager->persist($gallery);
+        for ($i = 1; $i <= 20; $i++) {
+            $main = ($i === 1) ? true : false;
+            $gallery = new Gallery();
+            $gallery->setSort($i);
+            $gallery->setPath('4/properties/1/'.$i.'.jpg');
+            $gallery->setMain($main);
+            $gallery->setProperty($this->getReference('property_annan_1'));
+            $manager->persist($gallery);
+        }
 
-        $gallery = new Gallery();
-        $gallery->setSort(3);
-        $gallery->setPath('http://www.live.web-print.co.uk/Client_38/593eafc1_1_4lo.jpg');
-        $gallery->setProperty($this->getReference('property_annan_1'));
-        $manager->persist($gallery);
+        for ($i = 1; $i <= 20; $i++) {
+            $main = ($i === 1) ? true : false;
+            $gallery = new Gallery();
+            $gallery->setSort($i);
+            $gallery->setPath('4/properties/2/'.$i.'.jpg');
+            $gallery->setMain($main);
+            $gallery->setProperty($this->getReference('property_annan_2'));
+            $manager->persist($gallery);
+        }
 
-
-
-
-
-
+        for ($i = 1; $i <= 20; $i++) {
+            $main = ($i === 1) ? true : false;
+            $gallery = new Gallery();
+            $gallery->setSort($i);
+            $gallery->setPath('4/properties/3/'.$i.'.jpg');
+            $gallery->setMain($main);
+            $gallery->setProperty($this->getReference('property_annan_3'));
+            $manager->persist($gallery);
+        }
 
         $manager->flush();
     }

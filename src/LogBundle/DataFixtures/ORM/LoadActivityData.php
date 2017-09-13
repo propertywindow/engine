@@ -22,6 +22,8 @@ class LoadActivityData extends AbstractFixture implements OrderedFixtureInterfac
     {
         // todo: only in dev environment
 
+        // Annan Properties
+
         $activity = new Activity();
         $activity->setUser($this->getReference('user_annan_colleague_1'));
         $activity->setAgent($this->getReference('agent_6'));
@@ -31,6 +33,34 @@ class LoadActivityData extends AbstractFixture implements OrderedFixtureInterfac
         $activity->setNewValue(
             $this->container->get('jms_serializer')->serialize(
                 $this->getReference('property_annan_1'),
+                'json'
+            )
+        );
+        $manager->persist($activity);
+
+        $activity = new Activity();
+        $activity->setUser($this->getReference('user_annan_colleague_2'));
+        $activity->setAgent($this->getReference('agent_6'));
+        $activity->setActionCategory('property');
+        $activity->setActionId(1);
+        $activity->setActionName('create');
+        $activity->setNewValue(
+            $this->container->get('jms_serializer')->serialize(
+                $this->getReference('property_annan_2'),
+                'json'
+            )
+        );
+        $manager->persist($activity);
+
+        $activity = new Activity();
+        $activity->setUser($this->getReference('user_annan_colleague_3'));
+        $activity->setAgent($this->getReference('agent_6'));
+        $activity->setActionCategory('property');
+        $activity->setActionId(1);
+        $activity->setActionName('create');
+        $activity->setNewValue(
+            $this->container->get('jms_serializer')->serialize(
+                $this->getReference('property_annan_3'),
                 'json'
             )
         );
