@@ -62,6 +62,11 @@ class Property
     private $subType;
 
     /**
+     * @ORM\OneToOne(targetEntity="Details", mappedBy="property")
+     */
+    private $details;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="online", type="boolean", options={"default": false})
@@ -330,6 +335,30 @@ class Property
     public function getSubType()
     {
         return $this->subType;
+    }
+
+    /**
+     * Set details
+     *
+     * @param Details $details
+     *
+     * @return Property
+     */
+    public function setDetails(Details $details = null)
+    {
+        $this->details = $details;
+
+        return $this;
+    }
+
+    /**
+     * Get details
+     *
+     * @return Details
+     */
+    public function getDetails()
+    {
+        return $this->details;
     }
 
     /**

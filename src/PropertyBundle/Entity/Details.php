@@ -23,11 +23,10 @@ class Details
     private $id;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="property_id", type="integer")
+     * @ORM\OneToOne(targetEntity="Property", inversedBy="details")
+     * @ORM\JoinColumn(name="property_id", referencedColumnName="id")
      */
-    private $propertyId;
+    protected $property;
 
     /**
      * @var int
@@ -61,27 +60,27 @@ class Details
     }
 
     /**
-     * Set propertyId
+     * Set property
      *
-     * @param integer $propertyId
+     * @param Property $property
      *
      * @return Details
      */
-    public function setPropertyId($propertyId)
+    public function setProperty(Property $property = null)
     {
-        $this->propertyId = $propertyId;
+        $this->property = $property;
 
         return $this;
     }
 
     /**
-     * Get propertyId
+     * Get property
      *
-     * @return int
+     * @return Property
      */
-    public function getPropertyId()
+    public function getProperty()
     {
-        return $this->propertyId;
+        return $this->property;
     }
 
     /**

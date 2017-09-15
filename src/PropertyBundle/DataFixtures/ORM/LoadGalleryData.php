@@ -25,7 +25,7 @@ class LoadGalleryData extends AbstractFixture implements OrderedFixtureInterface
                 $main    = ($g === 1) ? true : false;
                 $gallery = new Gallery();
                 $gallery->setSort($g);
-                $gallery->setPath('4/properties/'.$i.'/'.$g.'.jpg');
+                $gallery->setPath('2/properties/'.$i.'/'.$g.'.jpg');
                 $gallery->setMain($main);
                 $gallery->setProperty($this->getReference('property_annan_' . $i));
                 $manager->persist($gallery);
