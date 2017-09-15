@@ -1,0 +1,11 @@
+.gitignore
+bitbucket-pipeles.yml
+composer.json
+composer.lock
+docker-compose.yml
+phpunit.xml.dist
+README.md
+tests/
+var/
+wget_images/
+docker/

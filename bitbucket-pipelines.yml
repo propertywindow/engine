@@ -25,7 +25,7 @@ pipelines:
            - composer install --prefer-source --no-interaction
            - echo "Need to deploy here"
            - apt-get -qq install git-ftp
-           - git ftp init --user $FTP_USERNAME --passwd $FTP_PASSWORD sftp://propertywindow.nl/subdomains/api/
+           - git ftp push --user $FTP_USERNAME --passwd $FTP_PASSWORD sftp://propertywindow.nl/subdomains/api/
 #  branches:
 #      master:
 #        - step:
