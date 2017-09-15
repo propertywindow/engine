@@ -423,7 +423,7 @@ class PropertyController extends BaseController
         $id   = (int)$parameters['id'];
         $user = $this->userService->getUser($userId);
 
-        if ((int)$user->getUserType()->getId() >= self::USER_AGENT) {
+        if ((int)$user->getUserType()->getId() > self::USER_AGENT) {
             throw new NotAuthorizedException($userId);
         }
 

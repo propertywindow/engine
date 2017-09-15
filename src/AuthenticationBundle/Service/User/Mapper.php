@@ -40,6 +40,7 @@ class Mapper
             'active'       => $user->getActive(),
             'email'        => $user->getEmail(),
             'agent_id'     => $user->getAgent()->getId(),
+            'office'       => $user->getAgent()->getOffice(),
             'user_type_id' => $user->getUserType()->getId(),
             'full_name'    => $user->getFirstName().' '.$user->getLastName(),
             'first_name'   => $user->getFirstName(),

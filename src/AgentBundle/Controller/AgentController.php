@@ -80,6 +80,8 @@ class AgentController extends BaseController
                 return $this->getAgents($userId);
             case "createAgent":
                 return $this->createAgent($userId, $parameters);
+            case "updateAgent":
+                return $this->updateAgent($userId, $parameters);
             case "deleteAgent":
                 return $this->deleteAgent($userId, $parameters);
         }
@@ -118,6 +120,10 @@ class AgentController extends BaseController
             throw new NotAuthorizedException($userId);
         }
 
+
+//        $userType = $this->userTypeService->getUserType(2);
+//        $agentUser = $this->userService->getAgentUser($userType);
+
         return Mapper::fromAgents(...$this->agentService->getAgents());
     }
 
@@ -138,12 +144,15 @@ class AgentController extends BaseController
             throw new NotAuthorizedException($userId);
         }
 
-        if (!array_key_exists('agent_group_id', $parameters) && $parameters['agent_group_id'] !== null) {
-            throw new InvalidArgumentException("agent_group_id parameter not provided");
+        if (!array_key_exists('agent_group_id', $parameters)) {
+            if (!array_key_exists('name', $parameters) && $parameters['name'] !== null) {
+                throw new InvalidArgumentException("name or agent_group_id parameter not provided");
+            }
         }
-        // todo: agent_group_id OR name,with id just get name
-        if (!array_key_exists('name', $parameters) && $parameters['name'] !== null) {
-            throw new InvalidArgumentException("name parameter not provided");
+        if (!array_key_exists('name', $parameters)) {
+            if (!array_key_exists('agent_group_id', $parameters) && $parameters['agent_group_id'] !== null) {
+                throw new InvalidArgumentException("name or agent_group_id parameter not provided");
+            }
         }
         if (!array_key_exists('office', $parameters) && $parameters['office'] !== null) {
             throw new InvalidArgumentException("office parameter not provided");
@@ -224,9 +233,97 @@ class AgentController extends BaseController
         $createdUser->setActive(true);
         $this->userService->updateUser($createdUser);
 
+        $agent->setUserId($createdUser->getId());
+        $this->agentService->updateAgent($agent);
+
+        // todo: also set serviceGroupMap and serviceMap
 
         return Mapper::fromAgent($agent);
     }
+
+
+    /**
+     * @param int   $userId
+     * @param array $parameters
+     *
+     * @return array
+     *
+     * @throws NotAuthorizedException
+     */
+    private function updateAgent(int $userId, array $parameters)
+    {
+        if (!array_key_exists('id', $parameters) || empty($parameters['id'])) {
+            throw new InvalidArgumentException("Identifier not provided");
+        }
+
+        if (!filter_var($parameters['email'], FILTER_VALIDATE_EMAIL)) {
+            throw new InvalidArgumentException("email parameter not valid");
+        }
+
+        $id   = (int)$parameters['id'];
+        $user = $this->userService->getUser($userId);
+
+        $updateAgent = $this->agentService->getAgent($id);
+
+        if ((int)$user->getUserType()->getId() <= self::USER_AGENT) {
+            throw new NotAuthorizedException($userId);
+        }
+
+        if ($updateAgent->getId() !== $user->getAgent()->getId()) {
+            if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
+                throw new NotAuthorizedException($userId);
+            }
+        }
+
+        if (array_key_exists('office', $parameters) && $parameters['office'] !== null) {
+            $updateAgent->setOffice(ucfirst($parameters['office']));
+        }
+        if (array_key_exists('phone', $parameters) && $parameters['phone'] !== null) {
+            $updateAgent->setPhone($parameters['phone']);
+        }
+        if (array_key_exists('fax', $parameters) && $parameters['fax'] !== null) {
+            $updateAgent->setFax($parameters['fax']);
+        }
+        if (array_key_exists('email', $parameters) && $parameters['email'] !== null) {
+            $updateAgent->setEmail($parameters['email']);
+        }
+        if (array_key_exists('website', $parameters) && $parameters['website'] !== null) {
+            $updateAgent->setWebsite($parameters['website']);
+        }
+        if (array_key_exists('logo', $parameters) && $parameters['logo'] !== null) {
+            $updateAgent->setLogo($parameters['logo']);
+        }
+        if (array_key_exists('street', $parameters) && $parameters['street'] !== null) {
+            $updateAgent->setStreet($parameters['street']);
+        }
+        if (array_key_exists('house_number', $parameters) && $parameters['house_number'] !== null) {
+            $updateAgent->setHouseNumber($parameters['house_number']);
+        }
+        if (array_key_exists('postcode', $parameters) && $parameters['postcode'] !== null) {
+            $updateAgent->setPostcode($parameters['postcode']);
+        }
+        if (array_key_exists('city', $parameters) && $parameters['city'] !== null) {
+            $updateAgent->setCity($parameters['city']);
+        }
+        if (array_key_exists('country', $parameters) && $parameters['country'] !== null) {
+            $updateAgent->setCountry($parameters['country']);
+        }
+        if (array_key_exists('property_limit', $parameters) && $parameters['property_limit'] !== null) {
+            $updateAgent->setPropertyLimit((int)$parameters['property_limit']);
+        }
+        if (array_key_exists('web_print', $parameters) && $parameters['web_print'] !== null) {
+            $updateAgent->setWebprint((bool)$parameters['web_print']);
+        }
+        if (array_key_exists('espc', $parameters) && $parameters['espc'] !== null) {
+            $updateAgent->setEspc((bool)$parameters['espc']);
+        }
+        if (array_key_exists('archived', $parameters) && $parameters['archived'] !== null) {
+            $updateAgent->setArchived((bool)$parameters['archived']);
+        }
+
+        return Mapper::fromAgent($this->agentService->updateAgent($updateAgent));
+    }
+
 
     /**
      * @param int   $userId

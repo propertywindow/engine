@@ -62,13 +62,12 @@ class PropertyRepository extends EntityRepository
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
                    ->select('p')
-                   ->from('PropertyBundle:Property', 'p');
-
-        $qb->where("p.agent IN (:agentIds)")
-           ->orderBy('p.id', 'DESC')
-           ->setFirstResult($offset)
-           ->setMaxResults($limit)
-           ->setParameter('agentIds', $agentIds);
+                   ->from('PropertyBundle:Property', 'p')
+                   ->where("p.agent IN (:agentIds)")
+                   ->orderBy('p.id', 'DESC')
+                   ->setFirstResult($offset)
+                   ->setMaxResults($limit)
+                   ->setParameter('agentIds', $agentIds);
 
         $pages = new Paginator($qb);
 

@@ -28,12 +28,14 @@ class Mapper
                 break;
         }
 
+
         return [
             'id'             => $agent->getId(),
             'agent_group_id' => $agent->getAgentGroup()->getId(),
 //            'agent_group'    => $agent->getAgentGroup(),
             'name'           => $agent->getAgentGroup()->getName(),
             'office'         => $agent->getOffice(),
+            'agent_user_id'  => $agent->getUserId(),
             'address'        => $address,
             'street'         => $agent->getStreet(),
             'house_number'   => $agent->getHouseNumber(),

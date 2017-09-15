@@ -81,7 +81,7 @@ class Mapper
             'lat'          => $property->getLat(),
             'lng'          => $property->getLng(),
             'photo'        => $photo,
-            //            'gallery'      => $gallery,
+            'gallery'      => $gallery,
         ];
     }
 

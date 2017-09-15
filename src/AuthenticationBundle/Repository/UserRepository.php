@@ -34,19 +34,24 @@ class UserRepository extends EntityRepository
     }
 
     /**
-     * @param User $user
+     * @param User     $user
+     * @param UserType $adminType
+     * @param UserType $colleagueType
      *
-     * @return User[]
+     * @return array|User[]
      */
-    public function listAll(User $user): array
+    public function listAll(User $user, UserType $adminType, UserType $colleagueType): array
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
                    ->select('u')
                    ->from('AuthenticationBundle:User', 'u')
-                   ->where("u.agent = :agent")
-                   ->andWhere('u.id != :userId')
+                   ->where('u.userType = :adminType')
+                   ->andWhere("u.agent = :agent")
+                   ->orWhere('u.userType = :colleagueType')
+                   ->andWhere("u.agent = :agent")
                    ->setParameter('agent', $user->getAgent())
-                   ->setParameter('userId', $user->getId())
+                   ->setParameter('adminType', $adminType)
+                   ->setParameter('colleagueType', $colleagueType)
                    ->orderBy('u.id', 'ASC');
 
         $results = $qb->getQuery()->getResult();
@@ -55,19 +60,19 @@ class UserRepository extends EntityRepository
     }
 
     /**
-     * @param User $user
+     * @param int[]    $agentIds
      * @param UserType $userType
      *
      * @return User[]
      */
-    public function listColleagues(User $user, UserType $userType): array
+    public function listColleagues(array $agentIds, UserType $userType): array
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
                    ->select('u')
                    ->from('AuthenticationBundle:User', 'u')
-                   ->where("u.agent = :agent")
-                   ->andWhere('u.userType <= :userType')
-                   ->setParameter('agent', $user->getAgent())
+                   ->where("u.agent IN (:agentIds)")
+                   ->andWhere('u.userType = :userType')
+                   ->setParameter('agentIds', $agentIds)
                    ->setParameter('userType', $userType)
                    ->orderBy('u.id', 'ASC');
 

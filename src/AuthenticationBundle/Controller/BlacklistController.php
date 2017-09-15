@@ -121,7 +121,7 @@ class BlacklistController extends BaseController
     {
         $user = $this->userService->getUser($userId);
 
-        if ((int)$user->getUserType()->getId() >= self::USER_AGENT) {
+        if ((int)$user->getUserType()->getId() > self::USER_AGENT) {
             throw new NotAuthorizedException($userId);
         }
 
@@ -165,7 +165,7 @@ class BlacklistController extends BaseController
     {
         $user = $this->userService->getUser($userId);
 
-        if ((int)$user->getUserType()->getId() >= self::USER_AGENT) {
+        if ((int)$user->getUserType()->getId() > self::USER_AGENT) {
             throw new NotAuthorizedException($userId);
         }
 

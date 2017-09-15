@@ -39,28 +39,30 @@ class UserService
     }
 
     /**
-     * @param User $user
+     * @param User     $user
+     * @param UserType $adminType
+     * @param UserType $colleagueType
      *
      * @return User[] $user
      */
-    public function getUsers(User $user)
+    public function getUsers(User $user, UserType $adminType, UserType $colleagueType)
     {
         $repository = $this->entityManager->getRepository('AuthenticationBundle:User');
-        $user       = $repository->listAll($user);
+        $user       = $repository->listAll($user, $adminType, $colleagueType);
 
         return $user;
     }
 
     /**
-     * @param User     $user
+     * @param int[]    $agentIds
      * @param UserType $userType
      *
      * @return User[] $user
      */
-    public function getColleagues(User $user, UserType $userType)
+    public function getColleagues(array $agentIds, UserType $userType)
     {
         $repository = $this->entityManager->getRepository('AuthenticationBundle:User');
-        $user       = $repository->listColleagues($user, $userType);
+        $user       = $repository->listColleagues($agentIds, $userType);
 
         return $user;
     }

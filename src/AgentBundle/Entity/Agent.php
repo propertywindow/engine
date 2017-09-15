@@ -29,6 +29,13 @@ class Agent
     private $agentGroup;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="agent_user_id", type="integer", nullable=true)
+     */
+    private $userId;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="office", type="string", length=255)
@@ -179,6 +186,30 @@ class Agent
     public function getAgentGroup()
     {
         return $this->agentGroup;
+    }
+
+    /**
+     * Set userId
+     *
+     * @param integer $userId
+     *
+     * @return Agent
+     */
+    public function setUserId($userId)
+    {
+        $this->userId = $userId;
+
+        return $this;
+    }
+
+    /**
+     * Get userId
+     *
+     * @return int
+     */
+    public function getUserId()
+    {
+        return $this->userId;
     }
 
     /**

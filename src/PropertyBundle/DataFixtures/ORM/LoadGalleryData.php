@@ -20,35 +20,18 @@ class LoadGalleryData extends AbstractFixture implements OrderedFixtureInterface
     {
         // Annan Properties
 
-        for ($i = 1; $i <= 20; $i++) {
-            $main = ($i === 1) ? true : false;
-            $gallery = new Gallery();
-            $gallery->setSort($i);
-            $gallery->setPath('4/properties/1/'.$i.'.jpg');
-            $gallery->setMain($main);
-            $gallery->setProperty($this->getReference('property_annan_1'));
-            $manager->persist($gallery);
+        for ($i = 1; $i <= 15; $i++) {
+            for ($g = 1; $g <= 20; $g++) {
+                $main    = ($g === 1) ? true : false;
+                $gallery = new Gallery();
+                $gallery->setSort($g);
+                $gallery->setPath('4/properties/'.$i.'/'.$g.'.jpg');
+                $gallery->setMain($main);
+                $gallery->setProperty($this->getReference('property_annan_' . $i));
+                $manager->persist($gallery);
+            }
         }
 
-        for ($i = 1; $i <= 20; $i++) {
-            $main = ($i === 1) ? true : false;
-            $gallery = new Gallery();
-            $gallery->setSort($i);
-            $gallery->setPath('4/properties/2/'.$i.'.jpg');
-            $gallery->setMain($main);
-            $gallery->setProperty($this->getReference('property_annan_2'));
-            $manager->persist($gallery);
-        }
-
-        for ($i = 1; $i <= 20; $i++) {
-            $main = ($i === 1) ? true : false;
-            $gallery = new Gallery();
-            $gallery->setSort($i);
-            $gallery->setPath('4/properties/3/'.$i.'.jpg');
-            $gallery->setMain($main);
-            $gallery->setProperty($this->getReference('property_annan_3'));
-            $manager->persist($gallery);
-        }
 
         $manager->flush();
     }

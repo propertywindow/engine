@@ -17,3 +17,4 @@ var/SymfonyRequirements.php
 /web/bundles/
 /app/symfony_requirements
 
+/wget_images/

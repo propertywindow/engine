@@ -127,8 +127,10 @@ class UserController extends BaseController
      */
     private function getUsers(int $userId)
     {
-        $user  = $this->userService->getUser($userId);
-        $users = $this->userService->getUsers($user);
+        $user          = $this->userService->getUser($userId);
+        $adminType     = $this->userTypeService->getUserType(1);
+        $colleagueType = $this->userTypeService->getUserType(3);
+        $users         = $this->userService->getUsers($user, $adminType, $colleagueType);
 
         return Mapper::fromUsers(...$users);
     }
@@ -143,7 +145,8 @@ class UserController extends BaseController
     {
         $user     = $this->userService->getUser($userId);
         $userType = $this->userTypeService->getUserType(3);
-        $users    = $this->userService->getColleagues($user, $userType);
+        $agentIds = $this->agentService->getAgentIdsFromGroup((int)$user->getAgent()->getId());
+        $users    = $this->userService->getColleagues($agentIds, $userType);
 
         return Mapper::fromUsers(...$users);
     }
@@ -161,7 +164,7 @@ class UserController extends BaseController
     {
         $user = $this->userService->getUser($userId);
 
-        if ((int)$user->getUserType()->getId() >= self::USER_AGENT) {
+        if ((int)$user->getUserType()->getId() > self::USER_AGENT) {
             throw new NotAuthorizedException($userId);
         }
 
@@ -378,7 +381,7 @@ class UserController extends BaseController
         $id   = (int)$parameters['id'];
         $user = $this->userService->getUser($userId);
 
-        if ((int)$user->getUserType()->getId() >= self::USER_AGENT) {
+        if ((int)$user->getUserType()->getId() > self::USER_AGENT) {
             throw new NotAuthorizedException($userId);
         }
 

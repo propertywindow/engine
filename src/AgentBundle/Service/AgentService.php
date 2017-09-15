@@ -124,6 +124,18 @@ class AgentService
     }
 
     /**
+     * @param Agent $agent
+     *
+     * @return Agent
+     */
+    public function updateAgent(Agent $agent)
+    {
+        $this->entityManager->flush();
+
+        return $agent;
+    }
+
+    /**
      * @param int $id
      *
      * @throws \Doctrine\ORM\ORMException

@@ -162,12 +162,14 @@ class LoginController extends BaseController
         $user          = $this->userService->getUser($userId);
         $impersonate   = $this->userService->getUser($impersonateId);
 
-        if ((int)$user->getUserType()->getId() >= self::USER_AGENT) {
+        if ((int)$user->getUserType()->getId() > self::USER_AGENT) {
             throw new NotAuthorizedException($userId);
         }
 
-        if ($user->getAgent() !== $impersonate->getAgent()) {
-            throw new NotAuthorizedException($userId);
+        if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
+            if ($user->getAgent() !== $impersonate->getAgent()) {
+                throw new NotAuthorizedException($userId);
+            }
         }
 
         $timestamp      = time();

@@ -67,33 +67,118 @@ class LoadServiceGroupMapData extends AbstractFixture implements OrderedFixtureI
             $manager->persist($serviceGroupMap);
         }
 
-
-        // Annan Agent
+        // Property Window Agents
 
         $serviceGroupMap = new ServiceGroupMap();
-        $serviceGroupMap->setUser($this->getReference('user_annan_agent_1'));
+        $serviceGroupMap->setUser($this->getReference('user_propertywindow_agent_1'));
         $serviceGroupMap->setServiceGroup($this->getReference('service_group_dashboard'));
         $manager->persist($serviceGroupMap);
 
         $serviceGroupMap = new ServiceGroupMap();
-        $serviceGroupMap->setUser($this->getReference('user_annan_agent_1'));
+        $serviceGroupMap->setUser($this->getReference('user_propertywindow_agent_1'));
         $serviceGroupMap->setServiceGroup($this->getReference('service_group_users'));
         $manager->persist($serviceGroupMap);
 
         $serviceGroupMap = new ServiceGroupMap();
-        $serviceGroupMap->setUser($this->getReference('user_annan_agent_1'));
+        $serviceGroupMap->setUser($this->getReference('user_propertywindow_agent_1'));
         $serviceGroupMap->setServiceGroup($this->getReference('service_group_notifications'));
         $manager->persist($serviceGroupMap);
 
         $serviceGroupMap = new ServiceGroupMap();
-        $serviceGroupMap->setUser($this->getReference('user_annan_agent_1'));
+        $serviceGroupMap->setUser($this->getReference('user_propertywindow_agent_1'));
         $serviceGroupMap->setServiceGroup($this->getReference('service_group_statistics'));
         $manager->persist($serviceGroupMap);
 
         $serviceGroupMap = new ServiceGroupMap();
-        $serviceGroupMap->setUser($this->getReference('user_annan_agent_1'));
+        $serviceGroupMap->setUser($this->getReference('user_propertywindow_agent_1'));
         $serviceGroupMap->setServiceGroup($this->getReference('service_group_settings'));
         $manager->persist($serviceGroupMap);
+
+
+        // Annan Agents
+
+        for ($i = 1; $i <= 2; $i++) {
+            $serviceGroupMap = new ServiceGroupMap();
+            $serviceGroupMap->setUser($this->getReference('user_annan_agent_' . $i));
+            $serviceGroupMap->setServiceGroup($this->getReference('service_group_dashboard'));
+            $manager->persist($serviceGroupMap);
+
+            $serviceGroupMap = new ServiceGroupMap();
+            $serviceGroupMap->setUser($this->getReference('user_annan_agent_' . $i));
+            $serviceGroupMap->setServiceGroup($this->getReference('service_group_users'));
+            $manager->persist($serviceGroupMap);
+
+            $serviceGroupMap = new ServiceGroupMap();
+            $serviceGroupMap->setUser($this->getReference('user_annan_agent_' . $i));
+            $serviceGroupMap->setServiceGroup($this->getReference('service_group_notifications'));
+            $manager->persist($serviceGroupMap);
+
+            $serviceGroupMap = new ServiceGroupMap();
+            $serviceGroupMap->setUser($this->getReference('user_annan_agent_' . $i));
+            $serviceGroupMap->setServiceGroup($this->getReference('service_group_statistics'));
+            $manager->persist($serviceGroupMap);
+
+            $serviceGroupMap = new ServiceGroupMap();
+            $serviceGroupMap->setUser($this->getReference('user_annan_agent_' . $i));
+            $serviceGroupMap->setServiceGroup($this->getReference('service_group_settings'));
+            $manager->persist($serviceGroupMap);
+        }
+
+        // Oliver Agents
+
+        $serviceGroupMap = new ServiceGroupMap();
+        $serviceGroupMap->setUser($this->getReference('user_oliver_agent_1'));
+        $serviceGroupMap->setServiceGroup($this->getReference('service_group_dashboard'));
+        $manager->persist($serviceGroupMap);
+
+        $serviceGroupMap = new ServiceGroupMap();
+        $serviceGroupMap->setUser($this->getReference('user_oliver_agent_1'));
+        $serviceGroupMap->setServiceGroup($this->getReference('service_group_users'));
+        $manager->persist($serviceGroupMap);
+
+        $serviceGroupMap = new ServiceGroupMap();
+        $serviceGroupMap->setUser($this->getReference('user_oliver_agent_1'));
+        $serviceGroupMap->setServiceGroup($this->getReference('service_group_notifications'));
+        $manager->persist($serviceGroupMap);
+
+        $serviceGroupMap = new ServiceGroupMap();
+        $serviceGroupMap->setUser($this->getReference('user_oliver_agent_1'));
+        $serviceGroupMap->setServiceGroup($this->getReference('service_group_statistics'));
+        $manager->persist($serviceGroupMap);
+
+        $serviceGroupMap = new ServiceGroupMap();
+        $serviceGroupMap->setUser($this->getReference('user_oliver_agent_1'));
+        $serviceGroupMap->setServiceGroup($this->getReference('service_group_settings'));
+        $manager->persist($serviceGroupMap);
+
+        // Deans Agents
+
+        for ($i = 1; $i <= 3; $i++) {
+            $serviceGroupMap = new ServiceGroupMap();
+            $serviceGroupMap->setUser($this->getReference('user_deans_agent_' . $i));
+            $serviceGroupMap->setServiceGroup($this->getReference('service_group_dashboard'));
+            $manager->persist($serviceGroupMap);
+
+            $serviceGroupMap = new ServiceGroupMap();
+            $serviceGroupMap->setUser($this->getReference('user_deans_agent_' . $i));
+            $serviceGroupMap->setServiceGroup($this->getReference('service_group_users'));
+            $manager->persist($serviceGroupMap);
+
+            $serviceGroupMap = new ServiceGroupMap();
+            $serviceGroupMap->setUser($this->getReference('user_deans_agent_' . $i));
+            $serviceGroupMap->setServiceGroup($this->getReference('service_group_notifications'));
+            $manager->persist($serviceGroupMap);
+
+            $serviceGroupMap = new ServiceGroupMap();
+            $serviceGroupMap->setUser($this->getReference('user_deans_agent_' . $i));
+            $serviceGroupMap->setServiceGroup($this->getReference('service_group_statistics'));
+            $manager->persist($serviceGroupMap);
+
+            $serviceGroupMap = new ServiceGroupMap();
+            $serviceGroupMap->setUser($this->getReference('user_deans_agent_' . $i));
+            $serviceGroupMap->setServiceGroup($this->getReference('service_group_settings'));
+            $manager->persist($serviceGroupMap);
+        }
 
         // Annan Colleagues
 

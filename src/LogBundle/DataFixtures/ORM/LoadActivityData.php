@@ -24,48 +24,24 @@ class LoadActivityData extends AbstractFixture implements OrderedFixtureInterfac
 
         // Annan Properties
 
-        $activity = new Activity();
-        $activity->setUser($this->getReference('user_annan_colleague_1'));
-        $activity->setAgent($this->getReference('agent_6'));
-        $activity->setActionCategory('property');
-        $activity->setActionId(1);
-        $activity->setActionName('create');
-        $activity->setNewValue(
-            $this->container->get('jms_serializer')->serialize(
-                $this->getReference('property_annan_1'),
-                'json'
-            )
-        );
-        $manager->persist($activity);
+        $propertyService = $this->container->get('property_service');
 
-        $activity = new Activity();
-        $activity->setUser($this->getReference('user_annan_colleague_2'));
-        $activity->setAgent($this->getReference('agent_6'));
-        $activity->setActionCategory('property');
-        $activity->setActionId(1);
-        $activity->setActionName('create');
-        $activity->setNewValue(
-            $this->container->get('jms_serializer')->serialize(
-                $this->getReference('property_annan_2'),
-                'json'
-            )
-        );
-        $manager->persist($activity);
-
-        $activity = new Activity();
-        $activity->setUser($this->getReference('user_annan_colleague_3'));
-        $activity->setAgent($this->getReference('agent_6'));
-        $activity->setActionCategory('property');
-        $activity->setActionId(1);
-        $activity->setActionName('create');
-        $activity->setNewValue(
-            $this->container->get('jms_serializer')->serialize(
-                $this->getReference('property_annan_3'),
-                'json'
-            )
-        );
-        $manager->persist($activity);
-
+        for ($i = 1; $i <= 15; $i++) {
+            $activity = new Activity();
+            $property = $propertyService->getProperty($i);
+            $activity->setUser($this->getReference('user_annan_colleague_'.rand(1, 6)));
+            $activity->setAgent($property->getAgent());
+            $activity->setActionCategory('property');
+            $activity->setActionId(1);
+            $activity->setActionName('create');
+            $activity->setNewValue(
+                $this->container->get('jms_serializer')->serialize(
+                    $this->getReference('property_annan_'.$i),
+                    'json'
+                )
+            );
+            $manager->persist($activity);
+        }
 
         $manager->flush();
     }
