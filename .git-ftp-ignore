@@ -1,11 +1,10 @@
 .gitignore
-bitbucket-pipeles.yml
+bitbucket-pipelines.yml
 composer.json
-composer.lock
 docker-compose.yml
 phpunit.xml.dist
 README.md
-tests/
+tests
 var/
 wget_images/
-docker/
+docker
