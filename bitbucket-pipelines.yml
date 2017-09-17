@@ -24,7 +24,7 @@ pipelines:
            - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
            - composer install --prefer-source --no-interaction
            - apt-get -qq install git-ftp
-           - git ftp init --user $FTP_USERNAME --passwd $FTP_PASSWORD sftp://engine.propertywindow.nl/engine.propertywindow.nl
+           - git ftp push --user $FTP_USERNAME --passwd $FTP_PASSWORD sftp://engine.propertywindow.nl/engine.propertywindow.nl
 #  branches:
 #      master:
 #        - step:

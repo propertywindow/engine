@@ -1,5 +1,7 @@
 <?php declare(strict_types=1);
 
+umask(0000);
+
 use Symfony\Component\HttpFoundation\Request;
 
 require __DIR__.'/../vendor/autoload.php';

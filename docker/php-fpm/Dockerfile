@@ -53,8 +53,8 @@ RUN apt-get autoremove -y
 RUN echo 'alias sf="php app/console"' >> ~/.bashrc
 
 # Set enviroments
-ENV MYSQL_ROOT_PASSWORD=root
 ENV MYSQL_ROOT_USER=root
+ENV MYSQL_ROOT_PASSWORD=propertywindow
 
 # Set rights
 RUN useradd -ms /bin/bash vagrant
