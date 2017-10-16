@@ -77,6 +77,8 @@ class UserController extends BaseController
                 return $this->getUserById($userId, $parameters);
             case "getUsers":
                 return $this->getUsers($userId);
+            case "getAgentUsers":
+                return $this->getAgentUsers($userId, $parameters);
             case "getColleagues":
                 return $this->getColleagues($userId);
             case "createUser":
@@ -131,6 +133,31 @@ class UserController extends BaseController
         $adminType     = $this->userTypeService->getUserType(1);
         $colleagueType = $this->userTypeService->getUserType(3);
         $users         = $this->userService->getUsers($user, $adminType, $colleagueType);
+
+        return Mapper::fromUsers(...$users);
+    }
+
+    /**
+     * @param int $userId
+     *
+     * @return array
+     * @throws NotAuthorizedException
+     */
+    private function getAgentUsers(int $userId, array $parameters)
+    {
+        $user = $this->userService->getUser($userId);
+
+        if (!array_key_exists('id', $parameters)) {
+            throw new InvalidArgumentException("No argument provided");
+        }
+
+        if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
+            throw new NotAuthorizedException($userId);
+        }
+
+        $agent         = $this->agentService->getAgent((int)$parameters['id']);
+        $colleagueType = $this->userTypeService->getUserType(3);
+        $users         = $this->userService->getAgentUsers($agent, $colleagueType);
 
         return Mapper::fromUsers(...$users);
     }

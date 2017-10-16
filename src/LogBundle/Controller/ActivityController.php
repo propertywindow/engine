@@ -138,7 +138,7 @@ class ActivityController extends BaseController
 
 
     /**
-     * @param int $userId
+     * @param int   $userId
      * @param array $parameters
      *
      * @return array
@@ -149,17 +149,22 @@ class ActivityController extends BaseController
             throw new InvalidArgumentException("No argument provided");
         }
 
-        $user = $this->userService->getUser($userId);
+        if (array_key_exists('id', $parameters) && $parameters['id'] !== null) {
+            $agent = $this->agentService->getAgent($parameters['id']);
+        } else {
+            $user  = $this->userService->getUser($userId);
+            $agent = $user->getAgent();
+        }
 
         switch ($parameters['type']) {
             case "create":
-                $activities = $this->activityService->findPropertiesByAgent($user->getAgent(), $parameters['type']);
+                $activities = $this->activityService->findPropertiesByAgent($agent, $parameters['type']);
                 break;
             case "update":
-                $activities = $this->activityService->findPropertiesByAgent($user->getAgent(), $parameters['type']);
+                $activities = $this->activityService->findPropertiesByAgent($agent, $parameters['type']);
                 break;
             default:
-                $activities = $this->activityService->findPropertiesByAgent($user->getAgent(), 'create');
+                $activities = $this->activityService->findPropertiesByAgent($agent, 'create');
         }
 
         return Mapper::fromActivities(...$activities);

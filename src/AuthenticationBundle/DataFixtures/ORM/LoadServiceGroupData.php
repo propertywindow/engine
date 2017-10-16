@@ -50,8 +50,8 @@ class LoadServiceGroupData extends AbstractFixture implements OrderedFixtureInte
         $manager->persist($serviceGroup);
 
         $serviceGroup = new ServiceGroup();
-        $serviceGroup->setEn('Services Manager');
-        $serviceGroup->setNl('Diensten Beheren');
+        $serviceGroup->setEn('Services');
+        $serviceGroup->setNl('Diensten');
         $serviceGroup->setIcon('zmdi zmdi-ungroup');
         $serviceGroup->setUrl('/services');
         $this->addReference('service_group_services_manager', $serviceGroup);

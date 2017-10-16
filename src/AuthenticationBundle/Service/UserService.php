@@ -54,6 +54,20 @@ class UserService
     }
 
     /**
+     * @param Agent    $agent
+     * @param UserType $colleagueType
+     *
+     * @return User[] $user
+     */
+    public function getAgentUsers(Agent $agent, UserType $colleagueType)
+    {
+        $repository = $this->entityManager->getRepository('AuthenticationBundle:User');
+        $user       = $repository->agentListAll($agent, $colleagueType);
+
+        return $user;
+    }
+
+    /**
      * @param int[]    $agentIds
      * @param UserType $userType
      *

@@ -60,6 +60,28 @@ class UserRepository extends EntityRepository
     }
 
     /**
+     * @param Agent    $agent
+     * @param UserType $colleagueType
+     *
+     * @return array|User[]
+     */
+    public function agentListAll(Agent $agent, UserType $colleagueType): array
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder()
+                   ->select('u')
+                   ->from('AuthenticationBundle:User', 'u')
+                   ->where('u.userType = :colleagueType')
+                   ->andWhere("u.agent = :agent")
+                   ->setParameter('agent', $agent)
+                   ->setParameter('colleagueType', $colleagueType)
+                   ->orderBy('u.id', 'ASC');
+
+        $results = $qb->getQuery()->getResult();
+
+        return $results;
+    }
+
+    /**
      * @param int[]    $agentIds
      * @param UserType $userType
      *
