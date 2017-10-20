@@ -6,13 +6,12 @@ use AuthenticationBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Conversation
+ * Message
  *
- * @ORM\Table(name="conversation")
- * @ORM\Entity(repositoryClass="ConversationBundle\Repository\ConversationRepository")
- * @ORM\HasLifecycleCallbacks
+ * @ORM\Table(name="conversation_message")
+ * @ORM\Entity(repositoryClass="ConversationBundle\Repository\MessageRepository")
  */
-class Conversation
+class Message
 {
     /**
      * @var int
@@ -22,6 +21,12 @@ class Conversation
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="ConversationBundle\Entity\Conversation")
+     * @ORM\JoinColumn(name="conversation_id", referencedColumnName="id")
+     */
+    private $conversation;
 
     /**
      * @ORM\ManyToOne(targetEntity="AuthenticationBundle\Entity\User")
@@ -36,11 +41,18 @@ class Conversation
     private $toUser;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="message", type="string", length=255)
+     */
+    private $message;
+
+    /**
      * @var bool
      *
-     * @ORM\Column(name="closed", type="boolean", options={"default": false})
+     * @ORM\Column(name="seen", type="boolean", options={"default": false})
      */
-    private $closed = false;
+    private $seen = false;
 
     /**
      * @var \DateTime $created
@@ -67,11 +79,35 @@ class Conversation
     }
 
     /**
+     * Set conversation
+     *
+     * @param Conversation $conversation
+     *
+     * @return Message
+     */
+    public function setConversation(Conversation $conversation = null)
+    {
+        $this->conversation = $conversation;
+
+        return $this;
+    }
+
+    /**
+     * Get conversation
+     *
+     * @return Conversation
+     */
+    public function getConversation()
+    {
+        return $this->conversation;
+    }
+
+    /**
      * Set fromUser
      *
      * @param \AuthenticationBundle\Entity\User $fromUser
      *
-     * @return Conversation
+     * @return Message
      */
     public function setFromUser(User $fromUser = null)
     {
@@ -95,7 +131,7 @@ class Conversation
      *
      * @param \AuthenticationBundle\Entity\User $toUser
      *
-     * @return Conversation
+     * @return Message
      */
     public function setToUser(User $toUser = null)
     {
@@ -115,27 +151,51 @@ class Conversation
     }
 
     /**
-     * Set closed
+     * Set message
      *
-     * @param boolean $closed
+     * @param string $message
      *
-     * @return Conversation
+     * @return Message
      */
-    public function setClosed($closed)
+    public function setMessage($message)
     {
-        $this->closed = $closed;
+        $this->message = $message;
 
         return $this;
     }
 
     /**
-     * Get closed
+     * Get message
+     *
+     * @return string
+     */
+    public function getMessage()
+    {
+        return $this->message;
+    }
+
+    /**
+     * Set seen
+     *
+     * @param boolean $seen
+     *
+     * @return Message
+     */
+    public function setSeen($seen)
+    {
+        $this->seen = $seen;
+
+        return $this;
+    }
+
+    /**
+     * Get seen
      *
      * @return bool
      */
-    public function getClosed()
+    public function getSeen()
     {
-        return $this->closed;
+        return $this->seen;
     }
 
     /**
