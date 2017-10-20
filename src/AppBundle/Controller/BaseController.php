@@ -19,6 +19,8 @@ use AuthenticationBundle\Service\ServiceTemplateService;
 use AuthenticationBundle\Service\UserService;
 use AuthenticationBundle\Service\UserSettingsService;
 use AuthenticationBundle\Service\UserTypeService;
+use ConversationBundle\Service\ConversationService;
+use ConversationBundle\Service\MessageService;
 use ConversationBundle\Service\NotificationService;
 use PropertyBundle\Service\GalleryService;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
@@ -56,6 +58,7 @@ class BaseController extends Controller
     public const          SUB_TYPE_NOT_FOUND     = -32008;
     public const          LOG_NOT_FOUND          = -32009;
     public const          NOTIFICATION_NOT_FOUND = -32010;
+    public const          CONVERSATION_NOT_FOUND = -32011;
     public const          USER_ADMIN             = 1;
     public const          USER_AGENT             = 2;
     public const          USER_COLLEAGUE         = 3;
@@ -180,6 +183,16 @@ class BaseController extends Controller
     public $notificationService;
 
     /**
+     * @var ConversationService
+     */
+    public $conversationService;
+
+    /**
+     * @var MessageService
+     */
+    public $messageService;
+
+    /**
      * @param Authenticator          $authenticator
      * @param AgentService           $agentService
      * @param AgentGroupService      $agentGroupService
@@ -203,6 +216,8 @@ class BaseController extends Controller
      * @param GalleryService         $galleryService
      * @param LoginService           $loginService
      * @param NotificationService    $notificationService
+     * @param ConversationService    $conversationService
+     * @param MessageService         $messageService
      */
     public function __construct(
         Authenticator $authenticator,
@@ -227,7 +242,9 @@ class BaseController extends Controller
         SubTypeService $subTypeService,
         GalleryService $galleryService,
         LoginService $loginService,
-        NotificationService $notificationService
+        NotificationService $notificationService,
+        ConversationService $conversationService,
+        MessageService $messageService
     ) {
         $this->authenticator          = $authenticator;
         $this->agentService           = $agentService;
@@ -252,6 +269,8 @@ class BaseController extends Controller
         $this->galleryService         = $galleryService;
         $this->loginService           = $loginService;
         $this->notificationService    = $notificationService;
+        $this->conversationService    = $conversationService;
+        $this->messageService         = $messageService;
     }
 
     /**

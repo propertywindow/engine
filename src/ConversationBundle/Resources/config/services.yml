@@ -2,6 +2,16 @@ services:
   notification_service:
       class: ConversationBundle\Service\NotificationService
       arguments: ["@doctrine.orm.entity_manager"]
+  conversation_service:
+      class: ConversationBundle\Service\ConversationService
+      arguments: ["@doctrine.orm.entity_manager"]
+  message_service:
+      class: ConversationBundle\Service\MessageService
+      arguments: ["@doctrine.orm.entity_manager"]
   notification_controller:
       class: ConversationBundle\Controller\NotificationController
       autowire: true
+  conversation_controller:
+      class: ConversationBundle\Controller\ConversationController
+      autowire: true
+
