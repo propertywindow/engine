@@ -7,7 +7,6 @@ use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use ConversationBundle\Entity\Conversation;
 use ConversationBundle\Entity\Message;
 use ConversationBundle\Exceptions\ConversationNotFoundException;
-use ConversationBundle\Service\ConversationService;
 use Exception;
 use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -75,9 +74,9 @@ class ConversationController extends BaseController
     private function invoke(int $userId, string $method, array $parameters = [])
     {
         switch ($method) {
-            case "getNotification":
+            case "getConversation":
                 return $this->getConversation($parameters);
-            case "getNotifications":
+            case "getConversations":
                 return $this->getConversations();
             case "createConversation":
                 return $this->createConversation($userId, $parameters);
@@ -124,27 +123,31 @@ class ConversationController extends BaseController
      */
     private function createConversation(int $userId, array $parameters)
     {
-        if (!array_key_exists('to_user', $parameters) && $parameters['to_user'] !== null) {
-            throw new InvalidArgumentException("to_user parameter not provided");
+        if (!array_key_exists('to_user_id', $parameters) && $parameters['to_user_id'] !== null) {
+            throw new InvalidArgumentException("to_user_id parameter not provided");
         }
         if (!array_key_exists('message', $parameters) && $parameters['message'] !== null) {
             throw new InvalidArgumentException("message parameter not provided");
         }
 
-        $conversation = $this->conversationService->findByUsers($userId, $parameters['to_user']);
+        $fromUser     = $this->userService->getUser($userId);
+        $toUser       = $this->userService->getUser((int)$parameters['to_user_id']);
+        $conversation = $this->conversationService->findByUsers($fromUser, $toUser);
 
-        if ($conversation === null) {
+        // todo: fix this, always creates a new one
+
+        if (empty($conversation)) {
             $conversation = new Conversation();
-            $conversation->setFromUser($userId);
-            $conversation->setToUser($parameters['to_user']);
+            $conversation->setFromUser($fromUser);
+            $conversation->setToUser($toUser);
             $conversation = $this->conversationService->createConversation($conversation);
         }
 
         $message = new Message();
 
         $message->setConversation($conversation);
-        $message->setFromUser($userId);
-        $message->setToUser($parameters['to_user']);
+        $message->setFromUser($fromUser);
+        $message->setToUser($toUser);
         $message->setMessage($parameters['message']);
 
         $this->messageService->updateMessage($message);

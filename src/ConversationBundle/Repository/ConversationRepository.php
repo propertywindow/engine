@@ -2,6 +2,7 @@
 
 namespace ConversationBundle\Repository;
 
+use AuthenticationBundle\Entity\User;
 use ConversationBundle\Entity\Conversation;
 use ConversationBundle\Exceptions\ConversationNotFoundException;
 use Doctrine\ORM\EntityRepository;
@@ -38,10 +39,10 @@ class ConversationRepository extends EntityRepository
     public function listAll(): array
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
-                   ->select('t')
-                   ->from('ConversationBundle:Conversation', 'n');
+                   ->select('c')
+                   ->from('ConversationBundle:Conversation', 'c');
 
-        $qb->orderBy('n.id', 'ASC');
+        $qb->orderBy('c.id', 'ASC');
 
         $results = $qb->getQuery()->getResult();
 
@@ -49,19 +50,19 @@ class ConversationRepository extends EntityRepository
     }
 
     /**
-     * @param int $user
+     * @param User $user
      *
      * @return Conversation[]
      */
-    public function findByUser(int $user): array
+    public function findByUser(User $user): array
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
-                   ->select('t')
-                   ->from('ConversationBundle:Conversation', 'n')
-                   ->where('n.fromUser = :user')
-                   ->orWhere('n.toUser = :user')
+                   ->select('c')
+                   ->from('ConversationBundle:Conversation', 'c')
+                   ->where('c.fromUser = :user')
+                   ->orWhere('c.toUser = :user')
                    ->setParameter('user', $user)
-                   ->orderBy('n.id', 'ASC');
+                   ->orderBy('c.id', 'ASC');
 
         $results = $qb->getQuery()->getResult();
 
@@ -69,20 +70,20 @@ class ConversationRepository extends EntityRepository
     }
 
     /**
-     * @param int $fromUser
-     * @param int $toUser
+     * @param User $fromUser
+     * @param User $toUser
      *
      * @return Conversation[]
      */
-    public function findByUsers(int $fromUser, int $toUser): array
+    public function findByUsers(User $fromUser, User $toUser): array
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
-                   ->select('t')
-                   ->from('ConversationBundle:Conversation', 'n')
-                   ->where('n.fromUser = :fromUser')
-                   ->andWhere("n.toUser = :toUser")
-                   ->orWhere('n.fromUser = :toUser')
-                   ->andWhere("n.toUser = :fromUser")
+                   ->select('c')
+                   ->from('ConversationBundle:Conversation', 'c')
+                   ->where('c.fromUser = :fromUser')
+                   ->andWhere("c.toUser = :toUser")
+                   ->orWhere('c.fromUser = :toUser')
+                   ->andWhere("c.toUser = :fromUser")
                    ->setParameter('fromUser', $fromUser)
                    ->setParameter('toUser', $toUser)
                    ->setMaxResults(1);

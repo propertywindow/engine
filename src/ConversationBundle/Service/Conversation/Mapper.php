@@ -19,8 +19,8 @@ class Mapper
     {
         return [
             'id'           => $conversation->getId(),
-            'from_user_id' => $conversation->getFromUser(),
-            'to_user_id'   => $conversation->getToUser(),
+            'from_user_id' => $conversation->getFromUser()->getId(),
+            'to_user_id'   => $conversation->getToUser()->getId(),
             'closed'       => $conversation->getClosed(),
             'last_message' => '',
         ];

@@ -38,7 +38,7 @@ class NotificationRepository extends EntityRepository
     public function listAll(): array
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
-                   ->select('t')
+                   ->select('n')
                    ->from('ConversationBundle:Notification', 'n');
 
         $qb->orderBy('n.id', 'ASC');

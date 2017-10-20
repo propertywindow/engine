@@ -18,15 +18,14 @@ log:
     resource: "@LogBundle/Controller/"
     type:     annotation
 
+conversation:
+    resource: "@ConversationBundle/Controller/"
+    type:     annotation
+
 transparency:
     resource: "@TransparencyBundle/Controller/"
     type:     annotation
     prefix:   /transparency
-
-conversation:
-    resource: "@ConversationBundle/Controller/"
-    type:     annotation
-    prefix:   /conversation
 
 appointment:
     resource: "@AppointmentBundle/Controller/"

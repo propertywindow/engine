@@ -36,12 +36,12 @@ class MessageRepository extends EntityRepository
     /**
      * @param Conversation $conversation
      *
-     * @return array|Message[]
+     * @return Message[]
      */
     public function listAll(Conversation $conversation): array
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
-                   ->select('t')
+                   ->select('m')
                    ->from('ConversationBundle:Message', 'm')
                    ->where('m.conversation = :conversation')
                    ->setParameter('conversation', $conversation)

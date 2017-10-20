@@ -2,6 +2,7 @@
 
 namespace ConversationBundle\Service;
 
+use AuthenticationBundle\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use ConversationBundle\Entity\Conversation;
 
@@ -47,11 +48,11 @@ class ConversationService
     }
 
     /**
-     * @param int $user
+     * @param User $user
      *
      * @return Conversation
      */
-    public function findByUser(int $user)
+    public function findByUser(User $user)
     {
         $repository   = $this->entityManager->getRepository('ConversationBundle:Conversation');
         $conversation = $repository->findByUser($user);
@@ -61,16 +62,15 @@ class ConversationService
     }
 
     /**
-     * @param int $fromUser
-     * @param int $toUser
+     * @param User $fromUser
+     * @param User $toUser
      *
-     * @return Conversation
+     * @return null|Conversation
      */
-    public function findByUsers(int $fromUser, int $toUser)
+    public function findByUsers(User $fromUser, User $toUser)
     {
         $repository   = $this->entityManager->getRepository('ConversationBundle:Conversation');
         $conversation = $repository->findByUsers($fromUser, $toUser);
-
 
         return $conversation;
     }
