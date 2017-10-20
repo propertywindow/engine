@@ -19,6 +19,7 @@ use AuthenticationBundle\Service\ServiceTemplateService;
 use AuthenticationBundle\Service\UserService;
 use AuthenticationBundle\Service\UserSettingsService;
 use AuthenticationBundle\Service\UserTypeService;
+use ConversationBundle\Service\NotificationService;
 use PropertyBundle\Service\GalleryService;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use LogBundle\Service\ActivityService;
@@ -54,6 +55,7 @@ class BaseController extends Controller
     public const          TYPE_NOT_FOUND         = -32007;
     public const          SUB_TYPE_NOT_FOUND     = -32008;
     public const          LOG_NOT_FOUND          = -32009;
+    public const          NOTIFICATION_NOT_FOUND = -32010;
     public const          USER_ADMIN             = 1;
     public const          USER_AGENT             = 2;
     public const          USER_COLLEAGUE         = 3;
@@ -173,6 +175,11 @@ class BaseController extends Controller
     public $loginService;
 
     /**
+     * @var NotificationService
+     */
+    public $notificationService;
+
+    /**
      * @param Authenticator          $authenticator
      * @param AgentService           $agentService
      * @param AgentGroupService      $agentGroupService
@@ -195,6 +202,7 @@ class BaseController extends Controller
      * @param SubTypeService         $subTypeService
      * @param GalleryService         $galleryService
      * @param LoginService           $loginService
+     * @param NotificationService    $notificationService
      */
     public function __construct(
         Authenticator $authenticator,
@@ -218,7 +226,8 @@ class BaseController extends Controller
         TypeService $typeService,
         SubTypeService $subTypeService,
         GalleryService $galleryService,
-        LoginService $loginService
+        LoginService $loginService,
+        NotificationService $notificationService
     ) {
         $this->authenticator          = $authenticator;
         $this->agentService           = $agentService;
@@ -242,6 +251,7 @@ class BaseController extends Controller
         $this->subTypeService         = $subTypeService;
         $this->galleryService         = $galleryService;
         $this->loginService           = $loginService;
+        $this->notificationService    = $notificationService;
     }
 
     /**

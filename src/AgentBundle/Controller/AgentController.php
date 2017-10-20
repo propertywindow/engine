@@ -258,13 +258,13 @@ class AgentController extends BaseController
         }
 
         $createdUser->setPassword(md5($password));
-        $createdUser->setActive(true);
         $this->userService->updateUser($createdUser);
 
         $agent->setUserId($createdUser->getId());
         $this->agentService->updateAgent($agent);
 
-        // todo: also set serviceGroupMap and serviceMap
+        // todo: also set serviceGroupMap and serviceMap, do this in serviceMapService -> wizard saves during each step
+        // todo:  $createdUser->setActive(true); and agent active after services are set.
 
         return Mapper::fromAgent($agent);
     }

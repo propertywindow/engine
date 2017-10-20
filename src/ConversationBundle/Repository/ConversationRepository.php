@@ -6,7 +6,6 @@ use Doctrine\ORM\EntityRepository;
 
 /**
  * ConversationRepository
- *
  */
 class ConversationRepository extends EntityRepository
 {
