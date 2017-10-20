@@ -32,4 +32,19 @@ class AgentGroupRepository extends EntityRepository
         /** @var AgentGroup $result */
         return $result;
     }
+
+    /**
+     * @return AgentGroup[]
+     */
+    public function listAll(): array
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder()
+                   ->select('a')
+                   ->from('AgentBundle:AgentGroup', 'a')
+                   ->orderBy('a.id', 'ASC');
+
+        $results = $qb->getQuery()->getResult();
+
+        return $results;
+    }
 }

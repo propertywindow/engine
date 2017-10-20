@@ -2,7 +2,6 @@
 
 namespace AgentBundle\Service;
 
-use AgentBundle\Entity\AgentGroup;
 use Doctrine\ORM\EntityManagerInterface;
 use AgentBundle\Entity\Agent;
 
@@ -62,19 +61,6 @@ class AgentService
         return $groupIds;
     }
 
-    /**
-     * @param int $id
-     *
-     * @return AgentGroup $agentGroup
-     */
-    public function getAgentGroup(int $id)
-    {
-        $repository = $this->entityManager->getRepository('AgentBundle:AgentGroup');
-        $agentGroup = $repository->findById($id);
-
-        return $agentGroup;
-    }
-
 
     /**
      * @param Agent $agent
@@ -111,9 +97,9 @@ class AgentService
     public function deleteAgent(int $id)
     {
         $agentRepository = $this->entityManager->getRepository('AgentBundle:Agent');
-        $type            = $agentRepository->findById($id);
+        $agent           = $agentRepository->findById($id);
 
-        $this->entityManager->remove($type);
+        $this->entityManager->remove($agent);
         $this->entityManager->flush();
     }
 }

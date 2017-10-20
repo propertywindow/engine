@@ -40,10 +40,9 @@ class AgentRepository extends EntityRepository
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
                    ->select('a')
-                   ->from('AgentBundle:Agent', 'a');
-
-        $qb->where("a.archived = false")
-           ->orderBy('a.id', 'ASC');
+                   ->from('AgentBundle:Agent', 'a')
+                   ->where("a.archived = false")
+                   ->orderBy('a.id', 'ASC');
 
         $results = $qb->getQuery()->getResult();
 

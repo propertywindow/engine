@@ -1,10 +1,16 @@
 services:
+    agent_group_service:
+          class: AgentBundle\Service\AgentGroupService
+          arguments: ["@doctrine.orm.entity_manager"]
     agent_service:
           class: AgentBundle\Service\AgentService
           arguments: ["@doctrine.orm.entity_manager"]
     client_service:
           class: AgentBundle\Service\ClientService
           arguments: ["@doctrine.orm.entity_manager"]
+    agent_group_controller:
+          class: AgentBundle\Controller\AgentGroupController
+          autowire: true
     agent_controller:
           class: AgentBundle\Controller\AgentController
           autowire: true

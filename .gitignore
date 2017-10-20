@@ -18,3 +18,4 @@ var/SymfonyRequirements.php
 /app/symfony_requirements
 
 /wget_images/
+/image_data

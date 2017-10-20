@@ -121,9 +121,8 @@ class AgentController extends BaseController
             throw new NotAuthorizedException($userId);
         }
 
-
-//        $userType = $this->userTypeService->getUserType(2);
-//        $agentUser = $this->userService->getAgentUser($userType);
+        //        $userType = $this->userTypeService->getUserType(2);
+        //        $agentUser = $this->userService->getAgentUser($userType);
 
         return Mapper::fromAgents(...$this->agentService->getAgents());
     }
@@ -190,9 +189,10 @@ class AgentController extends BaseController
             throw new UserAlreadyExistException($parameters['email']);
         }
 
-        $agent = new Agent();
+        $agent      = new Agent();
+        $agentGroup = $this->agentGroupService->getAgentGroup($parameters['agent_group_id']);
 
-        $agent->setAgentGroup($this->agentService->getAgentGroup($parameters['agent_group_id']));
+        $agent->setAgentGroup($agentGroup);
         $agent->setOffice($parameters['office']);
         $agent->setStreet(ucwords($parameters['street']));
         $agent->setHouseNumber($parameters['house_number']);
@@ -223,45 +223,42 @@ class AgentController extends BaseController
             $agent->setWebsite((string)$parameters['website']);
         }
 
-
-        $agent      = $this->agentService->createAgent($agent);
-        $userType   = $this->userTypeService->getUserType(2);
-
-        // todo: add folder for agent in data folder
+        $agent    = $this->agentService->createAgent($agent);
+        $userType = $this->userTypeService->getUserType(2);
 
         $createdUser = $this->userService->createUser($parameters, $agent, $userType);
 
-        $password    = $this->randomPassword();
-        $subject     = 'Invitation to create an account';
-
-        $message = Swift_Message::newInstance()
-                                ->setSubject($subject)
-                                ->setFrom([self::EMAIL_FROM_EMAIL => self::EMAIL_FROM_NAME])
-                                ->setTo($createdUser->getEmail())
-                                ->setBody(
-                                    $this->renderView(
-                                        'AuthenticationBundle:Emails:Registration.html.twig',
-                                        [
-                                            'name'     => $parameters['first_name'],
-                                            'password' => $password,
-                                        ]
-                                    ),
-                                    'text/html'
-                                )
-                                ->addPart(
-                                    $this->renderView(
-                                        'AuthenticationBundle:Emails:Registration.txt.twig',
-                                        [
-                                            'name'     => $parameters['first_name'],
-                                            'password' => $password,
-                                        ]
-                                    ),
-                                    'text/plain'
-                                );
-
-        if ($this->get('mailer')->send($message)) {
-            $this->mailService->createMail($user, $agent, $createdUser->getEmail(), $subject);
-        }
+        $password = $this->randomPassword();
+        //        $subject     = 'Invitation to create an account';
+        //
+        //        $message = Swift_Message::newInstance()
+        //                                ->setSubject($subject)
+        //                                ->setFrom([self::EMAIL_FROM_EMAIL => self::EMAIL_FROM_NAME])
+        //                                ->setTo($createdUser->getEmail())
+        //                                ->setBody(
+        //                                    $this->renderView(
+        //                                        'AuthenticationBundle:Emails:Registration.html.twig',
+        //                                        [
+        //                                            'name'     => $parameters['first_name'],
+        //                                            'password' => $password,
+        //                                        ]
+        //                                    ),
+        //                                    'text/html'
+        //                                )
+        //                                ->addPart(
+        //                                    $this->renderView(
+        //                                        'AuthenticationBundle:Emails:Registration.txt.twig',
+        //                                        [
+        //                                            'name'     => $parameters['first_name'],
+        //                                            'password' => $password,
+        //                                        ]
+        //                                    ),
+        //                                    'text/plain'
+        //                                );
+        //
+        //        if ($this->get('mailer')->send($message)) {
+        //            $this->mailService->createMail($user, $agent, $createdUser->getEmail(), $subject);
+        //        }
 
         $createdUser->setPassword(md5($password));
         $createdUser->setActive(true);
