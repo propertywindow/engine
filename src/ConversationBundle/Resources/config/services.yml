@@ -14,4 +14,7 @@ services:
   conversation_controller:
       class: ConversationBundle\Controller\ConversationController
       autowire: true
+  email_controller:
+      class: ConversationBundle\Controller\EmailController
+      autowire: true
 

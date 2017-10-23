@@ -113,11 +113,11 @@ class LoadServiceGroupData extends AbstractFixture implements OrderedFixtureInte
         $manager->persist($serviceGroup);
 
         $serviceGroup = new ServiceGroup();
-        $serviceGroup->setEn('Inbox');
-        $serviceGroup->setNl('Inbox');
+        $serviceGroup->setEn('Email');
+        $serviceGroup->setNl('Email');
         $serviceGroup->setIcon('zmdi zmdi-email');
-        $serviceGroup->setUrl('/inbox');
-        $this->addReference('service_group_inbox', $serviceGroup);
+        $serviceGroup->setUrl('/email');
+        $this->addReference('service_group_email', $serviceGroup);
         $manager->persist($serviceGroup);
 
         $serviceGroup = new ServiceGroup();

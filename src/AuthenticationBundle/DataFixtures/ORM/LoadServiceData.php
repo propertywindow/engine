@@ -729,7 +729,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setNl('Bekijk Email');
         $service->setIcon('zmdi zmdi-search');
         $service->setVisible(false);
-        $service->setServiceGroup($this->getReference('service_group_inbox'));
+        $service->setServiceGroup($this->getReference('service_group_email'));
         $this->addReference('service_view_email', $service);
         $manager->persist($service);
 
@@ -738,7 +738,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setNl('Email toevoegen');
         $service->setIcon('zmdi zmdi-plus');
         $service->setVisible(false);
-        $service->setServiceGroup($this->getReference('service_group_inbox'));
+        $service->setServiceGroup($this->getReference('service_group_email'));
         $this->addReference('service_add_email', $service);
         $manager->persist($service);
 
@@ -747,7 +747,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setNl('Bewerk Email');
         $service->setIcon('');
         $service->setVisible(false);
-        $service->setServiceGroup($this->getReference('service_group_inbox'));
+        $service->setServiceGroup($this->getReference('service_group_email'));
         $this->addReference('service_edit_email', $service);
         $manager->persist($service);
 
@@ -756,7 +756,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setNl('Verwijder Email');
         $service->setIcon('zmdi zmdi-delete');
         $service->setVisible(false);
-        $service->setServiceGroup($this->getReference('service_group_inbox'));
+        $service->setServiceGroup($this->getReference('service_group_email'));
         $this->addReference('service_delete_email', $service);
         $manager->persist($service);
 

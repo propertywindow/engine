@@ -59,6 +59,7 @@ class BaseController extends Controller
     public const          LOG_NOT_FOUND          = -32009;
     public const          NOTIFICATION_NOT_FOUND = -32010;
     public const          CONVERSATION_NOT_FOUND = -32011;
+    public const          INBOX_NOT_FOUND        = -32012;
     public const          USER_ADMIN             = 1;
     public const          USER_AGENT             = 2;
     public const          USER_COLLEAGUE         = 3;

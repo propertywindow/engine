@@ -34,6 +34,27 @@ class UserSettings
      */
     private $language = 'en';
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="IMAP_server", type="string", length=255, nullable=true)
+     */
+    private $IMAPServer;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="IMAP_username", type="string", length=255, nullable=true)
+     */
+    private $IMAPUsername;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="IMAP_password", type="string", length=255, nullable=true)
+     */
+    private $IMAPPassword;
+
 
     /**
      * Get id
@@ -91,5 +112,77 @@ class UserSettings
     public function getLanguage()
     {
         return $this->language;
+    }
+
+    /**
+     * Set IMAPServer
+     *
+     * @param string $IMAPServer
+     *
+     * @return UserSettings
+     */
+    public function setIMAPServer($IMAPServer)
+    {
+        $this->IMAPServer = $IMAPServer;
+
+        return $this;
+    }
+
+    /**
+     * Get IMAPServer
+     *
+     * @return string
+     */
+    public function getIMAPServer()
+    {
+        return $this->IMAPServer;
+    }
+
+    /**
+     * Set IMAPUsername
+     *
+     * @param string $IMAPUsername
+     *
+     * @return UserSettings
+     */
+    public function setIMAPUsername($IMAPUsername)
+    {
+        $this->IMAPUsername = $IMAPUsername;
+
+        return $this;
+    }
+
+    /**
+     * Get IMAPUsername
+     *
+     * @return string
+     */
+    public function getIMAPUsername()
+    {
+        return $this->IMAPUsername;
+    }
+
+    /**
+     * Set IMAPPassword
+     *
+     * @param string $IMAPPassword
+     *
+     * @return UserSettings
+     */
+    public function setIMAPPassword($IMAPPassword)
+    {
+        $this->IMAPPassword = $IMAPPassword;
+
+        return $this;
+    }
+
+    /**
+     * Get IMAPPassword
+     *
+     * @return string
+     */
+    public function getIMAPPassword()
+    {
+        return $this->IMAPPassword;
     }
 }

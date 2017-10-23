@@ -36,7 +36,7 @@ class LoadServiceGroupTemplateData extends AbstractFixture implements OrderedFix
         $manager->persist($serviceGroupTemplate);
 
         $serviceGroupTemplate = new ServiceGroupTemplate();
-        $serviceGroupTemplate->setServiceGroup($this->getReference('service_group_inbox'));
+        $serviceGroupTemplate->setServiceGroup($this->getReference('service_group_email'));
         $serviceGroupTemplate->setUserType($this->getReference('user_type_admin'));
         $manager->persist($serviceGroupTemplate);
 
@@ -73,7 +73,7 @@ class LoadServiceGroupTemplateData extends AbstractFixture implements OrderedFix
         $manager->persist($serviceGroupTemplate);
 
         $serviceGroupTemplate = new ServiceGroupTemplate();
-        $serviceGroupTemplate->setServiceGroup($this->getReference('service_group_inbox'));
+        $serviceGroupTemplate->setServiceGroup($this->getReference('service_group_email'));
         $serviceGroupTemplate->setUserType($this->getReference('user_type_agent'));
         $manager->persist($serviceGroupTemplate);
 
@@ -135,7 +135,7 @@ class LoadServiceGroupTemplateData extends AbstractFixture implements OrderedFix
         $manager->persist($serviceGroupTemplate);
 
         $serviceGroupTemplate = new ServiceGroupTemplate();
-        $serviceGroupTemplate->setServiceGroup($this->getReference('service_group_inbox'));
+        $serviceGroupTemplate->setServiceGroup($this->getReference('service_group_email'));
         $serviceGroupTemplate->setUserType($this->getReference('user_type_colleague'));
         $manager->persist($serviceGroupTemplate);
 

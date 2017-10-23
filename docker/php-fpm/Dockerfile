@@ -17,6 +17,8 @@ RUN apt-get update \
 		libicu-dev \
 		libmemcached-dev \
 		g++ \
+		libc-client-dev \
+		libkrb5-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Composer
@@ -26,6 +28,11 @@ RUN composer --version
 # Run docker-php-ext-install for available extensions
 RUN docker-php-ext-configure intl \
     && docker-php-ext-install pdo pdo_mysql opcache intl
+
+
+RUN docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
+    && docker-php-ext-install imap
+
 
 # install xdebug
 RUN pecl install xdebug
