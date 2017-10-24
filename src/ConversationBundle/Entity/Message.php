@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="conversation_message")
  * @ORM\Entity(repositoryClass="ConversationBundle\Repository\MessageRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class Message
 {
@@ -200,7 +201,6 @@ class Message
 
     /**
      * Gets triggered only on insert
-     *
      * @ORM\PrePersist
      */
     public function onPrePersist()
@@ -210,11 +210,30 @@ class Message
 
     /**
      * Gets triggered every time on update
-     *
      * @ORM\PreUpdate
      */
     public function onPreUpdate()
     {
         $this->updated = new \DateTime("now");
+    }
+
+    /**
+     * Get created
+     *
+     * @return \DateTime
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    /**
+     * Get updated
+     *
+     * @return \DateTime
+     */
+    public function getUpdated()
+    {
+        return $this->updated;
     }
 }

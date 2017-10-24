@@ -38,27 +38,15 @@ class ConversationService
     }
 
     /**
+     * @param User $user
+     *
      * @return Conversation[]
      */
-    public function getConversations()
+    public function getConversations(User $user)
     {
         $repository = $this->entityManager->getRepository('ConversationBundle:Conversation');
 
-        return $repository->listAll();
-    }
-
-    /**
-     * @param User $user
-     *
-     * @return Conversation
-     */
-    public function findByUser(User $user)
-    {
-        $repository   = $this->entityManager->getRepository('ConversationBundle:Conversation');
-        $conversation = $repository->findByUser($user);
-
-
-        return $conversation;
+        return $repository->findByUser($user);
     }
 
     /**
@@ -70,7 +58,7 @@ class ConversationService
     public function findByUsers(User $fromUser, User $toUser)
     {
         $repository   = $this->entityManager->getRepository('ConversationBundle:Conversation');
-        $conversation = $repository->findByUsers($fromUser, $toUser);
+        $conversation = $repository->findOneBy(['uniqueId' => $fromUser->getId() + $toUser->getId()]);
 
         return $conversation;
     }
@@ -98,18 +86,5 @@ class ConversationService
         $this->entityManager->flush();
 
         return $conversation;
-    }
-
-    /**
-     * @param int $id
-     */
-    public function closeConversation(int $id)
-    {
-        $conversationRepository = $this->entityManager->getRepository('ConversationBundle:Conversation');
-        $conversation           = $conversationRepository->findById($id);
-
-        $conversation->setClosed(true);
-
-        $this->entityManager->flush();
     }
 }

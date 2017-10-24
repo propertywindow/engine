@@ -3,6 +3,7 @@
 namespace ConversationBundle\Service\Conversation;
 
 use ConversationBundle\Entity\Conversation;
+use ConversationBundle\Entity\Message;
 
 /**
  * Class Mapper
@@ -22,7 +23,6 @@ class Mapper
             'from_user_id' => $conversation->getFromUser()->getId(),
             'to_user_id'   => $conversation->getToUser()->getId(),
             'closed'       => $conversation->getClosed(),
-            'last_message' => '',
         ];
     }
 
@@ -38,6 +38,30 @@ class Mapper
                 return self::fromConversation($conversation);
             },
             $conversations
+        );
+    }
+
+
+    /**
+     * @param Message[] ...$messages
+     *
+     * @return array
+     */
+    public static function fromMessages(Message ...$messages): array
+    {
+        return array_map(
+            function (Message $message) {
+                return [
+                    'id'           => $message->getId(),
+                    'from_user_id' => $message->getFromUser()->getId(),
+                    'to_user_id'   => $message->getToUser()->getId(),
+                    'message'      => $message->getMessage(),
+                    'seen'         => $message->getSeen(),
+                    'read'         => $message->getUpdated(),
+                    'date'         => $message->getCreated(),
+                ];
+            },
+            $messages
         );
     }
 }

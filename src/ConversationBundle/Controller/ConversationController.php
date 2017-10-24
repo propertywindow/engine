@@ -77,11 +77,11 @@ class ConversationController extends BaseController
             case "getConversation":
                 return $this->getConversation($parameters);
             case "getConversations":
-                return $this->getConversations();
+                return $this->getConversations($userId);
             case "createConversation":
                 return $this->createConversation($userId, $parameters);
-            case "closeNotification":
-                return $this->closeNotification($parameters, $userId);
+            case "getMessages":
+                return $this->getMessages($userId, $parameters);
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
@@ -105,12 +105,17 @@ class ConversationController extends BaseController
     }
 
     /**
+     * @param int $userId
+     *
      * @return array
+     *
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    private function getConversations()
+    private function getConversations(int $userId)
     {
-        return Mapper::fromConversations(...$this->conversationService->getConversations());
+        $user = $this->userService->getUser($userId);
+
+        return Mapper::fromConversations(...$this->conversationService->getConversations($user));
     }
 
     /**
@@ -134,12 +139,11 @@ class ConversationController extends BaseController
         $toUser       = $this->userService->getUser((int)$parameters['to_user_id']);
         $conversation = $this->conversationService->findByUsers($fromUser, $toUser);
 
-        // todo: fix this, always creates a new one
-
         if (empty($conversation)) {
             $conversation = new Conversation();
             $conversation->setFromUser($fromUser);
             $conversation->setToUser($toUser);
+            $conversation->setUniqueId($fromUser->getId() + $toUser->getId());
             $conversation = $this->conversationService->createConversation($conversation);
         }
 
@@ -150,7 +154,7 @@ class ConversationController extends BaseController
         $message->setToUser($toUser);
         $message->setMessage($parameters['message']);
 
-        $this->messageService->updateMessage($message);
+        $this->messageService->createMessage($message);
 
         $conversation->setClosed(false);
 
@@ -158,25 +162,30 @@ class ConversationController extends BaseController
     }
 
     /**
+     * @param int   $userId
      * @param array $parameters
      *
-     * @param int   $userId
-     *
-     * @throws NotAuthorizedException
+     * @return array
+     * @throws ConversationNotFoundException
      */
-    private function closeNotification(array $parameters, int $userId)
+    private function getMessages(int $userId, array $parameters)
     {
         if (!array_key_exists('id', $parameters)) {
             throw new InvalidArgumentException("No argument provided");
         }
 
-        if ($userId === 1) {
-            // todo: check if userId is either from or to
-            throw new NotAuthorizedException($userId);
+        $id           = (int)$parameters['id'];
+        $conversation = $this->conversationService->getConversation($id);
+
+        $messages = $this->messageService->getMessages($conversation);
+
+        foreach ($messages as $message) {
+            if (!$message->getSeen() && $message->getToUser()->getId() === $userId) {
+                $message->setSeen(true);
+                $this->messageService->updateMessage($message);
+            }
         }
 
-        $id = (int)$parameters['id'];
-
-        $this->conversationService->closeConversation($id);
+        return Mapper::fromMessages(...$messages);
     }
 }

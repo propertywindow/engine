@@ -5,6 +5,7 @@ namespace ConversationBundle\Repository;
 use AuthenticationBundle\Entity\User;
 use ConversationBundle\Entity\Conversation;
 use ConversationBundle\Exceptions\ConversationNotFoundException;
+use ConversationBundle\Service\ConversationService;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -63,30 +64,6 @@ class ConversationRepository extends EntityRepository
                    ->orWhere('c.toUser = :user')
                    ->setParameter('user', $user)
                    ->orderBy('c.id', 'ASC');
-
-        $results = $qb->getQuery()->getResult();
-
-        return $results;
-    }
-
-    /**
-     * @param User $fromUser
-     * @param User $toUser
-     *
-     * @return Conversation[]
-     */
-    public function findByUsers(User $fromUser, User $toUser): array
-    {
-        $qb = $this->getEntityManager()->createQueryBuilder()
-                   ->select('c')
-                   ->from('ConversationBundle:Conversation', 'c')
-                   ->where('c.fromUser = :fromUser')
-                   ->andWhere("c.toUser = :toUser")
-                   ->orWhere('c.fromUser = :toUser')
-                   ->andWhere("c.toUser = :fromUser")
-                   ->setParameter('fromUser', $fromUser)
-                   ->setParameter('toUser', $toUser)
-                   ->setMaxResults(1);
 
         $results = $qb->getQuery()->getResult();
 

@@ -36,6 +36,13 @@ class Conversation
     private $toUser;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="unique_id", type="integer")
+     */
+    private $uniqueId;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="closed", type="boolean", options={"default": false})
@@ -112,6 +119,30 @@ class Conversation
     public function getToUser()
     {
         return $this->toUser;
+    }
+
+    /**
+     * Set uniqueId
+     *
+     * @param integer $uniqueId
+     *
+     * @return Conversation
+     */
+    public function setUniqueId($uniqueId)
+    {
+        $this->uniqueId = $uniqueId;
+
+        return $this;
+    }
+
+    /**
+     * Get uniqueId
+     *
+     * @return int
+     */
+    public function getUniqueId()
+    {
+        return $this->uniqueId;
     }
 
     /**

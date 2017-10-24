@@ -83,6 +83,8 @@ class EmailController extends BaseController
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
     }
 
+    // todo: get mail settings: https://emailsettings.firetrust.com/settings?q=test.user@gmail.com
+
     /**
      * @param int   $userId
      * @param array $parameters
@@ -104,9 +106,8 @@ class EmailController extends BaseController
         }
 
         $mailbox    = [];
-        $box        = $userSettings->getIMAPServer().$parameters['mailbox'];
         $connection = imap_open(
-            $box,
+            $parameters['mailbox'],
             $userSettings->getIMAPUsername(),
             $userSettings->getIMAPPassword()
         );
@@ -158,19 +159,20 @@ class EmailController extends BaseController
         $mailboxes = [];
         $list      = imap_list($connection, $userSettings->getIMAPServer(), '*');
 
-        foreach ($list as $val) {
-            if (preg_match("/}/i", $val)) {
-                $arr = explode('}', $val);
+        foreach ($list as $item) {
+            $array = [];
+            if (preg_match('/}/i', $item)) {
+                $array = explode('}', $item);
             }
-            if (preg_match("/]/i", $val)) {
-                $arr = explode(']/', $val);
+            if (preg_match('/]/i', $item)) {
+                $array = explode(']/', $item);
             }
 
             $mailbox    = new Mailbox();
-            $folderName = str_replace('INBOX.', '', trim(stripslashes($arr[1])));
+            $folderName = str_replace('INBOX.', '', trim(stripslashes($array[1])));
 
             $mailbox->setName(ucwords(strtolower(imap_utf7_decode($folderName))));
-            $mailbox->setMailbox($val);
+            $mailbox->setMailbox($item);
             $mailbox->setUnread(0);
 
             $mailboxes[] = $mailbox;

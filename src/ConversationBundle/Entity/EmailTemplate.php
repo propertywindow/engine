@@ -1,14 +1,15 @@
 <?php declare(strict_types=1);
 
-namespace AgentBundle\Entity;
+namespace ConversationBundle\Entity;
 
+use AgentBundle\Entity\Agent;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * EmailTemplate
  *
  * @ORM\Table(name="email_template")
- * @ORM\Entity(repositoryClass="AgentBundle\Repository\EmailTemplateRepository")
+ * @ORM\Entity(repositoryClass="ConversationBundle\Repository\EmailTemplateRepository")
  * @ORM\HasLifecycleCallbacks
  */
 class EmailTemplate
@@ -23,11 +24,10 @@ class EmailTemplate
     private $id;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="agent_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="AgentBundle\Entity\Agent")
+     * @ORM\JoinColumn(name="agent_id", referencedColumnName="id")
      */
-    private $agentId;
+    private $agent;
 
     /**
      * @var string
@@ -75,27 +75,27 @@ class EmailTemplate
     }
 
     /**
-     * Set agentId
+     * Set agent
      *
-     * @param integer $agentId
+     * @param \AgentBundle\Entity\Agent $agent
      *
      * @return EmailTemplate
      */
-    public function setAgentId($agentId)
+    public function setAgent(Agent $agent = null)
     {
-        $this->agentId = $agentId;
+        $this->agent = $agent;
 
         return $this;
     }
 
     /**
-     * Get agentId
+     * Get agent
      *
-     * @return int
+     * @return \AgentBundle\Entity\Agent
      */
-    public function getAgentId()
+    public function getAgent()
     {
-        return $this->agentId;
+        return $this->agent;
     }
 
     /**
