@@ -7,6 +7,7 @@ use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use ConversationBundle\Entity\Conversation;
 use ConversationBundle\Entity\Message;
 use ConversationBundle\Exceptions\ConversationNotFoundException;
+use ConversationBundle\Exceptions\NoColleagueException;
 use Exception;
 use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -126,7 +127,7 @@ class ConversationController extends BaseController
      *
      * @return array $conversation
      *
-     * @throws NotAuthorizedException
+     * @throws NoColleagueException
      */
     private function createConversation(int $userId, array $parameters)
     {
@@ -137,8 +138,15 @@ class ConversationController extends BaseController
             throw new InvalidArgumentException("message parameter not provided");
         }
 
-        $fromUser     = $this->userService->getUser($userId);
-        $toUser       = $this->userService->getUser((int)$parameters['to_user_id']);
+        $fromUser = $this->userService->getUser($userId);
+        $toUser   = $this->userService->getUser((int)$parameters['to_user_id']);
+        $userType = $this->userTypeService->getUserType(3);
+        $agentIds = $this->agentService->getAgentIdsFromGroup((int)$fromUser->getAgent()->getId());
+
+        if (!$this->userService->isColleague($toUser->getId(), $agentIds, $userType)) {
+            throw new NoColleagueException((int)$parameters['to_user_id']);
+        }
+
         $conversation = $this->conversationService->findByUsers($fromUser, $toUser);
 
         if (empty($conversation)) {

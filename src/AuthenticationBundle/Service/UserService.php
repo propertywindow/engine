@@ -82,6 +82,27 @@ class UserService
     }
 
     /**
+     * @param int      $userId
+     * @param int[]    $agentIds
+     * @param UserType $userType
+     *
+     * @return bool
+     */
+    public function isColleague(int $userId, array $agentIds, UserType $userType)
+    {
+        $repository = $this->entityManager->getRepository('AuthenticationBundle:User');
+        $users      = $repository->listColleagues($agentIds, $userType);
+
+        foreach ($users as $user) {
+            if ($userId === $user->getId()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * @param array    $parameters
      *
      * @param Agent    $agent
