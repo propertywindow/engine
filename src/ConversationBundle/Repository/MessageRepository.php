@@ -2,6 +2,7 @@
 
 namespace ConversationBundle\Repository;
 
+use AuthenticationBundle\Entity\User;
 use ConversationBundle\Entity\Conversation;
 use ConversationBundle\Entity\Message;
 use ConversationBundle\Exceptions\MessageNotFoundException;
@@ -45,6 +46,26 @@ class MessageRepository extends EntityRepository
                    ->from('ConversationBundle:Message', 'm')
                    ->where('m.conversation = :conversation')
                    ->setParameter('conversation', $conversation)
+                   ->orderBy('m.created', 'ASC');
+
+        $results = $qb->getQuery()->getResult();
+
+        return $results;
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return Message[]
+     */
+    public function findUnreadByUser(User $user): array
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder()
+                   ->select('m')
+                   ->from('ConversationBundle:Message', 'm')
+                   ->where('m.toUser = :user')
+                   ->andWhere('m.seen = false')
+                   ->setParameter('user', $user)
                    ->orderBy('m.created', 'ASC');
 
         $results = $qb->getQuery()->getResult();

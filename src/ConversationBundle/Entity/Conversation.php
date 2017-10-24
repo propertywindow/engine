@@ -43,13 +43,6 @@ class Conversation
     private $uniqueId;
 
     /**
-     * @var bool
-     *
-     * @ORM\Column(name="closed", type="boolean", options={"default": false})
-     */
-    private $closed = false;
-
-    /**
      * @var \DateTime $created
      *
      * @ORM\Column(type="datetime")
@@ -143,30 +136,6 @@ class Conversation
     public function getUniqueId()
     {
         return $this->uniqueId;
-    }
-
-    /**
-     * Set closed
-     *
-     * @param boolean $closed
-     *
-     * @return Conversation
-     */
-    public function setClosed($closed)
-    {
-        $this->closed = $closed;
-
-        return $this;
-    }
-
-    /**
-     * Get closed
-     *
-     * @return bool
-     */
-    public function getClosed()
-    {
-        return $this->closed;
     }
 
     /**

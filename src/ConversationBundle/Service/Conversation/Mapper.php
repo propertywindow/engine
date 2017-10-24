@@ -22,7 +22,6 @@ class Mapper
             'id'           => $conversation->getId(),
             'from_user_id' => $conversation->getFromUser()->getId(),
             'to_user_id'   => $conversation->getToUser()->getId(),
-            'closed'       => $conversation->getClosed(),
         ];
     }
 

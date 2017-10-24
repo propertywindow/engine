@@ -82,6 +82,8 @@ class ConversationController extends BaseController
                 return $this->createConversation($userId, $parameters);
             case "getMessages":
                 return $this->getMessages($userId, $parameters);
+            case "getUnread":
+                return $this->getUnread($userId);
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
@@ -156,9 +158,7 @@ class ConversationController extends BaseController
 
         $this->messageService->createMessage($message);
 
-        $conversation->setClosed(false);
-
-        return Mapper::fromConversation($this->conversationService->updateConversation($conversation));
+        return Mapper::fromConversation($conversation);
     }
 
     /**
@@ -166,6 +166,7 @@ class ConversationController extends BaseController
      * @param array $parameters
      *
      * @return array
+     *
      * @throws ConversationNotFoundException
      */
     private function getMessages(int $userId, array $parameters)
@@ -181,10 +182,22 @@ class ConversationController extends BaseController
 
         foreach ($messages as $message) {
             if (!$message->getSeen() && $message->getToUser()->getId() === $userId) {
-                $message->setSeen(true);
-                $this->messageService->updateMessage($message);
+                $this->messageService->readMessage($message);
             }
         }
+
+        return Mapper::fromMessages(...$messages);
+    }
+
+    /**
+     * @param int $userId
+     *
+     * @return array $messages
+     */
+    private function getUnread(int $userId)
+    {
+        $user     = $this->userService->getUser($userId);
+        $messages = $this->messageService->getUnread($user);
 
         return Mapper::fromMessages(...$messages);
     }
