@@ -1,16 +1,16 @@
 <?php declare(strict_types=1);
 
-namespace AuthenticationBundle\Entity;
+namespace AgentBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * UserSettings
+ * AgentSettings
  *
- * @ORM\Table(name="user_settings")
- * @ORM\Entity(repositoryClass="AuthenticationBundle\Repository\UserSettingsRepository")
+ * @ORM\Table(name="agent_settings")
+ * @ORM\Entity(repositoryClass="AgentBundle\Repository\AgentSettingsRepository")
  */
-class UserSettings
+class AgentSettings
 {
     /**
      * @var int
@@ -22,10 +22,10 @@ class UserSettings
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AuthenticationBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Agent")
+     * @ORM\JoinColumn(name="agent_id", referencedColumnName="id", nullable=true)
      */
-    protected $user;
+    protected $agent;
 
     /**
      * @var string
@@ -33,6 +33,13 @@ class UserSettings
      * @ORM\Column(name="language", type="string", length=2)
      */
     private $language = 'en';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="currency", type="string", length=3)
+     */
+    private $currency = 'EUR';
 
     /**
      * @var string
@@ -116,27 +123,27 @@ class UserSettings
     }
 
     /**
-     * Set user
+     * Set agent
      *
-     * @param User $user
+     * @param Agent $agent
      *
-     * @return UserSettings
+     * @return AgentSettings
      */
-    public function setUser(User $user = null)
+    public function setAgent(Agent $agent = null)
     {
-        $this->user = $user;
+        $this->agent = $agent;
 
         return $this;
     }
 
     /**
-     * Get user
+     * Get agent
      *
-     * @return User
+     * @return Agent
      */
-    public function getUser()
+    public function getAgent()
     {
-        return $this->user;
+        return $this->agent;
     }
 
     /**
@@ -144,7 +151,7 @@ class UserSettings
      *
      * @param string $language
      *
-     * @return UserSettings
+     * @return AgentSettings
      */
     public function setLanguage($language)
     {
@@ -164,11 +171,35 @@ class UserSettings
     }
 
     /**
+     * Set currency
+     *
+     * @param string $currency
+     *
+     * @return AgentSettings
+     */
+    public function setCurrency($currency)
+    {
+        $this->currency = $currency;
+
+        return $this;
+    }
+
+    /**
+     * Get currency
+     *
+     * @return string
+     */
+    public function getCurrency()
+    {
+        return $this->currency;
+    }
+
+    /**
      * Set IMAPAddress
      *
      * @param string $IMAPAddress
      *
-     * @return UserSettings
+     * @return AgentSettings
      */
     public function setIMAPAddress($IMAPAddress)
     {
@@ -192,7 +223,7 @@ class UserSettings
      *
      * @param int $IMAPPort
      *
-     * @return UserSettings
+     * @return AgentSettings
      */
     public function setIMAPPort($IMAPPort)
     {
@@ -216,7 +247,7 @@ class UserSettings
      *
      * @param string $IMAPSecure
      *
-     * @return UserSettings
+     * @return AgentSettings
      */
     public function setIMAPSecure($IMAPSecure)
     {
@@ -240,7 +271,7 @@ class UserSettings
      *
      * @param string $IMAPUsername
      *
-     * @return UserSettings
+     * @return AgentSettings
      */
     public function setIMAPUsername($IMAPUsername)
     {
@@ -264,7 +295,7 @@ class UserSettings
      *
      * @param string $IMAPPassword
      *
-     * @return UserSettings
+     * @return AgentSettings
      */
     public function setIMAPPassword($IMAPPassword)
     {
@@ -288,7 +319,7 @@ class UserSettings
      *
      * @param string $SMTPAddress
      *
-     * @return UserSettings
+     * @return AgentSettings
      */
     public function setSMTPAddress($SMTPAddress)
     {
@@ -312,7 +343,7 @@ class UserSettings
      *
      * @param int $SMTPPort
      *
-     * @return UserSettings
+     * @return AgentSettings
      */
     public function setSMTPPort($SMTPPort)
     {
@@ -336,7 +367,7 @@ class UserSettings
      *
      * @param string $SMTPSecure
      *
-     * @return UserSettings
+     * @return AgentSettings
      */
     public function setSMTPSecure($SMTPSecure)
     {
@@ -360,7 +391,7 @@ class UserSettings
      *
      * @param string $SMTPUsername
      *
-     * @return UserSettings
+     * @return AgentSettings
      */
     public function setSMTPUsername($SMTPUsername)
     {
@@ -384,7 +415,7 @@ class UserSettings
      *
      * @param string $SMTPPassword
      *
-     * @return UserSettings
+     * @return AgentSettings
      */
     public function setSMTPPassword($SMTPPassword)
     {

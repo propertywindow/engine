@@ -101,7 +101,7 @@ class EmailController extends BaseController
 
         $userSettings = $this->userSettingsService->getSettings($userId);
 
-        if (!$userSettings->getIMAPServer()) {
+        if (!$userSettings->getIMAPAddress()) {
             throw new EmailNotSetException($userId);
         }
 
@@ -147,17 +147,24 @@ class EmailController extends BaseController
     {
         $userSettings = $this->userSettingsService->getSettings($userId);
 
-        if (!$userSettings->getIMAPServer()) {
+        if (!$userSettings->getIMAPAddress()) {
             throw new EmailNotSetException($userId);
         }
+
+        $server = '{'
+                  .$userSettings->getIMAPAddress().':'
+                  .$userSettings->getIMAPPort().'/'
+                  .strtolower($userSettings->getIMAPSecure())
+                  .'}';
+
         $connection = imap_open(
-            $userSettings->getIMAPServer(),
+            $server,
             $userSettings->getIMAPUsername(),
             $userSettings->getIMAPPassword()
         );
 
         $mailboxes = [];
-        $list      = imap_list($connection, $userSettings->getIMAPServer(), '*');
+        $list      = imap_list($connection, $server, '*');
 
         foreach ($list as $item) {
             $array = [];
