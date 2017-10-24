@@ -103,7 +103,7 @@ class ActivityController extends BaseController
             throw new NotAuthorizedException($userId);
         }
 
-        return Mapper::fromActivity($this->activityService->getActivity($id));
+        return Mapper::fromActivity($this->logActivityService->getActivity($id));
     }
 
     /**
@@ -115,7 +115,7 @@ class ActivityController extends BaseController
     {
         $user = $this->userService->getUser($userId);
 
-        return Mapper::fromActivities(...$this->activityService->getActivityFromUser($user));
+        return Mapper::fromActivities(...$this->logActivityService->getActivityFromUser($user));
     }
 
     /**
@@ -133,7 +133,7 @@ class ActivityController extends BaseController
             throw new NotAuthorizedException($userId);
         }
 
-        return Mapper::fromActivities(...$this->activityService->getActivities($user->getAgent()));
+        return Mapper::fromActivities(...$this->logActivityService->getActivities($user->getAgent()));
     }
 
 
@@ -158,13 +158,13 @@ class ActivityController extends BaseController
 
         switch ($parameters['type']) {
             case "create":
-                $activities = $this->activityService->findPropertiesByAgent($agent, $parameters['type']);
+                $activities = $this->logActivityService->findPropertiesByAgent($agent, $parameters['type']);
                 break;
             case "update":
-                $activities = $this->activityService->findPropertiesByAgent($agent, $parameters['type']);
+                $activities = $this->logActivityService->findPropertiesByAgent($agent, $parameters['type']);
                 break;
             default:
-                $activities = $this->activityService->findPropertiesByAgent($agent, 'create');
+                $activities = $this->logActivityService->findPropertiesByAgent($agent, 'create');
         }
 
         return Mapper::fromActivities(...$activities);

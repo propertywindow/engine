@@ -11,7 +11,7 @@ use LogBundle\Exceptions\LoginNotFoundException;
 /**
  * @package LogBundle\Service
  */
-class LoginService
+class LogLoginService
 {
     /**
      * @var EntityManagerInterface

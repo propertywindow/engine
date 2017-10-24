@@ -11,7 +11,7 @@ use LogBundle\Exceptions\MailNotFoundException;
 /**
  * @package LogBundle\Service
  */
-class MailService
+class LogMailService
 {
     /**
      * @var EntityManagerInterface

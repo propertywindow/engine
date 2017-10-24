@@ -254,7 +254,7 @@ class AgentController extends BaseController
                                 );
 
         if ($this->get('mailer')->send($message)) {
-            $this->mailService->createMail($user, $agent, $createdUser->getEmail(), $subject);
+            $this->logMailService->createMail($user, $agent, $createdUser->getEmail(), $subject);
         }
 
         $createdUser->setPassword(md5($password));

@@ -9,7 +9,7 @@ use LogBundle\Exceptions\TrafficNotFoundException;
 /**
  * @package LogBundle\Service
  */
-class TrafficService
+class LogTrafficService
 {
     /**
      * @var EntityManagerInterface

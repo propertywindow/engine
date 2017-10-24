@@ -24,10 +24,10 @@ use ConversationBundle\Service\MessageService;
 use ConversationBundle\Service\NotificationService;
 use PropertyBundle\Service\GalleryService;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
-use LogBundle\Service\ActivityService;
-use LogBundle\Service\LoginService;
-use LogBundle\Service\MailService;
-use LogBundle\Service\TrafficService;
+use LogBundle\Service\LogActivityService;
+use LogBundle\Service\LogLoginService;
+use LogBundle\Service\LogMailService;
+use LogBundle\Service\LogTrafficService;
 use PropertyBundle\Service\KindService;
 use PropertyBundle\Service\PropertyService;
 use PropertyBundle\Service\SubTypeService;
@@ -124,9 +124,9 @@ class BaseController extends Controller
     public $serviceMapService;
 
     /**
-     * @var MailService
+     * @var LogMailService
      */
-    public $mailService;
+    public $logMailService;
 
     /**
      * @var PropertyService
@@ -139,14 +139,14 @@ class BaseController extends Controller
     public $clientService;
 
     /**
-     * @var ActivityService
+     * @var LogActivityService
      */
-    public $activityService;
+    public $logActivityService;
 
     /**
-     * @var TrafficService
+     * @var LogTrafficService
      */
-    public $trafficService;
+    public $logTrafficService;
 
     /**
      * @var KindService
@@ -174,9 +174,9 @@ class BaseController extends Controller
     public $galleryService;
 
     /**
-     * @var LoginService
+     * @var LogLoginService
      */
-    public $loginService;
+    public $logLoginService;
 
     /**
      * @var NotificationService
@@ -205,17 +205,17 @@ class BaseController extends Controller
      * @param ServiceGroupService    $serviceGroupService
      * @param ServiceTemplateService $serviceTemplateService
      * @param ServiceMapService      $serviceMapService
-     * @param MailService            $mailService
+     * @param LogMailService         $logMailService
      * @param PropertyService        $propertyService
      * @param ClientService          $clientService
-     * @param ActivityService        $activityService
-     * @param TrafficService         $trafficService
+     * @param LogActivityService     $logActivityService
+     * @param LogTrafficService      $logTrafficService
      * @param KindService            $kindService
      * @param TermsService           $termsService
      * @param TypeService            $typeService
      * @param SubTypeService         $subTypeService
      * @param GalleryService         $galleryService
-     * @param LoginService           $loginService
+     * @param LogLoginService        $logLoginService
      * @param NotificationService    $notificationService
      * @param ConversationService    $conversationService
      * @param MessageService         $messageService
@@ -232,17 +232,17 @@ class BaseController extends Controller
         ServiceGroupService $serviceGroupService,
         ServiceTemplateService $serviceTemplateService,
         ServiceMapService $serviceMapService,
-        MailService $mailService,
+        LogMailService $logMailService,
         PropertyService $propertyService,
         ClientService $clientService,
-        ActivityService $activityService,
-        TrafficService $trafficService,
+        LogActivityService $logActivityService,
+        LogTrafficService $logTrafficService,
         KindService $kindService,
         TermsService $termsService,
         TypeService $typeService,
         SubTypeService $subTypeService,
         GalleryService $galleryService,
-        LoginService $loginService,
+        LogLoginService $logLoginService,
         NotificationService $notificationService,
         ConversationService $conversationService,
         MessageService $messageService
@@ -258,17 +258,17 @@ class BaseController extends Controller
         $this->serviceGroupService    = $serviceGroupService;
         $this->serviceTemplateService = $serviceTemplateService;
         $this->serviceMapService      = $serviceMapService;
-        $this->mailService            = $mailService;
+        $this->logMailService         = $logMailService;
         $this->propertyService        = $propertyService;
         $this->clientService          = $clientService;
-        $this->activityService        = $activityService;
-        $this->trafficService         = $trafficService;
+        $this->logActivityService     = $logActivityService;
+        $this->logTrafficService      = $logTrafficService;
         $this->kindService            = $kindService;
         $this->termsService           = $termsService;
         $this->typeService            = $typeService;
         $this->subTypeService         = $subTypeService;
         $this->galleryService         = $galleryService;
-        $this->loginService           = $loginService;
+        $this->logLoginService        = $logLoginService;
         $this->notificationService    = $notificationService;
         $this->conversationService    = $conversationService;
         $this->messageService         = $messageService;

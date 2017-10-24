@@ -264,7 +264,7 @@ class UserController extends BaseController
                                 );
 
         if ($this->get('mailer')->send($message)) {
-            $this->mailService->createMail($user, $user->getAgent(), $createdUser->getEmail(), $subject);
+            $this->logMailService->createMail($user, $user->getAgent(), $createdUser->getEmail(), $subject);
         }
 
         $createdUser->setPassword(md5($password));

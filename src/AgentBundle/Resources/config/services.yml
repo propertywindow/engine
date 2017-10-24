@@ -5,6 +5,9 @@ services:
     agent_service:
           class: AgentBundle\Service\AgentService
           arguments: ["@doctrine.orm.entity_manager"]
+    agent_settings_service:
+          class: AgentBundle\Service\AgentSettingsService
+          arguments: ["@doctrine.orm.entity_manager"]
     client_service:
           class: AgentBundle\Service\ClientService
           arguments: ["@doctrine.orm.entity_manager"]
