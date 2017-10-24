@@ -20,6 +20,7 @@ use AuthenticationBundle\Service\UserService;
 use AuthenticationBundle\Service\UserSettingsService;
 use AuthenticationBundle\Service\UserTypeService;
 use ConversationBundle\Service\ConversationService;
+use ConversationBundle\Service\MailerService;
 use ConversationBundle\Service\MessageService;
 use ConversationBundle\Service\NotificationService;
 use PropertyBundle\Service\GalleryService;
@@ -65,8 +66,6 @@ class BaseController extends Controller
     public const          USER_COLLEAGUE         = 3;
     public const          USER_CLIENT            = 4;
     public const          USER_API               = 5;
-    public const          EMAIL_FROM_EMAIL       = 'no-reply@propertywindow.nl';
-    public const          EMAIL_FROM_NAME        = 'Property Window';
 
     /**
      * @var Authenticator
@@ -194,6 +193,11 @@ class BaseController extends Controller
     public $messageService;
 
     /**
+     * @var MailerService
+     */
+    public $mailerService;
+
+    /**
      * @param Authenticator          $authenticator
      * @param AgentService           $agentService
      * @param AgentGroupService      $agentGroupService
@@ -219,6 +223,7 @@ class BaseController extends Controller
      * @param NotificationService    $notificationService
      * @param ConversationService    $conversationService
      * @param MessageService         $messageService
+     * @param MailerService          $mailerService
      */
     public function __construct(
         Authenticator $authenticator,
@@ -245,7 +250,8 @@ class BaseController extends Controller
         LogLoginService $logLoginService,
         NotificationService $notificationService,
         ConversationService $conversationService,
-        MessageService $messageService
+        MessageService $messageService,
+        MailerService $mailerService
     ) {
         $this->authenticator          = $authenticator;
         $this->agentService           = $agentService;
@@ -272,6 +278,7 @@ class BaseController extends Controller
         $this->notificationService    = $notificationService;
         $this->conversationService    = $conversationService;
         $this->messageService         = $messageService;
+        $this->mailerService          = $mailerService;
     }
 
     /**

@@ -114,6 +114,8 @@ class UserService
     {
         $user = new User();
 
+        // todo: move this to controller
+
         $user->setEmail(strtolower($parameters['email']));
         $user->setFirstName(ucfirst($parameters['first_name']));
         $user->setLastName(ucfirst($parameters['last_name']));

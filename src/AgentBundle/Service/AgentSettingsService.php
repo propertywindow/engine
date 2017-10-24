@@ -2,6 +2,7 @@
 
 namespace AgentBundle\Service;
 
+use AgentBundle\Entity\Agent;
 use AgentBundle\Entity\AgentSettings;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -24,14 +25,14 @@ class AgentSettingsService
     }
 
     /**
-     * @param int $agentId
+     * @param Agent $agent
      *
      * @return AgentSettings $agent
      */
-    public function getSettings(int $agentId)
+    public function getSettings(Agent $agent)
     {
         $repository = $this->entityManager->getRepository('AgentBundle:AgentSettings');
-        $agent      = $repository->findByAgentId($agentId);
+        $agent      = $repository->findByAgent($agent);
 
         return $agent;
     }

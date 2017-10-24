@@ -44,6 +44,20 @@ class AgentSettings
     /**
      * @var string
      *
+     * @ORM\Column(name="email_name", type="string", length=255, nullable=true)
+     */
+    private $emailName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="email_address", type="string", length=255, nullable=true)
+     */
+    private $emailAddress;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="IMAP_address", type="string", length=255, nullable=true)
      */
     private $IMAPAddress;
@@ -192,6 +206,54 @@ class AgentSettings
     public function getCurrency()
     {
         return $this->currency;
+    }
+
+    /**
+     * Set emailName
+     *
+     * @param string $emailName
+     *
+     * @return AgentSettings
+     */
+    public function setEmailName($emailName)
+    {
+        $this->emailName = $emailName;
+
+        return $this;
+    }
+
+    /**
+     * Get emailName
+     *
+     * @return string
+     */
+    public function getEmailName()
+    {
+        return $this->emailName;
+    }
+
+    /**
+     * Set emailAddress
+     *
+     * @param string $emailAddress
+     *
+     * @return AgentSettings
+     */
+    public function setEmailAddress($emailAddress)
+    {
+        $this->emailAddress = $emailAddress;
+
+        return $this;
+    }
+
+    /**
+     * Get emailAddress
+     *
+     * @return string
+     */
+    public function getEmailAddress()
+    {
+        return $this->emailAddress;
     }
 
     /**

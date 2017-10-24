@@ -20,20 +20,20 @@ class LoadGalleryData extends AbstractFixture implements OrderedFixtureInterface
     {
         // Annan Properties
 
-        for ($i = 1; $i <= 15; $i++) {
-            for ($g = 1; $g <= 20; $g++) {
-                $main    = ($g === 1) ? true : false;
-                $gallery = new Gallery();
-                $gallery->setSort($g);
-                $gallery->setPath('2/properties/'.$i.'/'.$g.'.jpg');
-                $gallery->setMain($main);
-                $gallery->setProperty($this->getReference('property_annan_' . $i));
-                $manager->persist($gallery);
-            }
-        }
-
-
-        $manager->flush();
+//        for ($i = 1; $i <= 15; $i++) {
+//            for ($g = 1; $g <= 20; $g++) {
+//                $main    = ($g === 1) ? true : false;
+//                $gallery = new Gallery();
+//                $gallery->setSort($g);
+//                $gallery->setPath('2/properties/'.$i.'/'.$g.'.jpg');
+//                $gallery->setMain($main);
+//                $gallery->setProperty($this->getReference('property_annan_' . $i));
+//                $manager->persist($gallery);
+//            }
+//        }
+//
+//
+//        $manager->flush();
     }
 
     /**

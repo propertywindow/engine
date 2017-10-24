@@ -24,15 +24,17 @@ class LoadUserSettingsData extends AbstractFixture implements OrderedFixtureInte
             $userSettings = new UserSettings();
             $userSettings->setUser($this->getReference('user_propertywindow_admin_'. $i));
             $userSettings->setLanguage('en');
-            $userSettings->setIMAPAddress('imap-mail.outlook.com');
+            $userSettings->setEmailName('Property Window');
+            $userSettings->setEmailAddress('propertywindownl@gmail.com');
+            $userSettings->setIMAPAddress('imap.gmail.com');
             $userSettings->setIMAPPort(993);
             $userSettings->setIMAPSecure('SSL');
-            $userSettings->setIMAPUsername('propertywindownl@hotmail.com');
+            $userSettings->setIMAPUsername('propertywindownl');
             $userSettings->setIMAPPassword('PropertyWindow12');
-            $userSettings->setSMTPAddress('smtp-mail.outlook.com');
-            $userSettings->setSMTPPort(587);
-            $userSettings->setSMTPSecure('TLS');
-            $userSettings->setSMTPUsername('propertywindownl@hotmail.com');
+            $userSettings->setSMTPAddress('smtp.gmail.com');
+            $userSettings->setSMTPPort(465);
+            $userSettings->setSMTPSecure('SSL');
+            $userSettings->setSMTPUsername('propertywindownl');
             $userSettings->setSMTPPassword('PropertyWindow12');
             $manager->persist($userSettings);
         }

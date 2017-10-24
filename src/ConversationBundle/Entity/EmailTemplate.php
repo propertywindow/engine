@@ -4,6 +4,7 @@ namespace ConversationBundle\Entity;
 
 use AgentBundle\Entity\Agent;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bundle\FrameworkBundle\Tests\Fixtures\Validation\Category;
 
 /**
  * EmailTemplate
@@ -30,6 +31,19 @@ class EmailTemplate
     private $agent;
 
     /**
+     * @ORM\ManyToOne(targetEntity="ConversationBundle\Entity\EmailTemplateCategory")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     */
+    private $category;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=255)
+     */
+    private $name;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="subject", type="string", length=255)
@@ -39,9 +53,16 @@ class EmailTemplate
     /**
      * @var string
      *
-     * @ORM\Column(name="message", type="blob")
+     * @ORM\Column(name="message_html", type="blob")
      */
-    private $message;
+    private $messageHTML;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="message_txt", type="blob")
+     */
+    private $messageTXT;
 
     /**
      * @var bool
@@ -99,6 +120,54 @@ class EmailTemplate
     }
 
     /**
+     * Set category
+     *
+     * @param EmailTemplateCategory $category
+     *
+     * @return EmailTemplate
+     */
+    public function setCategory(EmailTemplateCategory $category = null)
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    /**
+     * Get category
+     *
+     * @return Category
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return EmailTemplate
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
      * Set subject
      *
      * @param string $subject
@@ -123,27 +192,51 @@ class EmailTemplate
     }
 
     /**
-     * Set message
+     * Set messageHTML
      *
-     * @param string $message
+     * @param string $messageHTML
      *
      * @return EmailTemplate
      */
-    public function setMessage($message)
+    public function setMessageHTML($messageHTML)
     {
-        $this->message = $message;
+        $this->messageHTML = $messageHTML;
 
         return $this;
     }
 
     /**
-     * Get message
+     * Get messageHTML
      *
      * @return string
      */
-    public function getMessage()
+    public function getMessageHTML()
     {
-        return $this->message;
+        return $this->messageHTML;
+    }
+
+    /**
+     * Set messageTXT
+     *
+     * @param string $messageTXT
+     *
+     * @return EmailTemplate
+     */
+    public function setMessageTXT($messageTXT)
+    {
+        $this->messageTXT = $messageTXT;
+
+        return $this;
+    }
+
+    /**
+     * Get messageTXT
+     *
+     * @return string
+     */
+    public function getMessageTXT()
+    {
+        return $this->messageTXT;
     }
 
     /**

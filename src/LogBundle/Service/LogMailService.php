@@ -49,7 +49,7 @@ class LogMailService
     /**
      * @param User   $user
      * @param Agent  $agent
-     * @param string $sendTo
+     * @param string $recipient
      * @param string $subject
      *
      * @return Mail
@@ -57,14 +57,14 @@ class LogMailService
     public function createMail(
         User $user,
         Agent $agent,
-        string $sendTo,
+        string $recipient,
         string $subject
     ) {
         $mail = new Mail();
 
-        $mail->setSendBy($user);
+        $mail->setSender($user);
         $mail->setAgent($agent);
-        $mail->setSentTo($sendTo);
+        $mail->setRecipient($recipient);
         $mail->setSubject($subject);
 
         $this->entityManager->persist($mail);

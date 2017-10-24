@@ -22,15 +22,17 @@ class LoadAgentSettingsData extends AbstractFixture implements OrderedFixtureInt
         $agentSettings->setAgent($this->getReference('agent_propertywindow_1'));
         $agentSettings->setLanguage('en');
         $agentSettings->setCurrency('GBP');
-        $agentSettings->setIMAPAddress('imap-mail.outlook.com');
+        $agentSettings->setEmailName('Property Window');
+        $agentSettings->setEmailAddress('no-reply@propertywindow.nl');
+        $agentSettings->setIMAPAddress('imap.gmail.com');
         $agentSettings->setIMAPPort(993);
         $agentSettings->setIMAPSecure('SSL');
-        $agentSettings->setIMAPUsername('propertywindownl@hotmail.com');
+        $agentSettings->setIMAPUsername('propertywindownl');
         $agentSettings->setIMAPPassword('PropertyWindow12');
-        $agentSettings->setSMTPAddress('smtp-mail.outlook.com');
-        $agentSettings->setSMTPPort(587);
-        $agentSettings->setSMTPSecure('TLS');
-        $agentSettings->setSMTPUsername('propertywindownl@hotmail.com');
+        $agentSettings->setSMTPAddress('smtp.gmail.com');
+        $agentSettings->setSMTPPort(465);
+        $agentSettings->setSMTPSecure('SSL');
+        $agentSettings->setSMTPUsername('propertywindownl');
         $agentSettings->setSMTPPassword('PropertyWindow12');
         $manager->persist($agentSettings);
 
