@@ -34,6 +34,50 @@ class UserRepository extends EntityRepository
     }
 
     /**
+     * @param int[] $identifiers
+     *
+     * @return User[]
+     *
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function findByUserIdentifiers(array $identifiers): array
+    {
+        /** @var User[] $users */
+        $users = $this->findBy(['id' => $identifiers]);
+
+        $userIdentifiersFound = array_map(
+            function (User $user) {
+                return $user->getId();
+            },
+            $users
+        );
+
+        $userIdentifiersNotFound = array_diff($identifiers, $userIdentifiersFound);
+        if (count($userIdentifiersNotFound) > 0) {
+            $entityManager = $this->getEntityManager();
+            $i             = 0;
+            $insertedUsers = [];
+            foreach ($userIdentifiersNotFound as $identifier) {
+                $user = new User($identifier);
+
+                $entityManager->persist($user);
+                $insertedUsers[] = $user;
+
+                if ($i % 50 === 0) {
+                    $entityManager->flush();
+                }
+
+                $i++;
+            }
+
+            $entityManager->flush($insertedUsers);
+            $users = array_merge($users, $insertedUsers);
+        }
+
+        return $users;
+    }
+
+    /**
      * @param User     $user
      * @param UserType $adminType
      * @param UserType $colleagueType

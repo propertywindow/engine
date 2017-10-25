@@ -4,6 +4,8 @@ namespace ConversationBundle\Controller;
 
 use AppBundle\Controller\BaseController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
+use ConversationBundle\Entity\Notification;
+use DateTime;
 use Exception;
 use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -71,15 +73,35 @@ class NotificationController extends BaseController
     private function invoke(int $userId, string $method, array $parameters = [])
     {
         switch ($method) {
+            case "getNotifications":
+                return $this->getNotifications($userId);
             case "getNotification":
                 return $this->getNotification($parameters);
-            case "getNotifications":
-                return $this->getNotifications();
+            case "listNotifications":
+                return $this->listNotifications();
+            case "createNotification":
+                return $this->createNotification($userId, $parameters);
+            case "updateNotification":
+                return $this->updateNotification($userId, $parameters);
             case "deleteNotification":
-                return $this->deleteNotification($parameters, $userId);
+                return $this->deleteNotification($userId, $parameters);
+            case "closeNotification":
+                return $this->closeNotification($userId, $parameters);
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
+    }
+
+    /**
+     * @param int $userId
+     *
+     * @return array
+     */
+    private function getNotifications(int $userId)
+    {
+        $user = $this->userService->getUser($userId);
+
+        return Mapper::fromNotifications(...$this->notificationService->getNotifications($user));
     }
 
     /**
@@ -101,27 +123,173 @@ class NotificationController extends BaseController
 
     /**
      * @return array
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
-    private function getNotifications()
+    private function listNotifications()
     {
-        return Mapper::fromNotifications(...$this->notificationService->getNotifications());
+        $notifications = $this->notificationService->listNotifications();
+
+        return Mapper::fromNotifications(...$notifications);
     }
 
     /**
+     * @param int   $userId
      * @param array $parameters
      *
-     * @param int   $userId
+     * @return array
      *
      * @throws NotAuthorizedException
      */
-    private function deleteNotification(array $parameters, int $userId)
+    private function createNotification(int $userId, array $parameters)
+    {
+        // todo: check rights
+
+        $user = $this->userService->getUser($userId);
+
+        $notification = new Notification();
+
+        $notification->setUser($user);
+
+        if (!array_key_exists('content', $parameters) && $parameters['content'] !== null) {
+            throw new InvalidArgumentException("Content parameter not provided");
+        } else {
+            $notification->setContent((string)$parameters['content']);
+        }
+
+        if (!array_key_exists('type', $parameters) && $parameters['type'] !== null) {
+            throw new InvalidArgumentException("Type parameter not provided");
+        } else {
+            $notification->setType((string)$parameters['type']);
+        }
+
+        if (!array_key_exists('start', $parameters) && $parameters['start'] !== null) {
+            throw new InvalidArgumentException("Start parameter not provided");
+        }
+
+        $start = DateTime::createFromFormat("Y-m-d\tH:i:s", $parameters['start']);
+        if ($start === false) {
+            throw new InvalidArgumentException("Start {$parameters['start']} couldn't be parsed");
+        } else {
+            $notification->setStart($parameters['start']);
+        }
+
+        if (array_key_exists('end', $parameters) && $parameters['end'] !== null) {
+            $end = DateTime::createFromFormat("Y-m-d\tH:i:s", $parameters['end']);
+            if ($end === false) {
+                throw new InvalidArgumentException("End {$parameters['end']} couldn't be parsed");
+            }
+            $notification->setEnd($end);
+        }
+
+        if (array_key_exists('label', $parameters)) {
+            $notification->setLabel((string)$parameters['label']);
+        }
+
+        if (array_key_exists('visible', $parameters) && $parameters['visible'] !== null) {
+            $notification->setVisible((bool)$parameters['visible']);
+        }
+
+        if (array_key_exists('important', $parameters) && $parameters['important'] !== null) {
+            $notification->setImportant((bool)$parameters['important']);
+        }
+
+        if (array_key_exists('removable', $parameters) && $parameters['removable'] !== null) {
+            $notification->setRemovable((bool)$parameters['removable']);
+        }
+
+        $userIdentifiers = [];
+
+        if (array_key_exists('userIdentifiers', $parameters) && is_array($parameters['userIdentifiers'])) {
+            $userIdentifiers = array_map('intval', $parameters['userIdentifiers']);
+        }
+
+        return Mapper::fromNotification(
+            $this->notificationService->createNotification($notification, $userIdentifiers)
+        );
+    }
+
+    /**
+     * @param int   $userId
+     * @param array $parameters
+     *
+     * @return array
+     */
+    private function updateNotification(int $userId, array $parameters)
+    {
+        // todo: check rights
+
+        $user = $this->userService->getUser($userId);
+
+        if (!array_key_exists('id', $parameters) || empty($parameters['id'])) {
+            throw new InvalidArgumentException("Identifier not provided");
+        }
+        $notification = $this->notificationService->getNotification((int)$parameters['id']);
+
+        if (array_key_exists('content', $parameters) && $parameters['content'] !== null) {
+            $notification->setContent((string)$parameters['content']);
+        }
+
+        if (array_key_exists('type', $parameters) && $parameters['type'] !== null) {
+            $notification->setType((string)$parameters['type']);
+        }
+
+        if (array_key_exists('start', $parameters) && $parameters['start'] !== null) {
+            $start = DateTime::createFromFormat("Y-m-d\tH:i:s", $parameters['start']);
+            if ($start === false) {
+                throw new InvalidArgumentException("Start {$parameters['start']} couldn't be parsed");
+            }
+            $notification->setStart($start);
+        }
+
+        if (array_key_exists('end', $parameters) && $parameters['end'] !== null) {
+            $end = DateTime::createFromFormat("Y-m-d\tH:i:s", $parameters['end']);
+            if ($end === false) {
+                throw new InvalidArgumentException("End {$parameters['end']} couldn't be parsed");
+            }
+            $notification->setEnd($end);
+        }
+
+        if (array_key_exists('label', $parameters)) {
+            $notification->setLabel($parameters['label'] !== null ? (string)$parameters['label'] : null);
+        }
+
+        if (array_key_exists('visible', $parameters)) {
+            $notification->setVisible((bool)$parameters['visible']);
+        }
+
+        if (array_key_exists('important', $parameters)) {
+            $notification->setImportant((bool)$parameters['important']);
+        }
+
+        if (array_key_exists('removable', $parameters) && $parameters['removable'] !== null) {
+            $notification->setRemovable((bool)$parameters['removable']);
+        }
+
+        $userIdentifiers = [];
+
+        if (array_key_exists('userIdentifiers', $parameters) && is_array($parameters['userIdentifiers'])) {
+            $userIdentifiers = array_map('intval', $parameters['userIdentifiers']);
+        }
+
+        return Mapper::fromNotification(
+            $this->notificationService->updateNotification($notification, $userIdentifiers)
+        );
+    }
+
+    /**
+     * @param int   $userId
+     * @param array $parameters
+     *
+     * @throws NotAuthorizedException
+     */
+    private function deleteNotification(int $userId, array $parameters)
     {
         if (!array_key_exists('id', $parameters)) {
             throw new InvalidArgumentException("No argument provided");
         }
 
         $user = $this->userService->getUser($userId);
+
+        // todo: check rights
 
         if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
             throw new NotAuthorizedException($userId);
@@ -130,5 +298,20 @@ class NotificationController extends BaseController
         $id = (int)$parameters['id'];
 
         $this->notificationService->deleteNotification($id);
+    }
+
+    /**
+     * @param int   $userId
+     * @param array $parameters
+     */
+    private function closeNotification(int $userId, array $parameters)
+    {
+        if (!array_key_exists('id', $parameters)) {
+            throw new InvalidArgumentException("No argument provided");
+        }
+
+        $id = (int)$parameters['id'];
+
+        $this->notificationService->closeNotification($id, $userId);
     }
 }
