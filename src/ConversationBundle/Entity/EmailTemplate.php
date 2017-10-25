@@ -53,16 +53,17 @@ class EmailTemplate
     /**
      * @var string
      *
-     * @ORM\Column(name="message_html", type="blob")
+     * @ORM\Column(name="body_html", type="text")
      */
-    private $messageHTML;
+    private $bodyHTML;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="message_txt", type="blob")
+     * @ORM\Column(name="body_txt", type="text")
      */
-    private $messageTXT;
+    private $bodyTXT;
+
 
     /**
      * @var bool
@@ -192,51 +193,51 @@ class EmailTemplate
     }
 
     /**
-     * Set messageHTML
+     * Set bodyHTML
      *
-     * @param string $messageHTML
+     * @param string $bodyHTML
      *
      * @return EmailTemplate
      */
-    public function setMessageHTML($messageHTML)
+    public function setBodyHTML($bodyHTML)
     {
-        $this->messageHTML = $messageHTML;
+        $this->bodyHTML = $bodyHTML;
 
         return $this;
     }
 
     /**
-     * Get messageHTML
+     * Get bodyHTML
      *
      * @return string
      */
-    public function getMessageHTML()
+    public function getBodyHTML()
     {
-        return $this->messageHTML;
+        return $this->bodyHTML;
     }
 
     /**
-     * Set messageTXT
+     * Set bodyTXT
      *
-     * @param string $messageTXT
+     * @param string $bodyTXT
      *
      * @return EmailTemplate
      */
-    public function setMessageTXT($messageTXT)
+    public function setBodyTXT($bodyTXT)
     {
-        $this->messageTXT = $messageTXT;
+        $this->bodyTXT = $bodyTXT;
 
         return $this;
     }
 
     /**
-     * Get messageTXT
+     * Get bodyTXT
      *
      * @return string
      */
-    public function getMessageTXT()
+    public function getBodyTXT()
     {
-        return $this->messageTXT;
+        return $this->bodyTXT;
     }
 
     /**

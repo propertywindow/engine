@@ -5,7 +5,7 @@ namespace ConversationBundle\Service;
 use AuthenticationBundle\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use LogBundle\Service\LogMailService;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Twig_Environment;
 
 /**
  * @package ConversationBundle\Service
@@ -15,35 +15,37 @@ class MailerService
     /**
      * @var EntityManagerInterface
      */
-    private $entityManager;
+    private $em;
 
     /**
      * @var LogMailService
      */
     private $logMailService;
 
-
+    /**
+     * @var Twig_Environment
+     */
     private $twig;
 
     /**
-     * @param EntityManagerInterface $entityManger
-     * @param ContainerInterface     $container
+     * @param EntityManagerInterface $em
      * @param LogMailService         $logMailService
+     * @param Twig_Environment       $twig
      */
     public function __construct(
-        EntityManagerInterface $entityManger,
-        ContainerInterface $container,
-        LogMailService $logMailService
+        EntityManagerInterface $em,
+        LogMailService $logMailService,
+        Twig_Environment $twig
     ) {
-        $this->entityManager  = $entityManger;
-        $this->twig           = $container->get('twig');
+        $this->em             = $em;
         $this->logMailService = $logMailService;
+        $this->twig           = $twig;
     }
 
     /**
      * @param User   $user
      * @param string $recipient
-     * @param string $template
+     * @param string $templateName
      * @param array  $parameters
      * @param bool   $personal
      *
@@ -52,23 +54,23 @@ class MailerService
     public function sendMail(
         User $user,
         string $recipient,
-        string $template,
+        string $templateName,
         array $parameters,
         bool $personal = false
     ) {
-
-        $templateRepository = $this->entityManager->getRepository('ConversationBundle:EmailTemplate');
-        $template           = $templateRepository->findOneBy([
+        $template = $this->em->getRepository('ConversationBundle:EmailTemplate')->findOneBy([
             'agent' => $user->getAgent(),
-            'name'  => $template,
+            'name'  => $templateName,
         ]);
 
         if ($personal) {
-            $settingsRepository = $this->entityManager->getRepository('AuthenticationBundle:UserSettings');
-            $settings           = $settingsRepository->findByUserId($user->getId());
+            $settings = $this->em->getRepository('AuthenticationBundle:UserSettings')->findByUserId(
+                $user->getId()
+            );
         } else {
-            $settingsRepository = $this->entityManager->getRepository('AgentBundle:AgentSettings');
-            $settings           = $settingsRepository->findByAgent($user->getAgent());
+            $settings = $this->em->getRepository('AgentBundle:AgentSettings')->findByAgent(
+                $user->getAgent()
+            );
         }
 
         $transport = \Swift_SmtpTransport::newInstance()
@@ -78,37 +80,15 @@ class MailerService
                                          ->setPort($settings->getSMTPPort())
                                          ->setEncryption(strtolower($settings->getSMTPSecure()));
 
-        $mailer = \Swift_Mailer::newInstance($transport);
-
-        //        $message = \Swift_Message::newInstance()
-        //                                 ->setSubject($template->getSubject())
-        //                                 ->setFrom([$settings->getEmailAddress() => $settings->getEmailName()])
-        //                                 ->setTo($recipient)
-        //                                 ->setBody(
-        //                                     '<h1>Welcome</h1>',
-        //                                     'text/html'
-        //                                 );
-
-
+        $mailer  = \Swift_Mailer::newInstance($transport);
+        $html    = $this->twig->createTemplate($template->getBodyHTML());
+        $txt     = $this->twig->createTemplate($template->getBodyTXT());
         $message = \Swift_Message::newInstance()
                                  ->setSubject($template->getSubject())
                                  ->setFrom([$settings->getEmailAddress() => $settings->getEmailName()])
                                  ->setTo($recipient)
-                                 ->setBody(
-                                     $this->twig->render(
-                                         $this->twig->createTemplate($template->getMessageHTML()),
-                                         $parameters
-                                     ),
-                                     'text/html'
-                                 )
-                                 ->addPart(
-                                     $this->twig->render(
-                                         $this->twig->createTemplate($template->getMessageTXT()),
-                                         $parameters
-                                     ),
-                                     'text/plain'
-                                 );
-
+                                 ->setBody($html->render($parameters), 'text/html')
+                                 ->addPart($txt->render($parameters), 'text/plain');
 
         if ($mailer->send($message)) {
             $this->logMailService->createMail($user, $user->getAgent(), $recipient, $template->getSubject());

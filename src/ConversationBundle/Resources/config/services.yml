@@ -10,7 +10,7 @@ services:
       arguments: ["@doctrine.orm.entity_manager"]
   mailer_service:
       class: ConversationBundle\Service\MailerService
-      arguments: ["@doctrine.orm.entity_manager", "@service_container", '@log_mail_service']
+      arguments: ["@doctrine.orm.entity_manager", '@log_mail_service', '@twig']
   notification_controller:
       class: ConversationBundle\Controller\NotificationController
       autowire: true

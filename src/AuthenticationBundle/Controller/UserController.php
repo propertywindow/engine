@@ -241,7 +241,7 @@ class UserController extends BaseController
             'password'  => $password,
         ];
 
-        $this->mailerService->sendMail($user, $createdUser->getEmail(), 'invite_user', $mailParameters);
+        $this->mailerService->sendMail($user, $createdUser->getEmail(), 'user_invite_email', $mailParameters);
 
         // todo: move new User() from userService to here
 
