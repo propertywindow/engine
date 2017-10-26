@@ -329,8 +329,9 @@ class BaseController extends Controller
 
         $ipAddress = $httpRequest->getClientIp();
         $blacklist = $this->blacklistService->checkBlacklist($ipAddress);
+        $settings  = $this->settingsService->getSettings();
 
-        if ($blacklist && $blacklist->getAmount() >= 5) {
+        if ($blacklist && $blacklist->getAmount() >= $settings->getMaxFailedLogin()) {
             throw new CouldNotAuthenticateUserException("You're IP address ($ipAddress) has been blocked");
         }
 

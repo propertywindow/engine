@@ -105,16 +105,13 @@ class LoginController extends BaseController
             $attemptedAgent = null;
             $attemptedUser  = $this->userService->getUserByEmail($email);
 
-            if ($attemptedUser) {
-                $attemptedAgent = $attemptedUser->getAgent();
-            }
-
-            $this->blacklistService->createBlacklist($ipAddress, $attemptedUser, $attemptedAgent);
+            $this->blacklistService->createBlacklist($ipAddress, $attemptedUser);
 
             throw new LoginFailedException($email);
         }
 
         $blacklist = $this->blacklistService->checkBlacklist($ipAddress);
+
         if ($blacklist) {
             $this->blacklistService->removeBlacklist($blacklist->getId());
         }
