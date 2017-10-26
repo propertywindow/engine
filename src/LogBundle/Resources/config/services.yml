@@ -1,15 +1,15 @@
 services:
-    activity_service:
-          class: LogBundle\Service\ActivityService
+    log_activity_service:
+          class: LogBundle\Service\LogActivityService
           arguments: ['@doctrine.orm.entity_manager']
-    traffic_service:
-          class: LogBundle\Service\TrafficService
+    log_traffic_service:
+          class: LogBundle\Service\LogTrafficService
           arguments: ['@doctrine.orm.entity_manager']
-    login_service:
-          class: LogBundle\Service\LoginService
+    log_login_service:
+          class: LogBundle\Service\LogLoginService
           arguments: ['@doctrine.orm.entity_manager']
-    mail_service:
-          class: LogBundle\Service\MailService
+    log_mail_service:
+          class: LogBundle\Service\LogMailService
           arguments: ['@doctrine.orm.entity_manager']
     activity_controller:
           class: LogBundle\Controller\ActivityController

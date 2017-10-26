@@ -11,7 +11,7 @@ use LogBundle\Exceptions\ActivityNotFoundException;
 /**
  * @package LogBundle\Service
  */
-class ActivityService
+class LogActivityService
 {
     /**
      * @var EntityManagerInterface

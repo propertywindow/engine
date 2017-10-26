@@ -26,9 +26,9 @@ class Mail
 
     /**
      * @ORM\ManyToOne(targetEntity="AuthenticationBundle\Entity\User")
-     * @ORM\JoinColumn(name="send_by", referencedColumnName="id")
+     * @ORM\JoinColumn(name="sender", referencedColumnName="id")
      */
-    protected $sendBy;
+    protected $sender;
 
     /**
      * @ORM\ManyToOne(targetEntity="AgentBundle\Entity\Agent")
@@ -39,9 +39,9 @@ class Mail
     /**
      * @var string
      *
-     * @ORM\Column(name="sentTo", type="string", length=255)
+     * @ORM\Column(name="recipient", type="string", length=255)
      */
-    private $sentTo;
+    private $recipient;
 
     /**
      * @var string
@@ -68,27 +68,27 @@ class Mail
     }
 
     /**
-     * Set sendBy
+     * Set sender
      *
-     * @param \AuthenticationBundle\Entity\User $sendBy
+     * @param \AuthenticationBundle\Entity\User $sender
      *
      * @return Mail
      */
-    public function setSendBy(User $sendBy = null)
+    public function setSender(User $sender = null)
     {
-        $this->sendBy = $sendBy;
+        $this->sender = $sender;
 
         return $this;
     }
 
     /**
-     * Get sendBy
+     * Get sender
      *
      * @return \AuthenticationBundle\Entity\User
      */
-    public function getSendBy()
+    public function getSender()
     {
-        return $this->sendBy;
+        return $this->sender;
     }
 
     /**
@@ -116,27 +116,27 @@ class Mail
     }
 
     /**
-     * Set sentTo
+     * Set recipient
      *
-     * @param string $sentTo
+     * @param string $recipient
      *
      * @return Mail
      */
-    public function setSentTo($sentTo)
+    public function setRecipient($recipient)
     {
-        $this->sentTo = $sentTo;
+        $this->recipient = $recipient;
 
         return $this;
     }
 
     /**
-     * Get sentTo
+     * Get recipient
      *
      * @return string
      */
-    public function getSentTo()
+    public function getRecipient()
     {
-        return $this->sentTo;
+        return $this->recipient;
     }
 
     /**

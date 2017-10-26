@@ -119,7 +119,7 @@ class LoginController extends BaseController
             $this->blacklistService->removeBlacklist($blacklist->getId());
         }
 
-        $this->loginService->createLogin(
+        $this->logLoginService->createLogin(
             $user,
             $user->getAgent(),
             $ipAddress

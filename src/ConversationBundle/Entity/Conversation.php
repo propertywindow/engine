@@ -2,6 +2,7 @@
 
 namespace ConversationBundle\Entity;
 
+use AuthenticationBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -23,32 +24,23 @@ class Conversation
     private $id;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="from_user", type="integer")
+     * @ORM\ManyToOne(targetEntity="AuthenticationBundle\Entity\User")
+     * @ORM\JoinColumn(name="from_user", referencedColumnName="id")
      */
     private $fromUser;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="to_user", type="integer")
+     * @ORM\ManyToOne(targetEntity="AuthenticationBundle\Entity\User")
+     * @ORM\JoinColumn(name="to_user", referencedColumnName="id")
      */
     private $toUser;
 
     /**
-     * @var string
+     * @var int
      *
-     * @ORM\Column(name="message", type="blob")
+     * @ORM\Column(name="unique_id", type="integer")
      */
-    private $message;
-
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="seen", type="boolean")
-     */
-    private $seen;
+    private $uniqueId;
 
     /**
      * @var \DateTime $created
@@ -64,7 +56,6 @@ class Conversation
      */
     protected $updated;
 
-
     /**
      * Get id
      *
@@ -78,11 +69,11 @@ class Conversation
     /**
      * Set fromUser
      *
-     * @param integer $fromUser
+     * @param \AuthenticationBundle\Entity\User $fromUser
      *
      * @return Conversation
      */
-    public function setFromUser($fromUser)
+    public function setFromUser(User $fromUser = null)
     {
         $this->fromUser = $fromUser;
 
@@ -92,7 +83,7 @@ class Conversation
     /**
      * Get fromUser
      *
-     * @return int
+     * @return \AuthenticationBundle\Entity\User
      */
     public function getFromUser()
     {
@@ -102,11 +93,11 @@ class Conversation
     /**
      * Set toUser
      *
-     * @param integer $toUser
+     * @param \AuthenticationBundle\Entity\User $toUser
      *
      * @return Conversation
      */
-    public function setToUser($toUser)
+    public function setToUser(User $toUser = null)
     {
         $this->toUser = $toUser;
 
@@ -116,7 +107,7 @@ class Conversation
     /**
      * Get toUser
      *
-     * @return int
+     * @return \AuthenticationBundle\Entity\User
      */
     public function getToUser()
     {
@@ -124,51 +115,27 @@ class Conversation
     }
 
     /**
-     * Set message
+     * Set uniqueId
      *
-     * @param string $message
+     * @param integer $uniqueId
      *
      * @return Conversation
      */
-    public function setMessage($message)
+    public function setUniqueId($uniqueId)
     {
-        $this->message = $message;
+        $this->uniqueId = $uniqueId;
 
         return $this;
     }
 
     /**
-     * Get message
+     * Get uniqueId
      *
-     * @return string
+     * @return int
      */
-    public function getMessage()
+    public function getUniqueId()
     {
-        return $this->message;
-    }
-
-    /**
-     * Set seen
-     *
-     * @param boolean $seen
-     *
-     * @return Conversation
-     */
-    public function setSeen($seen)
-    {
-        $this->seen = $seen;
-
-        return $this;
-    }
-
-    /**
-     * Get seen
-     *
-     * @return bool
-     */
-    public function getSeen()
-    {
-        return $this->seen;
+        return $this->uniqueId;
     }
 
     /**

@@ -24,44 +24,44 @@ class LoadActivityData extends AbstractFixture implements OrderedFixtureInterfac
 
         // Annan Properties
 
-        $propertyService = $this->container->get('property_service');
-
-        for ($i = 1; $i <= 15; $i++) {
-            $activity = new Activity();
-            $property = $propertyService->getProperty($i);
-            $activity->setUser($this->getReference('user_annan_colleague_'.rand(1, 6)));
-            $activity->setAgent($property->getAgent());
-            $activity->setActionCategory('property');
-            $activity->setActionId(1);
-            $activity->setActionName('create');
-            $activity->setNewValue(
-                $this->container->get('jms_serializer')->serialize(
-                    $this->getReference('property_annan_'.$i),
-                    'json'
-                )
-            );
-            $manager->persist($activity);
-        }
-
-        // Annan Users
-
-        for ($i = 1; $i <= 6; $i++) {
-            $activity = new Activity();
-            $activity->setUser($this->getReference('user_annan_colleague_'.rand(1, 6)));
-            $activity->setAgent($activity->getUser()->getAgent());
-            $activity->setActionCategory('user');
-            $activity->setActionId(1);
-            $activity->setActionName('create');
-            $activity->setNewValue(
-                $this->container->get('jms_serializer')->serialize(
-                    $this->getReference('user_annan_colleague_'.$i),
-                    'json'
-                )
-            );
-            $manager->persist($activity);
-        }
-
-        $manager->flush();
+//        $propertyService = $this->container->get('property_service');
+//
+//        for ($i = 1; $i <= 15; $i++) {
+//            $activity = new Activity();
+//            $property = $propertyService->getProperty($i);
+//            $activity->setUser($this->getReference('user_annan_colleague_'.rand(1, 6)));
+//            $activity->setAgent($property->getAgent());
+//            $activity->setActionCategory('property');
+//            $activity->setActionId(1);
+//            $activity->setActionName('create');
+//            $activity->setNewValue(
+//                $this->container->get('jms_serializer')->serialize(
+//                    $this->getReference('property_annan_'.$i),
+//                    'json'
+//                )
+//            );
+//            $manager->persist($activity);
+//        }
+//
+//        // Annan Users
+//
+//        for ($i = 1; $i <= 6; $i++) {
+//            $activity = new Activity();
+//            $activity->setUser($this->getReference('user_annan_colleague_'.rand(1, 6)));
+//            $activity->setAgent($activity->getUser()->getAgent());
+//            $activity->setActionCategory('user');
+//            $activity->setActionId(1);
+//            $activity->setActionName('create');
+//            $activity->setNewValue(
+//                $this->container->get('jms_serializer')->serialize(
+//                    $this->getReference('user_annan_colleague_'.$i),
+//                    'json'
+//                )
+//            );
+//            $manager->persist($activity);
+//        }
+//
+//        $manager->flush();
     }
 
     /**

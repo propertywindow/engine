@@ -43,7 +43,7 @@ class LoadServiceGroupMapData extends AbstractFixture implements OrderedFixtureI
 
             $serviceGroupMap = new ServiceGroupMap();
             $serviceGroupMap->setUser($this->getReference('user_propertywindow_admin_' . $i));
-            $serviceGroupMap->setServiceGroup($this->getReference('service_group_inbox'));
+            $serviceGroupMap->setServiceGroup($this->getReference('service_group_email'));
             $manager->persist($serviceGroupMap);
 
             $serviceGroupMap = new ServiceGroupMap();
@@ -230,7 +230,7 @@ class LoadServiceGroupMapData extends AbstractFixture implements OrderedFixtureI
 
             $serviceGroupMap = new ServiceGroupMap();
             $serviceGroupMap->setUser($this->getReference('user_annan_colleague_' . $i));
-            $serviceGroupMap->setServiceGroup($this->getReference('service_group_inbox'));
+            $serviceGroupMap->setServiceGroup($this->getReference('service_group_email'));
             $manager->persist($serviceGroupMap);
 
             $serviceGroupMap = new ServiceGroupMap();

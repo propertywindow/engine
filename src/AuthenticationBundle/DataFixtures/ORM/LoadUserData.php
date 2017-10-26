@@ -288,34 +288,34 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
 
         // Annan Clients
 
-        for ($i = 1; $i <= 15; $i++) {
-            $path     = file_get_contents('https://randomuser.me/api/?nat=gb');
-            $json     = json_decode($path, true);
-            $fakeUser = $json['results'][0];
-            $matches  = [];
-
-            if (preg_match('/(?P<number>\d+.?) (?P<street>[^\d]+)/', $fakeUser['location']['street'], $matches)) {
-                $houseNumber = $matches['number'];
-                $street      = $matches['street'];
-
-                $user = new User();
-                $user->setUserType($this->getReference('user_type_client'));
-                $user->setAgent($this->getReference('agent_annan_1'));
-                $user->setEmail($fakeUser['email']);
-                $user->setPassword($fakeUser['login']['md5']);
-                $user->setFirstName(ucfirst($fakeUser['name']['first']));
-                $user->setLastName(ucfirst($fakeUser['name']['last']));
-                $user->setStreet(ucwords($street));
-                $user->setHouseNumber($houseNumber);
-                $user->setPostcode($fakeUser['location']['postcode']);
-                $user->setCity(ucwords($fakeUser['location']['city']));
-                $user->setCountry('GB');
-                $user->setPhone($fakeUser['cell']);
-                $user->setActive(false);
-                $this->addReference('user_annan_client_'.$i, $user);
-                $manager->persist($user);
-            }
-        }
+//        for ($i = 1; $i <= 15; $i++) {
+//            $path     = file_get_contents('https://randomuser.me/api/?nat=gb');
+//            $json     = json_decode($path, true);
+//            $fakeUser = $json['results'][0];
+//            $matches  = [];
+//
+//            if (preg_match('/(?P<number>\d+.?) (?P<street>[^\d]+)/', $fakeUser['location']['street'], $matches)) {
+//                $houseNumber = $matches['number'];
+//                $street      = $matches['street'];
+//
+//                $user = new User();
+//                $user->setUserType($this->getReference('user_type_client'));
+//                $user->setAgent($this->getReference('agent_annan_1'));
+//                $user->setEmail($fakeUser['email']);
+//                $user->setPassword($fakeUser['login']['md5']);
+//                $user->setFirstName(ucfirst($fakeUser['name']['first']));
+//                $user->setLastName(ucfirst($fakeUser['name']['last']));
+//                $user->setStreet(ucwords($street));
+//                $user->setHouseNumber($houseNumber);
+//                $user->setPostcode($fakeUser['location']['postcode']);
+//                $user->setCity(ucwords($fakeUser['location']['city']));
+//                $user->setCountry('GB');
+//                $user->setPhone($fakeUser['cell']);
+//                $user->setActive(false);
+//                $this->addReference('user_annan_client_'.$i, $user);
+//                $manager->persist($user);
+//            }
+//        }
 
 
         $manager->flush();

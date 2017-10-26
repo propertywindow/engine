@@ -1,17 +1,17 @@
 <?php declare(strict_types=1);
 
-namespace AgentBundle\Entity;
+namespace ConversationBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * EmailTemplate
+ * EmailTemplateCategory
  *
- * @ORM\Table(name="email_template")
- * @ORM\Entity(repositoryClass="AgentBundle\Repository\EmailTemplateRepository")
+ * @ORM\Table(name="email_template_category")
+ * @ORM\Entity(repositoryClass="ConversationBundle\Repository\EmailTemplateCategoryRepository")
  * @ORM\HasLifecycleCallbacks
  */
-class EmailTemplate
+class EmailTemplateCategory
 {
     /**
      * @var int
@@ -23,25 +23,11 @@ class EmailTemplate
     private $id;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="agent_id", type="integer")
-     */
-    private $agentId;
-
-    /**
      * @var string
      *
-     * @ORM\Column(name="subject", type="string", length=255)
+     * @ORM\Column(name="category", type="string", length=255)
      */
-    private $subject;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="message", type="blob")
-     */
-    private $message;
+    private $category;
 
     /**
      * @var bool
@@ -75,75 +61,27 @@ class EmailTemplate
     }
 
     /**
-     * Set agentId
+     * Set category
      *
-     * @param integer $agentId
+     * @param string $category
      *
-     * @return EmailTemplate
+     * @return EmailTemplateCategory
      */
-    public function setAgentId($agentId)
+    public function setCategory($category)
     {
-        $this->agentId = $agentId;
+        $this->category = $category;
 
         return $this;
     }
 
     /**
-     * Get agentId
-     *
-     * @return int
-     */
-    public function getAgentId()
-    {
-        return $this->agentId;
-    }
-
-    /**
-     * Set subject
-     *
-     * @param string $subject
-     *
-     * @return EmailTemplate
-     */
-    public function setSubject($subject)
-    {
-        $this->subject = $subject;
-
-        return $this;
-    }
-
-    /**
-     * Get subject
+     * Get category
      *
      * @return string
      */
-    public function getSubject()
+    public function getCategory()
     {
-        return $this->subject;
-    }
-
-    /**
-     * Set message
-     *
-     * @param string $message
-     *
-     * @return EmailTemplate
-     */
-    public function setMessage($message)
-    {
-        $this->message = $message;
-
-        return $this;
-    }
-
-    /**
-     * Get message
-     *
-     * @return string
-     */
-    public function getMessage()
-    {
-        return $this->message;
+        return $this->category;
     }
 
     /**
@@ -151,7 +89,7 @@ class EmailTemplate
      *
      * @param boolean $active
      *
-     * @return EmailTemplate
+     * @return EmailTemplateCategory
      */
     public function setActive($active)
     {

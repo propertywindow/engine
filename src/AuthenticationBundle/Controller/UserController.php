@@ -9,7 +9,6 @@ use AuthenticationBundle\Exceptions\UserNotFoundException;
 use AuthenticationBundle\Service\User\Mapper;
 use Exception;
 use InvalidArgumentException;
-use Swift_Message;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Error;
 use AppBundle\Models\JsonRpc\Response;
@@ -233,39 +232,20 @@ class UserController extends BaseController
             throw new UserAlreadyExistException($parameters['email']);
         }
 
-        $userType    = $this->userTypeService->getUserType($parameters['user_type_id']);
-        $createdUser = $this->userService->createUser($parameters, $user->getAgent(), $userType);
-        $password    = $this->randomPassword();
-        $subject     = 'Invitation to create an account';
+        $userType       = $this->userTypeService->getUserType($parameters['user_type_id']);
+        $createdUser    = $this->userService->createUser($parameters, $user->getAgent(), $userType);
+        $password       = $this->randomPassword();
 
-        $message = Swift_Message::newInstance()
-                                ->setSubject($subject)
-                                ->setFrom([self::EMAIL_FROM_EMAIL => self::EMAIL_FROM_NAME])
-                                ->setTo($createdUser->getEmail())
-                                ->setBody(
-                                    $this->renderView(
-                                        'AuthenticationBundle:Emails:Registration.html.twig',
-                                        [
-                                            'name'     => $parameters['first_name'],
-                                            'password' => $password,
-                                        ]
-                                    ),
-                                    'text/html'
-                                )
-                                ->addPart(
-                                    $this->renderView(
-                                        'AuthenticationBundle:Emails:Registration.txt.twig',
-                                        [
-                                            'name'     => $parameters['first_name'],
-                                            'password' => $password,
-                                        ]
-                                    ),
-                                    'text/plain'
-                                );
+        $mailParameters = [
+            'name'      => $parameters['first_name'],
+            'password'  => $password,
+        ];
 
-        if ($this->get('mailer')->send($message)) {
-            $this->mailService->createMail($user, $user->getAgent(), $createdUser->getEmail(), $subject);
-        }
+        $this->mailerService->sendMail($user, $createdUser->getEmail(), 'user_invite_email', $mailParameters);
+
+        // todo: move new User() from userService to here
+
+        // todo: create user settings, load some settings from agent
 
         $createdUser->setPassword(md5($password));
         $createdUser->setActive(true);

@@ -223,48 +223,26 @@ class AgentController extends BaseController
         $agent    = $this->agentService->createAgent($agent);
         $userType = $this->userTypeService->getUserType(2);
 
+        // todo: move new User() from userService to here
+
         $createdUser = $this->userService->createUser($parameters, $agent, $userType);
+        $password    = $this->randomPassword();
 
-        $password = $this->randomPassword();
-        $subject = 'Invitation to create an account';
+        $mailParameters = [
+            'name'     => $parameters['first_name'],
+            'password' => $password,
+        ];
 
-        $message = Swift_Message::newInstance()
-                                ->setSubject($subject)
-                                ->setFrom([self::EMAIL_FROM_EMAIL => self::EMAIL_FROM_NAME])
-                                ->setTo($createdUser->getEmail())
-                                ->setBody(
-                                    $this->renderView(
-                                        'AuthenticationBundle:Emails:Registration.html.twig',
-                                        [
-                                            'name'     => $parameters['first_name'],
-                                            'password' => $password,
-                                        ]
-                                    ),
-                                    'text/html'
-                                )
-                                ->addPart(
-                                    $this->renderView(
-                                        'AuthenticationBundle:Emails:Registration.txt.twig',
-                                        [
-                                            'name'     => $parameters['first_name'],
-                                            'password' => $password,
-                                        ]
-                                    ),
-                                    'text/plain'
-                                );
-
-        if ($this->get('mailer')->send($message)) {
-            $this->mailService->createMail($user, $agent, $createdUser->getEmail(), $subject);
-        }
+        $this->mailerService->sendMail($user, $createdUser->getEmail(), 'user_invite_email', $mailParameters);
 
         $createdUser->setPassword(md5($password));
-        $createdUser->setActive(true);
         $this->userService->updateUser($createdUser);
 
         $agent->setUserId($createdUser->getId());
         $this->agentService->updateAgent($agent);
 
-        // todo: also set serviceGroupMap and serviceMap
+        // todo: also set serviceGroupMap and serviceMap, do this in serviceMapService -> wizard saves during each step
+        // todo:  $createdUser->setActive(true); and agent active after services are set.
 
         return Mapper::fromAgent($agent);
     }

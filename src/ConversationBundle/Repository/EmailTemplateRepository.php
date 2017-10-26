@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace AgentBundle\Repository;
+namespace ConversationBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 

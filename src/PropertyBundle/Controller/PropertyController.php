@@ -130,7 +130,7 @@ class PropertyController extends BaseController
                 throw new InvalidArgumentException("No location argument provided");
             }
 
-            $this->trafficService->createTraffic(
+            $this->logTrafficService->createTraffic(
                 $id,
                 (string)$parameters['id'],
                 (string)$parameters['browser'],
@@ -246,7 +246,7 @@ class PropertyController extends BaseController
         $property   = $this->propertyService->createProperty($parameters, $agent, $client, $kind, $terms, $subType);
         $propertyId = (int)$property->getId();
 
-        $this->activityService->createActivity(
+        $this->logActivityService->createActivity(
             $user,
             $propertyId,
             'property',
@@ -360,7 +360,7 @@ class PropertyController extends BaseController
 
         $updatedProperty = $this->propertyService->updateProperty($property);
 
-        $this->activityService->createActivity(
+        $this->logActivityService->createActivity(
             $user,
             $id,
             'property',
@@ -396,7 +396,7 @@ class PropertyController extends BaseController
 
         $this->propertyService->archiveProperty($id);
 
-        $this->activityService->createActivity(
+        $this->logActivityService->createActivity(
             $user,
             $id,
             'property',
@@ -460,7 +460,7 @@ class PropertyController extends BaseController
 
         $updatedProperty = $this->propertyService->setPropertySold($id, $soldPrice);
 
-        $this->activityService->createActivity(
+        $this->logActivityService->createActivity(
             $user,
             $id,
             'property',
@@ -497,7 +497,7 @@ class PropertyController extends BaseController
 
         $updatedProperty = $this->propertyService->toggleOnline($id, $online);
 
-        $this->activityService->createActivity(
+        $this->logActivityService->createActivity(
             $user,
             $id,
             'property',

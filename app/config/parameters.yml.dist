@@ -8,9 +8,4 @@ parameters:
     database_user: propertywindow
     database_password: propertywindow
 
-    mailer_transport: smtp
-    mailer_host: smtp.transip.email
-    mailer_user: noreply@propertywindow.nl
-    mailer_password: Propertywindow12!
-
     secret: 2a1m5Ww34Hs23dsmQ
