@@ -17,10 +17,23 @@ class Mapper
      */
     public static function fromNotification(Notification $notification): array
     {
+        $end = null;
+        if ($notification->getEnd() !== null) {
+            $end = $notification->getEnd()->format("Y-m-d H:i:s");
+        }
+
         return [
-            'id'           => $notification->getId(),
-            'user_id'      => $notification->getUser(),
-            'notification' => $notification->getNotification(),
+            'id'          => $notification->getId(),
+            'content'     => $notification->getContent(),
+            'type'        => $notification->getType(),
+            'start'       => $notification->getStart()->format("Y-m-d H:i:s"),
+            'end'         => $end,
+            'important'   => $notification->isImportant(),
+            'label'       => $notification->getLabel(),
+            'removable'   => $notification->isRemovable(),
+            'visible'     => $notification->isVisible(),
+            'users'       => $notification->getUserIdentifiers(),
+            'forEveryone' => $notification->isForEveryone(),
         ];
     }
 

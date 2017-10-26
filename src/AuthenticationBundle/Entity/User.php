@@ -3,6 +3,8 @@
 namespace AuthenticationBundle\Entity;
 
 use AgentBundle\Entity\Agent;
+use ConversationBundle\Entity\Notification;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -136,6 +138,13 @@ class User
      * @ORM\Column(name="active", type="boolean", options={"default": false})
      */
     private $active = false;
+
+    /**
+     * @var Collection
+     *
+     * @ORM\ManyToMany(targetEntity="ConversationBundle\Entity\Notification", mappedBy="users")
+     */
+    private $notifications;
 
     /**
      * @var \DateTime $created
@@ -543,6 +552,14 @@ class User
     public function getActive()
     {
         return $this->active;
+    }
+
+    /**
+     * @return \ConversationBundle\Entity\Notification[]
+     */
+    public function getNotifications(): array
+    {
+        return $this->notifications->getValues();
     }
 
     /**

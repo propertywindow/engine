@@ -3,8 +3,6 @@
 namespace ConversationBundle\Service;
 
 use AuthenticationBundle\Entity\User;
-use ConversationBundle\Exceptions\NotificationNotCloseableException;
-use ConversationBundle\Exceptions\NotificationNotFoundException;
 use Doctrine\ORM\EntityManagerInterface;
 use ConversationBundle\Entity\Notification;
 
@@ -48,17 +46,19 @@ class NotificationService
     {
         $repository = $this->entityManager->getRepository('ConversationBundle:Notification');
 
-        return $repository->getByUser($user);
+        return $repository->getByUserId($user->getId());
     }
 
     /**
+     * @param User $user
+     *
      * @return Notification[]
      */
-    public function listNotifications()
+    public function listNotifications(User $user)
     {
         $repository = $this->entityManager->getRepository('ConversationBundle:Notification');
 
-        return $repository->listAll();
+        return $repository->listAll($user);
     }
 
     /**
@@ -99,41 +99,7 @@ class NotificationService
         $notificationRepository = $this->entityManager->getRepository('ConversationBundle:Notification');
         $notification           = $notificationRepository->findById($id);
 
-        // todo: also delete from mapper, cascade delete?
-
         $this->entityManager->remove($notification);
-        $this->entityManager->flush();
-    }
-
-    /**
-     * @param int $notificationId
-     * @param int $userId
-     *
-     * @throws NotificationNotCloseableException
-     * @throws NotificationNotFoundException
-     */
-    public function closeNotification(int $notificationId, int $userId)
-    {
-        $criteria   = ['notification' => $notificationId, 'userId' => $userId];
-        $repository = $this->entityManager->getRepository('ConversationBundle:NotificationMapper');
-        $mapper     = $repository->findOneBy($criteria);
-
-        if ($mapper === null) {
-            throw new NotificationNotFoundException($notificationId);
-        }
-
-        $notification = $this->entityManager
-            ->getRepository('ConversationBundle:Notification')
-            ->findById($notificationId);
-
-        if (!$notification->isRemovable()) {
-            throw new NotificationNotCloseableException($notificationId);
-        }
-
-        $mapper->setSeen(true);
-
-        $this->entityManager->persist($mapper);
-
         $this->entityManager->flush();
     }
 
@@ -148,17 +114,8 @@ class NotificationService
         array $userIdentifiers
     ) {
         $userRepository = $this->entityManager->getRepository('AuthenticationBundle:User');
+        $users          = $userRepository->findByUserIdentifiers(array_unique($userIdentifiers));
 
-        $users = $userRepository->findByUserIdentifiers(array_unique($userIdentifiers));
-
-        $notification->setUsers(
-            array_filter(
-                $users,
-                function (User $user) use ($userIdentifiers) {
-                    return in_array($user->getId(), $userIdentifiers);
-                }
-            )
-        );
-        $notification->setCalculatedUsers($users);
+        $notification->setUsers($users);
     }
 }

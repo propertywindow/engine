@@ -3,6 +3,9 @@
 namespace ConversationBundle\Entity;
 
 use AuthenticationBundle\Entity\User;
+use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use InvalidArgumentException;
 
@@ -31,6 +34,18 @@ class Notification
     private $user;
 
     /**
+     * @var Collection
+     *
+     * @ORM\ManyToMany(targetEntity="AuthenticationBundle\Entity\User", inversedBy="notifications")
+     * @ORM\JoinTable(
+     *          name="notification_user_maps",
+     *          joinColumns={@ORM\JoinColumn(name="notification_id", referencedColumnName="id")},
+     *          inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")}
+     *     )
+     */
+    private $users;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="content", type="text")
@@ -47,19 +62,19 @@ class Notification
     /**
      * @var string
      *
-     * @ORM\Column(name="type", type="text", columnDefinition="enum('DANGER','WARNING','SUCCESS','DEPLOYMENT','INFO')")
+     * @ORM\Column(name="type", type="text")
      */
     private $type;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="start", type="datetime")
      */
     private $start;
 
     /**
-     * @var \DateTime|null
+     * @var DateTime|null
      *
      * @ORM\Column(name="end", type="datetime", nullable=true)
      */
@@ -87,18 +102,38 @@ class Notification
     private $important;
 
     /**
-     * @var \DateTime $created
+     * @var bool
+     *
+     * @ORM\Column(name="for_everyone", type="boolean", options={"default": false})
+     */
+    private $forEveryone;
+
+    /**
+     * @var DateTime $created
      *
      * @ORM\Column(type="datetime")
      */
     protected $created;
 
     /**
-     * @var \DateTime $updated
+     * @var DateTime $updated
      *
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $updated;
+
+    /**
+     * Notification constructor.
+     */
+    public function __construct()
+    {
+        $this->users       = new ArrayCollection();
+
+        $this->removable   = false;
+        $this->visible     = true;
+        $this->important   = false;
+        $this->forEveryone = false;
+    }
 
     /**
      * id
@@ -146,6 +181,53 @@ class Notification
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * @return \AuthenticationBundle\Entity\User[]
+     */
+    public function getUsers(): array
+    {
+        return $this->users->getValues();
+    }
+
+    /**
+     * @return int[]
+     */
+    public function getUserIdentifiers(): array
+    {
+        return array_map(
+            function (User $user) {
+                return $user->getId();
+            },
+            $this->users->toArray()
+        );
+    }
+
+    /**
+     * @param \AuthenticationBundle\Entity\User[] $users
+     */
+    public function setUsers(array $users)
+    {
+        foreach ($this->users->getKeys() as $userId) {
+            $found = false;
+            foreach ($users as $user) {
+                if ($user->getId() === $userId) {
+                    $found = true;
+                    break;
+                }
+            }
+
+            if (!$found) {
+                $this->users->remove($userId);
+            }
+        }
+
+        foreach ($users as $key => $user) {
+            if (!$this->users->contains($user)) {
+                $this->users->add($user);
+            }
+        }
     }
 
     /**
@@ -219,11 +301,11 @@ class Notification
     /**
      * start
      *
-     * @param \DateTime $start
+     * @param DateTime $start
      *
-     * @return $this
+     * @return Notification
      */
-    public function setStart(\DateTime $start)
+    public function setStart(DateTime $start)
     {
         $this->start = $start;
 
@@ -233,9 +315,9 @@ class Notification
     /**
      * start
      *
-     * @return \DateTime
+     * @return DateTime
      */
-    public function getStart(): \DateTime
+    public function getStart(): DateTime
     {
         return $this->start;
     }
@@ -243,11 +325,11 @@ class Notification
     /**
      * end
      *
-     * @param \DateTime|null $end
+     * @param DateTime|null $end
      *
-     * @return $this
+     * @return Notification
      */
-    public function setEnd(?\DateTime $end = null)
+    public function setEnd(?DateTime $end = null)
     {
         if ($end !== null && $end < $this->start) {
             throw new InvalidArgumentException(
@@ -267,9 +349,9 @@ class Notification
     /**
      * end
      *
-     * @return \DateTime|null
+     * @return DateTime|null
      */
-    public function getEnd():?\DateTime
+    public function getEnd():?DateTime
     {
         return $this->end;
     }
@@ -347,13 +429,30 @@ class Notification
     }
 
     /**
+     * @ORM\PreFlush()
+     */
+    public function markForEveryone()
+    {
+        $this->forEveryone = $this->isForEveryone();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isForEveryone(): bool
+    {
+        return
+            $this->users->count() === 0;
+    }
+
+    /**
      * Gets triggered only on insert
      *
      * @ORM\PrePersist
      */
     public function onPrePersist()
     {
-        $this->created = new \DateTime("now");
+        $this->created = new DateTime("now");
     }
 
     /**
@@ -363,6 +462,6 @@ class Notification
      */
     public function onPreUpdate()
     {
-        $this->updated = new \DateTime("now");
+        $this->updated = new DateTime("now");
     }
 }

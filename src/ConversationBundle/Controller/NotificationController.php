@@ -78,15 +78,13 @@ class NotificationController extends BaseController
             case "getNotification":
                 return $this->getNotification($parameters);
             case "listNotifications":
-                return $this->listNotifications();
+                return $this->listNotifications($userId);
             case "createNotification":
                 return $this->createNotification($userId, $parameters);
             case "updateNotification":
                 return $this->updateNotification($userId, $parameters);
             case "deleteNotification":
                 return $this->deleteNotification($userId, $parameters);
-            case "closeNotification":
-                return $this->closeNotification($userId, $parameters);
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
@@ -122,11 +120,14 @@ class NotificationController extends BaseController
     }
 
     /**
+     * @param int $userId
+     *
      * @return array
      */
-    private function listNotifications()
+    private function listNotifications(int $userId)
     {
-        $notifications = $this->notificationService->listNotifications();
+        $user = $this->userService->getUser($userId);
+        $notifications = $this->notificationService->listNotifications($user);
 
         return Mapper::fromNotifications(...$notifications);
     }
@@ -165,15 +166,15 @@ class NotificationController extends BaseController
             throw new InvalidArgumentException("Start parameter not provided");
         }
 
-        $start = DateTime::createFromFormat("Y-m-d\tH:i:s", $parameters['start']);
+        $start = DateTime::createFromFormat("Y-m-d H:i:s", $parameters['start']);
         if ($start === false) {
             throw new InvalidArgumentException("Start {$parameters['start']} couldn't be parsed");
         } else {
-            $notification->setStart($parameters['start']);
+            $notification->setStart($start);
         }
 
         if (array_key_exists('end', $parameters) && $parameters['end'] !== null) {
-            $end = DateTime::createFromFormat("Y-m-d\tH:i:s", $parameters['end']);
+            $end = DateTime::createFromFormat("Y-m-d H:i:s", $parameters['end']);
             if ($end === false) {
                 throw new InvalidArgumentException("End {$parameters['end']} couldn't be parsed");
             }
@@ -233,7 +234,7 @@ class NotificationController extends BaseController
         }
 
         if (array_key_exists('start', $parameters) && $parameters['start'] !== null) {
-            $start = DateTime::createFromFormat("Y-m-d\tH:i:s", $parameters['start']);
+            $start = DateTime::createFromFormat("Y-m-d H:i:s", $parameters['start']);
             if ($start === false) {
                 throw new InvalidArgumentException("Start {$parameters['start']} couldn't be parsed");
             }
@@ -241,7 +242,7 @@ class NotificationController extends BaseController
         }
 
         if (array_key_exists('end', $parameters) && $parameters['end'] !== null) {
-            $end = DateTime::createFromFormat("Y-m-d\tH:i:s", $parameters['end']);
+            $end = DateTime::createFromFormat("Y-m-d H:i:s", $parameters['end']);
             if ($end === false) {
                 throw new InvalidArgumentException("End {$parameters['end']} couldn't be parsed");
             }
@@ -298,20 +299,5 @@ class NotificationController extends BaseController
         $id = (int)$parameters['id'];
 
         $this->notificationService->deleteNotification($id);
-    }
-
-    /**
-     * @param int   $userId
-     * @param array $parameters
-     */
-    private function closeNotification(int $userId, array $parameters)
-    {
-        if (!array_key_exists('id', $parameters)) {
-            throw new InvalidArgumentException("No argument provided");
-        }
-
-        $id = (int)$parameters['id'];
-
-        $this->notificationService->closeNotification($id, $userId);
     }
 }
