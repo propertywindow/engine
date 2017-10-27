@@ -44,13 +44,6 @@ class Error
     private $oldValue;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="new_value", type="blob")
-     */
-    private $newValue;
-
-    /**
      * @var \DateTime $created
      *
      * @ORM\Column(type="datetime")
@@ -140,29 +133,6 @@ class Error
         return $this->oldValue;
     }
 
-    /**
-     * Set newValue
-     *
-     * @param string $newValue
-     *
-     * @return Error
-     */
-    public function setNewValue($newValue)
-    {
-        $this->newValue = $newValue;
-
-        return $this;
-    }
-
-    /**
-     * Get newValue
-     *
-     * @return string
-     */
-    public function getNewValue()
-    {
-        return $this->newValue;
-    }
 
     /**
      * Gets triggered only on insert

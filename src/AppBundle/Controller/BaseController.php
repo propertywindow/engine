@@ -10,6 +10,7 @@ use AppBundle\Exceptions\CouldNotAuthenticateUserException;
 use AppBundle\Exceptions\JsonRpc\CouldNotParseJsonRequestException;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcRequestException;
+use AppBundle\Models\JsonRpc\Error;
 use AppBundle\Models\JsonRpc\Response;
 use AppBundle\Security\Authenticator;
 use AppBundle\Service\SettingsService;
@@ -39,6 +40,9 @@ use PropertyBundle\Service\TypeService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use InvalidArgumentException;
+use Exception;
+use Throwable;
 
 /**
  * @Route(service="base_controller")
@@ -50,20 +54,8 @@ class BaseController extends Controller
     public const          METHOD_NOT_FOUND       = -32601;
     public const          INVALID_PARAMS         = -32602;
     public const          INTERNAL_ERROR         = -32603;
+    public const          EXCEPTION_ERROR        = -32604;
     public const          USER_NOT_AUTHENTICATED = -32000;
-    public const          AGENT_NOT_FOUND        = -32001;
-    public const          USER_NOT_FOUND         = -32002;
-    public const          BLACKLIST_NOT_FOUND    = -32003;
-    public const          SERVICE_NOT_FOUND      = -32004;
-    public const          TEMPLATE_NOT_FOUND     = -32005;
-    public const          PROPERTY_NOT_FOUND     = -32006;
-    public const          TYPE_NOT_FOUND         = -32007;
-    public const          SUB_TYPE_NOT_FOUND     = -32008;
-    public const          LOG_NOT_FOUND          = -32009;
-    public const          NOTIFICATION_NOT_FOUND = -32010;
-    public const          CONVERSATION_NOT_FOUND = -32011;
-    public const          INBOX_NOT_FOUND        = -32012;
-    public const          SETTINGS_NOT_FOUND     = -32013;
     public const          USER_ADMIN             = 1;
     public const          USER_AGENT             = 2;
     public const          USER_COLLEAGUE         = 3;
@@ -329,7 +321,6 @@ class BaseController extends Controller
      */
     public function prepareRequest(Request $httpRequest, bool $authenticate = true, bool $impersonate = false)
     {
-        $id     = null;
         $userId = null;
 
         if ($authenticate) {
@@ -355,7 +346,6 @@ class BaseController extends Controller
             throw new InvalidJsonRpcRequestException("Request does not match JSON-RPC 2.0 specification");
         }
 
-        $id     = $jsonArray['id'];
         $method = $jsonArray['method'];
         if (empty($method)) {
             throw new InvalidJsonRpcMethodException("No request method found");
@@ -367,9 +357,9 @@ class BaseController extends Controller
         }
 
         if ($authenticate) {
-            return [$id, $userId, $method, $parameters];
+            return [$userId, $method, $parameters];
         } else {
-            return [$id, $method, $parameters];
+            return [$method, $parameters];
         }
     }
 
@@ -395,5 +385,34 @@ class BaseController extends Controller
         $responseHeaders->set('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, PATCH, OPTIONS');
 
         return $httpResponse;
+    }
+
+    /**
+     * @param Throwable $throwable
+     *
+     * @return Response
+     *
+     * @throws Throwable
+     */
+    public function throwable(Throwable $throwable)
+    {
+        if ($throwable instanceof CouldNotParseJsonRequestException) {
+            return Response::failure(new Error(self::PARSE_ERROR, $throwable->getMessage()));
+        } elseif ($throwable instanceof InvalidJsonRpcRequestException) {
+            return Response::failure(new Error(self::INVALID_REQUEST, $throwable->getMessage()));
+        } elseif ($throwable instanceof InvalidJsonRpcMethodException) {
+            return Response::failure(new Error(self::METHOD_NOT_FOUND, $throwable->getMessage()));
+        } elseif ($throwable instanceof InvalidArgumentException) {
+            return Response::failure(new Error(self::INVALID_PARAMS, $throwable->getMessage()));
+        } elseif ($throwable instanceof CouldNotAuthenticateUserException) {
+            return Response::failure(new Error(self::USER_NOT_AUTHENTICATED, $throwable->getMessage()));
+        } elseif ($throwable instanceof Exception) {
+            // todo: add log here
+            return Response::failure(new Error(self::EXCEPTION_ERROR, $throwable->getMessage()));
+        }
+
+        // todo: add slack here
+
+        return Response::failure(new Error(self::INTERNAL_ERROR, $throwable->getMessage()));
     }
 }

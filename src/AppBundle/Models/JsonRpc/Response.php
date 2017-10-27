@@ -20,19 +20,6 @@ class Response implements JsonSerializable
     private $result;
 
     /**
-     * @var int|string|null
-     */
-    private $id;
-
-    /**
-     * @param $id
-     */
-    private function __construct($id)
-    {
-        $this->id = $id;
-    }
-
-    /**
      * @return Error|null
      */
     public function getError(): ?Error
@@ -49,26 +36,12 @@ class Response implements JsonSerializable
     }
 
     /**
-     * @return int|null|string
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Specify data which should be serialized to JSON
-     *
-     * @link  http://php.net/manual/en/jsonserializable.jsonserialize.php
-     * @return mixed data which can be serialized by <b>json_encode</b>,
-     * which is a value of any type other than a resource.
-     * @since 5.4.0
+     * @return array
      */
     public function jsonSerialize()
     {
         $jsonArray = [
             'jsonrpc' => '2.0',
-            'id'      => $this->id,
         ];
 
         if ($this->result !== null) {
@@ -83,28 +56,26 @@ class Response implements JsonSerializable
     }
 
     /**
-     * @param int|string|null $id
      * @param mixed           $result
      *
      * @return Response
      */
-    public static function success($id, $result): self
+    public static function success($result): self
     {
-        $self         = new self($id);
+        $self         = new self();
         $self->result = $result;
 
         return $self;
     }
 
     /**
-     * @param int|string|null $id
      * @param Error           $error
      *
      * @return Response
      */
-    public static function failure($id, Error $error): self
+    public static function failure(Error $error): self
     {
-        $self        = new self($id);
+        $self        = new self();
         $self->error = $error;
 
         return $self;

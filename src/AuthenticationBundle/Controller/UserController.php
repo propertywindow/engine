@@ -7,17 +7,13 @@ use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use AuthenticationBundle\Exceptions\UserAlreadyExistException;
 use AuthenticationBundle\Exceptions\UserNotFoundException;
 use AuthenticationBundle\Service\User\Mapper;
-use Exception;
 use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use AppBundle\Models\JsonRpc\Error;
 use AppBundle\Models\JsonRpc\Response;
-use AppBundle\Exceptions\CouldNotAuthenticateUserException;
-use AppBundle\Exceptions\JsonRpc\CouldNotParseJsonRequestException;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
-use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcRequestException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
+use Throwable;
 
 /**
  * @Route(service="user_controller")
@@ -33,25 +29,11 @@ class UserController extends BaseController
      */
     public function requestHandler(Request $httpRequest)
     {
-        $id = null;
         try {
-            list($id, $userId, $method, $parameters) = $this->prepareRequest($httpRequest);
-
-            $jsonRpcResponse = Response::success($id, $this->invoke($userId, $method, $parameters));
-        } catch (CouldNotParseJsonRequestException $ex) {
-            $jsonRpcResponse = Response::failure($id, new Error(self::PARSE_ERROR, $ex->getMessage()));
-        } catch (InvalidJsonRpcRequestException $ex) {
-            $jsonRpcResponse = Response::failure($id, new Error(self::INVALID_REQUEST, $ex->getMessage()));
-        } catch (InvalidJsonRpcMethodException $ex) {
-            $jsonRpcResponse = Response::failure($id, new Error(self::METHOD_NOT_FOUND, $ex->getMessage()));
-        } catch (InvalidArgumentException $ex) {
-            $jsonRpcResponse = Response::failure($id, new Error(self::INVALID_PARAMS, $ex->getMessage()));
-        } catch (CouldNotAuthenticateUserException $ex) {
-            $jsonRpcResponse = Response::failure($id, new Error(self::USER_NOT_AUTHENTICATED, $ex->getMessage()));
-        } catch (UserNotFoundException $ex) {
-            $jsonRpcResponse = Response::failure($id, new Error(self::USER_NOT_FOUND, $ex->getMessage()));
-        } catch (Exception $ex) {
-            $jsonRpcResponse = Response::failure($id, new Error(self::INTERNAL_ERROR, $ex->getMessage()));
+            list($userId, $method, $parameters) = $this->prepareRequest($httpRequest);
+            $jsonRpcResponse = Response::success($this->invoke($userId, $method, $parameters));
+        } catch (Throwable $throwable) {
+            $jsonRpcResponse = $this->throwable($throwable);
         }
 
         return $this->createResponse($jsonRpcResponse);
@@ -63,6 +45,7 @@ class UserController extends BaseController
      * @param array  $parameters
      *
      * @return array
+     *
      * @throws InvalidJsonRpcMethodException
      * @throws UserNotFoundException
      * @throws \Doctrine\ORM\ORMException
@@ -232,13 +215,13 @@ class UserController extends BaseController
             throw new UserAlreadyExistException($parameters['email']);
         }
 
-        $userType       = $this->userTypeService->getUserType($parameters['user_type_id']);
-        $createdUser    = $this->userService->createUser($parameters, $user->getAgent(), $userType);
-        $password       = $this->randomPassword();
+        $userType    = $this->userTypeService->getUserType($parameters['user_type_id']);
+        $createdUser = $this->userService->createUser($parameters, $user->getAgent(), $userType);
+        $password    = $this->randomPassword();
 
         $mailParameters = [
-            'name'      => $parameters['first_name'],
-            'password'  => $password,
+            'name'     => $parameters['first_name'],
+            'password' => $password,
         ];
 
         $this->mailerService->sendMail($user, $createdUser->getEmail(), 'user_invite_email', $mailParameters);
