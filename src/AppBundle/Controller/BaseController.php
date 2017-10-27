@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AgentBundle\Service\AgentService;
 use AgentBundle\Service\AgentGroupService;
+use AgentBundle\Service\AgentSettingsService;
 use AgentBundle\Service\ClientService;
 use AppBundle\Exceptions\CouldNotAuthenticateUserException;
 use AppBundle\Exceptions\JsonRpc\CouldNotParseJsonRequestException;
@@ -11,6 +12,7 @@ use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcRequestException;
 use AppBundle\Models\JsonRpc\Response;
 use AppBundle\Security\Authenticator;
+use AppBundle\Service\SettingsService;
 use AuthenticationBundle\Service\BlacklistService;
 use AuthenticationBundle\Service\ServiceMapService;
 use AuthenticationBundle\Service\ServiceService;
@@ -61,6 +63,7 @@ class BaseController extends Controller
     public const          NOTIFICATION_NOT_FOUND = -32010;
     public const          CONVERSATION_NOT_FOUND = -32011;
     public const          INBOX_NOT_FOUND        = -32012;
+    public const          SETTINGS_NOT_FOUND     = -32013;
     public const          USER_ADMIN             = 1;
     public const          USER_AGENT             = 2;
     public const          USER_COLLEAGUE         = 3;
@@ -71,6 +74,16 @@ class BaseController extends Controller
      * @var Authenticator
      */
     public $authenticator;
+
+    /**
+     * @var SettingsService
+     */
+    public $settingsService;
+
+    /**
+     * @var AgentSettingsService
+     */
+    public $agentSettingsService;
 
     /**
      * @var AgentService
@@ -199,6 +212,8 @@ class BaseController extends Controller
 
     /**
      * @param Authenticator          $authenticator
+     * @param SettingsService        $settingsService
+     * @param AgentSettingsService   $agentSettingsService
      * @param AgentService           $agentService
      * @param AgentGroupService      $agentGroupService
      * @param UserService            $userService
@@ -227,6 +242,8 @@ class BaseController extends Controller
      */
     public function __construct(
         Authenticator $authenticator,
+        SettingsService $settingsService,
+        AgentSettingsService $agentSettingsService,
         AgentService $agentService,
         AgentGroupService $agentGroupService,
         UserService $userService,
@@ -254,6 +271,8 @@ class BaseController extends Controller
         MailerService $mailerService
     ) {
         $this->authenticator          = $authenticator;
+        $this->settingsService        = $settingsService;
+        $this->agentSettingsService   = $agentSettingsService;
         $this->agentService           = $agentService;
         $this->agentGroupService      = $agentGroupService;
         $this->userService            = $userService;
@@ -319,8 +338,9 @@ class BaseController extends Controller
 
         $ipAddress = $httpRequest->getClientIp();
         $blacklist = $this->blacklistService->checkBlacklist($ipAddress);
+        $settings  = $this->settingsService->getSettings();
 
-        if ($blacklist && $blacklist->getAmount() >= 5) {
+        if ($blacklist && $blacklist->getAmount() >= $settings->getMaxFailedLogin()) {
             throw new CouldNotAuthenticateUserException("You're IP address ($ipAddress) has been blocked");
         }
 

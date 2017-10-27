@@ -66,11 +66,10 @@ class BlacklistService
     /**
      * @param string     $ipAddress
      * @param null|User  $user
-     * @param null|Agent $agent
      *
      * @return Blacklist
      */
-    public function createBlacklist(string $ipAddress, ?User $user, ?Agent $agent)
+    public function createBlacklist(string $ipAddress, ?User $user)
     {
         $repository = $this->entityManager->getRepository('AuthenticationBundle:Blacklist');
         $blacklist  = $repository->findOneBy(['ip' => $ipAddress]);
@@ -80,7 +79,7 @@ class BlacklistService
 
             if ($user) {
                 $blacklist->setUser($user);
-                $blacklist->setAgent($agent);
+                $blacklist->setAgent($user->getAgent());
             }
 
             $blacklist->setIp($ipAddress);

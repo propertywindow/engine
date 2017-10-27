@@ -142,17 +142,13 @@ class BlacklistController extends BaseController
         if (!array_key_exists('user_id', $parameters)) {
             throw new InvalidArgumentException("No user_id argument provided");
         }
-        if (!array_key_exists('agent_id', $parameters)) {
-            throw new InvalidArgumentException("No agent_id argument provided");
-        }
         if (!array_key_exists('ip', $parameters)) {
             throw new InvalidArgumentException("No ip argument provided");
         }
 
         $user  = $this->userService->getUser($parameters['user_id']);
-        $agent = $this->agentService->getAgent($parameters['agent_id']);
 
-        return Mapper::fromBlacklist($this->blacklistService->createBlacklist($parameters['ip'], $user, $agent));
+        return Mapper::fromBlacklist($this->blacklistService->createBlacklist($parameters['ip'], $user));
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace AuthenticationBundle\Service;
 
+use AuthenticationBundle\Entity\User;
 use AuthenticationBundle\Entity\UserSettings;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -24,15 +25,27 @@ class UserSettingsService
     }
 
     /**
-     * @param int $userId
+     * @param User $user
      *
      * @return UserSettings $user
      */
-    public function getSettings(int $userId)
+    public function getSettings(User $user)
     {
         $repository = $this->entityManager->getRepository('AuthenticationBundle:UserSettings');
-        $user       = $repository->findByUserId($userId);
+        $user       = $repository->findByUser($user);
 
         return $user;
+    }
+
+    /**
+     * @param UserSettings $userSettings
+     *
+     * @return UserSettings
+     */
+    public function updateSettings(UserSettings $userSettings)
+    {
+        $this->entityManager->flush();
+
+        return $userSettings;
     }
 }

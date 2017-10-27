@@ -2,6 +2,7 @@
 
 namespace AuthenticationBundle\Repository;
 
+use AuthenticationBundle\Entity\User;
 use AuthenticationBundle\Entity\UserSettings;
 use AuthenticationBundle\Exceptions\UserSettingsNotFoundException;
 use Doctrine\ORM\EntityRepository;
@@ -25,6 +26,25 @@ class UserSettingsRepository extends EntityRepository
 
         if ($result === null) {
             throw new UserSettingsNotFoundException($userId);
+        }
+
+        /** @var UserSettings $result */
+        return $result;
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return UserSettings
+     *
+     * @throws UserSettingsNotFoundException
+     */
+    public function findByUser(User $user): UserSettings
+    {
+        $result = $this->find($user);
+
+        if ($result === null) {
+            throw new UserSettingsNotFoundException($user->getId());
         }
 
         /** @var UserSettings $result */

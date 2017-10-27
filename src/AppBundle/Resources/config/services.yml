@@ -2,6 +2,12 @@ services:
     authenticator:
           class: AppBundle\Security\Authenticator
           arguments: ['%kernel.environment%', '@user_service', '@blacklist_service']
+    settings_service:
+          class: AppBundle\Service\SettingsService
+          arguments: ["@doctrine.orm.entity_manager"]
     base_controller:
           class: AppBundle\Controller\BaseController
+          autowire: true
+    settings_controller:
+          class: AppBundle\Controller\SettingsController
           autowire: true

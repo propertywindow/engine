@@ -17,6 +17,9 @@ services:
     agent_controller:
           class: AgentBundle\Controller\AgentController
           autowire: true
+    agent_settings_controller:
+          class: AgentBundle\Controller\AgentSettingsController
+          autowire: true
     client_controller:
           class: AgentBundle\Controller\ClientController
           autowire: true

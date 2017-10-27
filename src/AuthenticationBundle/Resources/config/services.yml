@@ -41,6 +41,9 @@ services:
     user_controller:
           class: AuthenticationBundle\Controller\UserController
           autowire: true
+    user_settings_controller:
+            class: AuthenticationBundle\Controller\UserSettingsController
+            autowire: true
     menu_controller:
           class: AuthenticationBundle\Controller\MenuController
           autowire: true
