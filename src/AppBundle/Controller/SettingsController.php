@@ -71,11 +71,10 @@ class SettingsController extends BaseController
     private function invoke(int $userId, string $method, array $parameters = [])
     {
         switch ($method) {
-            case "getConversation":
+            case "getSettings":
                 return $this->getSettings();
-            case "getConversations":
+            case "updateSettings":
                 return $this->updateSettings($userId, $parameters);
-            case "createConversation":
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");

@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AgentBundle\Service\AgentService;
 use AgentBundle\Service\AgentGroupService;
+use AgentBundle\Service\AgentSettingsService;
 use AgentBundle\Service\ClientService;
 use AppBundle\Exceptions\CouldNotAuthenticateUserException;
 use AppBundle\Exceptions\JsonRpc\CouldNotParseJsonRequestException;
@@ -78,6 +79,11 @@ class BaseController extends Controller
      * @var SettingsService
      */
     public $settingsService;
+
+    /**
+     * @var AgentSettingsService
+     */
+    public $agentSettingsService;
 
     /**
      * @var AgentService
@@ -207,6 +213,7 @@ class BaseController extends Controller
     /**
      * @param Authenticator          $authenticator
      * @param SettingsService        $settingsService
+     * @param AgentSettingsService   $agentSettingsService
      * @param AgentService           $agentService
      * @param AgentGroupService      $agentGroupService
      * @param UserService            $userService
@@ -236,6 +243,7 @@ class BaseController extends Controller
     public function __construct(
         Authenticator $authenticator,
         SettingsService $settingsService,
+        AgentSettingsService $agentSettingsService,
         AgentService $agentService,
         AgentGroupService $agentGroupService,
         UserService $userService,
@@ -264,6 +272,7 @@ class BaseController extends Controller
     ) {
         $this->authenticator          = $authenticator;
         $this->settingsService        = $settingsService;
+        $this->agentSettingsService   = $agentSettingsService;
         $this->agentService           = $agentService;
         $this->agentGroupService      = $agentGroupService;
         $this->userService            = $userService;

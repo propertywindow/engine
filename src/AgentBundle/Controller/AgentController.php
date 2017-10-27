@@ -6,7 +6,6 @@ use AgentBundle\Entity\Agent;
 use AppBundle\Controller\BaseController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use AuthenticationBundle\Exceptions\UserAlreadyExistException;
-use AuthenticationBundle\Exceptions\UserNotFoundException;
 use Exception;
 use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -18,7 +17,6 @@ use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcRequestException;
 use AgentBundle\Exceptions\AgentNotFoundException;
 use AgentBundle\Service\Agent\Mapper;
-use Swift_Message;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
@@ -67,7 +65,7 @@ class AgentController extends BaseController
      *
      * @return array
      * @throws InvalidJsonRpcMethodException
-     * @throws UserNotFoundException
+     * @throws AgentNotFoundException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
@@ -271,7 +269,7 @@ class AgentController extends BaseController
 
         $updateAgent = $this->agentService->getAgent($id);
 
-        if ((int)$user->getUserType()->getId() <= self::USER_AGENT) {
+        if ((int)$user->getUserType()->getId() > self::USER_AGENT) {
             throw new NotAuthorizedException($userId);
         }
 

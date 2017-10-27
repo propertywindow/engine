@@ -36,4 +36,16 @@ class AgentSettingsService
 
         return $agent;
     }
+
+    /**
+     * @param AgentSettings $agentSettings
+     *
+     * @return AgentSettings
+     */
+    public function updateSettings(AgentSettings $agentSettings)
+    {
+        $this->entityManager->flush();
+
+        return $agentSettings;
+    }
 }

@@ -29,17 +29,17 @@ class MailerService
 
     /**
      * @param EntityManagerInterface $em
-     * @param LogMailService         $logMailService
      * @param Twig_Environment       $twig
+     * @param LogMailService         $logMailService
      */
     public function __construct(
         EntityManagerInterface $em,
-        LogMailService $logMailService,
-        Twig_Environment $twig
+        Twig_Environment $twig,
+        LogMailService $logMailService
     ) {
         $this->em             = $em;
-        $this->logMailService = $logMailService;
         $this->twig           = $twig;
+        $this->logMailService = $logMailService;
     }
 
     /**
@@ -64,8 +64,8 @@ class MailerService
         ]);
 
         if ($personal) {
-            $settings = $this->em->getRepository('AuthenticationBundle:UserSettings')->findByUserId(
-                $user->getId()
+            $settings = $this->em->getRepository('AuthenticationBundle:UserSettings')->findByUser(
+                $user
             );
         } else {
             $settings = $this->em->getRepository('AgentBundle:AgentSettings')->findByAgent(
