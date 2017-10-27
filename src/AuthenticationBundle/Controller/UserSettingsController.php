@@ -108,7 +108,7 @@ class UserSettingsController extends BaseController
         $user     = $this->userService->getUser($userId);
         $settings = $this->userSettingsService->getSettings($user);
 
-        if ($settings->getId() !== $user->getAgent()->getId()) {
+        if ($settings->getId() !== $user->getId()) {
             if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
                 throw new NotAuthorizedException($userId);
             }
