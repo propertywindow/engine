@@ -34,7 +34,7 @@ class NotificationController extends BaseController
             list($userId, $method, $parameters) = $this->prepareRequest($httpRequest);
             $jsonRpcResponse = Response::success($this->invoke($userId, $method, $parameters));
         } catch (Throwable $throwable) {
-            $jsonRpcResponse = $this->throwable($throwable);
+            $jsonRpcResponse = $this->throwable($throwable, $httpRequest);
         }
 
         return $this->createResponse($jsonRpcResponse);

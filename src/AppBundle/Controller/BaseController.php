@@ -26,6 +26,7 @@ use ConversationBundle\Service\ConversationService;
 use ConversationBundle\Service\MailerService;
 use ConversationBundle\Service\MessageService;
 use ConversationBundle\Service\NotificationService;
+use LogBundle\Service\LogErrorService;
 use PropertyBundle\Service\GalleryService;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use LogBundle\Service\LogActivityService;
@@ -153,6 +154,11 @@ class BaseController extends Controller
     public $logTrafficService;
 
     /**
+     * @var LogErrorService
+     */
+    public $logErrorService;
+
+    /**
      * @var KindService
      */
     public $kindService;
@@ -221,6 +227,7 @@ class BaseController extends Controller
      * @param ClientService          $clientService
      * @param LogActivityService     $logActivityService
      * @param LogTrafficService      $logTrafficService
+     * @param LogErrorService        $logErrorService
      * @param KindService            $kindService
      * @param TermsService           $termsService
      * @param TypeService            $typeService
@@ -251,6 +258,7 @@ class BaseController extends Controller
         ClientService $clientService,
         LogActivityService $logActivityService,
         LogTrafficService $logTrafficService,
+        LogErrorService $logErrorService,
         KindService $kindService,
         TermsService $termsService,
         TypeService $typeService,
@@ -280,6 +288,7 @@ class BaseController extends Controller
         $this->clientService          = $clientService;
         $this->logActivityService     = $logActivityService;
         $this->logTrafficService      = $logTrafficService;
+        $this->logErrorService        = $logErrorService;
         $this->kindService            = $kindService;
         $this->termsService           = $termsService;
         $this->typeService            = $typeService;
@@ -389,12 +398,13 @@ class BaseController extends Controller
 
     /**
      * @param Throwable $throwable
+     * @param Request $httpRequest
      *
      * @return Response
      *
      * @throws Throwable
      */
-    public function throwable(Throwable $throwable)
+    public function throwable(Throwable $throwable, Request $httpRequest)
     {
         if ($throwable instanceof CouldNotParseJsonRequestException) {
             return Response::failure(new Error(self::PARSE_ERROR, $throwable->getMessage()));
@@ -407,7 +417,15 @@ class BaseController extends Controller
         } elseif ($throwable instanceof CouldNotAuthenticateUserException) {
             return Response::failure(new Error(self::USER_NOT_AUTHENTICATED, $throwable->getMessage()));
         } elseif ($throwable instanceof Exception) {
-            // todo: add log here
+            list($userId, $method, $parameters) = self::prepareRequest($httpRequest);
+
+            $this->logErrorService->createError(
+                $this->userService->getUser($userId),
+                $method,
+                $throwable->getMessage(),
+                $parameters
+            );
+
             return Response::failure(new Error(self::EXCEPTION_ERROR, $throwable->getMessage()));
         }
 
