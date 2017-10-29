@@ -27,6 +27,8 @@ use ConversationBundle\Service\MailerService;
 use ConversationBundle\Service\MessageService;
 use ConversationBundle\Service\NotificationService;
 use LogBundle\Service\LogErrorService;
+use LogBundle\Service\SlackClient;
+use LogBundle\Service\SlackLogger;
 use PropertyBundle\Service\GalleryService;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use LogBundle\Service\LogActivityService;
@@ -398,7 +400,7 @@ class BaseController extends Controller
 
     /**
      * @param Throwable $throwable
-     * @param Request $httpRequest
+     * @param Request   $httpRequest
      *
      * @return Response
      *
@@ -429,7 +431,20 @@ class BaseController extends Controller
             return Response::failure(new Error(self::EXCEPTION_ERROR, $throwable->getMessage()));
         }
 
-        // todo: add slack here
+        $settings = $this->settingsService->getSettings();
+
+        if ($settings->getSlackEnabled()) {
+            $loggerClient = new SlackClient(
+                $settings->getSlackURL(),
+                $settings->getSlackChannel(),
+                $settings->getSlackUsername(),
+                ''
+            );
+
+            $logger = new SlackLogger($loggerClient);
+
+            $logger->critical('error', $throwable->getMessage());
+        }
 
         return Response::failure(new Error(self::INTERNAL_ERROR, $throwable->getMessage()));
     }
