@@ -27,8 +27,7 @@ use ConversationBundle\Service\MailerService;
 use ConversationBundle\Service\MessageService;
 use ConversationBundle\Service\NotificationService;
 use LogBundle\Service\LogErrorService;
-use LogBundle\Service\SlackClient;
-use LogBundle\Service\SlackLogger;
+use LogBundle\Service\SlackService;
 use PropertyBundle\Service\GalleryService;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use LogBundle\Service\LogActivityService;
@@ -211,6 +210,11 @@ class BaseController extends Controller
     public $mailerService;
 
     /**
+     * @var SlackService
+     */
+    public $slackService;
+
+    /**
      * @param Authenticator          $authenticator
      * @param SettingsService        $settingsService
      * @param AgentSettingsService   $agentSettingsService
@@ -240,6 +244,7 @@ class BaseController extends Controller
      * @param ConversationService    $conversationService
      * @param MessageService         $messageService
      * @param MailerService          $mailerService
+     * @param SlackService           $slackService
      */
     public function __construct(
         Authenticator $authenticator,
@@ -270,7 +275,8 @@ class BaseController extends Controller
         NotificationService $notificationService,
         ConversationService $conversationService,
         MessageService $messageService,
-        MailerService $mailerService
+        MailerService $mailerService,
+        SlackService $slackService
     ) {
         $this->authenticator          = $authenticator;
         $this->settingsService        = $settingsService;
@@ -301,6 +307,7 @@ class BaseController extends Controller
         $this->conversationService    = $conversationService;
         $this->messageService         = $messageService;
         $this->mailerService          = $mailerService;
+        $this->slackService           = $slackService;
     }
 
     /**
@@ -431,20 +438,7 @@ class BaseController extends Controller
             return Response::failure(new Error(self::EXCEPTION_ERROR, $throwable->getMessage()));
         }
 
-        $settings = $this->settingsService->getSettings();
-
-        if ($settings->getSlackEnabled()) {
-            $loggerClient = new SlackClient(
-                $settings->getSlackURL(),
-                $settings->getSlackChannel(),
-                $settings->getSlackUsername(),
-                ''
-            );
-
-            $logger = new SlackLogger($loggerClient);
-
-            $logger->critical('error', $throwable->getMessage());
-        }
+        $this->slackService->critical($throwable->getMessage());
 
         return Response::failure(new Error(self::INTERNAL_ERROR, $throwable->getMessage()));
     }

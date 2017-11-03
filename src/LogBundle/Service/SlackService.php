@@ -2,6 +2,7 @@
 
 namespace LogBundle\Service;
 
+use AppBundle\Service\SettingsService;
 use Psr\Log\AbstractLogger;
 use LogBundle\Service\Message\Attachment;
 use LogBundle\Service\Message\Field;
@@ -10,25 +11,52 @@ use LogBundle\Service\Message\Message;
 /**
  * @package LogBundle\Service
  */
-class SlackLogger extends AbstractLogger
+class SlackService extends AbstractLogger
 {
-    /**
-     * @var SlackClient
-     */
-    protected $client;
-
     /**
      * @var string
      */
     protected $levels;
 
     /**
-     * @param SlackClient   $client
-     * @param string[]|null $levels
+     * @var string
      */
-    public function __construct(SlackClient $client, array $levels = null)
+    protected $hookUri;
+
+    /**
+     * @var string|null
+     */
+    protected $channel;
+
+    /**
+     * @var string
+     */
+    protected $name;
+
+    /**
+     * @var string
+     */
+    protected $iconUrl;
+
+    /**
+     * @var boolean
+     */
+    protected $slackEnabled = false;
+
+    /**
+     * @param SettingsService $settingsService
+     * @param string[]|null   $levels
+     */
+    public function __construct(SettingsService $settingsService, array $levels = null)
     {
-        $this->client = $client;
+        $settings = $settingsService->getSettings();
+
+        $this->hookUri      = $settings->getSlackURL();
+        $this->channel      = $settings->getSlackChannel();
+        $this->name         = $settings->getSlackUsername();
+        $this->slackEnabled = $settings->getSlackEnabled();
+        $this->iconUrl      = null;
+
         $this->levels = $levels !== null ? $levels : [
             'emergency',
             'alert',
@@ -53,6 +81,10 @@ class SlackLogger extends AbstractLogger
             return;
         }
 
+        if (!$this->slackEnabled) {
+            return;
+        }
+
         $parsedMessage = $this->parseMessage($message, $context);
 
         $attachment = Attachment::create()
@@ -68,7 +100,8 @@ class SlackLogger extends AbstractLogger
         $slackMessage = new Message();
         $slackMessage->attach($attachment);
 
-        $this->client->sendMessage($slackMessage);
+
+        $this->sendMessage($slackMessage);
     }
 
     /**
@@ -118,5 +151,32 @@ class SlackLogger extends AbstractLogger
             default:
                 return '#90CAF9';
         }
+    }
+
+    /**
+     * @param Message $message
+     */
+    public function sendMessage(Message $message)
+    {
+        $payload = array_merge($message->toArray(), [
+            'username' => $this->name,
+            'channel'  => $this->channel,
+        ]);
+
+        if ($this->iconUrl) {
+            $payload['icon_url'] = $this->iconUrl;
+        }
+
+        $ch = curl_init($this->hookUri);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, 'payload='.json_encode($payload));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        if (defined('CURLOPT_SAFE_UPLOAD')) {
+            curl_setopt($ch, CURLOPT_SAFE_UPLOAD, true);
+        }
+
+        curl_exec($ch);
+        curl_close($ch);
     }
 }
