@@ -11,6 +11,12 @@ services:
     log_mail_service:
           class: LogBundle\Service\LogMailService
           arguments: ['@doctrine.orm.entity_manager']
+    log_error_service:
+          class: LogBundle\Service\LogErrorService
+          arguments: ['@doctrine.orm.entity_manager']
+    slack_service:
+          class: LogBundle\Service\SlackService
+          arguments: ['@settings_service']
     activity_controller:
           class: LogBundle\Controller\ActivityController
           autowire: true

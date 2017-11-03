@@ -10,6 +10,7 @@ use AppBundle\Exceptions\CouldNotAuthenticateUserException;
 use AppBundle\Exceptions\JsonRpc\CouldNotParseJsonRequestException;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcRequestException;
+use AppBundle\Models\JsonRpc\Error;
 use AppBundle\Models\JsonRpc\Response;
 use AppBundle\Security\Authenticator;
 use AppBundle\Service\SettingsService;
@@ -25,6 +26,8 @@ use ConversationBundle\Service\ConversationService;
 use ConversationBundle\Service\MailerService;
 use ConversationBundle\Service\MessageService;
 use ConversationBundle\Service\NotificationService;
+use LogBundle\Service\LogErrorService;
+use LogBundle\Service\SlackService;
 use PropertyBundle\Service\GalleryService;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use LogBundle\Service\LogActivityService;
@@ -39,6 +42,9 @@ use PropertyBundle\Service\TypeService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use InvalidArgumentException;
+use Exception;
+use Throwable;
 
 /**
  * @Route(service="base_controller")
@@ -50,20 +56,8 @@ class BaseController extends Controller
     public const          METHOD_NOT_FOUND       = -32601;
     public const          INVALID_PARAMS         = -32602;
     public const          INTERNAL_ERROR         = -32603;
+    public const          EXCEPTION_ERROR        = -32604;
     public const          USER_NOT_AUTHENTICATED = -32000;
-    public const          AGENT_NOT_FOUND        = -32001;
-    public const          USER_NOT_FOUND         = -32002;
-    public const          BLACKLIST_NOT_FOUND    = -32003;
-    public const          SERVICE_NOT_FOUND      = -32004;
-    public const          TEMPLATE_NOT_FOUND     = -32005;
-    public const          PROPERTY_NOT_FOUND     = -32006;
-    public const          TYPE_NOT_FOUND         = -32007;
-    public const          SUB_TYPE_NOT_FOUND     = -32008;
-    public const          LOG_NOT_FOUND          = -32009;
-    public const          NOTIFICATION_NOT_FOUND = -32010;
-    public const          CONVERSATION_NOT_FOUND = -32011;
-    public const          INBOX_NOT_FOUND        = -32012;
-    public const          SETTINGS_NOT_FOUND     = -32013;
     public const          USER_ADMIN             = 1;
     public const          USER_AGENT             = 2;
     public const          USER_COLLEAGUE         = 3;
@@ -161,6 +155,11 @@ class BaseController extends Controller
     public $logTrafficService;
 
     /**
+     * @var LogErrorService
+     */
+    public $logErrorService;
+
+    /**
      * @var KindService
      */
     public $kindService;
@@ -211,6 +210,11 @@ class BaseController extends Controller
     public $mailerService;
 
     /**
+     * @var SlackService
+     */
+    public $slackService;
+
+    /**
      * @param Authenticator          $authenticator
      * @param SettingsService        $settingsService
      * @param AgentSettingsService   $agentSettingsService
@@ -229,6 +233,7 @@ class BaseController extends Controller
      * @param ClientService          $clientService
      * @param LogActivityService     $logActivityService
      * @param LogTrafficService      $logTrafficService
+     * @param LogErrorService        $logErrorService
      * @param KindService            $kindService
      * @param TermsService           $termsService
      * @param TypeService            $typeService
@@ -239,6 +244,7 @@ class BaseController extends Controller
      * @param ConversationService    $conversationService
      * @param MessageService         $messageService
      * @param MailerService          $mailerService
+     * @param SlackService           $slackService
      */
     public function __construct(
         Authenticator $authenticator,
@@ -259,6 +265,7 @@ class BaseController extends Controller
         ClientService $clientService,
         LogActivityService $logActivityService,
         LogTrafficService $logTrafficService,
+        LogErrorService $logErrorService,
         KindService $kindService,
         TermsService $termsService,
         TypeService $typeService,
@@ -268,7 +275,8 @@ class BaseController extends Controller
         NotificationService $notificationService,
         ConversationService $conversationService,
         MessageService $messageService,
-        MailerService $mailerService
+        MailerService $mailerService,
+        SlackService $slackService
     ) {
         $this->authenticator          = $authenticator;
         $this->settingsService        = $settingsService;
@@ -288,6 +296,7 @@ class BaseController extends Controller
         $this->clientService          = $clientService;
         $this->logActivityService     = $logActivityService;
         $this->logTrafficService      = $logTrafficService;
+        $this->logErrorService        = $logErrorService;
         $this->kindService            = $kindService;
         $this->termsService           = $termsService;
         $this->typeService            = $typeService;
@@ -298,6 +307,7 @@ class BaseController extends Controller
         $this->conversationService    = $conversationService;
         $this->messageService         = $messageService;
         $this->mailerService          = $mailerService;
+        $this->slackService           = $slackService;
     }
 
     /**
@@ -329,7 +339,6 @@ class BaseController extends Controller
      */
     public function prepareRequest(Request $httpRequest, bool $authenticate = true, bool $impersonate = false)
     {
-        $id     = null;
         $userId = null;
 
         if ($authenticate) {
@@ -355,7 +364,6 @@ class BaseController extends Controller
             throw new InvalidJsonRpcRequestException("Request does not match JSON-RPC 2.0 specification");
         }
 
-        $id     = $jsonArray['id'];
         $method = $jsonArray['method'];
         if (empty($method)) {
             throw new InvalidJsonRpcMethodException("No request method found");
@@ -367,9 +375,9 @@ class BaseController extends Controller
         }
 
         if ($authenticate) {
-            return [$id, $userId, $method, $parameters];
+            return [$userId, $method, $parameters];
         } else {
-            return [$id, $method, $parameters];
+            return [$method, $parameters];
         }
     }
 
@@ -395,5 +403,43 @@ class BaseController extends Controller
         $responseHeaders->set('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, PATCH, OPTIONS');
 
         return $httpResponse;
+    }
+
+    /**
+     * @param Throwable $throwable
+     * @param Request   $httpRequest
+     *
+     * @return Response
+     *
+     * @throws Throwable
+     */
+    public function throwable(Throwable $throwable, Request $httpRequest)
+    {
+        if ($throwable instanceof CouldNotParseJsonRequestException) {
+            return Response::failure(new Error(self::PARSE_ERROR, $throwable->getMessage()));
+        } elseif ($throwable instanceof InvalidJsonRpcRequestException) {
+            return Response::failure(new Error(self::INVALID_REQUEST, $throwable->getMessage()));
+        } elseif ($throwable instanceof InvalidJsonRpcMethodException) {
+            return Response::failure(new Error(self::METHOD_NOT_FOUND, $throwable->getMessage()));
+        } elseif ($throwable instanceof InvalidArgumentException) {
+            return Response::failure(new Error(self::INVALID_PARAMS, $throwable->getMessage()));
+        } elseif ($throwable instanceof CouldNotAuthenticateUserException) {
+            return Response::failure(new Error(self::USER_NOT_AUTHENTICATED, $throwable->getMessage()));
+        } elseif ($throwable instanceof Exception) {
+            list($userId, $method, $parameters) = self::prepareRequest($httpRequest);
+
+            $this->logErrorService->createError(
+                $this->userService->getUser($userId),
+                $method,
+                $throwable->getMessage(),
+                $parameters
+            );
+
+            return Response::failure(new Error(self::EXCEPTION_ERROR, $throwable->getMessage()));
+        }
+
+        $this->slackService->critical($throwable->getMessage());
+
+        return Response::failure(new Error(self::INTERNAL_ERROR, $throwable->getMessage()));
     }
 }

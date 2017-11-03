@@ -3,21 +3,18 @@
 namespace PropertyBundle\Controller;
 
 use AppBundle\Controller\BaseController;
-use Exception;
+
 use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use AppBundle\Models\JsonRpc\Error;
 use AppBundle\Models\JsonRpc\Response;
-use AppBundle\Exceptions\CouldNotAuthenticateUserException;
-use AppBundle\Exceptions\JsonRpc\CouldNotParseJsonRequestException;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
-use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcRequestException;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use PropertyBundle\Exceptions\PropertyNotFoundException;
 use PropertyBundle\Exceptions\PropertyAlreadyExistsException;
 use PropertyBundle\Service\Property\Mapper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
+use Throwable;
 
 /**
  * @Route(service="property_controller")
@@ -33,25 +30,11 @@ class PropertyController extends BaseController
      */
     public function requestHandler(Request $httpRequest)
     {
-        $id = null;
         try {
-            list($id, $userId, $method, $parameters) = $this->prepareRequest($httpRequest);
-
-            $jsonRpcResponse = Response::success($id, $this->invoke($userId, $method, $parameters));
-        } catch (CouldNotParseJsonRequestException $ex) {
-            $jsonRpcResponse = Response::failure($id, new Error(self::PARSE_ERROR, $ex->getMessage()));
-        } catch (InvalidJsonRpcRequestException $ex) {
-            $jsonRpcResponse = Response::failure($id, new Error(self::INVALID_REQUEST, $ex->getMessage()));
-        } catch (InvalidJsonRpcMethodException $ex) {
-            $jsonRpcResponse = Response::failure($id, new Error(self::METHOD_NOT_FOUND, $ex->getMessage()));
-        } catch (InvalidArgumentException $ex) {
-            $jsonRpcResponse = Response::failure($id, new Error(self::INVALID_PARAMS, $ex->getMessage()));
-        } catch (CouldNotAuthenticateUserException $ex) {
-            $jsonRpcResponse = Response::failure($id, new Error(self::USER_NOT_AUTHENTICATED, $ex->getMessage()));
-        } catch (PropertyNotFoundException $ex) {
-            $jsonRpcResponse = Response::failure($id, new Error(self::PROPERTY_NOT_FOUND, $ex->getMessage()));
-        } catch (Exception $ex) {
-            $jsonRpcResponse = Response::failure($id, new Error(self::INTERNAL_ERROR, $ex->getMessage()));
+            list($userId, $method, $parameters) = $this->prepareRequest($httpRequest);
+            $jsonRpcResponse = Response::success($this->invoke($userId, $method, $parameters));
+        } catch (Throwable $throwable) {
+            $jsonRpcResponse = $this->throwable($throwable, $httpRequest);
         }
 
         return $this->createResponse($jsonRpcResponse);
@@ -69,7 +52,7 @@ class PropertyController extends BaseController
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
      */
-    private function invoke(int $userId, string $method, array $parameters = [])
+    public function invoke(int $userId, string $method, array $parameters = [])
     {
         switch ($method) {
             case "getProperty":
@@ -111,7 +94,7 @@ class PropertyController extends BaseController
 
         $id           = (int)$parameters['id'];
         $user         = $this->userService->getUser($userId);
-        $userSettings = $this->userSettingsService->getSettings($userId);
+        $userSettings = $this->userSettingsService->getSettings($user);
 
         $property = $this->propertyService->getProperty($id);
 
@@ -150,11 +133,10 @@ class PropertyController extends BaseController
     private function getProperties(int $userId)
     {
         $user         = $this->userService->getUser($userId);
-        $userSettings = $this->userSettingsService->getSettings($userId);
-        $agent        = $this->agentService->getAgent((int)$user->getAgent()->getId());
+        $userSettings = $this->userSettingsService->getSettings($user);
 
         return Mapper::fromProperties($userSettings->getLanguage(), ...
-            $this->propertyService->listProperties($agent->getId()));
+            $this->propertyService->listProperties($user->getAgent()->getId()));
     }
 
     /**
@@ -171,7 +153,7 @@ class PropertyController extends BaseController
                   $parameters['offset'] !== null ? (int)$parameters['offset'] : 0;
 
         $user         = $this->userService->getUser($userId);
-        $userSettings = $this->userSettingsService->getSettings($userId);
+        $userSettings = $this->userSettingsService->getSettings($user);
         $agentIds     = $this->agentService->getAgentIdsFromGroup((int)$user->getAgent()->getId());
 
         list($properties, $count) = $this->propertyService->listAllProperties($agentIds, $limit, $offset);
@@ -194,7 +176,7 @@ class PropertyController extends BaseController
     private function createProperty(int $userId, array $parameters)
     {
         $user         = $this->userService->getUser($userId);
-        $userSettings = $this->userSettingsService->getSettings($userId);
+        $userSettings = $this->userSettingsService->getSettings($user);
 
         if ($user->getUserType()->getId() === self::USER_CLIENT || $user->getUserType()->getId() === self::USER_API) {
             throw new NotAuthorizedException($userId);
@@ -238,12 +220,18 @@ class PropertyController extends BaseController
             throw new PropertyAlreadyExistsException($parameters['client_id']);
         }
 
-        $agent      = $this->agentService->getAgent((int)$user->getAgent()->getId());
         $client     = $this->clientService->getClient($parameters['client_id']);
         $kind       = $this->kindService->getKind($parameters['kind_id']);
         $terms      = $this->termsService->getTerm($parameters['terms_id']);
         $subType    = $this->subTypeService->getSubType($parameters['sub_type_id']);
-        $property   = $this->propertyService->createProperty($parameters, $agent, $client, $kind, $terms, $subType);
+        $property   = $this->propertyService->createProperty(
+            $parameters,
+            $user->getAgent(),
+            $client,
+            $kind,
+            $terms,
+            $subType
+        );
         $propertyId = (int)$property->getId();
 
         $this->logActivityService->createActivity(
@@ -253,6 +241,13 @@ class PropertyController extends BaseController
             'create',
             null,
             $this->get('jms_serializer')->serialize($property, 'json')
+        );
+
+        $this->slackService->info(
+            $user->getAgent()->getAgentGroup()->getName().
+            ' ('.$user->getFirstName().
+            ' '.$user->getLastName().
+            ') added a new property: #'.$propertyId
         );
 
         // todo: also insert Details, Gallery, GeneralNotes
@@ -275,9 +270,9 @@ class PropertyController extends BaseController
             throw new InvalidArgumentException("Identifier not provided");
         }
 
-        $user         = $this->userService->getUser($userId);
-        $userSettings = $this->userSettingsService->getSettings($userId);
         $id           = (int)$parameters['id'];
+        $user         = $this->userService->getUser($userId);
+        $userSettings = $this->userSettingsService->getSettings($user);
         $property     = $this->propertyService->getProperty($id);
 
         if ($property->getAgent()->getId() !== $user->getAgent()->getId()) {

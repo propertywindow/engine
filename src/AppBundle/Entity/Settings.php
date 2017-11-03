@@ -42,6 +42,26 @@ class Settings
      */
     private $maxFailedLogin;
 
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="slack_enabled", type="boolean", options={"default": true})
+     */
+    private $slackEnabled = true;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="slack_url", type="string", length=255)
+     */
+    private $slackURL;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="slack_username", type="string", length=255)
+     */
+    private $slackUsername;
 
     /**
      * Get id
@@ -123,5 +143,77 @@ class Settings
     public function getMaxFailedLogin()
     {
         return $this->maxFailedLogin;
+    }
+
+    /**
+     * Set slackEnabled
+     *
+     * @param boolean $slackEnabled
+     *
+     * @return Settings
+     */
+    public function setSlackEnabled($slackEnabled)
+    {
+        $this->slackEnabled = $slackEnabled;
+
+        return $this;
+    }
+
+    /**
+     * Get slackEnabled
+     *
+     * @return bool
+     */
+    public function getSlackEnabled()
+    {
+        return $this->slackEnabled;
+    }
+
+    /**
+     * Set slackURL
+     *
+     * @param string $slackURL
+     *
+     * @return Settings
+     */
+    public function setSlackURL($slackURL)
+    {
+        $this->slackURL = $slackURL;
+
+        return $this;
+    }
+
+    /**
+     * Get slackURL
+     *
+     * @return string
+     */
+    public function getSlackURL()
+    {
+        return $this->slackURL;
+    }
+
+    /**
+     * Set slackUsername
+     *
+     * @param string $slackUsername
+     *
+     * @return Settings
+     */
+    public function setSlackUsername($slackUsername)
+    {
+        $this->slackUsername = $slackUsername;
+
+        return $this;
+    }
+
+    /**
+     * Get slackUsername
+     *
+     * @return string
+     */
+    public function getSlackUsername()
+    {
+        return $this->slackUsername;
     }
 }

@@ -22,6 +22,9 @@ class LoadSettingsData extends AbstractFixture implements OrderedFixtureInterfac
         $settings->setApplicationName('Property Window');
         $settings->setApplicationURL('http://www.propertywindow.nl');
         $settings->setMaxFailedLogin(5);
+        $settings->setSlackEnabled(true);
+        $settings->setSlackURL('https://hooks.slack.com/services/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');
+        $settings->setSlackUsername('Property Window');
         $manager->persist($settings);
 
         $manager->flush();

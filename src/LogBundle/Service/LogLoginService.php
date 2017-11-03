@@ -48,20 +48,18 @@ class LogLoginService
 
     /**
      * @param User   $user
-     * @param Agent  $agent
      * @param string $ipAddress
      *
      * @return Login
      */
     public function createLogin(
         User $user,
-        Agent $agent,
         string $ipAddress
     ) {
         $login = new Login();
 
         $login->setUser($user);
-        $login->setAgent($agent);
+        $login->setAgent($user->getAgent());
         $login->setIp($ipAddress);
 
         $this->entityManager->persist($login);

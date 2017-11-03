@@ -2,6 +2,7 @@
 
 namespace LogBundle\Entity;
 
+use AuthenticationBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -23,32 +24,32 @@ class Error
     private $id;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="user_id", type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="AuthenticationBundle\Entity\User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
-    private $userId;
+    protected $user;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="action", type="string", length=255)
+     * @ORM\Column(name="method", type="string", length=255)
      */
-    private $action;
+    private $method;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="old_value", type="blob")
+     * @ORM\Column(name="message", type="string", length=255)
      */
-    private $oldValue;
+    private $message;
 
     /**
-     * @var string
+     * @var array
      *
-     * @ORM\Column(name="new_value", type="blob")
+     * @ORM\Column(name="parameters", type="array", nullable=true)
      */
-    private $newValue;
+    private $parameters = [];
+
 
     /**
      * @var \DateTime $created
@@ -69,100 +70,101 @@ class Error
     }
 
     /**
-     * Set userId
+     * Set user
      *
-     * @param integer $userId
+     * @param \AuthenticationBundle\Entity\User $user
      *
      * @return Error
      */
-    public function setUserId($userId)
+    public function setUser(User $user = null)
     {
-        $this->userId = $userId;
+        $this->user = $user;
 
         return $this;
     }
 
     /**
-     * Get userId
+     * Get user
      *
-     * @return int
+     * @return \AuthenticationBundle\Entity\User
      */
-    public function getUserId()
+    public function getUser()
     {
-        return $this->userId;
+        return $this->user;
     }
 
     /**
-     * Set action
+     * Set method
      *
-     * @param string $action
+     * @param string $method
      *
      * @return Error
      */
-    public function setAction($action)
+    public function setMethod($method)
     {
-        $this->action = $action;
+        $this->method = $method;
 
         return $this;
     }
 
     /**
-     * Get action
+     * Get method
      *
      * @return string
      */
-    public function getAction()
+    public function getMethod()
     {
-        return $this->action;
+        return $this->method;
     }
 
     /**
-     * Set oldValue
+     * Set message
      *
-     * @param string $oldValue
+     * @param string $message
      *
      * @return Error
      */
-    public function setOldValue($oldValue)
+    public function setMessage($message)
     {
-        $this->oldValue = $oldValue;
+        $this->message = $message;
 
         return $this;
     }
 
     /**
-     * Get oldValue
+     * Get message
      *
      * @return string
      */
-    public function getOldValue()
+    public function getMessage()
     {
-        return $this->oldValue;
+        return $this->message;
     }
 
     /**
-     * Set newValue
+     * Set parameters
      *
-     * @param string $newValue
+     * @param array $parameters
      *
      * @return Error
      */
-    public function setNewValue($newValue)
+    public function setParameters($parameters)
     {
-        $this->newValue = $newValue;
+        $this->parameters = $parameters;
 
         return $this;
     }
 
     /**
-     * Get newValue
+     * Get parameters
      *
-     * @return string
+     * @return array
      */
-    public function getNewValue()
+    public function getParameters()
     {
-        return $this->newValue;
+        return $this->parameters;
     }
+
 
     /**
      * Gets triggered only on insert

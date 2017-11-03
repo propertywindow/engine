@@ -4,19 +4,15 @@ namespace PropertyBundle\Controller;
 
 use AppBundle\Controller\BaseController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
-use Exception;
 use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use AppBundle\Models\JsonRpc\Error;
 use AppBundle\Models\JsonRpc\Response;
-use AppBundle\Exceptions\CouldNotAuthenticateUserException;
-use AppBundle\Exceptions\JsonRpc\CouldNotParseJsonRequestException;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
-use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcRequestException;
 use PropertyBundle\Exceptions\TypeNotFoundException;
 use PropertyBundle\Service\Type\Mapper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
+use Throwable;
 
 /**
  * @Route(service="type_controller")
@@ -32,25 +28,11 @@ class TypeController extends BaseController
      */
     public function requestHandler(Request $httpRequest)
     {
-        $id = null;
         try {
-            list($id, $userId, $method, $parameters) = $this->prepareRequest($httpRequest);
-
-            $jsonRpcResponse = Response::success($id, $this->invoke($userId, $method, $parameters));
-        } catch (CouldNotParseJsonRequestException $ex) {
-            $jsonRpcResponse = Response::failure($id, new Error(self::PARSE_ERROR, $ex->getMessage()));
-        } catch (InvalidJsonRpcRequestException $ex) {
-            $jsonRpcResponse = Response::failure($id, new Error(self::INVALID_REQUEST, $ex->getMessage()));
-        } catch (InvalidJsonRpcMethodException $ex) {
-            $jsonRpcResponse = Response::failure($id, new Error(self::METHOD_NOT_FOUND, $ex->getMessage()));
-        } catch (InvalidArgumentException $ex) {
-            $jsonRpcResponse = Response::failure($id, new Error(self::INVALID_PARAMS, $ex->getMessage()));
-        } catch (CouldNotAuthenticateUserException $ex) {
-            $jsonRpcResponse = Response::failure($id, new Error(self::USER_NOT_AUTHENTICATED, $ex->getMessage()));
-        } catch (TypeNotFoundException $ex) {
-            $jsonRpcResponse = Response::failure($id, new Error(self::TYPE_NOT_FOUND, $ex->getMessage()));
-        } catch (Exception $ex) {
-            $jsonRpcResponse = Response::failure($id, new Error(self::INTERNAL_ERROR, $ex->getMessage()));
+            list($userId, $method, $parameters) = $this->prepareRequest($httpRequest);
+            $jsonRpcResponse = Response::success($this->invoke($userId, $method, $parameters));
+        } catch (Throwable $throwable) {
+            $jsonRpcResponse = $this->throwable($throwable, $httpRequest);
         }
 
         return $this->createResponse($jsonRpcResponse);

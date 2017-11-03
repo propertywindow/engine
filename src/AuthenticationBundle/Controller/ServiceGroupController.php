@@ -6,17 +6,13 @@ use AppBundle\Controller\BaseController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use AuthenticationBundle\Exceptions\ServiceNotFoundException;
 use AuthenticationBundle\Service\ServiceGroup\Mapper;
-use Exception;
 use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use AppBundle\Models\JsonRpc\Error;
 use AppBundle\Models\JsonRpc\Response;
-use AppBundle\Exceptions\CouldNotAuthenticateUserException;
-use AppBundle\Exceptions\JsonRpc\CouldNotParseJsonRequestException;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
-use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcRequestException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
+use Throwable;
 
 /**
  * @Route(service="service_group_controller")
@@ -32,25 +28,11 @@ class ServiceGroupController extends BaseController
      */
     public function requestHandler(Request $httpRequest)
     {
-        $id = null;
         try {
-            list($id, $userId, $method, $parameters) = $this->prepareRequest($httpRequest);
-
-            $jsonRpcResponse = Response::success($id, $this->invoke($userId, $method, $parameters));
-        } catch (CouldNotParseJsonRequestException $ex) {
-            $jsonRpcResponse = Response::failure($id, new Error(self::PARSE_ERROR, $ex->getMessage()));
-        } catch (InvalidJsonRpcRequestException $ex) {
-            $jsonRpcResponse = Response::failure($id, new Error(self::INVALID_REQUEST, $ex->getMessage()));
-        } catch (InvalidJsonRpcMethodException $ex) {
-            $jsonRpcResponse = Response::failure($id, new Error(self::METHOD_NOT_FOUND, $ex->getMessage()));
-        } catch (InvalidArgumentException $ex) {
-            $jsonRpcResponse = Response::failure($id, new Error(self::INVALID_PARAMS, $ex->getMessage()));
-        } catch (CouldNotAuthenticateUserException $ex) {
-            $jsonRpcResponse = Response::failure($id, new Error(self::USER_NOT_AUTHENTICATED, $ex->getMessage()));
-        } catch (ServiceNotFoundException $ex) {
-            $jsonRpcResponse = Response::failure($id, new Error(self::SERVICE_NOT_FOUND, $ex->getMessage()));
-        } catch (Exception $ex) {
-            $jsonRpcResponse = Response::failure($id, new Error(self::INTERNAL_ERROR, $ex->getMessage()));
+            list($userId, $method, $parameters) = $this->prepareRequest($httpRequest);
+            $jsonRpcResponse = Response::success($this->invoke($userId, $method, $parameters));
+        } catch (Throwable $throwable) {
+            $jsonRpcResponse = $this->throwable($throwable, $httpRequest);
         }
 
         return $this->createResponse($jsonRpcResponse);
@@ -94,8 +76,9 @@ class ServiceGroupController extends BaseController
         }
 
         $id           = (int)$parameters['id'];
+        $user         = $this->userService->getUser($userId);
         $serviceGroup = $this->serviceGroupService->getServiceGroup($id);
-        $userSettings = $this->userSettingsService->getSettings($userId);
+        $userSettings = $this->userSettingsService->getSettings($user);
 
         return Mapper::fromServiceGroup($userSettings->getLanguage(), $serviceGroup);
     }
@@ -109,7 +92,8 @@ class ServiceGroupController extends BaseController
      */
     private function getServiceGroups(int $userId)
     {
-        $userSettings = $this->userSettingsService->getSettings($userId);
+        $user         = $this->userService->getUser($userId);
+        $userSettings = $this->userSettingsService->getSettings($user);
 
         return Mapper::fromServiceGroups($userSettings->getLanguage(), ...
             $this->serviceGroupService->getServiceGroups());
