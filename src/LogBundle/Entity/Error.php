@@ -46,9 +46,9 @@ class Error
     /**
      * @var array
      *
-     * @ORM\Column(name="parameters", type="array")
+     * @ORM\Column(name="parameters", type="array", nullable=true)
      */
-    private $parameters;
+    private $parameters = [];
 
 
     /**

@@ -85,7 +85,7 @@ class SlackService extends AbstractLogger
         }
 
         $this->channel = $this->determineChannel($level);
-        $parsedMessage = $this->parseMessage($message, $context);
+        $parsedMessage = $this->parseMessage(urlencode($message), $context);
 
         $attachment = Attachment::create()
                                 ->color($this->determineColor($level))
@@ -167,12 +167,12 @@ class SlackService extends AbstractLogger
             case 'error':
             case 'debug':
             case 'warning':
-                return 'error';
+                return '#errors';
             case 'notice':
             case 'info':
-                return 'info';
+                return '#info';
             default:
-                return 'error';
+                return '#errors';
         }
     }
 

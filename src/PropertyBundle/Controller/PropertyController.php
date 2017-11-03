@@ -243,7 +243,7 @@ class PropertyController extends BaseController
             $this->get('jms_serializer')->serialize($property, 'json')
         );
 
-        $this->slackService->notice(
+        $this->slackService->info(
             $user->getAgent()->getAgentGroup()->getName().
             ' ('.$user->getFirstName().
             ' '.$user->getLastName().
