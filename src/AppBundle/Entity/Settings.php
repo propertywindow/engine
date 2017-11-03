@@ -64,13 +64,6 @@ class Settings
     private $slackUsername;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="slack_channel", type="string", length=255)
-     */
-    private $slackChannel;
-
-    /**
      * Get id
      *
      * @return int
@@ -222,29 +215,5 @@ class Settings
     public function getSlackUsername()
     {
         return $this->slackUsername;
-    }
-
-    /**
-     * Set slackChannel
-     *
-     * @param string $slackChannel
-     *
-     * @return Settings
-     */
-    public function setSlackChannel($slackChannel)
-    {
-        $this->slackChannel = $slackChannel;
-
-        return $this;
-    }
-
-    /**
-     * Get slackChannel
-     *
-     * @return string
-     */
-    public function getSlackChannel()
-    {
-        return $this->slackChannel;
     }
 }

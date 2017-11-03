@@ -52,7 +52,6 @@ class SlackService extends AbstractLogger
         $settings = $settingsService->getSettings();
 
         $this->hookUri      = $settings->getSlackURL();
-        $this->channel      = $settings->getSlackChannel();
         $this->name         = $settings->getSlackUsername();
         $this->slackEnabled = $settings->getSlackEnabled();
         $this->iconUrl      = null;
@@ -85,6 +84,7 @@ class SlackService extends AbstractLogger
             return;
         }
 
+        $this->channel = $this->determineChannel($level);
         $parsedMessage = $this->parseMessage($message, $context);
 
         $attachment = Attachment::create()
@@ -150,6 +150,29 @@ class SlackService extends AbstractLogger
             case 'debug':
             default:
                 return '#90CAF9';
+        }
+    }
+
+    /**
+     * @param string $level
+     *
+     * @return string
+     */
+    protected function determineChannel($level)
+    {
+        switch ($level) {
+            case 'emergency':
+            case 'alert':
+            case 'critical':
+            case 'error':
+            case 'debug':
+            case 'warning':
+                return 'error';
+            case 'notice':
+            case 'info':
+                return 'info';
+            default:
+                return 'error';
         }
     }
 

@@ -243,7 +243,12 @@ class PropertyController extends BaseController
             $this->get('jms_serializer')->serialize($property, 'json')
         );
 
-        $this->slackService->info($user->getAgent()->getAgentGroup()->getName().' added a new property: #'.$propertyId);
+        $this->slackService->notice(
+            $user->getAgent()->getAgentGroup()->getName().
+            ' ('.$user->getFirstName().
+            ' '.$user->getLastName().
+            ') added a new property: #'.$propertyId
+        );
 
         // todo: also insert Details, Gallery, GeneralNotes
         // todo: create data folder
