@@ -22,6 +22,10 @@ conversation:
     resource: "@ConversationBundle/Controller/"
     type:     annotation
 
+property_alert:
+    resource: "@PropertyAlertBundle/Controller/"
+    type:     annotation
+
 transparency:
     resource: "@TransparencyBundle/Controller/"
     type:     annotation
@@ -41,8 +45,3 @@ invoice:
     resource: "@InvoiceBundle/Controller/"
     type:     annotation
     prefix:   /invoice
-
-email_alert:
-    resource: "@EmailAlertBundle/Controller/"
-    type:     annotation
-    prefix:   /email_alert

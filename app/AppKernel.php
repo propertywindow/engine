@@ -24,7 +24,7 @@ class AppKernel extends Kernel
             new JMS\SerializerBundle\JMSSerializerBundle(),
             new AppBundle\AppBundle(),
             new PropertyBundle\PropertyBundle(),
-            new EmailAlertBundle\EmailAlertBundle(),
+            new PropertyAlertBundle\PropertyAlertBundle(),
             new InvoiceBundle\InvoiceBundle(),
             new OfferBundle\OfferBundle(),
             new AppointmentBundle\AppointmentBundle(),

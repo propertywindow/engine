@@ -1,17 +1,17 @@
 <?php declare(strict_types=1);
 
-namespace EmailAlertBundle\Entity;
+namespace PropertyAlertBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Alert
+ * Application
  *
- * @ORM\Table(name="email_alert")
- * @ORM\Entity(repositoryClass="EmailAlertBundle\Repository\AlertRepository")
+ * @ORM\Table(name="alert_application")
+ * @ORM\Entity(repositoryClass="PropertyAlertBundle\Repository\ApplicationRepository")
  * @ORM\HasLifecycleCallbacks
  */
-class Alert
+class Application
 {
     /**
      * @var int
@@ -23,18 +23,10 @@ class Alert
     private $id;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="applicant_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="PropertyAlertBundle\Entity\Applicant")
+     * @ORM\JoinColumn(name="applicant_id", referencedColumnName="id", nullable=true)
      */
-    private $applicantId;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="agent_group_id", type="integer")
-     */
-    private $agentGroupId;
+    protected $applicant;
 
     /**
      * @var string
@@ -117,51 +109,27 @@ class Alert
     }
 
     /**
-     * Set applicantId
+     * Set applicant
      *
-     * @param integer $applicantId
+     * @param Applicant $applicant
      *
-     * @return Alert
+     * @return Application
      */
-    public function setApplicantId($applicantId)
+    public function setApplicant(Applicant $applicant = null)
     {
-        $this->applicantId = $applicantId;
+        $this->applicant = $applicant;
 
         return $this;
     }
 
     /**
-     * Get applicantId
+     * Get applicant
      *
-     * @return int
+     * @return Applicant
      */
-    public function getApplicantId()
+    public function getApplicant()
     {
-        return $this->applicantId;
-    }
-
-    /**
-     * Set agentGroupId
-     *
-     * @param integer $agentGroupId
-     *
-     * @return Alert
-     */
-    public function setAgentGroupId($agentGroupId)
-    {
-        $this->agentGroupId = $agentGroupId;
-
-        return $this;
-    }
-
-    /**
-     * Get agentGroupId
-     *
-     * @return int
-     */
-    public function getAgentGroupId()
-    {
-        return $this->agentGroupId;
+        return $this->applicant;
     }
 
     /**
@@ -169,7 +137,7 @@ class Alert
      *
      * @param string $kind
      *
-     * @return Alert
+     * @return Application
      */
     public function setKind($kind)
     {
@@ -193,7 +161,7 @@ class Alert
      *
      * @param string $postcode
      *
-     * @return Alert
+     * @return Application
      */
     public function setPostcode($postcode)
     {
@@ -217,7 +185,7 @@ class Alert
      *
      * @param integer $distance
      *
-     * @return Alert
+     * @return Application
      */
     public function setDistance($distance)
     {
@@ -241,7 +209,7 @@ class Alert
      *
      * @param integer $minPrice
      *
-     * @return Alert
+     * @return Application
      */
     public function setMinPrice($minPrice)
     {
@@ -265,7 +233,7 @@ class Alert
      *
      * @param integer $maxPrice
      *
-     * @return Alert
+     * @return Application
      */
     public function setMaxPrice($maxPrice)
     {
@@ -289,7 +257,7 @@ class Alert
      *
      * @param integer $subType
      *
-     * @return Alert
+     * @return Application
      */
     public function setSubType($subType)
     {
@@ -313,7 +281,7 @@ class Alert
      *
      * @param integer $rooms
      *
-     * @return Alert
+     * @return Application
      */
     public function setRooms($rooms)
     {
@@ -337,7 +305,7 @@ class Alert
      *
      * @param boolean $terms
      *
-     * @return Alert
+     * @return Application
      */
     public function setTerms($terms)
     {

@@ -1,14 +1,15 @@
 <?php declare(strict_types=1);
 
-namespace EmailAlertBundle\Entity;
+namespace PropertyAlertBundle\Entity;
 
+use AgentBundle\Entity\AgentGroup;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Applicant
  *
- * @ORM\Table(name="email_applicant")
- * @ORM\Entity(repositoryClass="EmailAlertBundle\Repository\ApplicantRepository")
+ * @ORM\Table(name="alert_applicant")
+ * @ORM\Entity(repositoryClass="PropertyAlertBundle\Repository\ApplicantRepository")
  * @ORM\HasLifecycleCallbacks
  */
 class Applicant
@@ -23,6 +24,12 @@ class Applicant
     private $id;
 
     /**
+     * @ORM\ManyToOne(targetEntity="AgentBundle\Entity\AgentGroup")
+     * @ORM\JoinColumn(name="agent_group_id", referencedColumnName="id", nullable=true)
+     */
+    protected $agentGroup;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
@@ -35,6 +42,13 @@ class Applicant
      * @ORM\Column(name="email", type="string", length=255)
      */
     private $email;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="phone", type="string", length=20)
+     */
+    private $phone;
 
     /**
      * @var bool
@@ -65,6 +79,30 @@ class Applicant
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set agentGroup
+     *
+     * @param \AgentBundle\Entity\AgentGroup $agentGroup
+     *
+     * @return Applicant
+     */
+    public function setAgentGroup(AgentGroup $agentGroup)
+    {
+        $this->agentGroup = $agentGroup;
+
+        return $this;
+    }
+
+    /**
+     * Get agentGroup
+     *
+     * @return \AgentBundle\Entity\AgentGroup
+     */
+    public function getAgentGroup()
+    {
+        return $this->agentGroup;
     }
 
     /**
@@ -113,6 +151,30 @@ class Applicant
     public function getEmail()
     {
         return $this->email;
+    }
+
+    /**
+     * Set phone
+     *
+     * @param string $phone
+     *
+     * @return Applicant
+     */
+    public function setPhone($phone)
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+
+    /**
+     * Get phone
+     *
+     * @return string
+     */
+    public function getPhone()
+    {
+        return $this->phone;
     }
 
     /**
