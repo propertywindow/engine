@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace PropertyAlertBundle\Repository;
+namespace AlertBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use PropertyAlertBundle\Entity\Applicant;
-use PropertyAlertBundle\Entity\Application;
-use PropertyAlertBundle\Exceptions\ApplicationNotFoundException;
+use AlertBundle\Entity\Applicant;
+use AlertBundle\Entity\Application;
+use AlertBundle\Exceptions\ApplicationNotFoundException;
 
 /**
  * ApplicationRepository
@@ -40,7 +40,7 @@ class ApplicationRepository extends EntityRepository
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
                    ->select('a')
-                   ->from('PropertyAlertBundle:Application', 'a')
+                   ->from('AlertBundle:Application', 'a')
                    ->where("a.applicant = :applicant")
                    ->setParameter('applicant', $applicant)
                    ->orderBy('a.created', 'DESC');

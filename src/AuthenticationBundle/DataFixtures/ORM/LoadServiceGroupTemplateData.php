@@ -130,7 +130,7 @@ class LoadServiceGroupTemplateData extends AbstractFixture implements OrderedFix
         $manager->persist($serviceGroupTemplate);
 
         $serviceGroupTemplate = new ServiceGroupTemplate();
-        $serviceGroupTemplate->setServiceGroup($this->getReference('service_group_email_alerts'));
+        $serviceGroupTemplate->setServiceGroup($this->getReference('service_group_property_alerts'));
         $serviceGroupTemplate->setUserType($this->getReference('user_type_colleague'));
         $manager->persist($serviceGroupTemplate);
 

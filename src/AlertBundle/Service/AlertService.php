@@ -1,13 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace PropertyAlertBundle\Service;
+namespace AlertBundle\Service;
 
+use AgentBundle\Entity\AgentGroup;
 use Doctrine\ORM\EntityManagerInterface;
-use PropertyAlertBundle\Entity\Alert;
-use PropertyAlertBundle\Exceptions\AlertNotFoundException;
+use AlertBundle\Entity\Alert;
+use AlertBundle\Exceptions\AlertNotFoundException;
 
 /**
- * @package PropertyAlertBundle\Service
+ * @package AlertBundle\Service
  */
 class AlertService
 {
@@ -33,10 +34,22 @@ class AlertService
      */
     public function getAlert(int $id)
     {
-        $repository = $this->entityManager->getRepository('PropertyAlertBundle:Alert');
+        $repository = $this->entityManager->getRepository('AlertBundle:Alert');
         $alert      = $repository->findById($id);
 
         return $alert;
+    }
+
+    /**
+     * @param AgentGroup $agentGroup
+     *
+     * @return Alert[]
+     */
+    public function getAlerts(AgentGroup $agentGroup)
+    {
+        $repository = $this->entityManager->getRepository('AlertBundle:Alert');
+
+        return $repository->findByAgent($agentGroup);
     }
 
     /**

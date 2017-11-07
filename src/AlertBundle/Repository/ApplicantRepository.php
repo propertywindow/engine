@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace PropertyAlertBundle\Repository;
+namespace AlertBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use PropertyAlertBundle\Entity\Applicant;
-use PropertyAlertBundle\Exceptions\ApplicantNotFoundException;
+use AlertBundle\Entity\Applicant;
+use AlertBundle\Exceptions\ApplicantNotFoundException;
 
 /**
  * ApplicantRepository

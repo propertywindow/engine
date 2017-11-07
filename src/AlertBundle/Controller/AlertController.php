@@ -1,11 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace PropertyAlertBundle\Controller;
+namespace AlertBundle\Controller;
 
+use AlertBundle\Service\Alert\Mapper;
 use AppBundle\Controller\BaseController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use InvalidArgumentException;
-use PropertyAlertBundle\Exceptions\AlertNotFoundException;
+use AlertBundle\Exceptions\AlertNotFoundException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Response;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
@@ -14,12 +15,12 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Throwable;
 
 /**
- * @Route(service="property_alert_controller")
+ * @Route(service="alert_controller")
  */
-class PropertyAlertController extends BaseController
+class AlertController extends BaseController
 {
     /**
-     * @Route("/property_alert" , name="property_alert")
+     * @Route("/alert" , name="alert")
      *
      * @param Request $httpRequest
      *
@@ -73,10 +74,15 @@ class PropertyAlertController extends BaseController
             throw new InvalidArgumentException("No argument provided");
         }
 
-        $user = $this->userService->getUser($userId);
-        $id   = (int)$parameters['id'];
+        $id    = (int)$parameters['id'];
+        $user  = $this->userService->getUser($userId);
+        $alert = $this->alertService->getAlert($id);
 
-        return Mapper::fromActivity($this->logActivityService->getActivity($id));
+        if ($user->getAgent()->getAgentGroup() !== $alert->getApplicant()->getAgentGroup()) {
+            throw new NotAuthorizedException($userId);
+        }
+
+        return Mapper::fromAlert($alert);
     }
 
     /**
@@ -94,6 +100,6 @@ class PropertyAlertController extends BaseController
             throw new NotAuthorizedException($userId);
         }
 
-        return Mapper::fromActivities(...$this->logActivityService->getActivities($user->getAgent()));
+        return Mapper::fromAlerts(...$this->alertService->getAlerts($user->getAgent()->getAgentGroup()));
     }
 }

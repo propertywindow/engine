@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PropertyAlertBundle\Entity;
+namespace AlertBundle\Entity;
 
 use AgentBundle\Entity\AgentGroup;
 use Doctrine\ORM\Mapping as ORM;
@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Applicant
  *
  * @ORM\Table(name="alert_applicant")
- * @ORM\Entity(repositoryClass="PropertyAlertBundle\Repository\ApplicantRepository")
+ * @ORM\Entity(repositoryClass="AlertBundle\Repository\ApplicantRepository")
  * @ORM\HasLifecycleCallbacks
  */
 class Applicant
@@ -88,7 +88,7 @@ class Applicant
      *
      * @return Applicant
      */
-    public function setAgentGroup(AgentGroup $agentGroup)
+    public function setAgentGroup(AgentGroup $agentGroup = null)
     {
         $this->agentGroup = $agentGroup;
 

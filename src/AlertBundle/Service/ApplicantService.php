@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace PropertyAlertBundle\Service;
+namespace AlertBundle\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
-use PropertyAlertBundle\Entity\Applicant;
-use PropertyAlertBundle\Exceptions\ApplicantNotFoundException;
+use AlertBundle\Entity\Applicant;
+use AlertBundle\Exceptions\ApplicantNotFoundException;
 
 /**
- * @package PropertyAlertBundle\Service
+ * @package AlertBundle\Service
  */
 class ApplicantService
 {
@@ -33,7 +33,7 @@ class ApplicantService
      */
     public function getApplicant(int $id)
     {
-        $repository = $this->entityManager->getRepository('PropertyAlertBundle:Applicant');
+        $repository = $this->entityManager->getRepository('AlertBundle:Applicant');
         $applicant  = $repository->findById($id);
 
         return $applicant;

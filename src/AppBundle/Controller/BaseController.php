@@ -6,6 +6,9 @@ use AgentBundle\Service\AgentService;
 use AgentBundle\Service\AgentGroupService;
 use AgentBundle\Service\AgentSettingsService;
 use AgentBundle\Service\ClientService;
+use AlertBundle\Service\AlertService;
+use AlertBundle\Service\ApplicantService;
+use AlertBundle\Service\ApplicationService;
 use AppBundle\Exceptions\CouldNotAuthenticateUserException;
 use AppBundle\Exceptions\JsonRpc\CouldNotParseJsonRequestException;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
@@ -215,6 +218,21 @@ class BaseController extends Controller
     public $slackService;
 
     /**
+     * @var AlertService
+     */
+    public $alertService;
+
+    /**
+     * @var ApplicantService
+     */
+    public $applicantService;
+
+    /**
+     * @var ApplicationService
+     */
+    public $applicationService;
+
+    /**
      * @param Authenticator          $authenticator
      * @param SettingsService        $settingsService
      * @param AgentSettingsService   $agentSettingsService
@@ -245,6 +263,9 @@ class BaseController extends Controller
      * @param MessageService         $messageService
      * @param MailerService          $mailerService
      * @param SlackService           $slackService
+     * @param AlertService           $alertService
+     * @param ApplicantService       $applicantService
+     * @param ApplicationService     $applicationService
      */
     public function __construct(
         Authenticator $authenticator,
@@ -276,7 +297,10 @@ class BaseController extends Controller
         ConversationService $conversationService,
         MessageService $messageService,
         MailerService $mailerService,
-        SlackService $slackService
+        SlackService $slackService,
+        AlertService $alertService,
+        ApplicantService $applicantService,
+        ApplicationService $applicationService
     ) {
         $this->authenticator          = $authenticator;
         $this->settingsService        = $settingsService;
@@ -308,6 +332,9 @@ class BaseController extends Controller
         $this->messageService         = $messageService;
         $this->mailerService          = $mailerService;
         $this->slackService           = $slackService;
+        $this->alertService           = $alertService;
+        $this->applicantService       = $applicantService;
+        $this->applicationService     = $applicationService;
     }
 
     /**

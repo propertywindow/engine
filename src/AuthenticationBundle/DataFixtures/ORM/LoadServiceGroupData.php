@@ -105,11 +105,11 @@ class LoadServiceGroupData extends AbstractFixture implements OrderedFixtureInte
         $manager->persist($serviceGroup);
 
         $serviceGroup = new ServiceGroup();
-        $serviceGroup->setEn('Email Alerts');
-        $serviceGroup->setNl('Email Notificaties');
+        $serviceGroup->setEn('Property Alerts');
+        $serviceGroup->setNl('Property Notificaties');
         $serviceGroup->setIcon('zmdi zmdi-alarm');
         $serviceGroup->setUrl('/email-alerts');
-        $this->addReference('service_group_email_alerts', $serviceGroup);
+        $this->addReference('service_group_property_alerts', $serviceGroup);
         $manager->persist($serviceGroup);
 
         $serviceGroup = new ServiceGroup();

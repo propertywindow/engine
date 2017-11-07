@@ -22,17 +22,16 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new JMS\SerializerBundle\JMSSerializerBundle(),
+            new AgentBundle\AgentBundle(),
             new AppBundle\AppBundle(),
+            new AppointmentBundle\AppointmentBundle(),
+            new AlertBundle\AlertBundle(),
+            new AuthenticationBundle\AuthenticationBundle(),
             new PropertyBundle\PropertyBundle(),
-            new PropertyAlertBundle\PropertyAlertBundle(),
             new InvoiceBundle\InvoiceBundle(),
             new OfferBundle\OfferBundle(),
-            new AppointmentBundle\AppointmentBundle(),
             new LogBundle\LogBundle(),
             new ConversationBundle\ConversationBundle(),
-            new AuthenticationBundle\AuthenticationBundle(),
-            new TransparencyBundle\TransparencyBundle(),
-            new AgentBundle\AgentBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

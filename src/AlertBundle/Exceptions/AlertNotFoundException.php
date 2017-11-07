@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace PropertyAlertBundle\Exceptions;
+namespace AlertBundle\Exceptions;
 
 use AppBundle\Exceptions\Exception;
 
 /**
- * @package PropertyAlertBundle\Exceptions
+ * @package AlertBundle\Exceptions
  */
 class AlertNotFoundException extends Exception
 {

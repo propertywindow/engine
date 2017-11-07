@@ -1,14 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace PropertyAlertBundle\Service;
+namespace AlertBundle\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
-use PropertyAlertBundle\Entity\Applicant;
-use PropertyAlertBundle\Entity\Application;
-use PropertyAlertBundle\Exceptions\ApplicationNotFoundException;
+use AlertBundle\Entity\Applicant;
+use AlertBundle\Entity\Application;
+use AlertBundle\Exceptions\ApplicationNotFoundException;
 
 /**
- * @package PropertyAlertBundle\Service
+ * @package AlertBundle\Service
  */
 class ApplicationService
 {
@@ -34,7 +34,7 @@ class ApplicationService
      */
     public function getApplication(int $id)
     {
-        $repository  = $this->entityManager->getRepository('PropertyAlertBundle:Application');
+        $repository  = $this->entityManager->getRepository('AlertBundle:Application');
         $application = $repository->findById($id);
 
         return $application;
@@ -49,7 +49,7 @@ class ApplicationService
      */
     public function getApplicationFromApplicant(Applicant $applicant)
     {
-        $repository  = $this->entityManager->getRepository('PropertyAlertBundle:Application');
+        $repository  = $this->entityManager->getRepository('AlertBundle:Application');
         $application = $repository->findByApplicant($applicant);
 
         return $application;

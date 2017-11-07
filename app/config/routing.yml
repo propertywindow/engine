@@ -22,14 +22,9 @@ conversation:
     resource: "@ConversationBundle/Controller/"
     type:     annotation
 
-property_alert:
-    resource: "@PropertyAlertBundle/Controller/"
+alert:
+    resource: "@AlertBundle/Controller/"
     type:     annotation
-
-transparency:
-    resource: "@TransparencyBundle/Controller/"
-    type:     annotation
-    prefix:   /transparency
 
 appointment:
     resource: "@AppointmentBundle/Controller/"

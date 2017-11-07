@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PropertyAlertBundle\Entity;
+namespace AlertBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use PropertyBundle\Entity\Property;
@@ -9,7 +9,7 @@ use PropertyBundle\Entity\Property;
  * Alert
  *
  * @ORM\Table(name="alert")
- * @ORM\Entity(repositoryClass="PropertyAlertBundle\Repository\AlertRepository")
+ * @ORM\Entity(repositoryClass="AlertBundle\Repository\AlertRepository")
  * @ORM\HasLifecycleCallbacks
  */
 class Alert
@@ -24,7 +24,7 @@ class Alert
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="PropertyAlertBundle\Entity\Applicant")
+     * @ORM\ManyToOne(targetEntity="AlertBundle\Entity\Applicant")
      * @ORM\JoinColumn(name="applicant_id", referencedColumnName="id", nullable=true)
      */
     protected $applicant;

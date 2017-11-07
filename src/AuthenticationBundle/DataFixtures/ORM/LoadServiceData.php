@@ -684,14 +684,14 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $this->addReference('service_delete_colleague', $service);
         $manager->persist($service);
 
-        // Email Alerts
+        // Property Alerts
 
         $service = new Service();
         $service->setEn('View Applicant');
         $service->setNl('Bekijk Aanvrager');
         $service->setIcon('zmdi zmdi-search');
         $service->setVisible(false);
-        $service->setServiceGroup($this->getReference('service_group_email_alerts'));
+        $service->setServiceGroup($this->getReference('service_group_property_alerts'));
         $this->addReference('service_view_applicant', $service);
         $manager->persist($service);
 
@@ -700,7 +700,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setNl('Aanvrager toevoegen');
         $service->setIcon('zmdi zmdi-plus');
         $service->setVisible(false);
-        $service->setServiceGroup($this->getReference('service_group_email_alerts'));
+        $service->setServiceGroup($this->getReference('service_group_property_alerts'));
         $this->addReference('service_add_applicant', $service);
         $manager->persist($service);
 
@@ -709,7 +709,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setNl('Bewerk Aanvrager');
         $service->setIcon('zmdi zmdi-edit');
         $service->setVisible(false);
-        $service->setServiceGroup($this->getReference('service_group_email_alerts'));
+        $service->setServiceGroup($this->getReference('service_group_property_alerts'));
         $this->addReference('service_edit_applicant', $service);
         $manager->persist($service);
 
@@ -718,7 +718,7 @@ class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface
         $service->setNl('Verwijder Aanvrager');
         $service->setIcon('zmdi zmdi-delete');
         $service->setVisible(false);
-        $service->setServiceGroup($this->getReference('service_group_email_alerts'));
+        $service->setServiceGroup($this->getReference('service_group_property_alerts'));
         $this->addReference('service_delete_applicant', $service);
         $manager->persist($service);
 
