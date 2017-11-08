@@ -96,10 +96,6 @@ class AlertController extends BaseController
     {
         $user = $this->userService->getUser($userId);
 
-        if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
-            throw new NotAuthorizedException($userId);
-        }
-
         return Mapper::fromAlerts(...$this->alertService->getAlerts($user->getAgent()->getAgentGroup()));
     }
 }
