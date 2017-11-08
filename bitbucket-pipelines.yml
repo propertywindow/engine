@@ -15,16 +15,6 @@ pipelines:
            - composer install --prefer-source --no-interaction --dev
            - vendor/bin/phpcs --standard=PSR2 src/ tests/
            - vendor/bin/phpunit
-   deployment-to-prod:
-     - step:
-         caches:
-           - composer
-         script:
-           - apt-get update && apt-get install -y unzip git
-           - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-           - composer install --prefer-source --no-interaction
-           - apt-get -qq install git-ftp
-           - git ftp push --user $FTP_USERNAME --passwd $FTP_PASSWORD sftp://engine.propertywindow.nl/engine.propertywindow.nl
   branches:
       master:
         - step:
