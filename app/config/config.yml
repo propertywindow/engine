@@ -4,14 +4,13 @@ imports:
     - { resource: services.yml }
     - { resource: "@AppBundle/Resources/config/services.yml" }
     - { resource: "@PropertyBundle/Resources/config/services.yml" }
-    - { resource: "@EmailAlertBundle/Resources/config/services.yml" }
+    - { resource: "@AlertBundle/Resources/config/services.yml" }
     - { resource: "@InvoiceBundle/Resources/config/services.yml" }
     - { resource: "@OfferBundle/Resources/config/services.yml" }
     - { resource: "@AppointmentBundle/Resources/config/services.yml" }
     - { resource: "@LogBundle/Resources/config/services.yml" }
     - { resource: "@ConversationBundle/Resources/config/services.yml" }
     - { resource: "@AuthenticationBundle/Resources/config/services.yml" }
-    - { resource: "@TransparencyBundle/Resources/config/services.yml" }
     - { resource: "@AgentBundle/Resources/config/services.yml" }
 
 parameters:

@@ -1,17 +1,20 @@
 <?php declare(strict_types=1);
 
-namespace EmailAlertBundle\Entity;
+namespace AlertBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use PropertyBundle\Entity\Kind;
+use PropertyBundle\Entity\SubType;
+use PropertyBundle\Entity\Terms;
 
 /**
- * Alert
+ * Application
  *
- * @ORM\Table(name="email_alert")
- * @ORM\Entity(repositoryClass="EmailAlertBundle\Repository\AlertRepository")
+ * @ORM\Table(name="alert_application")
+ * @ORM\Entity(repositoryClass="AlertBundle\Repository\ApplicationRepository")
  * @ORM\HasLifecycleCallbacks
  */
-class Alert
+class Application
 {
     /**
      * @var int
@@ -23,25 +26,16 @@ class Alert
     private $id;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="applicant_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="AlertBundle\Entity\Applicant")
+     * @ORM\JoinColumn(name="applicant_id", referencedColumnName="id", nullable=true)
      */
-    private $applicantId;
+    protected $applicant;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="agent_group_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="PropertyBundle\Entity\Kind")
+     * @ORM\JoinColumn(name="kind_id", referencedColumnName="id", nullable=true)
      */
-    private $agentGroupId;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="kind", type="string", length=10)
-     */
-    private $kind;
+    protected $kind;
 
     /**
      * @var string
@@ -72,11 +66,10 @@ class Alert
     private $maxPrice = 100000;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="sub_type", type="integer")
+     * @ORM\ManyToOne(targetEntity="PropertyBundle\Entity\SubType")
+     * @ORM\JoinColumn(name="sub_type_id", referencedColumnName="id", nullable=true)
      */
-    private $subType;
+    protected $subType;
 
     /**
      * @var int
@@ -86,11 +79,17 @@ class Alert
     private $rooms = 0;
 
     /**
+     * @ORM\ManyToOne(targetEntity="PropertyBundle\Entity\Terms")
+     * @ORM\JoinColumn(name="terms_id", referencedColumnName="id", nullable=true)
+     */
+    protected $terms;
+
+    /**
      * @var bool
      *
-     * @ORM\Column(name="terms", type="boolean")
+     * @ORM\Column(name="active", type="boolean")
      */
-    private $terms = true;
+    private $active = true;
 
     /**
      * @var \DateTime $created
@@ -117,61 +116,37 @@ class Alert
     }
 
     /**
-     * Set applicantId
+     * Set applicant
      *
-     * @param integer $applicantId
+     * @param Applicant $applicant
      *
-     * @return Alert
+     * @return Application
      */
-    public function setApplicantId($applicantId)
+    public function setApplicant(Applicant $applicant = null)
     {
-        $this->applicantId = $applicantId;
+        $this->applicant = $applicant;
 
         return $this;
     }
 
     /**
-     * Get applicantId
+     * Get applicant
      *
-     * @return int
+     * @return Applicant
      */
-    public function getApplicantId()
+    public function getApplicant()
     {
-        return $this->applicantId;
-    }
-
-    /**
-     * Set agentGroupId
-     *
-     * @param integer $agentGroupId
-     *
-     * @return Alert
-     */
-    public function setAgentGroupId($agentGroupId)
-    {
-        $this->agentGroupId = $agentGroupId;
-
-        return $this;
-    }
-
-    /**
-     * Get agentGroupId
-     *
-     * @return int
-     */
-    public function getAgentGroupId()
-    {
-        return $this->agentGroupId;
+        return $this->applicant;
     }
 
     /**
      * Set kind
      *
-     * @param string $kind
+     * @param \PropertyBundle\Entity\Kind $kind
      *
-     * @return Alert
+     * @return Application
      */
-    public function setKind($kind)
+    public function setKind(Kind $kind = null)
     {
         $this->kind = $kind;
 
@@ -181,7 +156,7 @@ class Alert
     /**
      * Get kind
      *
-     * @return string
+     * @return Applicant
      */
     public function getKind()
     {
@@ -193,7 +168,7 @@ class Alert
      *
      * @param string $postcode
      *
-     * @return Alert
+     * @return Application
      */
     public function setPostcode($postcode)
     {
@@ -217,7 +192,7 @@ class Alert
      *
      * @param integer $distance
      *
-     * @return Alert
+     * @return Application
      */
     public function setDistance($distance)
     {
@@ -241,7 +216,7 @@ class Alert
      *
      * @param integer $minPrice
      *
-     * @return Alert
+     * @return Application
      */
     public function setMinPrice($minPrice)
     {
@@ -265,7 +240,7 @@ class Alert
      *
      * @param integer $maxPrice
      *
-     * @return Alert
+     * @return Application
      */
     public function setMaxPrice($maxPrice)
     {
@@ -287,11 +262,11 @@ class Alert
     /**
      * Set subType
      *
-     * @param integer $subType
+     * @param \PropertyBundle\Entity\SubType $subType
      *
-     * @return Alert
+     * @return Application
      */
-    public function setSubType($subType)
+    public function setSubType(SubType $subType = null)
     {
         $this->subType = $subType;
 
@@ -301,7 +276,7 @@ class Alert
     /**
      * Get subType
      *
-     * @return int
+     * @return Applicant
      */
     public function getSubType()
     {
@@ -313,7 +288,7 @@ class Alert
      *
      * @param integer $rooms
      *
-     * @return Alert
+     * @return Application
      */
     public function setRooms($rooms)
     {
@@ -335,11 +310,11 @@ class Alert
     /**
      * Set terms
      *
-     * @param boolean $terms
+     * @param \PropertyBundle\Entity\Terms $terms
      *
-     * @return Alert
+     * @return Application
      */
-    public function setTerms($terms)
+    public function setTerms(Terms $terms = null)
     {
         $this->terms = $terms;
 
@@ -349,11 +324,35 @@ class Alert
     /**
      * Get terms
      *
-     * @return bool
+     * @return Applicant
      */
     public function getTerms()
     {
         return $this->terms;
+    }
+
+    /**
+     * Set active
+     *
+     * @param boolean $active
+     *
+     * @return Application
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
+
+        return $this;
+    }
+
+    /**
+     * Get active
+     *
+     * @return bool
+     */
+    public function getActive()
+    {
+        return $this->active;
     }
 
     /**

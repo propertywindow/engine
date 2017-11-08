@@ -225,7 +225,7 @@ class LoadServiceGroupMapData extends AbstractFixture implements OrderedFixtureI
 
             $serviceGroupMap = new ServiceGroupMap();
             $serviceGroupMap->setUser($this->getReference('user_annan_colleague_' . $i));
-            $serviceGroupMap->setServiceGroup($this->getReference('service_group_email_alerts'));
+            $serviceGroupMap->setServiceGroup($this->getReference('service_group_property_alerts'));
             $manager->persist($serviceGroupMap);
 
             $serviceGroupMap = new ServiceGroupMap();
