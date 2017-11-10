@@ -30,7 +30,6 @@ class LoginController extends BaseController
      */
     public function requestHandler(Request $httpRequest)
     {
-        die('test');
         try {
             list($method, $parameters) = $this->prepareRequest($httpRequest, false);
             $jsonRpcResponse = Response::success($this->invoke($method, $httpRequest->getClientIp(), $parameters));
