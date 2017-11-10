@@ -4,3 +4,8 @@ docker
 phpunit.xml.dist
 README.md
 docker-compose.yml
+exclude-list.txt
+.git
+.gitignore
+results
+tests
