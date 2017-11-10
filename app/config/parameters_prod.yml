@@ -1,5 +1,5 @@
 parameters:
-    database_host: localhost
+    database_host: propertywindow.nl
     database_port: null
     database_name: propertywindow
     database_user: propertywindow
