@@ -1,0 +1,7 @@
+parameters:
+    database_host: localhost
+    database_port: null
+    database_name: propertywindow
+    database_user: propertywindow
+    database_password: propertywindow
+    secret: 2a1m5Ww34Hs23dsmQ
