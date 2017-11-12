@@ -25,9 +25,16 @@ class EmailTemplateCategory
     /**
      * @var string
      *
-     * @ORM\Column(name="category", type="string", length=255)
+     * @ORM\Column(name="en", type="string", length=255)
      */
-    private $category;
+    private $en;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nl", type="string", length=255)
+     */
+    private $nl;
 
     /**
      * @var bool
@@ -61,27 +68,51 @@ class EmailTemplateCategory
     }
 
     /**
-     * Set category
+     * Set en
      *
-     * @param string $category
+     * @param string $en
      *
      * @return EmailTemplateCategory
      */
-    public function setCategory($category)
+    public function setEn($en)
     {
-        $this->category = $category;
+        $this->en = $en;
 
         return $this;
     }
 
     /**
-     * Get category
+     * Get en
      *
      * @return string
      */
-    public function getCategory()
+    public function getEn()
     {
-        return $this->category;
+        return $this->en;
+    }
+
+    /**
+     * Set nl
+     *
+     * @param string $nl
+     *
+     * @return EmailTemplateCategory
+     */
+    public function setNl($nl)
+    {
+        $this->nl = $nl;
+
+        return $this;
+    }
+
+    /**
+     * Get nl
+     *
+     * @return string
+     */
+    public function getNl()
+    {
+        return $this->nl;
     }
 
     /**

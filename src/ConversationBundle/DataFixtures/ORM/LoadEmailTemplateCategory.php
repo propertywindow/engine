@@ -18,27 +18,30 @@ class LoadEmailTemplateCategory extends AbstractFixture implements OrderedFixtur
      */
     public function load(ObjectManager $manager)
     {
-
         $emailTemplateCategory = new EmailTemplateCategory();
-        $emailTemplateCategory->setCategory('User');
+        $emailTemplateCategory->setEn('Users');
+        $emailTemplateCategory->setNl('Gebruikers');
         $emailTemplateCategory->setActive(true);
         $this->addReference('email_template_category_user', $emailTemplateCategory);
         $manager->persist($emailTemplateCategory);
 
         $emailTemplateCategory = new EmailTemplateCategory();
-        $emailTemplateCategory->setCategory('offer');
+        $emailTemplateCategory->setEn('Offer');
+        $emailTemplateCategory->setNl('Biedingen');
         $emailTemplateCategory->setActive(true);
         $this->addReference('email_template_category_offer', $emailTemplateCategory);
         $manager->persist($emailTemplateCategory);
 
         $emailTemplateCategory = new EmailTemplateCategory();
-        $emailTemplateCategory->setCategory('viewing');
+        $emailTemplateCategory->setEn('Viewing');
+        $emailTemplateCategory->setNl('Bezichtigingen');
         $emailTemplateCategory->setActive(true);
         $this->addReference('email_template_category_viewing', $emailTemplateCategory);
         $manager->persist($emailTemplateCategory);
 
         $emailTemplateCategory = new EmailTemplateCategory();
-        $emailTemplateCategory->setCategory('appointment');
+        $emailTemplateCategory->setEn('Appointment');
+        $emailTemplateCategory->setNl('Afspreken');
         $emailTemplateCategory->setActive(true);
         $this->addReference('email_template_category_appointment', $emailTemplateCategory);
         $manager->persist($emailTemplateCategory);
