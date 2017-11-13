@@ -45,6 +45,13 @@ class Application
     private $postcode;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="country", type="string", length=2)
+     */
+    private $country;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="distance", type="integer")
@@ -185,6 +192,30 @@ class Application
     public function getPostcode()
     {
         return $this->postcode;
+    }
+
+    /**
+     * Set country
+     *
+     * @param string $country
+     *
+     * @return Application
+     */
+    public function setCountry($country)
+    {
+        $this->country = $country;
+
+        return $this;
+    }
+
+    /**
+     * Get country
+     *
+     * @return string
+     */
+    public function getCountry()
+    {
+        return $this->country;
     }
 
     /**

@@ -58,6 +58,13 @@ class Applicant
     private $protection = false;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="country", type="string", length=2)
+     */
+    private $country;
+
+    /**
      * @var \DateTime $created
      *
      * @ORM\Column(type="datetime")
@@ -199,6 +206,30 @@ class Applicant
     public function getProtection()
     {
         return $this->protection;
+    }
+
+    /**
+     * Set country
+     *
+     * @param string $country
+     *
+     * @return Applicant
+     */
+    public function setCountry($country)
+    {
+        $this->country = $country;
+
+        return $this;
+    }
+
+    /**
+     * Get country
+     *
+     * @return string
+     */
+    public function getCountry()
+    {
+        return $this->country;
     }
 
     /**
