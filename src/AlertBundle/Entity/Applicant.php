@@ -65,6 +65,13 @@ class Applicant
     private $country;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="active", type="boolean")
+     */
+    private $active = true;
+
+    /**
      * @var \DateTime $created
      *
      * @ORM\Column(type="datetime")
@@ -230,6 +237,30 @@ class Applicant
     public function getCountry()
     {
         return $this->country;
+    }
+
+    /**
+     * Set active
+     *
+     * @param boolean $active
+     *
+     * @return Applicant
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
+
+        return $this;
+    }
+
+    /**
+     * Get active
+     *
+     * @return bool
+     */
+    public function getActive()
+    {
+        return $this->active;
     }
 
     /**

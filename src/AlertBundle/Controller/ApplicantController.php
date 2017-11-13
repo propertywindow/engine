@@ -59,6 +59,8 @@ class ApplicantController extends BaseController
                 return $this->getApplicants($userId);
             case "createApplicant":
                 return $this->createApplicant($userId, $parameters);
+            case "deleteApplicant":
+                return $this->deleteApplicant($userId, $parameters);
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
@@ -146,5 +148,36 @@ class ApplicantController extends BaseController
         }
 
         return Mapper::fromApplicant($this->applicantService->createApplicant($applicant));
+    }
+
+    /**
+     * @param int   $userId
+     * @param array $parameters
+     *
+     * @throws NotAuthorizedException
+     */
+    private function deleteApplicant(int $userId, array $parameters)
+    {
+        if (!array_key_exists('id', $parameters)) {
+            throw new InvalidArgumentException("No argument provided");
+        }
+
+        $id        = (int)$parameters['id'];
+        $user      = $this->userService->getUser($userId);
+        $applicant = $this->applicantService->getApplicant($id);
+
+        if ($user->getAgent()->getAgentGroup() !== $applicant->getAgentGroup()) {
+            throw new NotAuthorizedException($userId);
+        }
+
+        $applications = $this->applicationService->getApplicationFromApplicant($applicant);
+
+        foreach ($applications as $application) {
+            $application->setActive(false);
+            $this->applicationService->updateApplication($application);
+        }
+
+        $applicant->setActive(false);
+        $this->applicantService->updateApplicant($applicant);
     }
 }
