@@ -88,7 +88,9 @@ class LoginController extends BaseController
 
             $this->blacklistService->createBlacklist($ipAddress, $attemptedUser);
 
-            throw new LoginFailedException($email);
+            return [
+                'user_id' => null,
+            ];
         }
 
         $blacklist = $this->blacklistService->checkBlacklist($ipAddress);
@@ -114,7 +116,10 @@ class LoginController extends BaseController
         $payloadJson    = json_encode($payload);
         $payloadEncoded = base64_encode($payloadJson);
 
-        return [$user->getId(), $payloadEncoded];
+        return [
+            'user_id' => $user->getId(),
+            'token'   => $payloadEncoded,
+        ];
     }
 
 
@@ -161,6 +166,10 @@ class LoginController extends BaseController
         $payloadJson    = json_encode($payload);
         $payloadEncoded = base64_encode($payloadJson);
 
-        return [$impersonate->getId(), $impersonate->getEmail(), $payloadEncoded];
+        return [
+            'user_id' => $impersonate->getId(),
+            'email'   => $impersonate->getEmail(),
+            'token'   => $payloadEncoded,
+        ];
     }
 }

@@ -436,27 +436,22 @@ class BaseController extends Controller
      * @param Throwable $throwable
      * @param Request   $httpRequest
      *
-     * @return HttpResponse
+     * @return Response
      *
      * @throws Throwable
      */
     public function throwable(Throwable $throwable, Request $httpRequest)
     {
         if ($throwable instanceof CouldNotParseJsonRequestException) {
-            $jsonRpcResponse =  Response::failure(new Error(self::PARSE_ERROR, $throwable->getMessage()));
-            return $this->createResponse($jsonRpcResponse);
+            return Response::failure(new Error(self::PARSE_ERROR, $throwable->getMessage()));
         } elseif ($throwable instanceof InvalidJsonRpcRequestException) {
-            $jsonRpcResponse =  Response::failure(new Error(self::INVALID_REQUEST, $throwable->getMessage()));
-            return $this->createResponse($jsonRpcResponse);
+            return Response::failure(new Error(self::INVALID_REQUEST, $throwable->getMessage()));
         } elseif ($throwable instanceof InvalidJsonRpcMethodException) {
-            $jsonRpcResponse =  Response::failure(new Error(self::METHOD_NOT_FOUND, $throwable->getMessage()));
-            return $this->createResponse($jsonRpcResponse);
+            return Response::failure(new Error(self::METHOD_NOT_FOUND, $throwable->getMessage()));
         } elseif ($throwable instanceof InvalidArgumentException) {
-            $jsonRpcResponse =  Response::failure(new Error(self::INVALID_PARAMS, $throwable->getMessage()));
-            return $this->createResponse($jsonRpcResponse);
+            return Response::failure(new Error(self::INVALID_PARAMS, $throwable->getMessage()));
         } elseif ($throwable instanceof CouldNotAuthenticateUserException) {
-            $jsonRpcResponse =  Response::failure(new Error(self::USER_NOT_AUTHENTICATED, $throwable->getMessage()));
-            return $this->createResponse($jsonRpcResponse);
+            return Response::failure(new Error(self::USER_NOT_AUTHENTICATED, $throwable->getMessage()));
         } elseif ($throwable instanceof Exception) {
             list($userId, $method, $parameters) = self::prepareRequest($httpRequest);
 
@@ -467,15 +462,11 @@ class BaseController extends Controller
                 $parameters
             );
 
-            $jsonRpcResponse = Response::failure(new Error(self::EXCEPTION_ERROR, $throwable->getMessage()));
-
-            return $this->createResponse($jsonRpcResponse);
+            return Response::failure(new Error(self::EXCEPTION_ERROR, $throwable->getMessage()));
         }
 
         $this->slackService->critical($throwable->getMessage());
 
-        $jsonRpcResponse=  Response::failure(new Error(self::INTERNAL_ERROR, $throwable->getMessage()));
-
-        return $this->createResponse($jsonRpcResponse);
+        return Response::failure(new Error(self::INTERNAL_ERROR, $throwable->getMessage()));
     }
 }
