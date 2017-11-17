@@ -43,7 +43,7 @@ class ApplicationService
     /**
      * @param Applicant $applicant
      *
-     * @return Application $application
+     * @return Application[] $application
      *
      * @throws ApplicationNotFoundException
      */

@@ -54,6 +54,8 @@ class LoginController extends BaseController
         switch ($method) {
             case "login":
                 return $this->login($ipAddress, $parameters);
+            case "verify":
+                return $this->verify($parameters);
             case "impersonate":
                 return $this->impersonate($parameters);
         }
@@ -162,5 +164,40 @@ class LoginController extends BaseController
         $payloadEncoded = base64_encode($payloadJson);
 
         return [$impersonate->getId(), $impersonate->getEmail(), $payloadEncoded];
+    }
+
+    /**
+     * @param array $parameters
+     *
+     * @return array
+     *
+     * @throws NotAuthorizedException
+     */
+    private function verify(array $parameters)
+    {
+        if (!array_key_exists('email', $parameters)) {
+            throw new InvalidArgumentException("No email argument provided");
+        }
+        if (!array_key_exists('password', $parameters)) {
+            throw new InvalidArgumentException("No password argument provided");
+        }
+
+        $email    = (string)$parameters['email'];
+        $password = md5((string)$parameters['password']);
+        $user     = $this->userService->login($email, $password);
+
+        $timestamp      = time();
+        $secret         = $user->getPassword();
+        $signature      = hash_hmac("sha1", $timestamp."-".$user->getId(), $secret);
+        $payload        = [
+            "user"      => $user->getId(),
+            "password"  => $secret,
+            "timestamp" => $timestamp,
+            "signature" => $signature,
+        ];
+        $payloadJson    = json_encode($payload);
+        $payloadEncoded = base64_encode($payloadJson);
+
+        return [$user->getId(), $payloadEncoded];
     }
 }

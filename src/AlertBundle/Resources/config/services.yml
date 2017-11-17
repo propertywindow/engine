@@ -11,4 +11,7 @@ services:
   alert_controller:
       class: AlertBundle\Controller\AlertController
       autowire: true
+  applicant_controller:
+      class: AlertBundle\Controller\ApplicantController
+      autowire: true
 

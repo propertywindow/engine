@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace AuthenticationBundle\Exceptions;
+namespace AlertBundle\Exceptions;
 
 use AppBundle\Exceptions\Exception;
 
 /**
- * @package AuthenticationBundle\Exceptions
+ * @package AlertBundle\Exceptions
  */
-class UserAlreadyExistException extends Exception
+class ApplicantAlreadyExistException extends Exception
 {
     /**
      * @var string
@@ -21,6 +21,6 @@ class UserAlreadyExistException extends Exception
     {
         $this->email = $email;
 
-        parent::__construct(sprintf("User with email: %s already exists", $email));
+        parent::__construct(sprintf("Applicant with email: %s already exists", $email));
     }
 }

@@ -46,7 +46,7 @@ class Applicant
     /**
      * @var string
      *
-     * @ORM\Column(name="phone", type="string", length=20)
+     * @ORM\Column(name="phone", type="string", length=20, nullable=true)
      */
     private $phone;
 
@@ -56,6 +56,20 @@ class Applicant
      * @ORM\Column(name="protection", type="boolean")
      */
     private $protection = false;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="country", type="string", length=2)
+     */
+    private $country;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="active", type="boolean")
+     */
+    private $active = true;
 
     /**
      * @var \DateTime $created
@@ -199,6 +213,54 @@ class Applicant
     public function getProtection()
     {
         return $this->protection;
+    }
+
+    /**
+     * Set country
+     *
+     * @param string $country
+     *
+     * @return Applicant
+     */
+    public function setCountry($country)
+    {
+        $this->country = $country;
+
+        return $this;
+    }
+
+    /**
+     * Get country
+     *
+     * @return string
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    /**
+     * Set active
+     *
+     * @param boolean $active
+     *
+     * @return Applicant
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
+
+        return $this;
+    }
+
+    /**
+     * Get active
+     *
+     * @return bool
+     */
+    public function getActive()
+    {
+        return $this->active;
     }
 
     /**

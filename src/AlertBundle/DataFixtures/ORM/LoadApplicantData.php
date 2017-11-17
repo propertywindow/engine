@@ -24,6 +24,7 @@ class LoadApplicantData extends AbstractFixture implements OrderedFixtureInterfa
         $applicant->setEmail('geurtsmarc@hotmail.com');
         $applicant->setPhone('0611389156');
         $applicant->setProtection(false);
+        $applicant->setCountry('NL');
         $this->addReference('applicant_1', $applicant);
         $manager->persist($applicant);
 
@@ -33,6 +34,7 @@ class LoadApplicantData extends AbstractFixture implements OrderedFixtureInterfa
         $applicant->setEmail('a.culina@yahoo.com');
         $applicant->setPhone('');
         $applicant->setProtection(true);
+        $applicant->setCountry('NL');
         $this->addReference('applicant_2', $applicant);
         $manager->persist($applicant);
 

@@ -22,6 +22,7 @@ class LoadApplicationData extends AbstractFixture implements OrderedFixtureInter
         $application->setApplicant($this->getReference('applicant_1'));
         $application->setKind($this->getReference('kind_sale'));
         $application->setPostcode('5754DW');
+        $application->setCountry('NL');
         $application->setDistance(15);
         $application->setMinPrice(150000);
         $application->setMaxPrice(450000);
@@ -36,6 +37,7 @@ class LoadApplicationData extends AbstractFixture implements OrderedFixtureInter
         $application->setApplicant($this->getReference('applicant_1'));
         $application->setKind($this->getReference('kind_sale'));
         $application->setPostcode('5754DW');
+        $application->setCountry('NL');
         $application->setDistance(30);
         $application->setMinPrice(350000);
         $application->setMaxPrice(650000);
@@ -50,6 +52,7 @@ class LoadApplicationData extends AbstractFixture implements OrderedFixtureInter
         $application->setApplicant($this->getReference('applicant_2'));
         $application->setKind($this->getReference('kind_sale'));
         $application->setPostcode('6702CR');
+        $application->setCountry('NL');
         $application->setDistance(15);
         $application->setMinPrice(150000);
         $application->setMaxPrice(450000);
