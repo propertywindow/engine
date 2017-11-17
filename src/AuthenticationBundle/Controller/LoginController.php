@@ -175,16 +175,12 @@ class LoginController extends BaseController
      */
     private function verify(array $parameters)
     {
-        if (!array_key_exists('email', $parameters)) {
+        if (!array_key_exists('user_id', $parameters)) {
             throw new InvalidArgumentException("No email argument provided");
         }
-        if (!array_key_exists('password', $parameters)) {
-            throw new InvalidArgumentException("No password argument provided");
-        }
 
-        $email    = (string)$parameters['email'];
-        $password = md5((string)$parameters['password']);
-        $user     = $this->userService->login($email, $password);
+        $userId   = (int)$parameters['user_id'];
+        $user     = $this->userService->getUser($userId);
 
         $timestamp      = time();
         $secret         = $user->getPassword();
