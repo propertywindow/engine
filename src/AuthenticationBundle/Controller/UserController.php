@@ -73,6 +73,8 @@ class UserController extends BaseController
                 return $this->disableUser($userId, $parameters);
             case "deleteUser":
                 return $this->deleteUser($userId, $parameters);
+            case "verify":
+                return $this->verify($userId);
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
@@ -376,5 +378,17 @@ class UserController extends BaseController
         }
 
         $this->userService->deleteUser($id);
+    }
+
+    /**
+     * @param int $userId
+     *
+     * @return array
+     */
+    private function verify(int $userId)
+    {
+        $user = $this->userService->getUser($userId);
+
+        return Mapper::fromUser($user);
     }
 }
