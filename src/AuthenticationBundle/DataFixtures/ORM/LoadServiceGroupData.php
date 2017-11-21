@@ -21,7 +21,7 @@ class LoadServiceGroupData extends AbstractFixture implements OrderedFixtureInte
         $serviceGroup = new ServiceGroup();
         $serviceGroup->setEn('Dashboard');
         $serviceGroup->setNl('Dashboard');
-        $serviceGroup->setIcon('zmdi zmdi-palette');
+        $serviceGroup->setIcon('flaticon-dashboard');
         $serviceGroup->setUrl('/dashboard');
         $this->addReference('service_group_dashboard', $serviceGroup);
         $manager->persist($serviceGroup);
@@ -29,7 +29,7 @@ class LoadServiceGroupData extends AbstractFixture implements OrderedFixtureInte
         $serviceGroup = new ServiceGroup();
         $serviceGroup->setEn('Properties');
         $serviceGroup->setNl('Woningen');
-        $serviceGroup->setIcon('zmdi zmdi zmdi-city-alt');
+        $serviceGroup->setIcon('flaticon-house');
         $serviceGroup->setUrl('/properties');
         $this->addReference('service_group_properties', $serviceGroup);
         $manager->persist($serviceGroup);
@@ -37,14 +37,14 @@ class LoadServiceGroupData extends AbstractFixture implements OrderedFixtureInte
         $serviceGroup = new ServiceGroup();
         $serviceGroup->setEn('Users');
         $serviceGroup->setNl('Gebruikers');
-        $serviceGroup->setIcon('zmdi zmdi-accounts');
+        $serviceGroup->setIcon('flaticon-users');
         $this->addReference('service_group_users', $serviceGroup);
         $manager->persist($serviceGroup);
 
         $serviceGroup = new ServiceGroup();
         $serviceGroup->setEn('Agents');
         $serviceGroup->setNl('Makelaars');
-        $serviceGroup->setIcon('zmdi zmdi-store');
+        $serviceGroup->setIcon('flaticon-internet');
         $serviceGroup->setUrl('/agents');
         $this->addReference('service_group_agents', $serviceGroup);
         $manager->persist($serviceGroup);
@@ -52,7 +52,7 @@ class LoadServiceGroupData extends AbstractFixture implements OrderedFixtureInte
         $serviceGroup = new ServiceGroup();
         $serviceGroup->setEn('Services');
         $serviceGroup->setNl('Diensten');
-        $serviceGroup->setIcon('zmdi zmdi-ungroup');
+        $serviceGroup->setIcon('flaticon-app');
         $serviceGroup->setUrl('/services');
         $this->addReference('service_group_services_manager', $serviceGroup);
         $manager->persist($serviceGroup);
@@ -60,7 +60,7 @@ class LoadServiceGroupData extends AbstractFixture implements OrderedFixtureInte
         $serviceGroup = new ServiceGroup();
         $serviceGroup->setEn('Appointments');
         $serviceGroup->setNl('Afspraken');
-        $serviceGroup->setIcon('zmdi zmdi-calendar');
+        $serviceGroup->setIcon('flaticon-calendar');
         $serviceGroup->setUrl('/appointments');
         $this->addReference('service_group_appointments', $serviceGroup);
         $manager->persist($serviceGroup);
@@ -68,7 +68,7 @@ class LoadServiceGroupData extends AbstractFixture implements OrderedFixtureInte
         $serviceGroup = new ServiceGroup();
         $serviceGroup->setEn('Viewings');
         $serviceGroup->setNl('Bezichtigingen');
-        $serviceGroup->setIcon('zmdi zmdi-eye');
+        $serviceGroup->setIcon('flaticon-house-1');
         $serviceGroup->setUrl('/viewings');
         $this->addReference('service_group_viewings', $serviceGroup);
         $manager->persist($serviceGroup);
@@ -76,7 +76,7 @@ class LoadServiceGroupData extends AbstractFixture implements OrderedFixtureInte
         $serviceGroup = new ServiceGroup();
         $serviceGroup->setEn('Interest');
         $serviceGroup->setNl('Interesse');
-        $serviceGroup->setIcon('mdi mdi-lightbulb');
+        $serviceGroup->setIcon('flaticon-house-9');
         $serviceGroup->setUrl('/interest');
         $this->addReference('service_group_interest', $serviceGroup);
         $manager->persist($serviceGroup);
@@ -84,7 +84,7 @@ class LoadServiceGroupData extends AbstractFixture implements OrderedFixtureInte
         $serviceGroup = new ServiceGroup();
         $serviceGroup->setEn('Offers');
         $serviceGroup->setNl('Biedingen');
-        $serviceGroup->setIcon('zmdi zmdi-money');
+        $serviceGroup->setIcon('flaticon-house-16');
         $serviceGroup->setUrl('/offers');
         $this->addReference('service_group_offers', $serviceGroup);
         $manager->persist($serviceGroup);
@@ -92,7 +92,7 @@ class LoadServiceGroupData extends AbstractFixture implements OrderedFixtureInte
         $serviceGroup = new ServiceGroup();
         $serviceGroup->setEn('Surveys');
         $serviceGroup->setNl('Surveys');
-        $serviceGroup->setIcon('zmdi zmdi-home');
+        $serviceGroup->setIcon('flaticon-blueprint');
         $serviceGroup->setUrl('/surverys');
         $this->addReference('service_group_surveys', $serviceGroup);
         $manager->persist($serviceGroup);
@@ -100,14 +100,14 @@ class LoadServiceGroupData extends AbstractFixture implements OrderedFixtureInte
         $serviceGroup = new ServiceGroup();
         $serviceGroup->setEn('Contacts');
         $serviceGroup->setNl('Contacten');
-        $serviceGroup->setIcon('zmdi zmdi-accounts-list');
+        $serviceGroup->setIcon('flaticon-users');
         $this->addReference('service_group_contacts', $serviceGroup);
         $manager->persist($serviceGroup);
 
         $serviceGroup = new ServiceGroup();
         $serviceGroup->setEn('Property Alerts');
         $serviceGroup->setNl('Property Notificaties');
-        $serviceGroup->setIcon('zmdi zmdi-alarm');
+        $serviceGroup->setIcon('flaticon-megaphone-1');
         $serviceGroup->setUrl('/email-alerts');
         $this->addReference('service_group_property_alerts', $serviceGroup);
         $manager->persist($serviceGroup);
@@ -115,7 +115,7 @@ class LoadServiceGroupData extends AbstractFixture implements OrderedFixtureInte
         $serviceGroup = new ServiceGroup();
         $serviceGroup->setEn('Email');
         $serviceGroup->setNl('Email');
-        $serviceGroup->setIcon('zmdi zmdi-email');
+        $serviceGroup->setIcon('flaticon-envelope-1');
         $serviceGroup->setUrl('/email');
         $this->addReference('service_group_email', $serviceGroup);
         $manager->persist($serviceGroup);
@@ -123,7 +123,7 @@ class LoadServiceGroupData extends AbstractFixture implements OrderedFixtureInte
         $serviceGroup = new ServiceGroup();
         $serviceGroup->setEn('Notifications');
         $serviceGroup->setNl('Notificaties');
-        $serviceGroup->setIcon('zmdi zmdi-notifications');
+        $serviceGroup->setIcon('flaticon-music-1');
         $serviceGroup->setUrl('/notifications');
         $this->addReference('service_group_notifications', $serviceGroup);
         $manager->persist($serviceGroup);
@@ -131,21 +131,21 @@ class LoadServiceGroupData extends AbstractFixture implements OrderedFixtureInte
         $serviceGroup = new ServiceGroup();
         $serviceGroup->setEn('Invoices');
         $serviceGroup->setNl('Invoices');
-        $serviceGroup->setIcon('zmdi zmdi-file-text');
+        $serviceGroup->setIcon('flaticon-file');
         $this->addReference('service_group_invoices', $serviceGroup);
         $manager->persist($serviceGroup);
 
         $serviceGroup = new ServiceGroup();
         $serviceGroup->setEn('Statistics');
         $serviceGroup->setNl('Statistieken');
-        $serviceGroup->setIcon('zmdi zmdi-chart');
+        $serviceGroup->setIcon('flaticon-graph-2');
         $this->addReference('service_group_statistics', $serviceGroup);
         $manager->persist($serviceGroup);
 
         $serviceGroup = new ServiceGroup();
         $serviceGroup->setEn('Settings');
         $serviceGroup->setNl('Instellingen');
-        $serviceGroup->setIcon('zmdi zmdi-settings');
+        $serviceGroup->setIcon('flaticon-settings');
         $this->addReference('service_group_settings', $serviceGroup);
         $manager->persist($serviceGroup);
 
