@@ -1,22 +1,26 @@
-version: '3.0'
+version: '2'
 
 services:
-  nginx:
+  web:
     build: docker/nginx
+    volumes:
+      - .:/app
     ports:
-      - "80:80"
+      - "8080:80"
     links:
       - php
-    volumes:
-      - ./:/app
+    tty: true
+    restart: always
 
   php:
     build: docker/php-fpm
     volumes:
-      - ./:/app
+      - .:/app
     working_dir: /app
     links:
       - db
+    tty: true
+    restart: always
 
   db:
     restart: always
@@ -28,3 +32,5 @@ services:
         MYSQL_DATABASE: propertywindow
         MYSQL_USER: propertywindow
         MYSQL_PASSWORD: propertywindow
+    tty: true
+    restart: always

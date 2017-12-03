@@ -1,9 +1,12 @@
 vendor/
 var/
 docker
+.docker-sync
 phpunit.xml.dist
 README.md
 docker-compose.yml
+docker-compose-dev.yml
+docker-sync.yml
 exclude-list.txt
 .git
 .gitignore
