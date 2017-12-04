@@ -74,8 +74,8 @@ ENV MYSQL_ROOT_USER=root
 ENV MYSQL_ROOT_PASSWORD=propertywindow
 
 # Set rights
-RUN useradd -ms /bin/bash vagrant
-CMD php-fpm -F
-USER vagrant
+#RUN useradd -ms /bin/bash vagrant
+#CMD php-fpm -F
+#USER vagrant
 
 WORKDIR /app
