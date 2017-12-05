@@ -426,8 +426,11 @@ class BaseController extends Controller
         $responseHeaders = $httpResponse->headers;
 
         $responseHeaders->set('Access-Control-Allow-Headers', 'origin, content-type, accept, authorization');
-        $responseHeaders->set('Access-Control-Allow-Origin', '*');
         $responseHeaders->set('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, PATCH, OPTIONS');
+
+        if ($this->container->get('kernel')->getEnvironment() !== 'dev') {
+            $responseHeaders->set('Access-Control-Allow-Origin', '*');
+        }
 
         return $httpResponse;
     }
