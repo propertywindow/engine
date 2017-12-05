@@ -7,8 +7,8 @@ options:
 
 syncs:
   project-sync:
-    sync_strategy: 'native_osx'
-    notify_terminal: true
+    sync_strategy: 'rsync'
+    notify_terminal: false
     src: './'
     sync_host_ip: 'auto'
     sync_host_port: 10872
