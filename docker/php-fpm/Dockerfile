@@ -64,18 +64,17 @@ RUN "date"
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 RUN apt-get autoremove -y
 
-
-# Add Symfony alias
-RUN echo 'alias sf="php app/console"' >> ~/.bashrc
-RUN echo 'alias ll="ls -lah"' >> ~/.bashrc
-
 # Set enviroments
 ENV MYSQL_ROOT_USER=root
 ENV MYSQL_ROOT_PASSWORD=propertywindow
 
 # Set rights
-#RUN useradd -ms /bin/bash vagrant
-#CMD php-fpm -F
-#USER vagrant
+RUN useradd -ms /bin/bash vagrant
+CMD php-fpm -F
+USER vagrant
+
+# Add Symfony alias
+RUN echo 'alias sf="php app/console"' >> ~/.bashrc
+RUN echo 'alias ll="ls -lah"' >> ~/.bashrc
 
 WORKDIR /app
