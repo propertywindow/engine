@@ -26,10 +26,6 @@ Table of Contents
 
 > Before anything, you need to make sure you have Docker properly setup in your environment. For that, refer to the official documentation for both [Docker](https://docs.docker.com/) and [Docker Compose](https://docs.docker.com/compose/). Also make sure you have [Docker Machine](https://docs.docker.com/machine/) properly setup.
 
-* Install docker-sync:
-```bash
-$ gem install docker-sync
-```
 * Create a docker machine:
 ```bash
 $ docker-machine create php71 --driver virtualbox
@@ -60,10 +56,6 @@ $ composer install
 $ php app/console doctrine:database:create
 $ php app/console doctrine:schema:update --force
 $ php app/console doctrine:fixtures:load --no-interaction
-```
-* Start docker-sync:
-```bash
-$ docker-sync start
 ```
 * Once that's done, you should be able to access the application on the http://engine.propertywindow.dev
 

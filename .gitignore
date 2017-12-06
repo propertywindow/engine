@@ -19,4 +19,3 @@ var/SymfonyRequirements.php
 
 /wget_images/
 /image_data
-.docker-sync
