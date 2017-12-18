@@ -4,7 +4,7 @@ pipeline {
 
     agent {
         docker {
-            image 'php:7.1-fpm'
+            image 'dockette/php71'
             args '-u root'
         }
     }
