@@ -46,7 +46,7 @@ $ docker-machine ip php71
 > unix only (on Windows, edit C:\Windows\System32\drivers\etc\hosts)
 
 ```bash
-$ sudo echo "192.168.99.100 engine.propertywindow.dev" >> /etc/hosts
+$ sudo echo "192.168.99.100 engine.propertywindow.local" >> /etc/hosts
 ```
 
 * Composer install & create database
@@ -57,7 +57,7 @@ $ php app/console doctrine:database:create
 $ php app/console doctrine:schema:update --force
 $ php app/console doctrine:fixtures:load --no-interaction
 ```
-* Once that's done, you should be able to access the application on the http://engine.propertywindow.dev
+* Once that's done, you should be able to access the application on the http://engine.propertywindow.local
 
 ---
 
