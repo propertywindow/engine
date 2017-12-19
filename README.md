@@ -28,11 +28,11 @@ Table of Contents
 
 * Create a docker machine:
 ```bash
-$ docker-machine create php71 --driver virtualbox
+$ docker-machine create propertywindow --driver virtualbox
 ```
 * Add new container to docker-machine
 ```bash
-$ eval $(docker-machine env php71)
+$ eval $(docker-machine env propertywindow)
 ```
 
 * Build and run the containers:
@@ -41,7 +41,7 @@ $ docker-compose up -d --build
 ```
 * Get containers IP address and update host (replace IP according to your configuration)
 ```bash
-$ docker-machine ip php71
+$ docker-machine ip propertywindow
 ```
 > unix only (on Windows, edit C:\Windows\System32\drivers\etc\hosts)
 
