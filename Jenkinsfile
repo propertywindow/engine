@@ -37,13 +37,13 @@ pipeline {
                 echo 'Finishing...'
                 sshagent(credentials:['52488a7e-586a-4087-a6fc-4654e5420403']) {
                     sh 'ssh -o StrictHostKeyChecking=no -l root propertywindow.nl cd /var/www/engine.propertywindow.nl/html'
-                    sh 'export SYMFONY_ENV=prod'
-                    sh 'composer install --optimize-autoloader --no-dev'
-                    sh 'php app/console cache:clear --env=prod --no-debug --no-warmup'
-                    sh 'php app/console cache:warmup --env=prod'
-                    sh 'php app/console doctrine:schema:drop --force'
-                    sh 'php app/console doctrine:schema:update --force'
-                    sh 'php app/console doctrine:fixtures:load'
+                    sh 'ssh -o StrictHostKeyChecking=no -l root propertywindow.nl export SYMFONY_ENV=dev'
+                    sh 'ssh -o StrictHostKeyChecking=no -l root propertywindow.nl composer install --optimize-autoloader'
+                    sh 'ssh -o StrictHostKeyChecking=no -l root propertywindow.nl php app/console cache:clear --env=dev --no-debug --no-warmup'
+                    sh 'ssh -o StrictHostKeyChecking=no -l root propertywindow.nl php app/console cache:warmup --env=dev'
+                    sh 'ssh -o StrictHostKeyChecking=no -l root propertywindow.nl php app/console doctrine:schema:drop --force'
+                    sh 'ssh -o StrictHostKeyChecking=no -l root propertywindow.nl php app/console doctrine:schema:update --force'
+                    sh 'ssh -o StrictHostKeyChecking=no -l root propertywindow.nl php app/console doctrine:fixtures:load'
                 }
             }
         }
