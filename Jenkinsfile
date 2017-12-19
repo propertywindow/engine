@@ -27,7 +27,6 @@ pipeline {
             steps {
                 echo 'Deploying...'
                 sshagent(['52488a7e-586a-4087-a6fc-4654e5420403']) {
-                    sh 'ssh-add -l'
                     sh 'ssh -o StrictHostKeyChecking=no -l root propertywindow.nl rm -rf /var/www/engine.propertywindow.nl/html/*'
                     sh 'scp -r ./ root@propertywindow.nl:/var/www/engine.propertywindow.nl/html/'
                 }
