@@ -20,7 +20,7 @@ pipeline {
             steps {
                 echo 'Testing...'
                 sh 'vendor/bin/phpcs --standard=PSR2 src/ tests/'
-                sh 'vendor/bin/phpunit --log-junit app/log/phpunit.xml -c phpunit.xml.dist'
+                sh 'vendor/bin/phpunit'
             }
         }
         stage('Deploying: Deploy') {
