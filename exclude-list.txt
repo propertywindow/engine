@@ -1,6 +1,5 @@
 vendor/
 var/
-docker
 phpunit.xml.dist
 README.md
 docker-compose.yml

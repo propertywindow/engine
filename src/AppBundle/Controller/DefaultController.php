@@ -27,11 +27,19 @@ class DefaultController extends Controller
     }
 
     /**
+     * @Route("/test")
+     *
+     * @return Response
+     */
+    public function testAction()
+    {
+        return new Response('Property Window Engine');
+    }
+
+    /**
      * @Route("/wget/{propertyId}")
      *
      * @param int $propertyId
-     *
-     * @return Response
      */
     public function wgetAction(int $propertyId)
     {
