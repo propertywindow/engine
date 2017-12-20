@@ -25,6 +25,7 @@ class ServiceController extends BaseController
      * @param Request $httpRequest
      *
      * @return HttpResponse
+     * @throws Throwable
      */
     public function requestHandler(Request $httpRequest)
     {
@@ -45,10 +46,6 @@ class ServiceController extends BaseController
      *
      * @return array
      * @throws InvalidJsonRpcMethodException
-     * @throws ServiceNotFoundException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     private function invoke(int $userId, string $method, array $parameters = [])
     {
@@ -67,7 +64,6 @@ class ServiceController extends BaseController
      * @param array $parameters
      *
      * @return array
-     * @throws NotAuthorizedException
      */
     private function getService(int $userId, array $parameters)
     {
@@ -88,7 +84,6 @@ class ServiceController extends BaseController
      * @param array $parameters
      *
      * @return array
-     * @throws NotAuthorizedException
      */
     private function getServices(int $userId, array $parameters)
     {

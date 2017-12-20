@@ -25,6 +25,7 @@ class ServiceTemplateController extends BaseController
      * @param Request $httpRequest
      *
      * @return HttpResponse
+     * @throws Throwable
      */
     public function requestHandler(Request $httpRequest)
     {
@@ -45,10 +46,9 @@ class ServiceTemplateController extends BaseController
      *
      * @return array
      * @throws InvalidJsonRpcMethodException
+     * @throws NotAuthorizedException
      * @throws TemplateNotFoundException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
+     * @throws \AuthenticationBundle\Exceptions\TemplateAlreadyHasServiceException
      */
     private function invoke(int $userId, string $method, array $parameters = [])
     {
@@ -80,15 +80,16 @@ class ServiceTemplateController extends BaseController
      */
     private function getServiceTemplates(int $userId)
     {
-        $template  = [];
-        $user      = $this->userService->getUser($userId);
-        $userTypes = $this->userTypeService->getUserTypes(true);
+        $template     = [];
+        $user         = $this->userService->getUser($userId);
+        $userTypes    = $this->userTypeService->getUserTypes(true);
+        $userSettings = $this->userSettingsService->getSettings($user);
 
         if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
             throw new NotAuthorizedException($userId);
         }
         foreach ($userTypes as $userType) {
-            switch ($user->getLanguage()) {
+            switch ($userSettings->getLanguage()) {
                 case "nl":
                     $description = $userType->getNl();
                     break;
@@ -114,6 +115,7 @@ class ServiceTemplateController extends BaseController
      *
      * @return array
      * @throws NotAuthorizedException
+     * @throws TemplateNotFoundException
      */
     private function getServiceTemplate(int $userId, array $parameters)
     {
@@ -140,6 +142,7 @@ class ServiceTemplateController extends BaseController
      *
      * @return array
      * @throws NotAuthorizedException
+     * @throws TemplateNotFoundException
      */
     private function getServiceGroupTemplate(int $userId, array $parameters)
     {
@@ -166,6 +169,7 @@ class ServiceTemplateController extends BaseController
      *
      * @return array
      * @throws NotAuthorizedException
+     * @throws \AuthenticationBundle\Exceptions\TemplateAlreadyHasServiceException
      */
     private function addToServiceTemplate(int $userId, array $parameters)
     {
@@ -177,7 +181,7 @@ class ServiceTemplateController extends BaseController
             throw new InvalidArgumentException("No argument provided");
         }
 
-        $user     = $this->userService->getUser($userId);
+        $user = $this->userService->getUser($userId);
 
         if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
             throw new NotAuthorizedException($userId);
@@ -195,6 +199,7 @@ class ServiceTemplateController extends BaseController
      *
      * @return array
      * @throws NotAuthorizedException
+     * @throws \AuthenticationBundle\Exceptions\TemplateAlreadyHasServiceException
      */
     private function addToServiceGroupTemplate(int $userId, array $parameters)
     {
@@ -206,7 +211,7 @@ class ServiceTemplateController extends BaseController
             throw new InvalidArgumentException("No argument provided");
         }
 
-        $user         = $this->userService->getUser($userId);
+        $user = $this->userService->getUser($userId);
 
         if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
             throw new NotAuthorizedException($userId);
@@ -225,6 +230,7 @@ class ServiceTemplateController extends BaseController
      * @param array $parameters
      *
      * @throws NotAuthorizedException
+     * @throws TemplateNotFoundException
      */
     private function removeFromServiceTemplate(int $userId, array $parameters)
     {
@@ -236,7 +242,7 @@ class ServiceTemplateController extends BaseController
             throw new InvalidArgumentException("No argument provided");
         }
 
-        $user     = $this->userService->getUser($userId);
+        $user = $this->userService->getUser($userId);
 
         if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
             throw new NotAuthorizedException($userId);
@@ -253,6 +259,7 @@ class ServiceTemplateController extends BaseController
      * @param array $parameters
      *
      * @throws NotAuthorizedException
+     * @throws TemplateNotFoundException
      */
     private function removeFromServiceGroupTemplate(int $userId, array $parameters)
     {
@@ -264,7 +271,7 @@ class ServiceTemplateController extends BaseController
             throw new InvalidArgumentException("No argument provided");
         }
 
-        $user         = $this->userService->getUser($userId);
+        $user = $this->userService->getUser($userId);
 
         if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
             throw new NotAuthorizedException($userId);
