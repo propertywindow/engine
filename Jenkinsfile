@@ -32,7 +32,7 @@ pipeline {
                 }
             }
         }
-        stage('Deploying: Finish') {
+        stage('Deploying: DB & Cache') {
             steps {
                 echo 'Finishing...'
                 sshagent(credentials:['52488a7e-586a-4087-a6fc-4654e5420403']) {
