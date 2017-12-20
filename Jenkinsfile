@@ -38,9 +38,7 @@ pipeline {
                 sshagent(credentials:['52488a7e-586a-4087-a6fc-4654e5420403']) {
                     sh '''
                         ssh -o StrictHostKeyChecking=no -l root propertywindow.nl cd /var/www/engine.propertywindow.nl/html
-                        rm -rf vendor
                         export SYMFONY_ENV=prod
-                        composer install --optimize-autoloader --no-interaction --no-dev
                         php app/console cache:clear --env=prod --no-debug --no-warmup
                         php app/console cache:warmup --env=prod
                         php app/console doctrine:schema:drop --force
