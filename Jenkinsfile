@@ -29,7 +29,6 @@ pipeline {
                 sh 'rm -rf ./phpunit.xml.dist'
                 sh 'rm -rf ./README.md'
                 sh 'rm -rf ./docker-compose.yml'
-                sh 'rm -rf ./.git'
                 sh 'rm -rf ./.gitignore'
                 sh 'rm -rf ./tests'
                 sshagent(credentials:['52488a7e-586a-4087-a6fc-4654e5420403']) {
