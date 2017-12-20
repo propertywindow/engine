@@ -56,7 +56,7 @@ pipeline {
                                 ssh -o StrictHostKeyChecking=no -l root propertywindow.nl 'cd /var/www/engine.propertywindow.nl/html
                                 export SYMFONY_ENV=prod
                                 php app/console cache:clear --env=prod --no-debug --no-warmup
-                                php app/console cache:warmup --env=prod
+                                php app/console cache:warmup --env=prod'
                              '''
                         }
                     }
