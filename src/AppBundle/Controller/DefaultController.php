@@ -19,20 +19,10 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-        if ($this->container->getParameter('kernel.environment') !== 'dev') {
-            throw $this->createAccessDeniedException('You don\'t have access to this page!');
-        }
+//        if ($this->container->getParameter('kernel.environment') !== 'dev') {
+//            throw $this->createAccessDeniedException('You don\'t have access to this page!');
+//        }
 
-        return new Response('Property Window Engine');
-    }
-
-    /**
-     * @Route("/test")
-     *
-     * @return Response
-     */
-    public function testAction()
-    {
         return new Response('Property Window Engine');
     }
 

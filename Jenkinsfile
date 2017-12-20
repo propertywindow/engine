@@ -26,6 +26,12 @@ pipeline {
         stage('Deploying: Deploy') {
             steps {
                 echo 'Deploying...'
+                sh 'rm -rf ./phpunit.xml.dist'
+                sh 'rm -rf ./README.md'
+                sh 'rm -rf ./docker-compose.yml'
+                sh 'rm -rf ./.git'
+                sh 'rm -rf ./.gitignore'
+                sh 'rm -rf ./tests'
                 sshagent(credentials:['52488a7e-586a-4087-a6fc-4654e5420403']) {
                     sh 'ssh -o StrictHostKeyChecking=no -l root propertywindow.nl rm -rf /var/www/engine.propertywindow.nl/html/*'
                     sh 'scp -r ./ root@propertywindow.nl:/var/www/engine.propertywindow.nl/html/'
