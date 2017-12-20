@@ -32,9 +32,9 @@ pipeline {
                 }
             }
         }
-        stage('Deploying: DB & Cache') {
+        stage('Deploying: Database') {
             steps {
-                echo 'Finishing...'
+                echo 'Migrations...'
                 sshagent(credentials:['52488a7e-586a-4087-a6fc-4654e5420403']) {
                     sh '''
                         ssh -o StrictHostKeyChecking=no -l root propertywindow.nl 'cd /var/www/engine.propertywindow.nl/html
@@ -48,5 +48,18 @@ pipeline {
                 }
             }
         }
+        stage('Deploying: Cache') {
+                    steps {
+                        echo 'Clearing...'
+                        sshagent(credentials:['52488a7e-586a-4087-a6fc-4654e5420403']) {
+                            sh '''
+                                ssh -o StrictHostKeyChecking=no -l root propertywindow.nl 'cd /var/www/engine.propertywindow.nl/html
+                                export SYMFONY_ENV=prod
+                                php app/console cache:clear --env=prod --no-debug --no-warmup
+                                php app/console cache:warmup --env=prod
+                             '''
+                        }
+                    }
+                }
     }
 }
