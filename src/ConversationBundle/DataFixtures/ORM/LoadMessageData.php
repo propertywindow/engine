@@ -23,7 +23,9 @@ class LoadMessageData extends AbstractFixture implements OrderedFixtureInterface
         $message->setAuthor($this->getReference('user_annan_colleague_1'));
         $message->setRecipient($this->getReference('user_annan_colleague_1'));
         $message->setSeen(false);
-        $message->setMessage('This is your space. Draft messages, list your to-dos, or keep links and files handy. You can also talk to yourself here, but please bear in mind you’ll have to supply both sides of the conversation.');
+        $message->setMessage('<b>This is your space</b>. 
+Draft messages, list your to-dos, or keep links and files handy. 
+You can also talk to yourself here, but please bear in mind you’ll have to supply both sides of the conversation.');
         $manager->persist($message);
 
         $message = new Message();
