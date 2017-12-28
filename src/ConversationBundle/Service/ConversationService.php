@@ -28,6 +28,10 @@ class ConversationService
      * @param int $id
      *
      * @return Conversation $conversation
+     * @throws \ConversationBundle\Exceptions\ConversationNotFoundException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     public function getConversation(int $id)
     {
@@ -50,15 +54,15 @@ class ConversationService
     }
 
     /**
-     * @param User $fromUser
-     * @param User $toUser
+     * @param User $author
+     * @param User $recipient
      *
      * @return null|Conversation
      */
-    public function findByUsers(User $fromUser, User $toUser)
+    public function findByUsers(User $author, User $recipient)
     {
         $repository   = $this->entityManager->getRepository('ConversationBundle:Conversation');
-        $conversation = $repository->findOneBy(['uniqueId' => $fromUser->getId() + $toUser->getId()]);
+        $conversation = $repository->findOneBy(['uniqueId' => $author->getId() + $recipient->getId()]);
 
         return $conversation;
     }

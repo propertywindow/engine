@@ -29,6 +29,10 @@ class MessageService
      * @param int $id
      *
      * @return Message $conversation
+     * @throws \ConversationBundle\Exceptions\MessageNotFoundException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     public function getMessage(int $id)
     {

@@ -20,8 +20,8 @@ class Mapper
     {
         return [
             'id'           => $conversation->getId(),
-            'from_user_id' => $conversation->getFromUser()->getId(),
-            'to_user_id'   => $conversation->getToUser()->getId(),
+            'author_id'    => $conversation->getAuthor()->getId(),
+            'recipient_id' => $conversation->getRecipient()->getId(),
         ];
     }
 
@@ -52,8 +52,8 @@ class Mapper
             function (Message $message) {
                 return [
                     'id'           => $message->getId(),
-                    'from_user_id' => $message->getFromUser()->getId(),
-                    'to_user_id'   => $message->getToUser()->getId(),
+                    'author_id'    => $message->getAuthor()->getId(),
+                    'recipient_id' => $message->getRecipient()->getId(),
                     'message'      => $message->getMessage(),
                     'seen'         => $message->getSeen(),
                     'read'         => $message->getUpdated(),

@@ -25,15 +25,15 @@ class Conversation
 
     /**
      * @ORM\ManyToOne(targetEntity="AuthenticationBundle\Entity\User")
-     * @ORM\JoinColumn(name="from_user", referencedColumnName="id")
+     * @ORM\JoinColumn(name="author", referencedColumnName="id")
      */
-    private $fromUser;
+    private $author;
 
     /**
      * @ORM\ManyToOne(targetEntity="AuthenticationBundle\Entity\User")
-     * @ORM\JoinColumn(name="to_user", referencedColumnName="id")
+     * @ORM\JoinColumn(name="recipient", referencedColumnName="id")
      */
-    private $toUser;
+    private $recipient;
 
     /**
      * @var int
@@ -67,15 +67,15 @@ class Conversation
     }
 
     /**
-     * Set fromUser
+     * Set author
      *
-     * @param \AuthenticationBundle\Entity\User $fromUser
+     * @param \AuthenticationBundle\Entity\User $author
      *
      * @return Conversation
      */
-    public function setFromUser(User $fromUser = null)
+    public function setAuthor(User $author = null)
     {
-        $this->fromUser = $fromUser;
+        $this->author = $author;
 
         return $this;
     }
@@ -85,33 +85,33 @@ class Conversation
      *
      * @return \AuthenticationBundle\Entity\User
      */
-    public function getFromUser()
+    public function getAuthor()
     {
-        return $this->fromUser;
+        return $this->author;
     }
 
     /**
-     * Set toUser
+     * Set recipient
      *
-     * @param \AuthenticationBundle\Entity\User $toUser
+     * @param \AuthenticationBundle\Entity\User $recipient
      *
      * @return Conversation
      */
-    public function setToUser(User $toUser = null)
+    public function setRecipient(User $recipient = null)
     {
-        $this->toUser = $toUser;
+        $this->recipient = $recipient;
 
         return $this;
     }
 
     /**
-     * Get toUser
+     * Get recipient
      *
      * @return \AuthenticationBundle\Entity\User
      */
-    public function getToUser()
+    public function getRecipient()
     {
-        return $this->toUser;
+        return $this->recipient;
     }
 
     /**
