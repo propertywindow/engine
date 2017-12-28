@@ -5,6 +5,7 @@ namespace ConversationBundle\Controller;
 use AppBundle\Controller\BaseController;
 use ConversationBundle\Entity\Conversation;
 use ConversationBundle\Entity\Message;
+use ConversationBundle\Exceptions\ConversationForRecipientNotFoundException;
 use ConversationBundle\Exceptions\NoColleagueException;
 use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -49,9 +50,6 @@ class ConversationController extends BaseController
      * @throws InvalidJsonRpcMethodException
      * @throws NoColleagueException
      * @throws \ConversationBundle\Exceptions\ConversationNotFoundException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     private function invoke(int $userId, string $method, array $parameters = [])
     {
@@ -64,6 +62,8 @@ class ConversationController extends BaseController
                 return $this->createConversation($userId, $parameters);
             case "getMessages":
                 return $this->getMessages($userId, $parameters);
+            case "getConversationByRecipient":
+                return $this->getConversationByRecipient($userId, $parameters);
             case "getUnread":
                 return $this->getUnread($userId);
         }
@@ -76,9 +76,6 @@ class ConversationController extends BaseController
      *
      * @return array
      * @throws \ConversationBundle\Exceptions\ConversationNotFoundException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     private function getConversation(array $parameters)
     {
@@ -157,9 +154,6 @@ class ConversationController extends BaseController
      *
      * @return array
      * @throws \ConversationBundle\Exceptions\ConversationNotFoundException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     private function getMessages(int $userId, array $parameters)
     {
@@ -171,6 +165,34 @@ class ConversationController extends BaseController
         $conversation = $this->conversationService->getConversation($id);
 
         $messages = $this->messageService->getMessages($conversation);
+
+        foreach ($messages as $message) {
+            if (!$message->getSeen() && $message->getRecipient()->getId() === $userId) {
+                $this->messageService->readMessage($message);
+            }
+        }
+
+        return Mapper::fromMessages(...$messages);
+    }
+
+
+    /**
+     * @param int   $userId
+     * @param array $parameters
+     *
+     * @return array
+     * @throws ConversationForRecipientNotFoundException
+     */
+    private function getConversationByRecipient(int $userId, array $parameters)
+    {
+        if (!array_key_exists('recipient_id', $parameters) && $parameters['recipient_id'] !== null) {
+            throw new InvalidArgumentException("recipient_id parameter not provided");
+        }
+
+        $author       = $this->userService->getUser($userId);
+        $recipient    = $this->userService->getUser((int)$parameters['recipient_id']);
+        $conversation = $this->conversationService->findByUsers($author, $recipient);
+        $messages     = $this->messageService->getMessages($conversation);
 
         foreach ($messages as $message) {
             if (!$message->getSeen() && $message->getRecipient()->getId() === $userId) {

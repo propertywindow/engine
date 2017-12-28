@@ -16,9 +16,6 @@ class EmailRepository extends EntityRepository
      *
      * @return Email
      * @throws EmailNotFoundException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     public function findById(int $id): Email
     {

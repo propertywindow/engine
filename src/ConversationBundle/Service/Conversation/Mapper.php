@@ -22,6 +22,7 @@ class Mapper
             'id'           => $conversation->getId(),
             'author_id'    => $conversation->getAuthor()->getId(),
             'recipient_id' => $conversation->getRecipient()->getId(),
+            'unique_id'    => $conversation->getUniqueId(),
         ];
     }
 
@@ -51,13 +52,13 @@ class Mapper
         return array_map(
             function (Message $message) {
                 return [
-                    'id'           => $message->getId(),
-                    'author_id'    => $message->getAuthor()->getId(),
-                    'recipient_id' => $message->getRecipient()->getId(),
-                    'message'      => $message->getMessage(),
-                    'seen'         => $message->getSeen(),
-                    'read'         => $message->getUpdated(),
-                    'date'         => $message->getCreated(),
+                    'id'                => $message->getId(),
+                    'author_id'         => $message->getAuthor()->getId(),
+                    'recipient_id'      => $message->getRecipient()->getId(),
+                    'message'           => $message->getMessage(),
+                    'seen'              => $message->getSeen(),
+                    'read'              => $message->getUpdated(),
+                    'date'              => $message->getCreated(),
                 ];
             },
             $messages
