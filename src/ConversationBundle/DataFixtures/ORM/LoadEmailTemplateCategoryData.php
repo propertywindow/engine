@@ -8,10 +8,10 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
 /**
- * Class LoadEmailTemplateCategory
+ * Class LoadEmailTemplateCategoryData
  * @package ConversationBundle\DataFixtures\ORM
  */
-class LoadEmailTemplateCategory extends AbstractFixture implements OrderedFixtureInterface
+class LoadEmailTemplateCategoryData extends AbstractFixture implements OrderedFixtureInterface
 {
     /**
      * @param ObjectManager $manager

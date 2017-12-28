@@ -5,7 +5,6 @@ namespace ConversationBundle\Repository;
 use AuthenticationBundle\Entity\User;
 use ConversationBundle\Entity\Conversation;
 use ConversationBundle\Exceptions\ConversationNotFoundException;
-use ConversationBundle\Service\ConversationService;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -18,9 +17,6 @@ class ConversationRepository extends EntityRepository
      *
      * @return Conversation
      * @throws ConversationNotFoundException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     public function findById(int $id): Conversation
     {
@@ -60,8 +56,8 @@ class ConversationRepository extends EntityRepository
         $qb = $this->getEntityManager()->createQueryBuilder()
                    ->select('c')
                    ->from('ConversationBundle:Conversation', 'c')
-                   ->where('c.fromUser = :user')
-                   ->orWhere('c.toUser = :user')
+                   ->where('c.author = :user')
+                   ->orWhere('c.recipient = :user')
                    ->setParameter('user', $user)
                    ->orderBy('c.id', 'ASC');
 
