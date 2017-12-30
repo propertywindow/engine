@@ -192,6 +192,11 @@ class ConversationController extends BaseController
         $author       = $this->userService->getUser($userId);
         $recipient    = $this->userService->getUser((int)$parameters['recipient_id']);
         $conversation = $this->conversationService->findByUsers($author, $recipient);
+
+        if ($conversation === null) {
+            throw new ConversationForRecipientNotFoundException();
+        }
+
         $messages     = $this->messageService->getMessages($conversation);
 
         foreach ($messages as $message) {

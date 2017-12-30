@@ -56,17 +56,11 @@ class ConversationService
      * @param User $recipient
      *
      * @return null|Conversation
-     *
-     * @throws ConversationForRecipientNotFoundException
      */
     public function findByUsers(User $author, User $recipient)
     {
         $repository   = $this->entityManager->getRepository('ConversationBundle:Conversation');
         $conversation = $repository->findOneBy(['uniqueId' => $author->getId() + $recipient->getId()]);
-
-        if ($conversation === null) {
-            throw new ConversationForRecipientNotFoundException();
-        }
 
         /** @var Conversation $conversation */
         return $conversation;

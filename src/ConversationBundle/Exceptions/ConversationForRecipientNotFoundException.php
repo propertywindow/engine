@@ -11,6 +11,6 @@ class ConversationForRecipientNotFoundException extends Exception
 {
     public function __construct()
     {
-        parent::__construct(sprintf("Could not find conversation"));
+        parent::__construct(sprintf("Could not find conversation with"));
     }
 }
