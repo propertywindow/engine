@@ -26,6 +26,7 @@ class LoadMessageData extends AbstractFixture implements OrderedFixtureInterface
         $message->setMessage('<h5>This is your space</h5> 
 Draft messages, list your to-dos, or keep links and files handy. 
 You can also talk to yourself here, but please bear in mind you’ll have to supply both sides of the conversation.');
+        $message->setType('message');
         $manager->persist($message);
 
         $message = new Message();
@@ -34,6 +35,7 @@ You can also talk to yourself here, but please bear in mind you’ll have to sup
         $message->setRecipient($this->getReference('user_annan_colleague_3'));
         $message->setSeen(true);
         $message->setMessage('Hi Jill');
+        $message->setType('message');
         $manager->persist($message);
 
         $message = new Message();
@@ -42,6 +44,7 @@ You can also talk to yourself here, but please bear in mind you’ll have to sup
         $message->setRecipient($this->getReference('user_annan_colleague_1'));
         $message->setSeen(true);
         $message->setMessage('Hi Michael, how are you?');
+        $message->setType('message');
         $manager->persist($message);
 
         $message = new Message();
@@ -50,6 +53,7 @@ You can also talk to yourself here, but please bear in mind you’ll have to sup
         $message->setRecipient($this->getReference('user_annan_colleague_3'));
         $message->setSeen(false);
         $message->setMessage('Great thanks, What time was our meeting?');
+        $message->setType('message');
         $manager->persist($message);
 
         $manager->flush();

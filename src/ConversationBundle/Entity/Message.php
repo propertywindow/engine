@@ -49,6 +49,13 @@ class Message
     private $message;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="type", type="string", length=255, nullable=true)
+     */
+    private $type;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="seen", type="boolean", options={"default": false})
@@ -173,6 +180,30 @@ class Message
     public function getMessage()
     {
         return $this->message;
+    }
+
+    /**
+     * Set type
+     *
+     * @param string $type
+     *
+     * @return Message
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 
     /**

@@ -142,6 +142,9 @@ class ConversationController extends BaseController
         $message->setAuthor($author);
         $message->setRecipient($recipient);
         $message->setMessage($parameters['message']);
+        if (array_key_exists('type', $parameters) && $parameters['type'] !== null) {
+            $message->setType($parameters['type']);
+        }
 
         $this->messageService->createMessage($message);
 
