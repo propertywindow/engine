@@ -9,6 +9,7 @@ services:
       - "80:80"
     links:
       - php
+      - memcached
     tty: true
     restart: always
 
@@ -34,3 +35,8 @@ services:
         MYSQL_PASSWORD: propertywindow
     tty: true
     restart: always
+
+  memcached:
+    image: memcached
+    ports:
+      - "11211:11211"
