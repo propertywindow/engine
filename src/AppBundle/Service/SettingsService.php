@@ -25,6 +25,11 @@ class SettingsService
 
     /**
      * @return Settings $settings
+     *
+     * @throws \AppBundle\Exceptions\SettingsNotFoundException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     public function getSettings()
     {

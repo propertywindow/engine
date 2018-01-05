@@ -25,6 +25,8 @@ class ActivityController extends BaseController
      * @param Request $httpRequest
      *
      * @return HttpResponse
+     *
+     * @throws Throwable
      */
     public function requestHandler(Request $httpRequest)
     {
@@ -46,7 +48,7 @@ class ActivityController extends BaseController
      * @return array
      *
      * @throws InvalidJsonRpcMethodException
-     * @throws ActivityNotFoundException
+     * @throws NotAuthorizedException
      */
     private function invoke(int $userId, string $method, array $parameters = [])
     {
@@ -92,6 +94,8 @@ class ActivityController extends BaseController
      * @param int $userId
      *
      * @return array
+     *
+     * @throws ActivityNotFoundException
      */
     private function getActivityFromUser(int $userId)
     {
