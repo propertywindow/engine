@@ -3,7 +3,6 @@ before_commands:
 
 build:
   dependencies:
-    # Runs before inferred commands
     before:
       - 'sudo apt-get update -y'
   environment:
