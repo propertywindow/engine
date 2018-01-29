@@ -417,7 +417,7 @@ class User
      *
      * @return User
      */
-    public function setAgent(Agent $agent = null)
+    public function setAgent(Agent $agent)
     {
         $this->agent = $agent;
 
@@ -429,7 +429,7 @@ class User
      *
      * @return \AgentBundle\Entity\Agent
      */
-    public function getAgent()
+    public function getAgent(): Agent
     {
         return $this->agent;
     }
