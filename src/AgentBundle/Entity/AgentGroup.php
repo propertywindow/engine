@@ -5,8 +5,6 @@ namespace AgentBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * AgentGroup
- *
  * @ORM\Table(name="agent_group")
  * @ORM\Entity(repositoryClass="AgentBundle\Repository\AgentGroupRepository")
  * @ORM\HasLifecycleCallbacks
@@ -44,23 +42,19 @@ class AgentGroup
     protected $updated;
 
     /**
-     * Get id
-     *
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
     /**
-     * Set name
-     *
      * @param string $name
      *
      * @return AgentGroup
      */
-    public function setName($name)
+    public function setName(string $name): AgentGroup
     {
         $this->name = $name;
 
@@ -68,11 +62,9 @@ class AgentGroup
     }
 
     /**
-     * Get name
-     *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }

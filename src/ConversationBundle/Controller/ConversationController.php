@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace ConversationBundle\Controller;
 
@@ -6,6 +7,7 @@ use AppBundle\Controller\BaseController;
 use ConversationBundle\Entity\Conversation;
 use ConversationBundle\Entity\Message;
 use ConversationBundle\Exceptions\ConversationForRecipientNotFoundException;
+use ConversationBundle\Exceptions\ConversationNotFoundException;
 use ConversationBundle\Exceptions\NoColleagueException;
 use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -27,6 +29,7 @@ class ConversationController extends BaseController
      * @param Request $httpRequest
      *
      * @return HttpResponse
+     *
      * @throws Throwable
      */
     public function requestHandler(Request $httpRequest)
@@ -42,14 +45,13 @@ class ConversationController extends BaseController
     }
 
     /**
-     * @param int    $userId
+     * @param int $userId
      * @param string $method
-     * @param array  $parameters
+     * @param array $parameters
      *
      * @return array
+     *
      * @throws InvalidJsonRpcMethodException
-     * @throws NoColleagueException
-     * @throws \ConversationBundle\Exceptions\ConversationNotFoundException
      */
     private function invoke(int $userId, string $method, array $parameters = [])
     {
@@ -75,7 +77,8 @@ class ConversationController extends BaseController
      * @param array $parameters
      *
      * @return array
-     * @throws \ConversationBundle\Exceptions\ConversationNotFoundException
+     *
+     * @throws ConversationNotFoundException
      */
     private function getConversation(array $parameters)
     {
@@ -90,7 +93,6 @@ class ConversationController extends BaseController
 
     /**
      * @param int $userId
-     *
      * @return array
      */
     private function getConversations(int $userId)
@@ -101,7 +103,7 @@ class ConversationController extends BaseController
     }
 
     /**
-     * @param int   $userId
+     * @param int $userId
      * @param array $parameters
      *
      * @return array $conversation
@@ -117,10 +119,10 @@ class ConversationController extends BaseController
             throw new InvalidArgumentException("message parameter not provided");
         }
 
-        $author    = $this->userService->getUser($userId);
+        $author = $this->userService->getUser($userId);
         $recipient = $this->userService->getUser((int)$parameters['recipient_id']);
-        $userType  = $this->userTypeService->getUserType(3);
-        $agentIds  = $this->agentService->getAgentIdsFromGroup((int)$author->getAgent()->getId());
+        $userType = $this->userTypeService->getUserType(3);
+        $agentIds = $this->agentService->getAgentIdsFromGroup((int)$author->getAgent()->getId());
 
         if (!$this->userService->isColleague($recipient->getId(), $agentIds, $userType)) {
             throw new NoColleagueException((int)$parameters['recipient_id']);
@@ -152,11 +154,12 @@ class ConversationController extends BaseController
     }
 
     /**
-     * @param int   $userId
+     * @param int $userId
      * @param array $parameters
      *
      * @return array
-     * @throws \ConversationBundle\Exceptions\ConversationNotFoundException
+     *
+     * @throws ConversationNotFoundException
      */
     private function getMessages(int $userId, array $parameters)
     {
@@ -164,7 +167,7 @@ class ConversationController extends BaseController
             throw new InvalidArgumentException("No argument provided");
         }
 
-        $id           = (int)$parameters['id'];
+        $id = (int)$parameters['id'];
         $conversation = $this->conversationService->getConversation($id);
 
         $messages = $this->messageService->getMessages($conversation);
@@ -180,10 +183,11 @@ class ConversationController extends BaseController
 
 
     /**
-     * @param int   $userId
+     * @param int $userId
      * @param array $parameters
      *
      * @return array
+     *
      * @throws ConversationForRecipientNotFoundException
      */
     private function getConversationByRecipient(int $userId, array $parameters)
@@ -192,15 +196,15 @@ class ConversationController extends BaseController
             throw new InvalidArgumentException("recipient_id parameter not provided");
         }
 
-        $author       = $this->userService->getUser($userId);
-        $recipient    = $this->userService->getUser((int)$parameters['recipient_id']);
+        $author = $this->userService->getUser($userId);
+        $recipient = $this->userService->getUser((int)$parameters['recipient_id']);
         $conversation = $this->conversationService->findByUsers($author, $recipient);
 
         if ($conversation === null) {
             throw new ConversationForRecipientNotFoundException();
         }
 
-        $messages     = $this->messageService->getMessages($conversation);
+        $messages = $this->messageService->getMessages($conversation);
 
         foreach ($messages as $message) {
             if (!$message->getSeen() && $message->getRecipient()->getId() === $userId) {
@@ -218,7 +222,7 @@ class ConversationController extends BaseController
      */
     private function getUnread(int $userId)
     {
-        $user     = $this->userService->getUser($userId);
+        $user = $this->userService->getUser($userId);
         $messages = $this->messageService->getUnread($user);
 
         return Mapper::fromMessages(...$messages);

@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace ConversationBundle\Repository;
 
@@ -15,7 +16,6 @@ class NotificationRepository extends EntityRepository
 {
     /**
      * @param int $id
-     *
      * @return Notification
      * @throws NotificationNotFoundException
      * @throws \Doctrine\ORM\ORMException
@@ -36,7 +36,6 @@ class NotificationRepository extends EntityRepository
 
     /**
      * @param User $user
-     *
      * @return array|Notification[]
      */
     public function listAll(User $user): array
@@ -56,7 +55,6 @@ class NotificationRepository extends EntityRepository
 
     /**
      * @param int $userId
-     *
      * @return array|Notification[]
      */
     public function getByUserId(int $userId): array
@@ -67,24 +65,24 @@ class NotificationRepository extends EntityRepository
         $qb->select('n')
            ->from('ConversationBundle:Notification', 'n')
            ->leftJoin('n.users', 'u', Join::WITH, 'u = :userId')
-           ->where(
-               $expr->andX(
-                   $expr->orX(
-                       $expr->eq('n.forEveryone', '1'),
-                       $expr->isNotNull('u.id')
-                   ),
-                   $expr->lt('n.start', 'CURRENT_TIMESTAMP()'),
-                   $expr->orX(
-                       $expr->isNull('n.end'),
-                       $expr->gt('n.end', 'CURRENT_TIMESTAMP()')
-                   ),
-                   $expr->eq('n.visible', '1')
-               )
-           )
+        ->where(
+            $expr->andX(
+                $expr->orX(
+                    $expr->eq('n.forEveryone', '1'),
+                    $expr->isNotNull('u.id')
+                ),
+                $expr->lt('n.start', 'CURRENT_TIMESTAMP()'),
+                $expr->orX(
+                    $expr->isNull('n.end'),
+                    $expr->gt('n.end', 'CURRENT_TIMESTAMP()')
+                ),
+                $expr->eq('n.visible', '1')
+            )
+        )
            ->setParameter('userId', $userId);
 
 
-        $query         = $qb;
+        $query = $qb;
         $notifications = $query->getQuery()->getResult();
 
         return $notifications;

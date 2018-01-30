@@ -1,9 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace AgentBundle\Service;
 
 use AgentBundle\Entity\AgentGroup;
 use Doctrine\ORM\EntityManagerInterface;
+use AgentBundle\Exceptions\AgentGroupNotFoundException;
 
 /**
  * @package AgentBundle\Service
@@ -28,10 +30,12 @@ class AgentGroupService
      * @param int $id
      *
      * @return AgentGroup $agentGroup
+     *
+     * @throws AgentGroupNotFoundException
      */
     public function getAgentGroup(int $id)
     {
-        $repository = $this->entityManager->getRepository('AgentBundle:AgentGroup');
+        $repository = $this->entityManager->getRepository(AgentGroup::class);
         $agentGroup = $repository->findById($id);
 
         return $agentGroup;
@@ -42,7 +46,7 @@ class AgentGroupService
      */
     public function getAgentGroups()
     {
-        $repository = $this->entityManager->getRepository('AgentBundle:AgentGroup');
+        $repository = $this->entityManager->getRepository(AgentGroup::class);
 
         return $repository->listAll();
     }
@@ -75,13 +79,11 @@ class AgentGroupService
     /**
      * @param int $id
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
+     * @throws AgentGroupNotFoundException
      */
     public function deleteAgentGroup(int $id)
     {
-        $agentGroupRepository = $this->entityManager->getRepository('AgentBundle:AgentGroup');
+        $agentGroupRepository = $this->entityManager->getRepository(AgentGroup::class);
         $agentGroup           = $agentGroupRepository->findById($id);
 
         $this->entityManager->remove($agentGroup);
