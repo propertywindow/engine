@@ -1,14 +1,16 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace AlertBundle\Service;
 
 use AgentBundle\Entity\AgentGroup;
+use AlertBundle\Repository\ApplicantRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use AlertBundle\Entity\Applicant;
 use AlertBundle\Exceptions\ApplicantNotFoundException;
 
 /**
- * @package AlertBundle\Service
+ * Applicant Service
  */
 class ApplicantService
 {
@@ -18,26 +20,28 @@ class ApplicantService
     private $entityManager;
 
     /**
+     * @var ApplicantRepository
+     */
+    private $repository;
+
+    /**
      * @param EntityManagerInterface $entityManger
      */
     public function __construct(EntityManagerInterface $entityManger)
     {
         $this->entityManager = $entityManger;
+        $this->repository    = $this->entityManager->getRepository(Applicant::class);
     }
 
     /**
      * @param int $id
      *
-     * @return Applicant $applicant
-     *
+     * @return Applicant
      * @throws ApplicantNotFoundException
      */
-    public function getApplicant(int $id)
+    public function getApplicant(int $id): Applicant
     {
-        $repository = $this->entityManager->getRepository('AlertBundle:Applicant');
-        $applicant  = $repository->findById($id);
-
-        return $applicant;
+        return $this->repository->findById($id);
     }
 
     /**
@@ -45,11 +49,9 @@ class ApplicantService
      *
      * @return Applicant[]
      */
-    public function getApplicants(AgentGroup $agentGroup)
+    public function getApplicants(AgentGroup $agentGroup): array
     {
-        $repository = $this->entityManager->getRepository('AlertBundle:Applicant');
-
-        return $repository->findByAgent($agentGroup);
+        return $this->repository->findByAgent($agentGroup);
     }
 
     /**
@@ -57,7 +59,7 @@ class ApplicantService
      *
      * @return Applicant
      */
-    public function createApplicant(Applicant $applicant)
+    public function createApplicant(Applicant $applicant): Applicant
     {
         $this->entityManager->persist($applicant);
         $this->entityManager->flush();
@@ -70,7 +72,7 @@ class ApplicantService
      *
      * @return Applicant
      */
-    public function updateApplicant(Applicant $applicant)
+    public function updateApplicant(Applicant $applicant): Applicant
     {
         $this->entityManager->flush();
 
@@ -80,13 +82,10 @@ class ApplicantService
     /**
      * @param string $email
      *
-     * @return Applicant $applicant
+     * @return Applicant
      */
-    public function getApplicantByEmail(string $email)
+    public function getApplicantByEmail(string $email): Applicant
     {
-        $repository = $this->entityManager->getRepository('AlertBundle:Applicant');
-        $applicant  = $repository->findOneBy(['email' => $email]);
-
-        return $applicant;
+        return $this->repository->findOneBy(['email' => $email]);
     }
 }

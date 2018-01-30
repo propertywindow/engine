@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace AgentBundle\Repository;
 
@@ -8,7 +9,6 @@ use Doctrine\ORM\EntityRepository;
 
 /**
  * AgentRepository
- *
  */
 class AgentRepository extends EntityRepository
 {
@@ -17,9 +17,6 @@ class AgentRepository extends EntityRepository
      *
      * @return Agent
      * @throws AgentNotFoundException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     public function findById(int $id): Agent
     {
@@ -53,8 +50,6 @@ class AgentRepository extends EntityRepository
      * @param int $agentGroupId
      *
      * @return int[] $ids
-     *
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function getAgentIdsFromGroupId(int $agentGroupId): array
     {

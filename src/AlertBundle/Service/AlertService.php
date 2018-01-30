@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace AlertBundle\Service;
 
 use AgentBundle\Entity\AgentGroup;
+use AlertBundle\Repository\AlertRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use AlertBundle\Entity\Alert;
 use AlertBundle\Exceptions\AlertNotFoundException;
@@ -19,25 +20,28 @@ class AlertService
     private $entityManager;
 
     /**
+     * @var AlertRepository
+     */
+    private $repository;
+
+    /**
      * @param EntityManagerInterface $entityManger
      */
     public function __construct(EntityManagerInterface $entityManger)
     {
         $this->entityManager = $entityManger;
+        $this->repository    = $this->entityManager->getRepository(Alert::class);
     }
 
     /**
      * @param int $id
      *
-     * @return Alert $alert
+     * @return Alert
      * @throws AlertNotFoundException
      */
     public function getAlert(int $id): Alert
     {
-        $repository = $this->entityManager->getRepository(Alert::class);
-        $alert      = $repository->findById($id);
-
-        return $alert;
+        return $this->repository->findById($id);
     }
 
     /**
@@ -45,11 +49,9 @@ class AlertService
      *
      * @return Alert[]
      */
-    public function getAlerts(AgentGroup $agentGroup)
+    public function getAlerts(AgentGroup $agentGroup): array
     {
-        $repository = $this->entityManager->getRepository(Alert::class);
-
-        return $repository->findByAgent($agentGroup);
+        return $this->repository->findByAgent($agentGroup);
     }
 
     /**

@@ -1,14 +1,17 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace AuthenticationBundle\Service;
 
 use AgentBundle\Entity\Agent;
 use AuthenticationBundle\Entity\UserType;
+use AuthenticationBundle\Exceptions\UserNotFoundException;
+use AuthenticationBundle\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use AuthenticationBundle\Entity\User;
 
 /**
- * @package AuthenticationBundle\Service
+ * User Service
  */
 class UserService
 {
@@ -18,22 +21,28 @@ class UserService
     private $entityManager;
 
     /**
+     * @var UserRepository
+     */
+    private $repository;
+
+    /**
      * @param EntityManagerInterface $entityManger
      */
     public function __construct(EntityManagerInterface $entityManger)
     {
         $this->entityManager = $entityManger;
+        $this->repository    = $this->entityManager->getRepository(User::class);
     }
 
     /**
      * @param int $id
      *
      * @return User $user
+     * @throws UserNotFoundException
      */
     public function getUser(int $id)
     {
-        $repository = $this->entityManager->getRepository('AuthenticationBundle:User');
-        $user       = $repository->findById($id);
+        $user = $this->repository->findById($id);
 
         return $user;
     }
@@ -47,8 +56,7 @@ class UserService
      */
     public function getUsers(User $user, UserType $adminType, UserType $colleagueType)
     {
-        $repository = $this->entityManager->getRepository('AuthenticationBundle:User');
-        $user       = $repository->listAll($user, $adminType, $colleagueType);
+        $user = $this->repository->listAll($user, $adminType, $colleagueType);
 
         return $user;
     }
@@ -61,8 +69,7 @@ class UserService
      */
     public function getAgentUsers(Agent $agent, UserType $colleagueType)
     {
-        $repository = $this->entityManager->getRepository('AuthenticationBundle:User');
-        $user       = $repository->agentListAll($agent, $colleagueType);
+        $user = $this->repository->agentListAll($agent, $colleagueType);
 
         return $user;
     }
@@ -75,8 +82,7 @@ class UserService
      */
     public function getColleagues(array $agentIds, UserType $userType)
     {
-        $repository = $this->entityManager->getRepository('AuthenticationBundle:User');
-        $user       = $repository->listColleagues($agentIds, $userType);
+        $user = $this->repository->listColleagues($agentIds, $userType);
 
         return $user;
     }
@@ -88,10 +94,9 @@ class UserService
      *
      * @return bool
      */
-    public function isColleague(int $userId, array $agentIds, UserType $userType)
+    public function isColleague(int $userId, array $agentIds, UserType $userType): bool
     {
-        $repository = $this->entityManager->getRepository('AuthenticationBundle:User');
-        $users      = $repository->listColleagues($agentIds, $userType);
+        $users = $this->repository->listColleagues($agentIds, $userType);
 
         foreach ($users as $user) {
             if ($userId === $user->getId()) {
@@ -103,40 +108,12 @@ class UserService
     }
 
     /**
-     * @param array    $parameters
-     *
-     * @param Agent    $agent
-     * @param UserType $userType
+     * @param User $user
      *
      * @return User
      */
-    public function createUser(array $parameters, Agent $agent, UserType $userType)
+    public function createUser(User $user): User
     {
-        $user = new User();
-
-        // todo: move this to controller
-
-        $user->setEmail(strtolower($parameters['email']));
-        $user->setFirstName(ucfirst($parameters['first_name']));
-        $user->setLastName(ucfirst($parameters['last_name']));
-        $user->setStreet(ucwords($parameters['street']));
-        $user->setHouseNumber($parameters['house_number']);
-        $user->setPostcode($parameters['postcode']);
-        $user->setCity(ucwords($parameters['city']));
-        $user->setCountry($parameters['country']);
-
-        $user->setAgent($agent);
-        $user->setUserType($userType);
-        $user->setActive(false);
-
-        if (array_key_exists('phone', $parameters) && $parameters['phone'] !== null) {
-            $user->setPhone((string)$parameters['phone']);
-        }
-
-        if (array_key_exists('avatar', $parameters) && $parameters['avatar'] !== null) {
-            $user->setAvatar((string)$parameters['avatar']);
-        }
-
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
@@ -148,7 +125,7 @@ class UserService
      *
      * @return User
      */
-    public function updateUser(User $user)
+    public function updateUser(User $user): User
     {
         $this->entityManager->flush();
 
@@ -156,25 +133,27 @@ class UserService
     }
 
     /**
-     * @param int $id
+     * @param User $user
+     *
+     * @return User
      */
-    public function disableUser(int $id)
+    public function disableUser(User $user): User
     {
-        $repository = $this->entityManager->getRepository('AuthenticationBundle:User');
-        $user       = $repository->findById($id);
-
         $user->setActive(false);
 
         $this->entityManager->flush();
+
+        return $user;
     }
 
     /**
      * @param int $id
+     *
+     * @throws UserNotFoundException
      */
     public function deleteUser(int $id)
     {
-        $repository = $this->entityManager->getRepository('AuthenticationBundle:User');
-        $user       = $repository->findById($id);
+        $user = $this->repository->findById($id);
 
         $this->entityManager->remove($user);
         $this->entityManager->flush();
@@ -187,8 +166,7 @@ class UserService
      */
     public function getUserByEmail(string $email)
     {
-        $repository = $this->entityManager->getRepository('AuthenticationBundle:User');
-        $user       = $repository->findOneBy(['email' => $email]);
+        $user = $this->repository->findOneBy(['email' => $email]);
 
         return $user;
     }
@@ -201,8 +179,7 @@ class UserService
      */
     public function login(string $email, string $password)
     {
-        $repository = $this->entityManager->getRepository('AuthenticationBundle:User');
-        $user       = $repository->findOneBy(
+        $user = $this->repository->findOneBy(
             [
                 'email'    => $email,
                 'password' => $password,

@@ -2,13 +2,14 @@
 
 namespace AlertBundle\Service;
 
+use AlertBundle\Repository\ApplicationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use AlertBundle\Entity\Applicant;
 use AlertBundle\Entity\Application;
 use AlertBundle\Exceptions\ApplicationNotFoundException;
 
 /**
- * @package AlertBundle\Service
+ * Application Service
  */
 class ApplicationService
 {
@@ -18,41 +19,39 @@ class ApplicationService
     private $entityManager;
 
     /**
+     * @var ApplicationRepository
+     */
+    private $repository;
+
+    /**
      * @param EntityManagerInterface $entityManger
      */
     public function __construct(EntityManagerInterface $entityManger)
     {
         $this->entityManager = $entityManger;
+        $this->repository    = $this->entityManager->getRepository(Application::class);
     }
 
     /**
      * @param int $id
      *
-     * @return Application $application
+     * @return Application
      *
      * @throws ApplicationNotFoundException
      */
-    public function getApplication(int $id)
+    public function getApplication(int $id): Application
     {
-        $repository  = $this->entityManager->getRepository('AlertBundle:Application');
-        $application = $repository->findById($id);
-
-        return $application;
+        return $this->repository->findById($id);
     }
 
     /**
      * @param Applicant $applicant
      *
-     * @return Application[] $application
-     *
-     * @throws ApplicationNotFoundException
+     * @return Application[]
      */
-    public function getApplicationFromApplicant(Applicant $applicant)
+    public function getApplicationFromApplicant(Applicant $applicant): array
     {
-        $repository  = $this->entityManager->getRepository('AlertBundle:Application');
-        $application = $repository->findByApplicant($applicant);
-
-        return $application;
+        return $this->repository->findByApplicant($applicant);
     }
 
     /**
@@ -60,7 +59,7 @@ class ApplicationService
      *
      * @return Application
      */
-    public function createApplication(Application $application)
+    public function createApplication(Application $application): Application
     {
         $this->entityManager->persist($application);
         $this->entityManager->flush();
@@ -73,7 +72,7 @@ class ApplicationService
      *
      * @return Application
      */
-    public function updateApplication(Application $application)
+    public function updateApplication(Application $application): Application
     {
         $this->entityManager->flush();
 

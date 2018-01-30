@@ -1,9 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace AgentBundle\Service;
 
 use AgentBundle\Entity\Agent;
 use AgentBundle\Entity\AgentSettings;
+use AgentBundle\Exceptions\AgentSettingsNotFoundException;
+use AgentBundle\Repository\AgentSettingsRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
@@ -17,24 +20,28 @@ class AgentSettingsService
     private $entityManager;
 
     /**
+     * @var AgentSettingsRepository
+     */
+    private $repository;
+
+    /**
      * @param EntityManagerInterface $entityManger
      */
     public function __construct(EntityManagerInterface $entityManger)
     {
         $this->entityManager = $entityManger;
+        $this->repository    = $this->entityManager->getRepository(AgentSettings::class);
     }
 
     /**
      * @param Agent $agent
      *
-     * @return AgentSettings $agent
+     * @return AgentSettings
+     * @throws AgentSettingsNotFoundException
      */
-    public function getSettings(Agent $agent)
+    public function getSettings(Agent $agent): AgentSettings
     {
-        $repository = $this->entityManager->getRepository('AgentBundle:AgentSettings');
-        $agent      = $repository->findByAgent($agent);
-
-        return $agent;
+        return $this->repository->findByAgent($agent);
     }
 
     /**
@@ -42,7 +49,7 @@ class AgentSettingsService
      *
      * @return AgentSettings
      */
-    public function updateSettings(AgentSettings $agentSettings)
+    public function updateSettings(AgentSettings $agentSettings): AgentSettings
     {
         $this->entityManager->flush();
 

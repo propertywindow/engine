@@ -4,11 +4,13 @@ declare(strict_types=1);
 namespace ConversationBundle\Service;
 
 use AuthenticationBundle\Entity\User;
+use ConversationBundle\Exceptions\NotificationNotFoundException;
+use ConversationBundle\Repository\NotificationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use ConversationBundle\Entity\Notification;
 
 /**
- * @package ConversationBundle\Service
+ * Notification Service
  */
 class NotificationService
 {
@@ -18,28 +20,28 @@ class NotificationService
     private $entityManager;
 
     /**
+     * @var NotificationRepository
+     */
+    private $repository;
+
+    /**
      * @param EntityManagerInterface $entityManger
      */
     public function __construct(EntityManagerInterface $entityManger)
     {
         $this->entityManager = $entityManger;
+        $this->repository    = $this->entityManager->getRepository(Notification::class);
     }
 
     /**
      * @param int $id
      *
-     * @return Notification $notification
-     * @throws \ConversationBundle\Exceptions\NotificationNotFoundException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
+     * @return Notification
+     * @throws NotificationNotFoundException
      */
-    public function getNotification(int $id)
+    public function getNotification(int $id): Notification
     {
-        $repository   = $this->entityManager->getRepository(Notification::class);
-        $notification = $repository->findById($id);
-
-        return $notification;
+        return $this->repository->findById($id);
     }
 
     /**
@@ -47,11 +49,9 @@ class NotificationService
      *
      * @return Notification[]
      */
-    public function getNotifications(User $user)
+    public function getNotifications(User $user): array
     {
-        $repository = $this->entityManager->getRepository(Notification::class);
-
-        return $repository->getByUserId($user->getId());
+        return $this->repository->getByUserId($user->getId());
     }
 
     /**
@@ -59,11 +59,9 @@ class NotificationService
      *
      * @return Notification[]
      */
-    public function listNotifications(User $user)
+    public function listNotifications(User $user): array
     {
-        $repository = $this->entityManager->getRepository(Notification::class);
-
-        return $repository->listAll($user);
+        return $this->repository->listAll($user);
     }
 
     /**
@@ -73,7 +71,7 @@ class NotificationService
      * @return Notification
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function createNotification(Notification $notification, array $userIdentifiers)
+    public function createNotification(Notification $notification, array $userIdentifiers): Notification
     {
         $this->entityManager->persist($notification);
         $this->rebindNotificationForeignEntries($notification, $userIdentifiers);
@@ -89,7 +87,7 @@ class NotificationService
      * @return Notification
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function updateNotification(Notification $notification, array $userIdentifiers)
+    public function updateNotification(Notification $notification, array $userIdentifiers): Notification
     {
         $this->rebindNotificationForeignEntries($notification, $userIdentifiers);
         $this->entityManager->flush();
@@ -100,15 +98,11 @@ class NotificationService
     /**
      * @param int $id
      *
-     * @throws \ConversationBundle\Exceptions\NotificationNotFoundException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
+     * @throws NotificationNotFoundException
      */
     public function deleteNotification(int $id)
     {
-        $notificationRepository = $this->entityManager->getRepository(Notification::class);
-        $notification           = $notificationRepository->findById($id);
+        $notification = $this->repository->findById($id);
 
         $this->entityManager->remove($notification);
         $this->entityManager->flush();

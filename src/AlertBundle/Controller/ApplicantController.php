@@ -9,6 +9,7 @@ use AlertBundle\Exceptions\ApplicationNotFoundException;
 use AlertBundle\Service\Applicant\Mapper;
 use AppBundle\Controller\BaseController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
+use AuthenticationBundle\Exceptions\UserNotFoundException;
 use InvalidArgumentException;
 use AlertBundle\Exceptions\ApplicantNotFoundException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -50,9 +51,10 @@ class ApplicantController extends BaseController
      * @return array
      * @throws ApplicantAlreadyExistException
      * @throws ApplicantNotFoundException
+     * @throws ApplicationNotFoundException
      * @throws InvalidJsonRpcMethodException
      * @throws NotAuthorizedException
-     * @throws ApplicationNotFoundException
+     * @throws UserNotFoundException
      */
     private function invoke(int $userId, string $method, array $parameters = [])
     {
@@ -77,8 +79,9 @@ class ApplicantController extends BaseController
      * @return array
      * @throws ApplicantNotFoundException
      * @throws NotAuthorizedException
+     * @throws UserNotFoundException
      */
-    private function getApplicant(int $userId, array $parameters)
+    private function getApplicant(int $userId, array $parameters): array
     {
         if (!array_key_exists('id', $parameters)) {
             throw new InvalidArgumentException("No argument provided");
@@ -99,8 +102,9 @@ class ApplicantController extends BaseController
      * @param int $userId
      *
      * @return array
+     * @throws UserNotFoundException
      */
-    private function getApplicants(int $userId)
+    private function getApplicants(int $userId): array
     {
         $user = $this->userService->getUser($userId);
 
@@ -113,6 +117,7 @@ class ApplicantController extends BaseController
      *
      * @return array $user
      * @throws ApplicantAlreadyExistException
+     * @throws UserNotFoundException
      */
     private function createApplicant(int $userId, array $parameters)
     {
@@ -155,8 +160,9 @@ class ApplicantController extends BaseController
      * @param array $parameters
      *
      * @throws ApplicantNotFoundException
-     * @throws NotAuthorizedException
      * @throws ApplicationNotFoundException
+     * @throws NotAuthorizedException
+     * @throws UserNotFoundException
      */
     private function deleteApplicant(int $userId, array $parameters)
     {

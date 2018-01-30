@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace AgentBundle\Service;
 
+use AgentBundle\Exceptions\AgentNotFoundException;
+use AgentBundle\Repository\AgentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use AgentBundle\Entity\Agent;
 
@@ -17,26 +19,28 @@ class AgentService
     private $entityManager;
 
     /**
+     * @var AgentRepository
+     */
+    private $repository;
+
+    /**
      * @param EntityManagerInterface $entityManger
      */
     public function __construct(EntityManagerInterface $entityManger)
     {
         $this->entityManager = $entityManger;
+        $this->repository    = $this->entityManager->getRepository(Agent::class);
     }
-    
+
     /**
      * @param int $id
      *
      * @return Agent $agent
-     * @throws \AgentBundle\Exceptions\AgentNotFoundException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
+     * @throws AgentNotFoundException
      */
     public function getAgent(int $id)
     {
-        $repository = $this->entityManager->getRepository(Agent::class);
-        $agent      = $repository->findById($id);
+        $agent      = $this->repository->findById($id);
 
         return $agent;
     }
@@ -44,27 +48,21 @@ class AgentService
     /**
      * @return Agent[]
      */
-    public function getAgents()
+    public function getAgents(): array
     {
-        $repository = $this->entityManager->getRepository(Agent::class);
-
-        return $repository->listAll();
+        return $this->repository->listAll();
     }
 
     /**
      * @param int $agentId
      *
      * @return int[] $groupIds
-     * @throws \AgentBundle\Exceptions\AgentNotFoundException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
+     * @throws AgentNotFoundException
      */
     public function getAgentIdsFromGroup(int $agentId)
     {
-        $repository = $this->entityManager->getRepository(Agent::class);
-        $agent      = $repository->findById($agentId);
-        $groupIds   = $repository->getAgentIdsFromGroupId((int)$agent->getAgentGroup()->getId());
+        $agent      = $this->repository->findById($agentId);
+        $groupIds   = $this->repository->getAgentIdsFromGroupId((int)$agent->getAgentGroup()->getId());
 
         return $groupIds;
     }
@@ -98,15 +96,11 @@ class AgentService
     /**
      * @param int $id
      *
-     * @throws \AgentBundle\Exceptions\AgentNotFoundException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
+     * @throws AgentNotFoundException
      */
     public function deleteAgent(int $id)
     {
-        $agentRepository = $this->entityManager->getRepository(Agent::class);
-        $agent           = $agentRepository->findById($id);
+        $agent           = $this->repository->findById($id);
 
         $this->entityManager->remove($agent);
         $this->entityManager->flush();

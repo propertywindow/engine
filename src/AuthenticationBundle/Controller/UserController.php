@@ -3,9 +3,12 @@ declare(strict_types=1);
 
 namespace AuthenticationBundle\Controller;
 
+use AgentBundle\Exceptions\AgentNotFoundException;
 use AppBundle\Controller\BaseController;
+use AuthenticationBundle\Entity\User;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use AuthenticationBundle\Exceptions\UserAlreadyExistException;
+use AuthenticationBundle\Exceptions\UserNotFoundException;
 use AuthenticationBundle\Service\User\Mapper;
 use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -89,6 +92,7 @@ class UserController extends BaseController
      *
      * @return array
      * @throws NotAuthorizedException
+     * @throws UserNotFoundException
      */
     private function getUserById(int $userId, array $parameters)
     {
@@ -111,6 +115,7 @@ class UserController extends BaseController
      * @param int $userId
      *
      * @return array
+     * @throws UserNotFoundException
      */
     private function getUsers(int $userId)
     {
@@ -128,6 +133,8 @@ class UserController extends BaseController
      *
      * @return array
      * @throws NotAuthorizedException
+     * @throws UserNotFoundException
+     * @throws AgentNotFoundException
      */
     private function getAgentUsers(int $userId, array $parameters)
     {
@@ -152,6 +159,8 @@ class UserController extends BaseController
      * @param int $userId
      *
      * @return array
+     * @throws UserNotFoundException
+     * @throws AgentNotFoundException
      */
     private function getColleagues(int $userId)
     {
@@ -222,8 +231,29 @@ class UserController extends BaseController
             throw new UserAlreadyExistException($parameters['email']);
         }
 
-        $userType    = $this->userTypeService->getUserType($parameters['user_type_id']);
-        $createdUser = $this->userService->createUser($parameters, $user->getAgent(), $userType);
+        $newUser = new User();
+
+        $newUser->setEmail(strtolower($parameters['email']));
+        $newUser->setFirstName(ucfirst($parameters['first_name']));
+        $newUser->setLastName(ucfirst($parameters['last_name']));
+        $newUser->setStreet(ucwords($parameters['street']));
+        $newUser->setHouseNumber($parameters['house_number']);
+        $newUser->setPostcode($parameters['postcode']);
+        $newUser->setCity(ucwords($parameters['city']));
+        $newUser->setCountry($parameters['country']);
+        $newUser->setAgent($user->getAgent());
+        $newUser->setUserType($this->userTypeService->getUserType($parameters['user_type_id']));
+        $newUser->setActive(false);
+
+        if (array_key_exists('phone', $parameters) && $parameters['phone'] !== null) {
+            $newUser->setPhone((string)$parameters['phone']);
+        }
+
+        if (array_key_exists('avatar', $parameters) && $parameters['avatar'] !== null) {
+            $newUser->setAvatar((string)$parameters['avatar']);
+        }
+
+        $createdUser = $this->userService->createUser($newUser);
         $password    = $this->randomPassword();
 
         $mailParameters = [
@@ -250,6 +280,7 @@ class UserController extends BaseController
      *
      * @return array
      * @throws NotAuthorizedException
+     * @throws UserNotFoundException
      */
     private function updateUser(int $userId, array $parameters)
     {
@@ -315,6 +346,7 @@ class UserController extends BaseController
      * @param array $parameters
      *
      * @throws NotAuthorizedException
+     * @throws UserNotFoundException
      */
     private function setPassword(int $userId, array $parameters)
     {
@@ -344,6 +376,7 @@ class UserController extends BaseController
      * @param array $parameters
      *
      * @throws NotAuthorizedException
+     * @throws UserNotFoundException
      */
     private function disableUser(int $userId, array $parameters)
     {
@@ -359,7 +392,7 @@ class UserController extends BaseController
             throw new NotAuthorizedException($userId);
         }
 
-        $this->userService->disableUser($id);
+        $this->userService->disableUser($user);
     }
 
     /**
@@ -367,6 +400,7 @@ class UserController extends BaseController
      * @param array $parameters
      *
      * @throws NotAuthorizedException
+     * @throws UserNotFoundException
      */
     private function deleteUser(int $userId, array $parameters)
     {
@@ -388,8 +422,9 @@ class UserController extends BaseController
      * @param int $userId
      *
      * @return array
+     * @throws UserNotFoundException
      */
-    private function verify(int $userId)
+    private function verify(int $userId): array
     {
         $user = $this->userService->getUser($userId);
 

@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace AuthenticationBundle\Repository;
 
@@ -10,7 +11,6 @@ use AuthenticationBundle\Exceptions\UserNotFoundException;
 
 /**
  * UserRepository
- *
  */
 class UserRepository extends EntityRepository
 {
@@ -18,7 +18,6 @@ class UserRepository extends EntityRepository
      * @param int $id
      *
      * @return User
-     *
      * @throws UserNotFoundException
      */
     public function findById(int $id): User
@@ -37,7 +36,6 @@ class UserRepository extends EntityRepository
      * @param int[] $identifiers
      *
      * @return User[]
-     *
      * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function findByUserIdentifiers(array $identifiers): array
@@ -59,6 +57,7 @@ class UserRepository extends EntityRepository
             $insertedUsers = [];
             foreach ($userIdentifiersNotFound as $identifier) {
                 $user = new User($identifier);
+                // todo: fix this
 
                 $entityManager->persist($user);
                 $insertedUsers[] = $user;
@@ -151,7 +150,6 @@ class UserRepository extends EntityRepository
      * @param int $id
      *
      * @return int $userType
-     *
      * @throws UserNotFoundException
      */
     public function getUserType(int $id): int

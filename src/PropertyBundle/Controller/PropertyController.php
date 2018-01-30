@@ -3,8 +3,10 @@ declare(strict_types=1);
 
 namespace PropertyBundle\Controller;
 
+use AgentBundle\Exceptions\AgentNotFoundException;
 use AppBundle\Controller\BaseController;
 
+use AuthenticationBundle\Exceptions\UserNotFoundException;
 use InvalidArgumentException;
 use PropertyBundle\Entity\Property;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -48,14 +50,12 @@ class PropertyController extends BaseController
      * @param array  $parameters
      *
      * @return array
+     * @throws AgentNotFoundException
      * @throws InvalidJsonRpcMethodException
      * @throws NotAuthorizedException
      * @throws PropertyAlreadyExistsException
      * @throws PropertyNotFoundException
-     * @throws \AgentBundle\Exceptions\AgentNotFoundException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
+     * @throws UserNotFoundException
      */
     public function invoke(int $userId, string $method, array $parameters = [])
     {
@@ -91,6 +91,7 @@ class PropertyController extends BaseController
      * @return array
      * @throws NotAuthorizedException
      * @throws PropertyNotFoundException
+     * @throws UserNotFoundException
      */
     private function getProperty(int $userId, array $parameters)
     {
@@ -135,6 +136,7 @@ class PropertyController extends BaseController
      * @param int $userId
      *
      * @return array
+     * @throws UserNotFoundException
      */
     private function getProperties(int $userId)
     {
@@ -150,10 +152,8 @@ class PropertyController extends BaseController
      * @param array $parameters
      *
      * @return array
-     * @throws \AgentBundle\Exceptions\AgentNotFoundException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
+     * @throws UserNotFoundException
+     * @throws AgentNotFoundException
      */
     private function getAllProperties(int $userId, array $parameters)
     {
@@ -181,6 +181,7 @@ class PropertyController extends BaseController
      * @return array $property
      * @throws NotAuthorizedException
      * @throws PropertyAlreadyExistsException
+     * @throws UserNotFoundException
      */
     private function createProperty(int $userId, array $parameters)
     {
@@ -287,6 +288,7 @@ class PropertyController extends BaseController
      * @return array
      * @throws NotAuthorizedException
      * @throws PropertyNotFoundException
+     * @throws UserNotFoundException
      */
     private function updateProperty(int $userId, array $parameters)
     {
@@ -399,6 +401,7 @@ class PropertyController extends BaseController
      *
      * @throws NotAuthorizedException
      * @throws PropertyNotFoundException
+     * @throws UserNotFoundException
      */
     private function archiveProperty(int $userId, array $parameters)
     {
@@ -434,6 +437,7 @@ class PropertyController extends BaseController
      *
      * @throws NotAuthorizedException
      * @throws PropertyNotFoundException
+     * @throws UserNotFoundException
      */
     private function deleteProperty(int $userId, array $parameters)
     {
@@ -460,6 +464,7 @@ class PropertyController extends BaseController
      *
      * @throws NotAuthorizedException
      * @throws PropertyNotFoundException
+     * @throws UserNotFoundException
      */
     private function setPropertySold(int $userId, array $parameters)
     {
@@ -498,6 +503,7 @@ class PropertyController extends BaseController
      *
      * @throws NotAuthorizedException
      * @throws PropertyNotFoundException
+     * @throws UserNotFoundException
      */
     private function toggleOnline(int $userId, array $parameters)
     {

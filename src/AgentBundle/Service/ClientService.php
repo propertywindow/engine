@@ -1,14 +1,16 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace AgentBundle\Service;
 
 use AgentBundle\Entity\Agent;
-use AuthenticationBundle\Entity\User;
+use AgentBundle\Exceptions\ClientNotFoundException;
+use AgentBundle\Repository\ClientRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use AgentBundle\Entity\Client;
 
 /**
- * @package AgentBundle\Service
+ * Client Service
  */
 class ClientService
 {
@@ -18,24 +20,28 @@ class ClientService
     private $entityManager;
 
     /**
+     * @var ClientRepository
+     */
+    private $repository;
+
+    /**
      * @param EntityManagerInterface $entityManger
      */
     public function __construct(EntityManagerInterface $entityManger)
     {
         $this->entityManager = $entityManger;
+        $this->repository    = $this->entityManager->getRepository(Client::class);
     }
 
     /**
      * @param int $id
      *
-     * @return Client $client
+     * @return Client
+     * @throws ClientNotFoundException
      */
-    public function getClient(int $id)
+    public function getClient(int $id): Client
     {
-        $repository = $this->entityManager->getRepository('AgentBundle:Client');
-        $client     = $repository->findById($id);
-
-        return $client;
+        return $this->repository->findById($id);
     }
 
     /**
@@ -43,31 +49,18 @@ class ClientService
      *
      * @return Client[]
      */
-    public function getClients(Agent $agent)
+    public function getClients(Agent $agent): array
     {
-        $repository = $this->entityManager->getRepository('AgentBundle:Client');
-
-        return $repository->listAll($agent);
+        return $this->repository->listAll($agent);
     }
 
     /**
-     * @param array $parameters
-     * @param User  $user
-     * @param Agent $agent
+     * @param Client $client
      *
      * @return Client
      */
-    public function createClient(array $parameters, User $user, Agent $agent)
+    public function createClient(Client $client): Client
     {
-        $client = new Client();
-
-        $client->setAgent($agent);
-        $client->setUser($user);
-
-        if (array_key_exists('transparency', $parameters) && $parameters['transparency'] !== null) {
-            $client->setTransparency($parameters['transparency']);
-        }
-
         $this->entityManager->persist($client);
         $this->entityManager->flush();
 
@@ -88,11 +81,12 @@ class ClientService
 
     /**
      * @param int $id
+     *
+     * @throws ClientNotFoundException
      */
     public function deleteClient(int $id)
     {
-        $repository = $this->entityManager->getRepository('AgentBundle:Client');
-        $client     = $repository->findById($id);
+        $client = $this->repository->findById($id);
 
         $this->entityManager->remove($client);
         $this->entityManager->flush();

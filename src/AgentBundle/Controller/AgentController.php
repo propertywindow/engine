@@ -5,9 +5,13 @@ namespace AgentBundle\Controller;
 
 use AgentBundle\Entity\Agent;
 use AgentBundle\Exceptions\AgentGroupNotFoundException;
+use AgentBundle\Exceptions\AgentNotFoundException;
+use AgentBundle\Exceptions\AgentSettingsNotFoundException;
 use AppBundle\Controller\BaseController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use AuthenticationBundle\Exceptions\UserAlreadyExistException;
+use AuthenticationBundle\Exceptions\UserNotFoundException;
+use AuthenticationBundle\Exceptions\UserSettingsNotFoundException;
 use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Response;
@@ -48,12 +52,16 @@ class AgentController extends BaseController
      *
      * @return array
      * @throws AgentGroupNotFoundException
+     * @throws AgentNotFoundException
+     * @throws AgentSettingsNotFoundException
      * @throws InvalidJsonRpcMethodException
      * @throws NotAuthorizedException
+     * @throws Throwable
      * @throws UserAlreadyExistException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
+     * @throws UserNotFoundException
+     * @throws UserSettingsNotFoundException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Syntax
      */
     private function invoke(int $userId, string $method, array $parameters = [])
     {
@@ -77,6 +85,7 @@ class AgentController extends BaseController
      * @param array $parameters
      *
      * @return array
+     * @throws AgentNotFoundException
      */
     private function getAgent(array $parameters)
     {
@@ -94,6 +103,7 @@ class AgentController extends BaseController
      *
      * @return array
      * @throws NotAuthorizedException
+     * @throws UserNotFoundException
      */
     private function getAgents(int $userId)
     {
@@ -111,9 +121,15 @@ class AgentController extends BaseController
      * @param array $parameters
      *
      * @return array $user
-     * @throws NotAuthorizedException
-     * @throws UserAlreadyExistException
      * @throws AgentGroupNotFoundException
+     * @throws NotAuthorizedException
+     * @throws Throwable
+     * @throws UserAlreadyExistException
+     * @throws UserNotFoundException
+     * @throws AgentSettingsNotFoundException
+     * @throws UserSettingsNotFoundException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Syntax
      */
     private function createAgent(int $userId, array $parameters)
     {
@@ -235,7 +251,9 @@ class AgentController extends BaseController
      * @param array $parameters
      *
      * @return array
+     * @throws AgentNotFoundException
      * @throws NotAuthorizedException
+     * @throws UserNotFoundException
      */
     private function updateAgent(int $userId, array $parameters)
     {
@@ -250,65 +268,65 @@ class AgentController extends BaseController
         $id   = (int)$parameters['id'];
         $user = $this->userService->getUser($userId);
 
-        $updateAgent = $this->agentService->getAgent($id);
+        $agent = $this->agentService->getAgent($id);
 
         if ((int)$user->getUserType()->getId() > self::USER_AGENT) {
             throw new NotAuthorizedException($userId);
         }
 
-        if ($updateAgent->getId() !== $user->getAgent()->getId()) {
+        if ($agent->getId() !== $user->getAgent()->getId()) {
             if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
                 throw new NotAuthorizedException($userId);
             }
         }
 
         if (array_key_exists('office', $parameters) && $parameters['office'] !== null) {
-            $updateAgent->setOffice(ucfirst($parameters['office']));
+            $agent->setOffice(ucfirst($parameters['office']));
         }
         if (array_key_exists('phone', $parameters) && $parameters['phone'] !== null) {
-            $updateAgent->setPhone($parameters['phone']);
+            $agent->setPhone($parameters['phone']);
         }
         if (array_key_exists('fax', $parameters) && $parameters['fax'] !== null) {
-            $updateAgent->setFax($parameters['fax']);
+            $agent->setFax($parameters['fax']);
         }
         if (array_key_exists('email', $parameters) && $parameters['email'] !== null) {
-            $updateAgent->setEmail($parameters['email']);
+            $agent->setEmail($parameters['email']);
         }
         if (array_key_exists('website', $parameters) && $parameters['website'] !== null) {
-            $updateAgent->setWebsite($parameters['website']);
+            $agent->setWebsite($parameters['website']);
         }
         if (array_key_exists('logo', $parameters) && $parameters['logo'] !== null) {
-            $updateAgent->setLogo($parameters['logo']);
+            $agent->setLogo($parameters['logo']);
         }
         if (array_key_exists('street', $parameters) && $parameters['street'] !== null) {
-            $updateAgent->setStreet($parameters['street']);
+            $agent->setStreet($parameters['street']);
         }
         if (array_key_exists('house_number', $parameters) && $parameters['house_number'] !== null) {
-            $updateAgent->setHouseNumber($parameters['house_number']);
+            $agent->setHouseNumber($parameters['house_number']);
         }
         if (array_key_exists('postcode', $parameters) && $parameters['postcode'] !== null) {
-            $updateAgent->setPostcode($parameters['postcode']);
+            $agent->setPostcode($parameters['postcode']);
         }
         if (array_key_exists('city', $parameters) && $parameters['city'] !== null) {
-            $updateAgent->setCity($parameters['city']);
+            $agent->setCity($parameters['city']);
         }
         if (array_key_exists('country', $parameters) && $parameters['country'] !== null) {
-            $updateAgent->setCountry($parameters['country']);
+            $agent->setCountry($parameters['country']);
         }
         if (array_key_exists('property_limit', $parameters) && $parameters['property_limit'] !== null) {
-            $updateAgent->setPropertyLimit((int)$parameters['property_limit']);
+            $agent->setPropertyLimit((int)$parameters['property_limit']);
         }
         if (array_key_exists('web_print', $parameters) && $parameters['web_print'] !== null) {
-            $updateAgent->setWebprint((bool)$parameters['web_print']);
+            $agent->setWebprint((bool)$parameters['web_print']);
         }
         if (array_key_exists('espc', $parameters) && $parameters['espc'] !== null) {
-            $updateAgent->setEspc((bool)$parameters['espc']);
+            $agent->setEspc((bool)$parameters['espc']);
         }
         if (array_key_exists('archived', $parameters) && $parameters['archived'] !== null) {
-            $updateAgent->setArchived((bool)$parameters['archived']);
+            $agent->setArchived((bool)$parameters['archived']);
         }
 
-        return Mapper::fromAgent($this->agentService->updateAgent($updateAgent));
+        return Mapper::fromAgent($this->agentService->updateAgent($agent));
     }
 
 
@@ -317,9 +335,8 @@ class AgentController extends BaseController
      * @param array $parameters
      *
      * @throws NotAuthorizedException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
+     * @throws AgentNotFoundException
+     * @throws UserNotFoundException
      */
     private function deleteAgent(int $userId, array $parameters)
     {

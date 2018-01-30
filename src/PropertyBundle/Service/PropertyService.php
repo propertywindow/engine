@@ -38,7 +38,7 @@ class PropertyService
      * @return Property $property
      * @throws PropertyNotFoundException
      */
-    public function getProperty(int $id)
+    public function getProperty(int $id): Property
     {
         $property = $this->repository->findById($id);
 
@@ -50,7 +50,7 @@ class PropertyService
      *
      * @return bool
      */
-    public function checkExistence(array $parameters)
+    public function checkExistence(array $parameters): bool
     {
         $property = $this->repository->findOneBy(
             [
@@ -95,7 +95,7 @@ class PropertyService
      *
      * @return Property
      */
-    public function createProperty(Property $property)
+    public function createProperty(Property $property): Property
     {
         $this->entityManager->persist($property);
         $this->entityManager->flush();
@@ -108,7 +108,7 @@ class PropertyService
      *
      * @return Property
      */
-    public function updateProperty(Property $property)
+    public function updateProperty(Property $property): Property
     {
         $this->entityManager->flush();
 
@@ -117,12 +117,16 @@ class PropertyService
 
     /**
      * @param Property $property
+     *
+     * @return Property
      */
-    public function archiveProperty(Property $property)
+    public function archiveProperty(Property $property): Property
     {
         $property->setArchived(true);
 
         $this->entityManager->flush();
+
+        return $property;
     }
 
     /**
@@ -149,7 +153,7 @@ class PropertyService
      * @return Property
      * @throws PropertyNotFoundException
      */
-    public function setPropertySold(int $id, int $soldPrice)
+    public function setPropertySold(int $id, int $soldPrice): Property
     {
         $property = $this->repository->find($id);
 
@@ -173,7 +177,7 @@ class PropertyService
      * @return Property
      * @throws PropertyNotFoundException
      */
-    public function toggleOnline(int $id, bool $online)
+    public function toggleOnline(int $id, bool $online): Property
     {
         $property = $this->repository->find($id);
 

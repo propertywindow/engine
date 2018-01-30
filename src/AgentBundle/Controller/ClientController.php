@@ -3,8 +3,12 @@ declare(strict_types=1);
 
 namespace AgentBundle\Controller;
 
+use AgentBundle\Entity\Client;
+use AgentBundle\Exceptions\ClientNotFoundException;
 use AppBundle\Controller\BaseController;
+use AuthenticationBundle\Entity\User;
 use AuthenticationBundle\Exceptions\UserAlreadyExistException;
+use AuthenticationBundle\Exceptions\UserNotFoundException;
 use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Response;
@@ -44,8 +48,10 @@ class ClientController extends BaseController
      * @param array  $parameters
      *
      * @return array
+     * @throws ClientNotFoundException
      * @throws InvalidJsonRpcMethodException
      * @throws UserAlreadyExistException
+     * @throws UserNotFoundException
      */
     private function invoke(int $userId, string $method, array $parameters = [])
     {
@@ -65,8 +71,9 @@ class ClientController extends BaseController
      * @param array $parameters
      *
      * @return array
+     * @throws ClientNotFoundException
      */
-    private function getClient(array $parameters)
+    private function getClient(array $parameters): array
     {
         if (!array_key_exists('id', $parameters)) {
             throw new InvalidArgumentException("No argument provided");
@@ -81,8 +88,9 @@ class ClientController extends BaseController
      * @param int $userId
      *
      * @return array
+     * @throws UserNotFoundException
      */
-    private function getClients(int $userId)
+    private function getClients(int $userId): array
     {
         $user = $this->userService->getUser($userId);
 
@@ -95,6 +103,7 @@ class ClientController extends BaseController
      *
      * @return array $user
      * @throws UserAlreadyExistException
+     * @throws UserNotFoundException
      */
     private function createClient(int $userId, array $parameters)
     {
@@ -132,9 +141,32 @@ class ClientController extends BaseController
             throw new UserAlreadyExistException($parameters['email']);
         }
 
-        $userType    = $this->userTypeService->getUserType(4);
-        $createdUser = $this->userService->createUser($parameters, $user->getAgent(), $userType);
-        $client      = $this->clientService->createClient($parameters, $createdUser, $user->getAgent());
+        $newUser = new User();
+
+        $newUser->setEmail(strtolower($parameters['email']));
+        $newUser->setFirstName(ucfirst($parameters['first_name']));
+        $newUser->setLastName(ucfirst($parameters['last_name']));
+        $newUser->setStreet(ucwords($parameters['street']));
+        $newUser->setHouseNumber($parameters['house_number']);
+        $newUser->setPostcode($parameters['postcode']);
+        $newUser->setCity(ucwords($parameters['city']));
+        $newUser->setCountry($parameters['country']);
+        $newUser->setAgent($user->getAgent());
+        $newUser->setUserType($this->userTypeService->getUserType(4));
+        $newUser->setActive(false);
+
+        $createdUser = $this->userService->createUser($newUser);
+
+        $client = new Client();
+
+        $client->setAgent($user->getAgent());
+        $client->setUser($createdUser);
+
+        if (array_key_exists('transparency', $parameters) && $parameters['transparency'] !== null) {
+            $client->setTransparency($parameters['transparency']);
+        }
+
+        $this->clientService->createClient($client);
 
         return Mapper::fromClient($client);
     }
