@@ -8,6 +8,7 @@ use AgentBundle\Exceptions\AgentGroupNotFoundException;
 use AgentBundle\Exceptions\AgentNotFoundException;
 use AgentBundle\Exceptions\AgentSettingsNotFoundException;
 use AppBundle\Controller\BaseController;
+use AuthenticationBundle\Entity\User;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use AuthenticationBundle\Exceptions\UserAlreadyExistException;
 use AuthenticationBundle\Exceptions\UserNotFoundException;
@@ -218,12 +219,22 @@ class AgentController extends BaseController
             $agent->setWebsite((string)$parameters['website']);
         }
 
-        $agent    = $this->agentService->createAgent($agent);
-        $userType = $this->userTypeService->getUserType(2);
+        $agent   = $this->agentService->createAgent($agent);
+        $newUser = new User();
 
-        // todo: move new User() from userService to here
+        $newUser->setEmail(strtolower($parameters['email']));
+        $newUser->setFirstName(ucfirst($parameters['first_name']));
+        $newUser->setLastName(ucfirst($parameters['last_name']));
+        $newUser->setStreet(ucwords($parameters['street']));
+        $newUser->setHouseNumber($parameters['house_number']);
+        $newUser->setPostcode($parameters['postcode']);
+        $newUser->setCity(ucwords($parameters['city']));
+        $newUser->setCountry($parameters['country']);
+        $newUser->setAgent($agent);
+        $newUser->setUserType($this->userTypeService->getUserType(2));
+        $newUser->setActive(false);
 
-        $createdUser = $this->userService->createUser($parameters, $agent, $userType);
+        $createdUser = $this->userService->createUser($newUser);
         $password    = $this->randomPassword();
 
         $mailParameters = [
