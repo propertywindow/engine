@@ -48,10 +48,11 @@ class ConversationController extends BaseController
      * @param int $userId
      * @param string $method
      * @param array $parameters
-     *
      * @return array
-     *
+     * @throws ConversationForRecipientNotFoundException
+     * @throws ConversationNotFoundException
      * @throws InvalidJsonRpcMethodException
+     * @throws NoColleagueException
      */
     private function invoke(int $userId, string $method, array $parameters = [])
     {

@@ -8,7 +8,6 @@ use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Response;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
-use AgentBundle\Exceptions\AgentNotFoundException;
 use AgentBundle\Service\AgentSettings\Mapper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;

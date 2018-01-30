@@ -170,7 +170,7 @@ class User
      *
      * @return User
      */
-    public function setEmail($email): User
+    public function setEmail(string $email): User
     {
         $this->email = $email;
 
@@ -180,7 +180,7 @@ class User
     /**
      * @return string
      */
-    public function getEmail()
+    public function getEmail(): string
     {
         return $this->email;
     }
@@ -210,7 +210,7 @@ class User
      *
      * @return User
      */
-    public function setFirstName($firstName): User
+    public function setFirstName(string $firstName): User
     {
         $this->firstName = $firstName;
 
@@ -220,7 +220,7 @@ class User
     /**
      * @return string
      */
-    public function getFirstName()
+    public function getFirstName(): string
     {
         return $this->firstName;
     }
@@ -230,7 +230,7 @@ class User
      *
      * @return User
      */
-    public function setLastName($lastName): User
+    public function setLastName(string $lastName): User
     {
         $this->lastName = $lastName;
 
@@ -240,7 +240,7 @@ class User
     /**
      * @return string
      */
-    public function getLastName()
+    public function getLastName(): string
     {
         return $this->lastName;
     }
@@ -250,7 +250,7 @@ class User
      *
      * @return User
      */
-    public function setStreet($street): User
+    public function setStreet(string $street): User
     {
         $this->street = $street;
 
@@ -260,7 +260,7 @@ class User
     /**
      * @return string
      */
-    public function getStreet()
+    public function getStreet(): string
     {
         return $this->street;
     }
@@ -270,7 +270,7 @@ class User
      *
      * @return User
      */
-    public function setHouseNumber($houseNumber): User
+    public function setHouseNumber(string $houseNumber): User
     {
         $this->houseNumber = $houseNumber;
 
@@ -280,7 +280,7 @@ class User
     /**
      * @return string
      */
-    public function getHouseNumber()
+    public function getHouseNumber(): string
     {
         return $this->houseNumber;
     }
@@ -290,7 +290,7 @@ class User
      *
      * @return User
      */
-    public function setPostcode($postcode): User
+    public function setPostcode(string $postcode): User
     {
         $this->postcode = $postcode;
 
@@ -300,7 +300,7 @@ class User
     /**
      * @return string
      */
-    public function getPostcode()
+    public function getPostcode(): string
     {
         return $this->postcode;
     }
@@ -310,7 +310,7 @@ class User
      *
      * @return User
      */
-    public function setCity($city): User
+    public function setCity(string $city): User
     {
         $this->city = $city;
 
@@ -320,7 +320,7 @@ class User
     /**
      * @return string
      */
-    public function getCity()
+    public function getCity(): string
     {
         return $this->city;
     }
