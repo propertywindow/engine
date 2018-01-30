@@ -6,6 +6,7 @@ namespace PropertyBundle\Controller;
 use AppBundle\Controller\BaseController;
 
 use InvalidArgumentException;
+use PropertyBundle\Entity\Property;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Response;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
@@ -51,6 +52,10 @@ class PropertyController extends BaseController
      * @throws NotAuthorizedException
      * @throws PropertyAlreadyExistsException
      * @throws PropertyNotFoundException
+     * @throws \AgentBundle\Exceptions\AgentNotFoundException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     public function invoke(int $userId, string $method, array $parameters = [])
     {
@@ -85,6 +90,7 @@ class PropertyController extends BaseController
      *
      * @return array
      * @throws NotAuthorizedException
+     * @throws PropertyNotFoundException
      */
     private function getProperty(int $userId, array $parameters)
     {
@@ -223,18 +229,33 @@ class PropertyController extends BaseController
             throw new PropertyAlreadyExistsException($parameters['client_id']);
         }
 
-        $client     = $this->clientService->getClient($parameters['client_id']);
-        $kind       = $this->kindService->getKind($parameters['kind_id']);
-        $terms      = $this->termsService->getTerm($parameters['terms_id']);
-        $subType    = $this->subTypeService->getSubType($parameters['sub_type_id']);
-        $property   = $this->propertyService->createProperty(
-            $parameters,
-            $user->getAgent(),
-            $client,
-            $kind,
-            $terms,
-            $subType
-        );
+        $property = new Property();
+
+        $property->setKind($this->kindService->getKind($parameters['kind_id']));
+        $property->setTerms($this->termsService->getTerm($parameters['terms_id']));
+        $property->setAgent($user->getAgent());
+        $property->setClient($this->clientService->getClient($parameters['client_id']));
+        $property->setSubType($this->subTypeService->getSubType($parameters['sub_type_id']));
+        $property->setStreet(ucwords($parameters['street']));
+        $property->setHouseNumber($parameters['house_number']);
+        $property->setPostcode($parameters['postcode']);
+        $property->setCity(ucwords($parameters['city']));
+        $property->setCountry($parameters['country']);
+        $property->setLat($parameters['lat']);
+        $property->setLng($parameters['lng']);
+
+        if (array_key_exists('online', $parameters) && $parameters['online'] !== null) {
+            $property->setOnline((bool)$parameters['online']);
+        }
+        if (array_key_exists('price', $parameters) && $parameters['price'] !== null) {
+            $property->setPrice((int)$parameters['price']);
+        }
+        if (array_key_exists('espc', $parameters) && $parameters['espc'] !== null) {
+            $property->setEspc((bool)$parameters['espc']);
+        }
+
+        $this->propertyService->createProperty($property);
+
         $propertyId = (int)$property->getId();
 
         $this->logActivityService->createActivity(
@@ -265,6 +286,7 @@ class PropertyController extends BaseController
      *
      * @return array
      * @throws NotAuthorizedException
+     * @throws PropertyNotFoundException
      */
     private function updateProperty(int $userId, array $parameters)
     {
@@ -392,7 +414,7 @@ class PropertyController extends BaseController
             throw new NotAuthorizedException($userId);
         }
 
-        $this->propertyService->archiveProperty($id);
+        $this->propertyService->archiveProperty($property);
 
         $this->logActivityService->createActivity(
             $user,

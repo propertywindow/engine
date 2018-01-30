@@ -6,7 +6,7 @@ services:
   ConversationBundle\Service\MessageService:
       arguments: ["@doctrine.orm.entity_manager"]
   ConversationBundle\Service\MailerService:
-      arguments: ["@doctrine.orm.entity_manager", '@twig', 'LogBundle\Service\LogMailService']
+      arguments: ["@doctrine.orm.entity_manager", '@twig', '@LogBundle\Service\LogMailService']
   ConversationBundle\Controller\NotificationController:
       autowire: true
   ConversationBundle\Controller\ConversationController:

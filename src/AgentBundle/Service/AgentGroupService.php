@@ -9,7 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use AgentBundle\Exceptions\AgentGroupNotFoundException;
 
 /**
- * @package AgentBundle\Service
+ * AgentGroup Service
  */
 class AgentGroupService
 {
@@ -19,26 +19,28 @@ class AgentGroupService
     private $entityManager;
 
     /**
+     * @var AgentGroupRepository
+     */
+    private $repository;
+
+    /**
      * @param EntityManagerInterface $entityManger
      */
     public function __construct(EntityManagerInterface $entityManger)
     {
         $this->entityManager = $entityManger;
+        $this->repository    = $this->entityManager->getRepository(AgentGroup::class);
     }
-
 
     /**
      * @param int $id
      *
      * @return AgentGroup $agentGroup
-     *
      * @throws AgentGroupNotFoundException
      */
     public function getAgentGroup(int $id)
     {
-        /** @var AgentGroupRepository $repository */
-        $repository = $this->entityManager->getRepository(AgentGroup::class);
-        $agentGroup = $repository->findById($id);
+        $agentGroup = $this->repository->findById($id);
 
         return $agentGroup;
     }
@@ -48,9 +50,7 @@ class AgentGroupService
      */
     public function getAgentGroups()
     {
-        $repository = $this->entityManager->getRepository(AgentGroup::class);
-
-        return $repository->listAll();
+        return $this->repository->listAll();
     }
 
     /**
@@ -85,8 +85,7 @@ class AgentGroupService
      */
     public function deleteAgentGroup(int $id)
     {
-        $agentGroupRepository = $this->entityManager->getRepository(AgentGroup::class);
-        $agentGroup           = $agentGroupRepository->findById($id);
+        $agentGroup = $this->repository->findById($id);
 
         $this->entityManager->remove($agentGroup);
         $this->entityManager->flush();

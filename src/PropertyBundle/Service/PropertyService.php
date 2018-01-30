@@ -1,18 +1,15 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace PropertyBundle\Service;
 
-use AgentBundle\Entity\Agent;
-use AgentBundle\Entity\Client;
 use Doctrine\ORM\EntityManagerInterface;
-use PropertyBundle\Entity\Kind;
 use PropertyBundle\Entity\Property;
-use PropertyBundle\Entity\SubType;
-use PropertyBundle\Entity\Terms;
 use PropertyBundle\Exceptions\PropertyNotFoundException;
+use PropertyBundle\Repository\PropertyRepository;
 
 /**
- * @package PropertyBundle\Service
+ * Property Service
  */
 class PropertyService
 {
@@ -22,22 +19,28 @@ class PropertyService
     private $entityManager;
 
     /**
+     * @var PropertyRepository
+     */
+    private $repository;
+
+    /**
      * @param EntityManagerInterface $entityManger
      */
     public function __construct(EntityManagerInterface $entityManger)
     {
         $this->entityManager = $entityManger;
+        $this->repository    = $this->entityManager->getRepository(Property::class);
     }
 
     /**
      * @param int $id
      *
      * @return Property $property
+     * @throws PropertyNotFoundException
      */
     public function getProperty(int $id)
     {
-        $repository = $this->entityManager->getRepository('PropertyBundle:Property');
-        $property   = $repository->findById($id);
+        $property = $this->repository->findById($id);
 
         return $property;
     }
@@ -49,8 +52,7 @@ class PropertyService
      */
     public function checkExistence(array $parameters)
     {
-        $repository = $this->entityManager->getRepository('PropertyBundle:Property');
-        $property   = $repository->findOneBy(
+        $property = $this->repository->findOneBy(
             [
                 'client'      => (int)$parameters['client_id'],
                 'postcode'    => $parameters['postcode'],
@@ -73,9 +75,7 @@ class PropertyService
      */
     public function listProperties(int $agentId): array
     {
-        $repository = $this->entityManager->getRepository('PropertyBundle:Property');
-
-        return $repository->listProperties($agentId);
+        return $this->repository->listProperties($agentId);
     }
 
     /**
@@ -87,54 +87,16 @@ class PropertyService
      */
     public function listAllProperties(array $agentIds, int $limit, int $offset)
     {
-        $repository = $this->entityManager->getRepository('PropertyBundle:Property');
-
-        return $repository->listAllProperties($agentIds, $limit, $offset);
+        return $this->repository->listAllProperties($agentIds, $limit, $offset);
     }
 
     /**
-     * @param array   $parameters
-     * @param Agent   $agent
-     * @param Client  $client
-     * @param Kind    $kind
-     * @param Terms   $terms
-     * @param Subtype $subType
+     * @param Property $property
      *
      * @return Property
      */
-    public function createProperty(
-        array $parameters,
-        Agent $agent,
-        Client $client,
-        Kind $kind,
-        Terms $terms,
-        SubType $subType
-    ) {
-        $property = new Property();
-
-        $property->setKind($kind);
-        $property->setTerms($terms);
-        $property->setAgent($agent);
-        $property->setClient($client);
-        $property->setSubType($subType);
-        $property->setStreet(ucwords($parameters['street']));
-        $property->setHouseNumber($parameters['house_number']);
-        $property->setPostcode($parameters['postcode']);
-        $property->setCity(ucwords($parameters['city']));
-        $property->setCountry($parameters['country']);
-        $property->setLat($parameters['lat']);
-        $property->setLng($parameters['lng']);
-
-        if (array_key_exists('online', $parameters) && $parameters['online'] !== null) {
-            $property->setOnline((bool)$parameters['online']);
-        }
-        if (array_key_exists('price', $parameters) && $parameters['price'] !== null) {
-            $property->setPrice((int)$parameters['price']);
-        }
-        if (array_key_exists('espc', $parameters) && $parameters['espc'] !== null) {
-            $property->setEspc((bool)$parameters['espc']);
-        }
-
+    public function createProperty(Property $property)
+    {
         $this->entityManager->persist($property);
         $this->entityManager->flush();
 
@@ -154,15 +116,10 @@ class PropertyService
     }
 
     /**
-     * @param int $id
-     *
-     * @throws PropertyNotFoundException
+     * @param Property $property
      */
-    public function archiveProperty(int $id)
+    public function archiveProperty(Property $property)
     {
-        $repository = $this->entityManager->getRepository('PropertyBundle:Property');
-        $property   = $repository->find($id);
-
         $property->setArchived(true);
 
         $this->entityManager->flush();
@@ -175,8 +132,7 @@ class PropertyService
      */
     public function deleteProperty(int $id)
     {
-        $repository = $this->entityManager->getRepository('PropertyBundle:Property');
-        $property   = $repository->find($id);
+        $property = $this->repository->find($id);
 
         if ($property === null) {
             throw new PropertyNotFoundException($id);
@@ -191,13 +147,11 @@ class PropertyService
      * @param int $soldPrice
      *
      * @return Property
-     *
      * @throws PropertyNotFoundException
      */
     public function setPropertySold(int $id, int $soldPrice)
     {
-        $repository = $this->entityManager->getRepository('PropertyBundle:Property');
-        $property   = $repository->find($id);
+        $property = $this->repository->find($id);
 
         /** @var Property $property */
         if ($property === null) {
@@ -217,13 +171,11 @@ class PropertyService
      * @param bool $online
      *
      * @return Property
-     *
      * @throws PropertyNotFoundException
      */
     public function toggleOnline(int $id, bool $online)
     {
-        $repository = $this->entityManager->getRepository('PropertyBundle:Property');
-        $property   = $repository->find($id);
+        $property = $this->repository->find($id);
 
         /** @var Property $property */
         if ($property === null) {

@@ -28,6 +28,6 @@ services:
     AuthenticationBundle\Controller\UserController:
           autowire: true
     AuthenticationBundle\Controller\UserSettingsController:
-            autowire: true
+          autowire: true
     AuthenticationBundle\Controller\MenuController:
           autowire: true

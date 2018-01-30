@@ -10,6 +10,6 @@ services:
     LogBundle\Service\LogErrorService:
           arguments: ['@doctrine.orm.entity_manager']
     LogBundle\Service\SlackService:
-          arguments: ['AppBundle\Service\SettingsService']
+          arguments: ['@AppBundle\Service\SettingsService']
     LogBundle\Controller\ActivityController:
           autowire: true
