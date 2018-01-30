@@ -5,8 +5,6 @@ namespace AgentBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Agent
- *
  * @ORM\Table(name="agent")
  * @ORM\Entity(repositoryClass="AgentBundle\Repository\AgentRepository")
  * @ORM\HasLifecycleCallbacks
@@ -155,8 +153,6 @@ class Agent
     protected $updated;
 
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -165,13 +161,11 @@ class Agent
     }
 
     /**
-     * Set agentGroup
-     *
      * @param AgentGroup $agentGroup
      *
      * @return Agent
      */
-    public function setAgentGroup(AgentGroup $agentGroup = null)
+    public function setAgentGroup(AgentGroup $agentGroup)
     {
         $this->agentGroup = $agentGroup;
 
@@ -179,23 +173,19 @@ class Agent
     }
 
     /**
-     * Get agentGroup
-     *
      * @return AgentGroup
      */
-    public function getAgentGroup()
+    public function getAgentGroup(): AgentGroup
     {
         return $this->agentGroup;
     }
 
     /**
-     * Set userId
-     *
-     * @param integer $userId
+     * @param int $userId
      *
      * @return Agent
      */
-    public function setUserId($userId)
+    public function setUserId(int $userId): Agent
     {
         $this->userId = $userId;
 
@@ -203,23 +193,19 @@ class Agent
     }
 
     /**
-     * Get userId
-     *
      * @return int
      */
-    public function getUserId()
+    public function getUserId(): int
     {
         return $this->userId;
     }
 
     /**
-     * Set office
-     *
      * @param string $office
      *
      * @return Agent
      */
-    public function setOffice($office)
+    public function setOffice($office): Agent
     {
         $this->office = $office;
 
@@ -227,8 +213,6 @@ class Agent
     }
 
     /**
-     * Get office
-     *
      * @return string
      */
     public function getOffice()
@@ -237,13 +221,11 @@ class Agent
     }
 
     /**
-     * Set phone
-     *
      * @param string $phone
      *
      * @return Agent
      */
-    public function setPhone($phone)
+    public function setPhone($phone): Agent
     {
         $this->phone = $phone;
 
@@ -251,8 +233,6 @@ class Agent
     }
 
     /**
-     * Get phone
-     *
      * @return string
      */
     public function getPhone()
@@ -261,13 +241,11 @@ class Agent
     }
 
     /**
-     * Set fax
-     *
      * @param string $fax
      *
      * @return Agent
      */
-    public function setFax($fax)
+    public function setFax($fax): Agent
     {
         $this->fax = $fax;
 
@@ -275,8 +253,6 @@ class Agent
     }
 
     /**
-     * Get fax
-     *
      * @return string
      */
     public function getFax()
@@ -285,13 +261,11 @@ class Agent
     }
 
     /**
-     * Set email
-     *
      * @param string $email
      *
      * @return Agent
      */
-    public function setEmail($email)
+    public function setEmail($email): Agent
     {
         $this->email = $email;
 
@@ -299,8 +273,6 @@ class Agent
     }
 
     /**
-     * Get email
-     *
      * @return string
      */
     public function getEmail()
@@ -309,13 +281,11 @@ class Agent
     }
 
     /**
-     * Set website
-     *
      * @param string $website
      *
      * @return Agent
      */
-    public function setWebsite($website)
+    public function setWebsite($website): Agent
     {
         $this->website = $website;
 
@@ -323,8 +293,6 @@ class Agent
     }
 
     /**
-     * Get website
-     *
      * @return string
      */
     public function getWebsite()
@@ -333,13 +301,11 @@ class Agent
     }
 
     /**
-     * Set logo
-     *
      * @param string $logo
      *
      * @return Agent
      */
-    public function setLogo($logo)
+    public function setLogo($logo): Agent
     {
         $this->logo = $logo;
 
@@ -347,8 +313,6 @@ class Agent
     }
 
     /**
-     * Get logo
-     *
      * @return string
      */
     public function getLogo()
@@ -357,13 +321,11 @@ class Agent
     }
 
     /**
-     * Set street
-     *
      * @param string $street
      *
      * @return Agent
      */
-    public function setStreet($street)
+    public function setStreet($street): Agent
     {
         $this->street = $street;
 
@@ -371,8 +333,6 @@ class Agent
     }
 
     /**
-     * Get street
-     *
      * @return string
      */
     public function getStreet()
@@ -381,13 +341,11 @@ class Agent
     }
 
     /**
-     * Set houseNumber
-     *
      * @param string $houseNumber
      *
      * @return Agent
      */
-    public function setHouseNumber($houseNumber)
+    public function setHouseNumber($houseNumber): Agent
     {
         $this->houseNumber = $houseNumber;
 
@@ -395,8 +353,6 @@ class Agent
     }
 
     /**
-     * Get houseNumber
-     *
      * @return string
      */
     public function getHouseNumber()
@@ -405,13 +361,11 @@ class Agent
     }
 
     /**
-     * Set postcode
-     *
      * @param string $postcode
      *
      * @return Agent
      */
-    public function setPostcode($postcode)
+    public function setPostcode($postcode): Agent
     {
         $this->postcode = $postcode;
 
@@ -419,8 +373,6 @@ class Agent
     }
 
     /**
-     * Get postcode
-     *
      * @return string
      */
     public function getPostcode()
@@ -429,13 +381,11 @@ class Agent
     }
 
     /**
-     * Set city
-     *
      * @param string $city
      *
      * @return Agent
      */
-    public function setCity($city)
+    public function setCity($city): Agent
     {
         $this->city = $city;
 
@@ -443,8 +393,6 @@ class Agent
     }
 
     /**
-     * Get city
-     *
      * @return string
      */
     public function getCity()
@@ -453,13 +401,11 @@ class Agent
     }
 
     /**
-     * Set country
-     *
      * @param string $country
      *
      * @return Agent
      */
-    public function setCountry($country)
+    public function setCountry($country): Agent
     {
         $this->country = $country;
 
@@ -467,8 +413,6 @@ class Agent
     }
 
     /**
-     * Get country
-     *
      * @return string
      */
     public function getCountry()
@@ -477,13 +421,11 @@ class Agent
     }
 
     /**
-     * Set propertyLimit
-     *
-     * @param integer $propertyLimit
+     * @param int $propertyLimit
      *
      * @return Agent
      */
-    public function setPropertyLimit($propertyLimit)
+    public function setPropertyLimit($propertyLimit): Agent
     {
         $this->propertyLimit = $propertyLimit;
 
@@ -491,8 +433,6 @@ class Agent
     }
 
     /**
-     * Get propertyLimit
-     *
      * @return int
      */
     public function getPropertyLimit()
@@ -501,13 +441,11 @@ class Agent
     }
 
     /**
-     * Set webprint
-     *
-     * @param boolean $webprint
+     * @param bool $webprint
      *
      * @return Agent
      */
-    public function setWebprint($webprint)
+    public function setWebprint($webprint): Agent
     {
         $this->webprint = $webprint;
 
@@ -515,23 +453,19 @@ class Agent
     }
 
     /**
-     * Get webprint
-     *
      * @return bool
      */
-    public function getWebprint()
+    public function getWebprint(): bool
     {
         return $this->webprint;
     }
 
     /**
-     * Set ESPC
-     *
      * @param boolean $espc
      *
      * @return Agent
      */
-    public function setEspc($espc)
+    public function setEspc($espc): Agent
     {
         $this->espc = $espc;
 
@@ -539,23 +473,19 @@ class Agent
     }
 
     /**
-     * Get ESPC
-     *
      * @return bool
      */
-    public function getEspc()
+    public function getEspc(): bool
     {
         return $this->espc;
     }
 
     /**
-     * Set archived
-     *
-     * @param boolean $archived
+     * @param bool $archived
      *
      * @return Agent
      */
-    public function setArchived($archived)
+    public function setArchived(bool $archived): Agent
     {
         $this->archived = $archived;
 
@@ -563,11 +493,9 @@ class Agent
     }
 
     /**
-     * Get archived
-     *
      * @return bool
      */
-    public function getArchived()
+    public function getArchived(): bool
     {
         return $this->archived;
     }
