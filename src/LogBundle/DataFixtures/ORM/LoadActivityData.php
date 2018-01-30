@@ -22,7 +22,7 @@ class LoadActivityData extends AbstractFixture implements OrderedFixtureInterfac
     {
         // Annan Properties
 
-        $propertyService = $this->container->get('property_service');
+        $propertyService = $this->container->get('PropertyBundle\Service\PropertyService');
 
         for ($i = 1; $i <= 15; $i++) {
             $activity = new Activity();
