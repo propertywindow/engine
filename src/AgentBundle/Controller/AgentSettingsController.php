@@ -20,11 +20,9 @@ class AgentSettingsController extends BaseController
 {
     /**
      * @Route("/agent_settings" , name="agent_settings")
-     *
      * @param Request $httpRequest
      *
      * @return HttpResponse
-     *
      * @throws Throwable
      */
     public function requestHandler(Request $httpRequest)
@@ -45,7 +43,6 @@ class AgentSettingsController extends BaseController
      * @param array  $parameters
      *
      * @return array
-     *
      * @throws InvalidJsonRpcMethodException
      * @throws NotAuthorizedException
      */
@@ -78,7 +75,6 @@ class AgentSettingsController extends BaseController
      * @param array $parameters
      *
      * @return array
-     *
      * @throws NotAuthorizedException
      */
     private function updateSettings(int $userId, array $parameters)

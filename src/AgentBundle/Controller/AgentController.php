@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace AgentBundle\Controller;
 
 use AgentBundle\Entity\Agent;
+use AgentBundle\Exceptions\AgentGroupNotFoundException;
 use AppBundle\Controller\BaseController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use AuthenticationBundle\Exceptions\UserAlreadyExistException;
@@ -10,7 +12,6 @@ use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Response;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
-use AgentBundle\Exceptions\AgentNotFoundException;
 use AgentBundle\Service\Agent\Mapper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
@@ -23,10 +24,10 @@ class AgentController extends BaseController
 {
     /**
      * @Route("/agent" , name="agent")
-     *
      * @param Request $httpRequest
      *
      * @return HttpResponse
+     * @throws Throwable
      */
     public function requestHandler(Request $httpRequest)
     {
@@ -46,8 +47,10 @@ class AgentController extends BaseController
      * @param array  $parameters
      *
      * @return array
+     * @throws AgentGroupNotFoundException
      * @throws InvalidJsonRpcMethodException
-     * @throws AgentNotFoundException
+     * @throws NotAuthorizedException
+     * @throws UserAlreadyExistException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
@@ -74,7 +77,6 @@ class AgentController extends BaseController
      * @param array $parameters
      *
      * @return array
-     * @throws AgentNotFoundException
      */
     private function getAgent(array $parameters)
     {
@@ -109,9 +111,9 @@ class AgentController extends BaseController
      * @param array $parameters
      *
      * @return array $user
-     *
      * @throws NotAuthorizedException
      * @throws UserAlreadyExistException
+     * @throws AgentGroupNotFoundException
      */
     private function createAgent(int $userId, array $parameters)
     {
@@ -233,7 +235,6 @@ class AgentController extends BaseController
      * @param array $parameters
      *
      * @return array
-     *
      * @throws NotAuthorizedException
      */
     private function updateAgent(int $userId, array $parameters)
@@ -316,6 +317,9 @@ class AgentController extends BaseController
      * @param array $parameters
      *
      * @throws NotAuthorizedException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     private function deleteAgent(int $userId, array $parameters)
     {

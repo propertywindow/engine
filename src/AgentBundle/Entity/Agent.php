@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace AgentBundle\Entity;
 
@@ -13,7 +14,6 @@ class Agent
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -28,126 +28,108 @@ class Agent
 
     /**
      * @var int
-     *
      * @ORM\Column(name="agent_user_id", type="integer", nullable=true)
      */
     private $userId;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="office", type="string", length=255)
      */
     private $office;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="phone", type="string", length=255, nullable=true)
      */
     private $phone;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="fax", type="string", length=255, nullable=true)
      */
     private $fax;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="email", type="string", length=255)
      */
     private $email;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="website", type="string", length=255, nullable=true)
      */
     private $website;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="logo", type="string", length=255, nullable=true)
      */
     private $logo;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="street", type="string", length=255)
      */
     private $street;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="house_number", type="string", length=10)
      */
     private $houseNumber;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="postcode", type="string", length=10)
      */
     private $postcode;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="city", type="string", length=255)
      */
     private $city;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="country", type="string", length=255)
      */
     private $country;
 
     /**
      * @var int
-     *
      * @ORM\Column(name="property_limit", type="integer")
      */
     private $propertyLimit = 0;
 
     /**
      * @var bool
-     *
      * @ORM\Column(name="webprint", type="boolean")
      */
     private $webprint = false;
 
     /**
      * @var bool
-     *
      * @ORM\Column(name="ESPC", type="boolean")
      */
     private $espc = false;
 
     /**
      * @var bool
-     *
      * @ORM\Column(name="archived", type="boolean")
      */
     private $archived = false;
 
     /**
      * @var \DateTime $created
-     *
      * @ORM\Column(type="datetime")
      */
     protected $created;
 
     /**
      * @var \DateTime $updated
-     *
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $updated;
