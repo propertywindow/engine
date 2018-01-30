@@ -9,7 +9,6 @@ use Doctrine\ORM\EntityRepository;
 
 /**
  * AgentGroupRepository
- *
  */
 class AgentGroupRepository extends EntityRepository
 {

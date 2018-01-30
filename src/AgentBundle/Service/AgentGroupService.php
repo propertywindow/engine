@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace AgentBundle\Service;
 
 use AgentBundle\Entity\AgentGroup;
+use AgentBundle\Repository\AgentGroupRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use AgentBundle\Exceptions\AgentGroupNotFoundException;
 
@@ -35,6 +36,7 @@ class AgentGroupService
      */
     public function getAgentGroup(int $id)
     {
+        /** @var AgentGroupRepository $repository */
         $repository = $this->entityManager->getRepository(AgentGroup::class);
         $agentGroup = $repository->findById($id);
 

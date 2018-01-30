@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace AgentBundle\Service;
 
@@ -6,7 +7,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use AgentBundle\Entity\Agent;
 
 /**
- * @package AgentBundle\Service
+ * Agent Service
  */
 class AgentService
 {
@@ -22,16 +23,19 @@ class AgentService
     {
         $this->entityManager = $entityManger;
     }
-
-
+    
     /**
      * @param int $id
      *
      * @return Agent $agent
+     * @throws \AgentBundle\Exceptions\AgentNotFoundException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     public function getAgent(int $id)
     {
-        $repository = $this->entityManager->getRepository('AgentBundle:Agent');
+        $repository = $this->entityManager->getRepository(Agent::class);
         $agent      = $repository->findById($id);
 
         return $agent;
@@ -42,7 +46,7 @@ class AgentService
      */
     public function getAgents()
     {
-        $repository = $this->entityManager->getRepository('AgentBundle:Agent');
+        $repository = $this->entityManager->getRepository(Agent::class);
 
         return $repository->listAll();
     }
@@ -51,10 +55,14 @@ class AgentService
      * @param int $agentId
      *
      * @return int[] $groupIds
+     * @throws \AgentBundle\Exceptions\AgentNotFoundException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     public function getAgentIdsFromGroup(int $agentId)
     {
-        $repository = $this->entityManager->getRepository('AgentBundle:Agent');
+        $repository = $this->entityManager->getRepository(Agent::class);
         $agent      = $repository->findById($agentId);
         $groupIds   = $repository->getAgentIdsFromGroupId((int)$agent->getAgentGroup()->getId());
 
@@ -90,13 +98,14 @@ class AgentService
     /**
      * @param int $id
      *
+     * @throws \AgentBundle\Exceptions\AgentNotFoundException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
      */
     public function deleteAgent(int $id)
     {
-        $agentRepository = $this->entityManager->getRepository('AgentBundle:Agent');
+        $agentRepository = $this->entityManager->getRepository(Agent::class);
         $agent           = $agentRepository->findById($id);
 
         $this->entityManager->remove($agent);

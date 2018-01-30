@@ -25,6 +25,7 @@ class PropertyController extends BaseController
     /**
      * @Route("/property" , name="property")
      * @param Request $httpRequest
+     *
      * @return HttpResponse
      * @throws Throwable
      */
@@ -41,9 +42,10 @@ class PropertyController extends BaseController
     }
 
     /**
-     * @param int $userId
+     * @param int    $userId
      * @param string $method
-     * @param array $parameters
+     * @param array  $parameters
+     *
      * @return array
      * @throws InvalidJsonRpcMethodException
      * @throws NotAuthorizedException
@@ -78,8 +80,9 @@ class PropertyController extends BaseController
 
 
     /**
-     * @param int $userId
+     * @param int   $userId
      * @param array $parameters
+     *
      * @return array
      * @throws NotAuthorizedException
      */
@@ -89,8 +92,8 @@ class PropertyController extends BaseController
             throw new InvalidArgumentException("No argument provided");
         }
 
-        $id = (int)$parameters['id'];
-        $user = $this->userService->getUser($userId);
+        $id           = (int)$parameters['id'];
+        $user         = $this->userService->getUser($userId);
         $userSettings = $this->userSettingsService->getSettings($user);
 
         $property = $this->propertyService->getProperty($id);
@@ -124,11 +127,12 @@ class PropertyController extends BaseController
 
     /**
      * @param int $userId
+     *
      * @return array
      */
     private function getProperties(int $userId)
     {
-        $user = $this->userService->getUser($userId);
+        $user         = $this->userService->getUser($userId);
         $userSettings = $this->userSettingsService->getSettings($user);
 
         return Mapper::fromProperties($userSettings->getLanguage(), ...
@@ -136,39 +140,45 @@ class PropertyController extends BaseController
     }
 
     /**
-     * @param int $userId
+     * @param int   $userId
      * @param array $parameters
+     *
      * @return array
+     * @throws \AgentBundle\Exceptions\AgentNotFoundException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     private function getAllProperties(int $userId, array $parameters)
     {
-        $limit = array_key_exists('limit', $parameters) &&
-                 $parameters['limit'] !== null ? (int)$parameters['limit'] : 50;
+        $limit  = array_key_exists('limit', $parameters) &&
+                  $parameters['limit'] !== null ? (int)$parameters['limit'] : 50;
         $offset = array_key_exists('offset', $parameters) &&
                   $parameters['offset'] !== null ? (int)$parameters['offset'] : 0;
 
-        $user = $this->userService->getUser($userId);
+        $user         = $this->userService->getUser($userId);
         $userSettings = $this->userSettingsService->getSettings($user);
-        $agentIds = $this->agentService->getAgentIdsFromGroup((int)$user->getAgent()->getId());
+        $agentIds     = $this->agentService->getAgentIdsFromGroup((int)$user->getAgent()->getId());
 
         list($properties, $count) = $this->propertyService->listAllProperties($agentIds, $limit, $offset);
 
         return [
             'properties' => Mapper::fromProperties($userSettings->getLanguage(), ...$properties),
-            'count' => $count,
+            'count'      => $count,
         ];
     }
 
     /**
-     * @param int $userId
+     * @param int   $userId
      * @param array $parameters
+     *
      * @return array $property
      * @throws NotAuthorizedException
      * @throws PropertyAlreadyExistsException
      */
     private function createProperty(int $userId, array $parameters)
     {
-        $user = $this->userService->getUser($userId);
+        $user         = $this->userService->getUser($userId);
         $userSettings = $this->userSettingsService->getSettings($user);
 
         if ($user->getUserType()->getId() === self::USER_CLIENT || $user->getUserType()->getId() === self::USER_API) {
@@ -213,11 +223,11 @@ class PropertyController extends BaseController
             throw new PropertyAlreadyExistsException($parameters['client_id']);
         }
 
-        $client = $this->clientService->getClient($parameters['client_id']);
-        $kind = $this->kindService->getKind($parameters['kind_id']);
-        $terms = $this->termsService->getTerm($parameters['terms_id']);
-        $subType = $this->subTypeService->getSubType($parameters['sub_type_id']);
-        $property = $this->propertyService->createProperty(
+        $client     = $this->clientService->getClient($parameters['client_id']);
+        $kind       = $this->kindService->getKind($parameters['kind_id']);
+        $terms      = $this->termsService->getTerm($parameters['terms_id']);
+        $subType    = $this->subTypeService->getSubType($parameters['sub_type_id']);
+        $property   = $this->propertyService->createProperty(
             $parameters,
             $user->getAgent(),
             $client,
@@ -250,8 +260,9 @@ class PropertyController extends BaseController
     }
 
     /**
-     * @param int $userId
+     * @param int   $userId
      * @param array $parameters
+     *
      * @return array
      * @throws NotAuthorizedException
      */
@@ -261,10 +272,10 @@ class PropertyController extends BaseController
             throw new InvalidArgumentException("Identifier not provided");
         }
 
-        $id = (int)$parameters['id'];
-        $user = $this->userService->getUser($userId);
+        $id           = (int)$parameters['id'];
+        $user         = $this->userService->getUser($userId);
         $userSettings = $this->userSettingsService->getSettings($user);
-        $property = $this->propertyService->getProperty($id);
+        $property     = $this->propertyService->getProperty($id);
 
         if ($property->getAgent()->getId() !== $user->getAgent()->getId()) {
             throw new NotAuthorizedException($userId);
@@ -291,7 +302,7 @@ class PropertyController extends BaseController
         }
 
         if (array_key_exists('online', $parameters) && $parameters['online'] !== null) {
-            $property->setOnline((int)$parameters['online']);
+            $property->setOnline((bool)$parameters['online']);
         }
 
         if (array_key_exists('street', $parameters) && $parameters['street'] !== null) {
@@ -361,8 +372,9 @@ class PropertyController extends BaseController
     }
 
     /**
-     * @param int $userId
+     * @param int   $userId
      * @param array $parameters
+     *
      * @throws NotAuthorizedException
      * @throws PropertyNotFoundException
      */
@@ -372,8 +384,8 @@ class PropertyController extends BaseController
             throw new InvalidArgumentException("No argument provided");
         }
 
-        $id = (int)$parameters['id'];
-        $user = $this->userService->getUser($userId);
+        $id       = (int)$parameters['id'];
+        $user     = $this->userService->getUser($userId);
         $property = $this->propertyService->getProperty($id);
 
         if ($property->getAgent()->getId() !== $user->getAgent()->getId()) {
@@ -395,8 +407,9 @@ class PropertyController extends BaseController
     }
 
     /**
-     * @param int $userId
+     * @param int   $userId
      * @param array $parameters
+     *
      * @throws NotAuthorizedException
      * @throws PropertyNotFoundException
      */
@@ -406,7 +419,7 @@ class PropertyController extends BaseController
             throw new InvalidArgumentException("No argument provided");
         }
 
-        $id = (int)$parameters['id'];
+        $id   = (int)$parameters['id'];
         $user = $this->userService->getUser($userId);
 
         if ((int)$user->getUserType()->getId() > self::USER_AGENT) {
@@ -420,8 +433,9 @@ class PropertyController extends BaseController
     }
 
     /**
-     * @param int $userId
+     * @param int   $userId
      * @param array $parameters
+     *
      * @throws NotAuthorizedException
      * @throws PropertyNotFoundException
      */
@@ -435,10 +449,10 @@ class PropertyController extends BaseController
             throw new InvalidArgumentException("No argument provided");
         }
 
-        $id = (int)$parameters['id'];
+        $id        = (int)$parameters['id'];
         $soldPrice = (int)$parameters['soldPrice'];
-        $user = $this->userService->getUser($userId);
-        $property = $this->propertyService->getProperty($id);
+        $user      = $this->userService->getUser($userId);
+        $property  = $this->propertyService->getProperty($id);
 
         if ($property->getAgent()->getId() !== $user->getAgent()->getId()) {
             throw new NotAuthorizedException($userId);
@@ -457,8 +471,9 @@ class PropertyController extends BaseController
     }
 
     /**
-     * @param int $userId
+     * @param int   $userId
      * @param array $parameters
+     *
      * @throws NotAuthorizedException
      * @throws PropertyNotFoundException
      */
@@ -472,9 +487,9 @@ class PropertyController extends BaseController
             throw new InvalidArgumentException("No argument provided");
         }
 
-        $id = (int)$parameters['id'];
-        $online = (bool)$parameters['online'];
-        $user = $this->userService->getUser($userId);
+        $id       = (int)$parameters['id'];
+        $online   = (bool)$parameters['online'];
+        $user     = $this->userService->getUser($userId);
         $property = $this->propertyService->getProperty($id);
 
         if ($property->getAgent()->getId() !== $user->getAgent()->getId()) {

@@ -1,14 +1,16 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace PropertyBundle\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
+use PropertyBundle\Entity\SubType;
 use PropertyBundle\Entity\Type;
 use PropertyBundle\Exceptions\TypeDeleteException;
 use PropertyBundle\Exceptions\TypeNotFoundException;
 
 /**
- * @package PropertyBundle\Service
+ * Type Service
  */
 class TypeService
 {
@@ -29,10 +31,11 @@ class TypeService
      * @param int $id
      *
      * @return Type $type
+     * @throws TypeNotFoundException
      */
     public function getType(int $id)
     {
-        $repository = $this->entityManager->getRepository('PropertyBundle:Type');
+        $repository = $this->entityManager->getRepository(Type::class);
         $type       = $repository->findById($id);
 
         return $type;
@@ -43,7 +46,7 @@ class TypeService
      */
     public function getTypes()
     {
-        $repository = $this->entityManager->getRepository('PropertyBundle:Type');
+        $repository = $this->entityManager->getRepository(Type::class);
 
         return $repository->listAll();
     }
@@ -77,13 +80,14 @@ class TypeService
      * @param int $id
      *
      * @throws TypeDeleteException
+     * @throws TypeNotFoundException
      */
     public function deleteType(int $id)
     {
-        $typeRepository = $this->entityManager->getRepository('PropertyBundle:Type');
+        $typeRepository = $this->entityManager->getRepository(Type::class);
         $type           = $typeRepository->findById($id);
 
-        $subTypeRepository = $this->entityManager->getRepository('PropertyBundle:SubType');
+        $subTypeRepository = $this->entityManager->getRepository(SubType::class);
         $subTypes          = $subTypeRepository->listAll($type);
 
         if (!empty($subTypes)) {
