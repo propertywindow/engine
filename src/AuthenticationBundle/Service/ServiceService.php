@@ -3,6 +3,8 @@
 namespace AuthenticationBundle\Service;
 
 use AuthenticationBundle\Entity\ServiceGroup;
+use AuthenticationBundle\Exceptions\ServiceNotFoundException;
+use AuthenticationBundle\Repository\ServiceRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use AuthenticationBundle\Entity\Service;
 
@@ -17,24 +19,28 @@ class ServiceService
     private $entityManager;
 
     /**
+     * @var ServiceRepository
+     */
+    private $repository;
+
+    /**
      * @param EntityManagerInterface $entityManger
      */
     public function __construct(EntityManagerInterface $entityManger)
     {
         $this->entityManager = $entityManger;
+        $this->repository    = $this->entityManager->getRepository(Service::class);
     }
 
     /**
      * @param int $id
      *
-     * @return Service $service
+     * @return Service
+     * @throws ServiceNotFoundException
      */
-    public function getService(int $id)
+    public function getService(int $id): Service
     {
-        $repository = $this->entityManager->getRepository('AuthenticationBundle:Service');
-        $service    = $repository->findById($id);
-
-        return $service;
+        return $this->repository->findById($id);
     }
 
     /**
@@ -42,10 +48,8 @@ class ServiceService
      *
      * @return array|Service[]
      */
-    public function getServices(ServiceGroup $serviceGroup)
+    public function getServices(ServiceGroup $serviceGroup): array
     {
-        $repository = $this->entityManager->getRepository('AuthenticationBundle:Service');
-
-        return $repository->listAll($serviceGroup);
+        return $this->repository->listAll($serviceGroup);
     }
 }

@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace LogBundle\Service;
 
@@ -6,6 +7,7 @@ use AuthenticationBundle\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use LogBundle\Entity\Error;
 use LogBundle\Exceptions\ErrorNotFoundException;
+use LogBundle\Repository\ErrorRepository;
 
 /**
  * @package LogBundle\Service
@@ -18,49 +20,46 @@ class LogErrorService
     private $entityManager;
 
     /**
+     * @var ErrorRepository
+     */
+    private $repository;
+
+    /**
      * @param EntityManagerInterface $entityManger
      */
     public function __construct(EntityManagerInterface $entityManger)
     {
         $this->entityManager = $entityManger;
+        $this->repository    = $this->entityManager->getRepository(Error::class);
     }
 
     /**
      * @param int $id
      *
-     * @return Error $error
+     * @return Error
+     * @throws ErrorNotFoundException
      */
-    public function getError(int $id)
+    public function getError(int $id): Error
     {
-        $repository = $this->entityManager->getRepository('LogBundle:Error');
-        $error      = $repository->findById($id);
-
-        return $error;
+        return $this->repository->findById($id);
     }
 
     /**
      * @return Error[]
      */
-    public function getErrors()
+    public function getErrors(): array
     {
-        $repository = $this->entityManager->getRepository('LogBundle:Error');
-
-        return $repository->findAll();
+        return $this->repository->findAll();
     }
 
     /**
      * @param User $user
      *
-     * @return Error $error
-     *
-     * @throws ErrorNotFoundException
+     * @return Error
      */
-    public function getErrorFromUser(User $user)
+    public function getErrorFromUser(User $user): Error
     {
-        $repository = $this->entityManager->getRepository('LogBundle:Error');
-        $error      = $repository->findByUser($user);
-
-        return $error;
+        return $this->repository->findByUser($user);
     }
 
     /**

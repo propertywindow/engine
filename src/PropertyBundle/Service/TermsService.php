@@ -1,9 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace PropertyBundle\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
 use PropertyBundle\Entity\Terms;
+use PropertyBundle\Exceptions\TermsNotFoundException;
+use PropertyBundle\Repository\TermsRepository;
 
 /**
  * @package PropertyBundle\Service
@@ -16,34 +19,36 @@ class TermsService
     private $entityManager;
 
     /**
+     * @var TermsRepository
+     */
+    private $repository;
+
+    /**
      * @param EntityManagerInterface $entityManger
      */
     public function __construct(EntityManagerInterface $entityManger)
     {
         $this->entityManager = $entityManger;
+        $this->repository    = $this->entityManager->getRepository(Terms::class);
     }
 
     /**
      * @param int $id
      *
-     * @return Terms $term
+     * @return Terms
+     * @throws TermsNotFoundException
      */
-    public function getTerm(int $id)
+    public function getTerm(int $id): Terms
     {
-        $repository = $this->entityManager->getRepository('PropertyBundle:Terms');
-        $term       = $repository->findById($id);
-
-        return $term;
+        return $this->repository->findById($id);
     }
 
     /**
      * @return Terms[]
      */
-    public function getTerms()
+    public function getTerms(): array
     {
-        $repository = $this->entityManager->getRepository('PropertyBundle:Terms');
-
-        return $repository->findAll();
+        return $this->repository->findAll();
     }
 
     /**
@@ -51,7 +56,7 @@ class TermsService
      *
      * @return Terms
      */
-    public function createTerm(Terms $term)
+    public function createTerm(Terms $term): Terms
     {
         $this->entityManager->persist($term);
         $this->entityManager->flush();
@@ -64,7 +69,7 @@ class TermsService
      *
      * @return Terms
      */
-    public function updateTerm(Terms $term)
+    public function updateTerm(Terms $term): Terms
     {
         $this->entityManager->flush();
 
@@ -73,11 +78,12 @@ class TermsService
 
     /**
      * @param int $id
+     *
+     * @throws TermsNotFoundException
      */
     public function deleteTerm(int $id)
     {
-        $repository = $this->entityManager->getRepository('PropertyBundle:Terms');
-        $term       = $repository->findById($id);
+        $term       = $this->repository->findById($id);
 
         $this->entityManager->remove($term);
         $this->entityManager->flush();

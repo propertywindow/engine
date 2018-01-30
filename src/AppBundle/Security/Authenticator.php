@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace AppBundle\Security;
 
 use AppBundle\Exceptions\CouldNotAuthenticateUserException;
+use AuthenticationBundle\Exceptions\UserNotFoundException;
 use AuthenticationBundle\Service\BlacklistService;
 use Symfony\Component\HttpFoundation\Request;
 use AuthenticationBundle\Service\UserService;
@@ -26,7 +27,7 @@ class Authenticator
     private $userService;
 
     /**
-     * @var UserService
+     * @var BlacklistService
      */
     private $blacklistService;
 
@@ -51,8 +52,9 @@ class Authenticator
      * @param Request $request
      * @param bool    $impersonate
      *
-     * @return int
+     * @return int $userId
      * @throws CouldNotAuthenticateUserException
+     * @throws UserNotFoundException
      */
     public function authenticate(Request $request, bool $impersonate): int
     {

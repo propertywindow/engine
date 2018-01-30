@@ -8,6 +8,8 @@ use PropertyBundle\Entity\SubType;
 use PropertyBundle\Entity\Type;
 use PropertyBundle\Exceptions\TypeDeleteException;
 use PropertyBundle\Exceptions\TypeNotFoundException;
+use PropertyBundle\Repository\SubTypeRepository;
+use PropertyBundle\Repository\TypeRepository;
 
 /**
  * Type Service
@@ -20,35 +22,36 @@ class TypeService
     private $entityManager;
 
     /**
+     * @var TypeRepository
+     */
+    private $repository;
+
+    /**
      * @param EntityManagerInterface $entityManger
      */
     public function __construct(EntityManagerInterface $entityManger)
     {
         $this->entityManager = $entityManger;
+        $this->repository    = $this->entityManager->getRepository(Type::class);
     }
 
     /**
      * @param int $id
      *
-     * @return Type $type
+     * @return Type
      * @throws TypeNotFoundException
      */
-    public function getType(int $id)
+    public function getType(int $id): Type
     {
-        $repository = $this->entityManager->getRepository(Type::class);
-        $type       = $repository->findById($id);
-
-        return $type;
+        return $this->repository->findById($id);
     }
 
     /**
      * @return Type[]
      */
-    public function getTypes()
+    public function getTypes(): array
     {
-        $repository = $this->entityManager->getRepository(Type::class);
-
-        return $repository->listAll();
+        return $this->repository->listAll();
     }
 
     /**
@@ -84,9 +87,9 @@ class TypeService
      */
     public function deleteType(int $id)
     {
-        $typeRepository = $this->entityManager->getRepository(Type::class);
-        $type           = $typeRepository->findById($id);
+        $type           = $this->repository->findById($id);
 
+        /** @var SubTypeRepository $subTypeRepository */
         $subTypeRepository = $this->entityManager->getRepository(SubType::class);
         $subTypes          = $subTypeRepository->listAll($type);
 

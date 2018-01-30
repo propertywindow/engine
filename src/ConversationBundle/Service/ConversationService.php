@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace ConversationBundle\Service;
 
 use AuthenticationBundle\Entity\User;
+use ConversationBundle\Repository\ConversationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use ConversationBundle\Entity\Conversation;
 
@@ -18,25 +19,28 @@ class ConversationService
     private $entityManager;
 
     /**
+     * @var ConversationRepository
+     */
+    private $repository;
+
+    /**
      * @param EntityManagerInterface $entityManger
      */
     public function __construct(EntityManagerInterface $entityManger)
     {
         $this->entityManager = $entityManger;
+        $this->repository    = $this->entityManager->getRepository(Conversation::class);
     }
 
     /**
      * @param int $id
      *
-     * @return Conversation $conversation
+     * @return Conversation
      * @throws \ConversationBundle\Exceptions\ConversationNotFoundException
      */
-    public function getConversation(int $id)
+    public function getConversation(int $id): Conversation
     {
-        $repository   = $this->entityManager->getRepository(Conversation::class);
-        $conversation = $repository->findById($id);
-
-        return $conversation;
+        return $this->repository->findById($id);
     }
 
     /**
@@ -44,11 +48,9 @@ class ConversationService
      *
      * @return Conversation[]
      */
-    public function getConversations(User $user)
+    public function getConversations(User $user): array
     {
-        $repository = $this->entityManager->getRepository(Conversation::class);
-
-        return $repository->findByUser($user);
+        return $this->repository->findByUser($user);
     }
 
     /**
@@ -59,8 +61,7 @@ class ConversationService
      */
     public function findByUsers(User $author, User $recipient)
     {
-        $repository   = $this->entityManager->getRepository(Conversation::class);
-        $conversation = $repository->findOneBy(['uniqueId' => $author->getId() + $recipient->getId()]);
+        $conversation = $this->repository->findOneBy(['uniqueId' => $author->getId() + $recipient->getId()]);
 
         /** @var Conversation $conversation */
         return $conversation;
@@ -71,7 +72,7 @@ class ConversationService
      *
      * @return Conversation
      */
-    public function createConversation(Conversation $conversation)
+    public function createConversation(Conversation $conversation): Conversation
     {
         $this->entityManager->persist($conversation);
         $this->entityManager->flush();
@@ -84,7 +85,7 @@ class ConversationService
      *
      * @return Conversation
      */
-    public function updateConversation(Conversation $conversation)
+    public function updateConversation(Conversation $conversation): Conversation
     {
         $this->entityManager->flush();
 

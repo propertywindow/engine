@@ -4,6 +4,9 @@ declare(strict_types=1);
 namespace AuthenticationBundle\Controller;
 
 use AppBundle\Controller\BaseController;
+use AuthenticationBundle\Exceptions\ServiceGroupNotFoundException;
+use AuthenticationBundle\Exceptions\ServiceNotFoundException;
+use AuthenticationBundle\Exceptions\UserNotFoundException;
 use AuthenticationBundle\Service\Service\Mapper;
 use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -45,6 +48,9 @@ class ServiceController extends BaseController
      *
      * @return array
      * @throws InvalidJsonRpcMethodException
+     * @throws ServiceGroupNotFoundException
+     * @throws ServiceNotFoundException
+     * @throws UserNotFoundException
      */
     private function invoke(int $userId, string $method, array $parameters = [])
     {
@@ -63,6 +69,8 @@ class ServiceController extends BaseController
      * @param array $parameters
      *
      * @return array
+     * @throws ServiceNotFoundException
+     * @throws UserNotFoundException
      */
     private function getService(int $userId, array $parameters)
     {
@@ -83,6 +91,8 @@ class ServiceController extends BaseController
      * @param array $parameters
      *
      * @return array
+     * @throws UserNotFoundException
+     * @throws ServiceGroupNotFoundException
      */
     private function getServices(int $userId, array $parameters)
     {

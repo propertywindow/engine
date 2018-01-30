@@ -3,10 +3,12 @@
 namespace AuthenticationBundle\Service;
 
 use AuthenticationBundle\Entity\ServiceGroup;
+use AuthenticationBundle\Exceptions\ServiceGroupNotFoundException;
+use AuthenticationBundle\Repository\ServiceGroupRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
- * @package AuthenticationBundle\Service
+ * ServiceGroup Service
  */
 class ServiceGroupService
 {
@@ -16,33 +18,35 @@ class ServiceGroupService
     private $entityManager;
 
     /**
+     * @var ServiceGroupRepository
+     */
+    private $repository;
+
+    /**
      * @param EntityManagerInterface $entityManger
      */
     public function __construct(EntityManagerInterface $entityManger)
     {
         $this->entityManager = $entityManger;
+        $this->repository    = $this->entityManager->getRepository(ServiceGroup::class);
     }
 
     /**
      * @param int $id
      *
-     * @return ServiceGroup $serviceGroup
+     * @return ServiceGroup
+     * @throws ServiceGroupNotFoundException
      */
-    public function getServiceGroup(int $id)
+    public function getServiceGroup(int $id): ServiceGroup
     {
-        $repository   = $this->entityManager->getRepository('AuthenticationBundle:ServiceGroup');
-        $serviceGroup = $repository->findById($id);
-
-        return $serviceGroup;
+        return $this->repository->findById($id);
     }
 
     /**
      * @return array|ServiceGroup[]
      */
-    public function getServiceGroups()
+    public function getServiceGroups(): array
     {
-        $repository = $this->entityManager->getRepository('AuthenticationBundle:ServiceGroup');
-
-        return $repository->listAll();
+        return $this->repository->listAll();
     }
 }

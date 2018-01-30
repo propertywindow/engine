@@ -1,13 +1,15 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace LogBundle\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
 use LogBundle\Entity\Traffic;
 use LogBundle\Exceptions\TrafficNotFoundException;
+use LogBundle\Repository\TrafficRepository;
 
 /**
- * @package LogBundle\Service
+ * LogTraffic Service
  */
 class LogTrafficService
 {
@@ -17,24 +19,28 @@ class LogTrafficService
     private $entityManager;
 
     /**
+     * @var TrafficRepository
+     */
+    private $repository;
+
+    /**
      * @param EntityManagerInterface $entityManger
      */
     public function __construct(EntityManagerInterface $entityManger)
     {
         $this->entityManager = $entityManger;
+        $this->repository    = $this->entityManager->getRepository(Traffic::class);
     }
 
     /**
      * @param int $id
      *
      * @return Traffic $activity
-     *
      * @throws TrafficNotFoundException
      */
-    public function getTraffic(int $id)
+    public function getTraffic(int $id): Traffic
     {
-        $repository = $this->entityManager->getRepository('LogBundle:Traffic');
-        $traffic    = $repository->find($id);
+        $traffic = $this->repository->find($id);
 
         /** @var Traffic $traffic */
         if ($traffic === null) {

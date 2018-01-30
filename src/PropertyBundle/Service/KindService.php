@@ -1,9 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace PropertyBundle\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
 use PropertyBundle\Entity\Kind;
+use PropertyBundle\Exceptions\KindNotFoundException;
+use PropertyBundle\Repository\KindRepository;
 
 /**
  * @package PropertyBundle\Service
@@ -16,34 +19,36 @@ class KindService
     private $entityManager;
 
     /**
+     * @var KindRepository
+     */
+    private $repository;
+
+    /**
      * @param EntityManagerInterface $entityManger
      */
     public function __construct(EntityManagerInterface $entityManger)
     {
         $this->entityManager = $entityManger;
+        $this->repository    = $this->entityManager->getRepository(Kind::class);
     }
 
     /**
      * @param int $id
      *
-     * @return Kind $kind
+     * @return Kind
+     * @throws KindNotFoundException
      */
-    public function getKind(int $id)
+    public function getKind(int $id): Kind
     {
-        $repository = $this->entityManager->getRepository('PropertyBundle:Kind');
-        $kind       = $repository->findById($id);
-
-        return $kind;
+        return $this->repository->findById($id);
     }
 
     /**
      * @return Kind[]
      */
-    public function getKinds()
+    public function getKinds(): array
     {
-        $repository = $this->entityManager->getRepository('PropertyBundle:Kind');
-
-        return $repository->findAll();
+        return $this->repository->findAll();
     }
 
     /**
@@ -51,7 +56,7 @@ class KindService
      *
      * @return Kind
      */
-    public function createKind(Kind $kind)
+    public function createKind(Kind $kind): Kind
     {
         $this->entityManager->persist($kind);
         $this->entityManager->flush();
@@ -64,7 +69,7 @@ class KindService
      *
      * @return Kind
      */
-    public function updateKind(Kind $kind)
+    public function updateKind(Kind $kind): Kind
     {
         $this->entityManager->flush();
 
@@ -73,11 +78,12 @@ class KindService
 
     /**
      * @param int $id
+     *
+     * @throws KindNotFoundException
      */
     public function deleteKind(int $id)
     {
-        $repository = $this->entityManager->getRepository('PropertyBundle:Kind');
-        $kind       = $repository->findById($id);
+        $kind       = $this->repository->findById($id);
 
         $this->entityManager->remove($kind);
         $this->entityManager->flush();

@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace LogBundle\Service;
 
@@ -7,6 +8,7 @@ use AuthenticationBundle\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use LogBundle\Entity\Activity;
 use LogBundle\Exceptions\ActivityNotFoundException;
+use LogBundle\Repository\ActivityRepository;
 
 /**
  * @package LogBundle\Service
@@ -19,24 +21,28 @@ class LogActivityService
     private $entityManager;
 
     /**
+     * @var ActivityRepository
+     */
+    private $repository;
+
+    /**
      * @param EntityManagerInterface $entityManger
      */
     public function __construct(EntityManagerInterface $entityManger)
     {
         $this->entityManager = $entityManger;
+        $this->repository    = $this->entityManager->getRepository(Activity::class);
     }
 
     /**
      * @param int $id
      *
-     * @return Activity $activity
+     * @return Activity
+     * @throws ActivityNotFoundException
      */
-    public function getActivity(int $id)
+    public function getActivity(int $id): Activity
     {
-        $repository = $this->entityManager->getRepository('LogBundle:Activity');
-        $activity   = $repository->findById($id);
-
-        return $activity;
+        return $this->repository->findById($id);
     }
 
     /**
@@ -44,39 +50,30 @@ class LogActivityService
      *
      * @return Activity[]
      */
-    public function getActivities(Agent $agent)
+    public function getActivities(Agent $agent): array
     {
-        $repository = $this->entityManager->getRepository('LogBundle:Activity');
-
-        return $repository->findByAgent($agent);
+        return $this->repository->findByAgent($agent);
     }
 
     /**
-     * @param Agent $agent
+     * @param Agent  $agent
      * @param string $type
      *
      * @return Activity[]
      */
-    public function findPropertiesByAgent(Agent $agent, string $type)
+    public function findPropertiesByAgent(Agent $agent, string $type): array
     {
-        $repository = $this->entityManager->getRepository('LogBundle:Activity');
-
-        return $repository->findPropertiesByAgent($agent, $type);
+        return $this->repository->findPropertiesByAgent($agent, $type);
     }
 
     /**
      * @param User $user
      *
-     * @return Activity $activity
-     *
-     * @throws ActivityNotFoundException
+     * @return Activity
      */
-    public function getActivityFromUser(User $user)
+    public function getActivityFromUser(User $user): Activity
     {
-        $repository = $this->entityManager->getRepository('LogBundle:Activity');
-        $activity   = $repository->findByUser($user);
-
-        return $activity;
+        return $this->repository->findByUser($user);
     }
 
     /**

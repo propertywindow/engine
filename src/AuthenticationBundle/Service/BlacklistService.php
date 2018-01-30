@@ -4,6 +4,8 @@ namespace AuthenticationBundle\Service;
 
 use AgentBundle\Entity\Agent;
 use AuthenticationBundle\Entity\User;
+use AuthenticationBundle\Exceptions\BlacklistNotFoundException;
+use AuthenticationBundle\Repository\BlacklistRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use AuthenticationBundle\Entity\Blacklist;
 
@@ -18,24 +20,28 @@ class BlacklistService
     private $entityManager;
 
     /**
+     * @var BlacklistRepository
+     */
+    private $repository;
+
+    /**
      * @param EntityManagerInterface $entityManger
      */
     public function __construct(EntityManagerInterface $entityManger)
     {
         $this->entityManager = $entityManger;
+        $this->repository    = $this->entityManager->getRepository(Blacklist::class);
     }
 
     /**
      * @param int $id
      *
-     * @return Blacklist $service
+     * @return Blacklist
+     * @throws BlacklistNotFoundException
      */
-    public function getBlacklist(int $id)
+    public function getBlacklist(int $id): Blacklist
     {
-        $repository = $this->entityManager->getRepository('AuthenticationBundle:Blacklist');
-        $blacklist  = $repository->findById($id);
-
-        return $blacklist;
+        return $this->repository->findById($id);
     }
 
     /**
@@ -43,36 +49,30 @@ class BlacklistService
      *
      * @return array|Blacklist[]
      */
-    public function getBlacklists(Agent $agent)
+    public function getBlacklists(Agent $agent): array
     {
-        $repository = $this->entityManager->getRepository('AuthenticationBundle:Blacklist');
-
-        return $repository->listAll($agent);
+        return $this->repository->listAll($agent);
     }
 
     /**
      * @param string $ipAddress
      *
-     * @return Blacklist $service
+     * @return Blacklist
      */
-    public function checkBlacklist(string $ipAddress)
+    public function checkBlacklist(string $ipAddress): Blacklist
     {
-        $repository = $this->entityManager->getRepository('AuthenticationBundle:Blacklist');
-        $blacklist  = $repository->findOneBy(['ip' => $ipAddress]);
-
-        return $blacklist;
+        return $this->repository->findOneBy(['ip' => $ipAddress]);
     }
 
     /**
-     * @param string     $ipAddress
-     * @param null|User  $user
+     * @param string    $ipAddress
+     * @param null|User $user
      *
      * @return Blacklist
      */
-    public function createBlacklist(string $ipAddress, ?User $user)
+    public function createBlacklist(string $ipAddress, ?User $user): Blacklist
     {
-        $repository = $this->entityManager->getRepository('AuthenticationBundle:Blacklist');
-        $blacklist  = $repository->findOneBy(['ip' => $ipAddress]);
+        $blacklist = $this->repository->findOneBy(['ip' => $ipAddress]);
 
         if ($blacklist === null) {
             $blacklist = new Blacklist();
@@ -97,11 +97,12 @@ class BlacklistService
 
     /**
      * @param int $id
+     *
+     * @throws BlacklistNotFoundException
      */
     public function removeBlacklist(int $id)
     {
-        $repository = $this->entityManager->getRepository('AuthenticationBundle:Blacklist');
-        $blacklist  = $repository->findById($id);
+        $blacklist = $this->repository->findById($id);
 
         $this->entityManager->remove($blacklist);
         $this->entityManager->flush();

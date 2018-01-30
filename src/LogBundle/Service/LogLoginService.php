@@ -1,12 +1,13 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace LogBundle\Service;
 
-use AgentBundle\Entity\Agent;
 use AuthenticationBundle\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use LogBundle\Entity\Login;
 use LogBundle\Exceptions\LoginNotFoundException;
+use LogBundle\Repository\LoginRepository;
 
 /**
  * @package LogBundle\Service
@@ -19,24 +20,28 @@ class LogLoginService
     private $entityManager;
 
     /**
+     * @var LoginRepository
+     */
+    private $repository;
+
+    /**
      * @param EntityManagerInterface $entityManger
      */
     public function __construct(EntityManagerInterface $entityManger)
     {
         $this->entityManager = $entityManger;
+        $this->repository    = $this->entityManager->getRepository(Login::class);
     }
 
     /**
      * @param int $id
      *
      * @return Login $login
-     *
      * @throws LoginNotFoundException
      */
-    public function getLogin(int $id)
+    public function getLogin(int $id): Login
     {
-        $repository = $this->entityManager->getRepository('LogBundle:Login');
-        $login      = $repository->find($id);
+        $login = $this->repository->find($id);
 
         /** @var Login $login */
         if ($login === null) {

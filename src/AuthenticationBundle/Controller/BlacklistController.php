@@ -3,8 +3,11 @@ declare(strict_types=1);
 
 namespace AuthenticationBundle\Controller;
 
+use AgentBundle\Exceptions\AgentNotFoundException;
 use AppBundle\Controller\BaseController;
+use AuthenticationBundle\Exceptions\BlacklistNotFoundException;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
+use AuthenticationBundle\Exceptions\UserNotFoundException;
 use AuthenticationBundle\Service\Blacklist\Mapper;
 use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -44,8 +47,11 @@ class BlacklistController extends BaseController
      * @param array  $parameters
      *
      * @return array
+     * @throws AgentNotFoundException
+     * @throws BlacklistNotFoundException
      * @throws InvalidJsonRpcMethodException
      * @throws NotAuthorizedException
+     * @throws UserNotFoundException
      */
     private function invoke(int $userId, string $method, array $parameters = [])
     {
@@ -70,6 +76,8 @@ class BlacklistController extends BaseController
      *
      * @return array
      * @throws NotAuthorizedException
+     * @throws BlacklistNotFoundException
+     * @throws UserNotFoundException
      */
     private function getBlacklist(int $userId, array $parameters)
     {
@@ -95,8 +103,10 @@ class BlacklistController extends BaseController
      *
      * @return array
      * @throws NotAuthorizedException
+     * @throws UserNotFoundException
+     * @throws AgentNotFoundException
      */
-    private function getBlacklists(int $userId)
+    private function getBlacklists(int $userId): array
     {
         $user = $this->userService->getUser($userId);
 
@@ -114,6 +124,7 @@ class BlacklistController extends BaseController
      * @param array $parameters
      *
      * @return array
+     * @throws UserNotFoundException
      */
     private function createBlacklist(array $parameters)
     {
@@ -133,7 +144,9 @@ class BlacklistController extends BaseController
      * @param int   $userId
      * @param array $parameters
      *
+     * @throws BlacklistNotFoundException
      * @throws NotAuthorizedException
+     * @throws UserNotFoundException
      */
     private function removeBlacklist(int $userId, array $parameters)
     {

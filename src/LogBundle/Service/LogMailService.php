@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace LogBundle\Service;
 
@@ -7,9 +8,10 @@ use AuthenticationBundle\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use LogBundle\Entity\Mail;
 use LogBundle\Exceptions\MailNotFoundException;
+use LogBundle\Repository\MailRepository;
 
 /**
- * @package LogBundle\Service
+ * LogMail Service
  */
 class LogMailService
 {
@@ -19,24 +21,28 @@ class LogMailService
     private $entityManager;
 
     /**
+     * @var MailRepository
+     */
+    private $repository;
+
+    /**
      * @param EntityManagerInterface $entityManger
      */
     public function __construct(EntityManagerInterface $entityManger)
     {
         $this->entityManager = $entityManger;
+        $this->repository    = $this->entityManager->getRepository(Mail::class);
     }
 
     /**
      * @param int $id
      *
      * @return Mail $mail
-     *
      * @throws MailNotFoundException
      */
-    public function getMail(int $id)
+    public function getMail(int $id): Mail
     {
-        $repository = $this->entityManager->getRepository('LogBundle:Mail');
-        $mail      = $repository->find($id);
+        $mail = $this->repository->find($id);
 
         /** @var Mail $mail */
         if ($mail === null) {

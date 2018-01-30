@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace AppBundle\Repository;
 
@@ -7,7 +8,7 @@ use AppBundle\Exceptions\SettingsNotFoundException;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * SettingsRepository
+ * Settings Repository
  */
 class SettingsRepository extends EntityRepository
 {
@@ -16,16 +17,13 @@ class SettingsRepository extends EntityRepository
      *
      * @return Settings
      * @throws SettingsNotFoundException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     public function findById(int $id): Settings
     {
         $result = $this->find($id);
 
         if ($result === null) {
-            throw new SettingsNotFoundException($id);
+            throw new SettingsNotFoundException();
         }
 
         /** @var Settings $result */

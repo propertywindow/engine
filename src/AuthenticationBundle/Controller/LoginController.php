@@ -5,6 +5,7 @@ namespace AuthenticationBundle\Controller;
 
 use AppBundle\Controller\BaseController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
+use AuthenticationBundle\Exceptions\UserNotFoundException;
 use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Response;
@@ -45,6 +46,7 @@ class LoginController extends BaseController
      * @return array
      * @throws InvalidJsonRpcMethodException
      * @throws NotAuthorizedException
+     * @throws UserNotFoundException
      */
     private function invoke(string $method, string $ipAddress, array $parameters = [])
     {
@@ -78,8 +80,7 @@ class LoginController extends BaseController
         $user     = $this->userService->login($email, $password);
 
         if ($user === null) {
-            $attemptedAgent = null;
-            $attemptedUser  = $this->userService->getUserByEmail($email);
+            $attemptedUser = $this->userService->getUserByEmail($email);
 
             $this->blacklistService->createBlacklist($ipAddress, $attemptedUser);
 
@@ -123,6 +124,7 @@ class LoginController extends BaseController
      *
      * @return array
      * @throws NotAuthorizedException
+     * @throws UserNotFoundException
      */
     private function impersonate(array $parameters)
     {

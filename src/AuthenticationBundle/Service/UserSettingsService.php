@@ -1,9 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace AuthenticationBundle\Service;
 
 use AuthenticationBundle\Entity\User;
 use AuthenticationBundle\Entity\UserSettings;
+use AuthenticationBundle\Exceptions\UserSettingsNotFoundException;
+use AuthenticationBundle\Repository\UserSettingsRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
@@ -17,24 +20,28 @@ class UserSettingsService
     private $entityManager;
 
     /**
+     * @var UserSettingsRepository
+     */
+    private $repository;
+
+    /**
      * @param EntityManagerInterface $entityManger
      */
     public function __construct(EntityManagerInterface $entityManger)
     {
         $this->entityManager = $entityManger;
+        $this->repository    = $this->entityManager->getRepository(UserSettings::class);
     }
 
     /**
      * @param User $user
      *
-     * @return UserSettings $user
+     * @return UserSettings
+     * @throws UserSettingsNotFoundException
      */
-    public function getSettings(User $user)
+    public function getSettings(User $user): UserSettings
     {
-        $repository = $this->entityManager->getRepository('AuthenticationBundle:UserSettings');
-        $user       = $repository->findByUser($user);
-
-        return $user;
+        return $this->repository->findByUser($user);
     }
 
     /**
@@ -42,7 +49,7 @@ class UserSettingsService
      *
      * @return UserSettings
      */
-    public function updateSettings(UserSettings $userSettings)
+    public function updateSettings(UserSettings $userSettings): UserSettings
     {
         $this->entityManager->flush();
 

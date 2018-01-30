@@ -3,9 +3,15 @@ declare(strict_types=1);
 
 namespace ConversationBundle\Service;
 
+use AgentBundle\Entity\AgentSettings;
 use AgentBundle\Exceptions\AgentSettingsNotFoundException;
+use AgentBundle\Repository\AgentSettingsRepository;
 use AuthenticationBundle\Entity\User;
+use AuthenticationBundle\Entity\UserSettings;
 use AuthenticationBundle\Exceptions\UserSettingsNotFoundException;
+use AuthenticationBundle\Repository\UserSettingsRepository;
+use ConversationBundle\Entity\EmailTemplate;
+use ConversationBundle\Repository\EmailTemplateRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use LogBundle\Service\LogMailService;
 use Twig_Environment;
@@ -18,7 +24,7 @@ class MailerService
     /**
      * @var EntityManagerInterface
      */
-    private $em;
+    private $entityManager;
 
     /**
      * @var LogMailService
@@ -31,16 +37,16 @@ class MailerService
     private $twig;
 
     /**
-     * @param EntityManagerInterface $em
+     * @param EntityManagerInterface $entityManger
      * @param Twig_Environment       $twig
      * @param LogMailService         $logMailService
      */
     public function __construct(
-        EntityManagerInterface $em,
+        EntityManagerInterface $entityManger,
         Twig_Environment $twig,
         LogMailService $logMailService
     ) {
-        $this->em             = $em;
+        $this->entityManager  = $entityManger;
         $this->twig           = $twig;
         $this->logMailService = $logMailService;
     }
@@ -66,18 +72,21 @@ class MailerService
         array $parameters,
         bool $personal = false
     ) {
-        $template = $this->em->getRepository('ConversationBundle:EmailTemplate')->findOneBy([
+        /** @var EmailTemplateRepository $settings */
+        $template = $this->entityManager->getRepository(EmailTemplate::class)->findOneBy([
             'agent' => $user->getAgent(),
             'name'  => $templateName,
         ]);
 
+        /** @var AgentSettingsRepository $settings */
+        $settings = $this->entityManager->getRepository(AgentSettings::class)->findByAgent(
+            $user->getAgent()
+        );
+
         if ($personal) {
-            $settings = $this->em->getRepository('AuthenticationBundle:UserSettings')->findByUser(
+            /** @var UserSettingsRepository $settings */
+            $settings = $this->entityManager->getRepository(UserSettings::class)->findByUser(
                 $user
-            );
-        } else {
-            $settings = $this->em->getRepository('AgentBundle:AgentSettings')->findByAgent(
-                $user->getAgent()
             );
         }
 

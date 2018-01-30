@@ -5,7 +5,9 @@ namespace ConversationBundle\Controller;
 
 use AppBundle\Controller\BaseController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
+use AuthenticationBundle\Exceptions\UserNotFoundException;
 use ConversationBundle\Entity\Notification;
+use ConversationBundle\Exceptions\NotificationNotFoundException;
 use DateTime;
 use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -48,6 +50,9 @@ class NotificationController extends BaseController
      * @return array
      * @throws InvalidJsonRpcMethodException
      * @throws NotAuthorizedException
+     * @throws NotificationNotFoundException
+     * @throws UserNotFoundException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     private function invoke(int $userId, string $method, array $parameters = [])
     {
@@ -73,6 +78,7 @@ class NotificationController extends BaseController
      * @param int $userId
      *
      * @return array
+     * @throws UserNotFoundException
      */
     private function getNotifications(int $userId)
     {
@@ -85,6 +91,7 @@ class NotificationController extends BaseController
      * @param array $parameters
      *
      * @return array
+     * @throws NotificationNotFoundException
      */
     private function getNotification(array $parameters)
     {
@@ -101,6 +108,7 @@ class NotificationController extends BaseController
      * @param int $userId
      *
      * @return array
+     * @throws UserNotFoundException
      */
     private function listNotifications(int $userId)
     {
@@ -115,6 +123,8 @@ class NotificationController extends BaseController
      * @param array $parameters
      *
      * @return array
+     * @throws UserNotFoundException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     private function createNotification(int $userId, array $parameters)
     {
@@ -189,6 +199,9 @@ class NotificationController extends BaseController
      * @param array $parameters
      *
      * @return array
+     * @throws NotificationNotFoundException
+     * @throws UserNotFoundException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     private function updateNotification(int $userId, array $parameters)
     {
@@ -257,6 +270,8 @@ class NotificationController extends BaseController
      * @param array $parameters
      *
      * @throws NotAuthorizedException
+     * @throws NotificationNotFoundException
+     * @throws UserNotFoundException
      */
     private function deleteNotification(int $userId, array $parameters)
     {

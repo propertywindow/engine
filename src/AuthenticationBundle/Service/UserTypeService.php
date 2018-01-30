@@ -2,6 +2,8 @@
 
 namespace AuthenticationBundle\Service;
 
+use AuthenticationBundle\Exceptions\UserTypeNotFoundException;
+use AuthenticationBundle\Repository\UserTypeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use AuthenticationBundle\Entity\UserType;
 
@@ -16,38 +18,37 @@ class UserTypeService
     private $entityManager;
 
     /**
+     * @var UserTypeRepository
+     */
+    private $repository;
+
+    /**
      * @param EntityManagerInterface $entityManger
      */
     public function __construct(EntityManagerInterface $entityManger)
     {
         $this->entityManager = $entityManger;
+        $this->repository    = $this->entityManager->getRepository(UserType::class);
     }
-
 
     /**
      * @param int $id
      *
-     * @return UserType $userType
+     * @return UserType
+     * @throws UserTypeNotFoundException
      */
-    public function getUserType(int $id)
+    public function getUserType(int $id): UserType
     {
-        $repository = $this->entityManager->getRepository('AuthenticationBundle:UserType');
-        $userType   = $repository->findById($id);
-
-        return $userType;
+        return $this->repository->findById($id);
     }
 
     /**
      * @param bool $visible
      *
-     * @return UserType[] $userTypes
-     *
+     * @return UserType[]
      */
-    public function getUserTypes(bool $visible = false)
+    public function getUserTypes(bool $visible = false): array
     {
-        $repository = $this->entityManager->getRepository('AuthenticationBundle:UserType');
-        $userTypes = $repository->listAll($visible);
-
-        return $userTypes;
+        return $this->repository->listAll($visible);
     }
 }

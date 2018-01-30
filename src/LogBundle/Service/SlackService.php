@@ -2,6 +2,7 @@
 
 namespace LogBundle\Service;
 
+use AppBundle\Exceptions\SettingsNotFoundException;
 use AppBundle\Service\SettingsService;
 use Psr\Log\AbstractLogger;
 use LogBundle\Service\Message\Attachment;
@@ -9,7 +10,7 @@ use LogBundle\Service\Message\Field;
 use LogBundle\Service\Message\Message;
 
 /**
- * @package LogBundle\Service
+ * Slack Service
  */
 class SlackService extends AbstractLogger
 {
@@ -46,6 +47,8 @@ class SlackService extends AbstractLogger
     /**
      * @param SettingsService $settingsService
      * @param string[]|null   $levels
+     *
+     * @throws SettingsNotFoundException
      */
     public function __construct(SettingsService $settingsService, array $levels = null)
     {
@@ -116,12 +119,12 @@ class SlackService extends AbstractLogger
 
         foreach ($context as $name => $value) {
             if ($value === null) {
-                $replacePairs['{'.$name.'}'] = 'NULL';
+                $replacePairs['{' . $name . '}'] = 'NULL';
             } elseif (is_scalar($value)) {
-                $replacePairs['{'.$name.'}'] = $value;
+                $replacePairs['{' . $name . '}'] = $value;
             } elseif (is_object($value)) {
                 if (method_exists($value, '__toString')) {
-                    $replacePairs['{'.$name.'}'] = (string)$value;
+                    $replacePairs['{' . $name . '}'] = (string)$value;
                 }
             }
         }
@@ -192,7 +195,7 @@ class SlackService extends AbstractLogger
 
         $ch = curl_init($this->hookUri);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-        curl_setopt($ch, CURLOPT_POSTFIELDS, 'payload='.json_encode($payload));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, 'payload=' . json_encode($payload));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
         if (defined('CURLOPT_SAFE_UPLOAD')) {

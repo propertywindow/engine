@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace AppBundle\Controller;
 
@@ -7,8 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class DefaultController
- * @package AppBundle\Controller
+ * Default Controller
  */
 class DefaultController extends Controller
 {
@@ -77,7 +77,5 @@ class DefaultController extends Controller
                 closedir($dh);
             }
         }
-
-        exit;
     }
 }

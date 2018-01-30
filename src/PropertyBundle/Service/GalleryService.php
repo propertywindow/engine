@@ -6,6 +6,7 @@ namespace PropertyBundle\Service;
 use Doctrine\ORM\EntityManagerInterface;
 use PropertyBundle\Entity\Gallery;
 use PropertyBundle\Exceptions\GalleryNotFoundException;
+use PropertyBundle\Repository\GalleryRepository;
 
 /**
  * Gallery Service
@@ -18,34 +19,35 @@ class GalleryService
     private $entityManager;
 
     /**
+     * @var GalleryRepository
+     */
+    private $repository;
+
+    /**
      * @param EntityManagerInterface $entityManger
      */
     public function __construct(EntityManagerInterface $entityManger)
     {
         $this->entityManager = $entityManger;
+        $this->repository    = $this->entityManager->getRepository(Gallery::class);
     }
 
     /**
      * @param int $id
      *
-     * @return Gallery $gallery
+     * @return Gallery
      * @throws GalleryNotFoundException
      */
     public function getPhoto(int $id): Gallery
     {
-        $repository = $this->entityManager->getRepository(Gallery::class);
-        $gallery    = $repository->findById($id);
-
-        return $gallery;
+        return $this->repository->findById($id);
     }
 
     /**
      * @return Gallery[]
      */
-    public function getGallery()
+    public function getGallery(): array
     {
-        $repository = $this->entityManager->getRepository(Gallery::class);
-
-        return $repository->findAll();
+        return $this->repository->findAll();
     }
 }

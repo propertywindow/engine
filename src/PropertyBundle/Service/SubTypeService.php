@@ -1,14 +1,19 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace PropertyBundle\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
+use PropertyBundle\Entity\Property;
 use PropertyBundle\Entity\SubType;
 use PropertyBundle\Entity\Type;
 use PropertyBundle\Exceptions\SubTypeDeleteException;
+use PropertyBundle\Exceptions\SubTypeNotFoundException;
+use PropertyBundle\Repository\PropertyRepository;
+use PropertyBundle\Repository\SubTypeRepository;
 
 /**
- * @package PropertyBundle\Service
+ * SubType Service
  */
 class SubTypeService
 {
@@ -18,24 +23,28 @@ class SubTypeService
     private $entityManager;
 
     /**
+     * @var SubTypeRepository
+     */
+    private $repository;
+
+    /**
      * @param EntityManagerInterface $entityManger
      */
     public function __construct(EntityManagerInterface $entityManger)
     {
         $this->entityManager = $entityManger;
+        $this->repository    = $this->entityManager->getRepository(SubType::class);
     }
 
     /**
      * @param int $id
      *
-     * @return SubType $subType
+     * @return SubType
+     * @throws SubTypeNotFoundException
      */
-    public function getSubType(int $id)
+    public function getSubType(int $id): SubType
     {
-        $repository = $this->entityManager->getRepository('PropertyBundle:SubType');
-        $subType    = $repository->findById($id);
-
-        return $subType;
+        return $this->repository->findById($id);
     }
 
     /**
@@ -43,21 +52,17 @@ class SubTypeService
      *
      * @return SubType[]
      */
-    public function getSubTypes(Type $type)
+    public function getSubTypes(Type $type): array
     {
-        $repository = $this->entityManager->getRepository('PropertyBundle:SubType');
-
-        return $repository->listAll($type);
+        return $this->repository->listAll($type);
     }
 
     /**
      * @param SubType $subType
      *
      * @return SubType
-     *
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function createSubType(SubType $subType)
+    public function createSubType(SubType $subType): SubType
     {
         $this->entityManager->persist($subType);
         $this->entityManager->flush();
@@ -69,10 +74,8 @@ class SubTypeService
      * @param SubType $subType
      *
      * @return SubType
-     *
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function updateSubType(SubType $subType)
+    public function updateSubType(SubType $subType): SubType
     {
         $this->entityManager->flush();
 
@@ -83,13 +86,14 @@ class SubTypeService
      * @param int $id
      *
      * @throws SubTypeDeleteException
+     * @throws SubTypeNotFoundException
      */
     public function deleteSubType(int $id)
     {
-        $subTypeRepository = $this->entityManager->getRepository('PropertyBundle:SubType');
-        $subType           = $subTypeRepository->findById($id);
+        $subType = $this->repository->findById($id);
 
-        $propertyRepository = $this->entityManager->getRepository('PropertyBundle:Property');
+        /** @var PropertyRepository $propertyRepository */
+        $propertyRepository = $this->entityManager->getRepository(Property::class);
         $subTypes           = $propertyRepository->findPropertiesWithSubType($subType->getId());
 
         if (!empty($subTypes)) {

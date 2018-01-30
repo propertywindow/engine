@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace ConversationBundle\Service;
 
 use AuthenticationBundle\Entity\User;
+use AuthenticationBundle\Repository\UserRepository;
 use ConversationBundle\Exceptions\NotificationNotFoundException;
 use ConversationBundle\Repository\NotificationRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -118,7 +119,8 @@ class NotificationService
         Notification $notification,
         array $userIdentifiers
     ) {
-        $userRepository = $this->entityManager->getRepository('AuthenticationBundle:User');
+        /** @var UserRepository $userRepository */
+        $userRepository = $this->entityManager->getRepository(User::class);
         $users          = $userRepository->findByUserIdentifiers(array_unique($userIdentifiers));
 
         $notification->setUsers($users);

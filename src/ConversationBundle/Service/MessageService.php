@@ -5,6 +5,8 @@ namespace ConversationBundle\Service;
 
 use AuthenticationBundle\Entity\User;
 use ConversationBundle\Entity\Message;
+use ConversationBundle\Exceptions\MessageNotFoundException;
+use ConversationBundle\Repository\MessageRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use ConversationBundle\Entity\Conversation;
 
@@ -19,28 +21,28 @@ class MessageService
     private $entityManager;
 
     /**
+     * @var MessageRepository
+     */
+    private $repository;
+
+    /**
      * @param EntityManagerInterface $entityManger
      */
     public function __construct(EntityManagerInterface $entityManger)
     {
         $this->entityManager = $entityManger;
+        $this->repository    = $this->entityManager->getRepository(Message::class);
     }
 
     /**
      * @param int $id
      *
-     * @return Message $conversation
-     * @throws \ConversationBundle\Exceptions\MessageNotFoundException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
+     * @return Message
+     * @throws MessageNotFoundException
      */
-    public function getMessage(int $id)
+    public function getMessage(int $id): Message
     {
-        $repository = $this->entityManager->getRepository('ConversationBundle:Message');
-        $message    = $repository->findById($id);
-
-        return $message;
+        return $this->repository->findById($id);
     }
 
     /**
@@ -48,11 +50,9 @@ class MessageService
      *
      * @return Message[]
      */
-    public function getMessages(Conversation $conversation)
+    public function getMessages(Conversation $conversation): array
     {
-        $repository = $this->entityManager->getRepository('ConversationBundle:Message');
-
-        return $repository->listAll($conversation);
+        return $this->repository->listAll($conversation);
     }
 
     /**
@@ -60,7 +60,7 @@ class MessageService
      *
      * @return Message
      */
-    public function createMessage(Message $message)
+    public function createMessage(Message $message): Message
     {
         $this->entityManager->persist($message);
         $this->entityManager->flush();
@@ -73,7 +73,7 @@ class MessageService
      *
      * @return Message
      */
-    public function updateMessage(Message $message)
+    public function updateMessage(Message $message): Message
     {
         $this->entityManager->flush();
 
@@ -95,10 +95,8 @@ class MessageService
      *
      * @return Message[]
      */
-    public function getUnread(User $user)
+    public function getUnread(User $user): array
     {
-        $repository = $this->entityManager->getRepository('ConversationBundle:Message');
-
-        return $repository->findUnreadByUser($user);
+        return $this->repository->findUnreadByUser($user);
     }
 }

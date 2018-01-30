@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace ConversationBundle\Repository;
 
@@ -18,9 +19,6 @@ class MessageRepository extends EntityRepository
      *
      * @return Message
      * @throws MessageNotFoundException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     public function findById(int $id): Message
     {
