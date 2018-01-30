@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace ConversationBundle\Controller;
 
@@ -10,23 +11,22 @@ use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Response;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
-use ConversationBundle\Exceptions\NotificationNotFoundException;
 use ConversationBundle\Service\Notification\Mapper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Throwable;
 
 /**
- * @Route(service="notification_controller")
+ * @Route(service="ConversationBundle\Controller\NotificationController")
  */
 class NotificationController extends BaseController
 {
     /**
      * @Route("/notification" , name="notification")
-     *
      * @param Request $httpRequest
      *
      * @return HttpResponse
+     * @throws Throwable
      */
     public function requestHandler(Request $httpRequest)
     {
@@ -47,10 +47,7 @@ class NotificationController extends BaseController
      *
      * @return array
      * @throws InvalidJsonRpcMethodException
-     * @throws NotificationNotFoundException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
+     * @throws NotAuthorizedException
      */
     private function invoke(int $userId, string $method, array $parameters = [])
     {
@@ -88,7 +85,6 @@ class NotificationController extends BaseController
      * @param array $parameters
      *
      * @return array
-     * @throws NotificationNotFoundException
      */
     private function getNotification(array $parameters)
     {
@@ -108,7 +104,7 @@ class NotificationController extends BaseController
      */
     private function listNotifications(int $userId)
     {
-        $user = $this->userService->getUser($userId);
+        $user          = $this->userService->getUser($userId);
         $notifications = $this->notificationService->listNotifications($user);
 
         return Mapper::fromNotifications(...$notifications);
@@ -119,8 +115,6 @@ class NotificationController extends BaseController
      * @param array $parameters
      *
      * @return array
-     *
-     * @throws NotAuthorizedException
      */
     private function createNotification(int $userId, array $parameters)
     {

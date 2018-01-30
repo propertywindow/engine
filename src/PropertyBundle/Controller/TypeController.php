@@ -1,30 +1,31 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace PropertyBundle\Controller;
 
 use AppBundle\Controller\BaseController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use InvalidArgumentException;
+use PropertyBundle\Exceptions\TypeDeleteException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Response;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
-use PropertyBundle\Exceptions\TypeNotFoundException;
 use PropertyBundle\Service\Type\Mapper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Throwable;
 
 /**
- * @Route(service="type_controller")
+ * @Route(service="PropertyBundle\Controller\TypeController")
  */
 class TypeController extends BaseController
 {
     /**
      * @Route("/property/type" , name="type")
-     *
      * @param Request $httpRequest
      *
      * @return HttpResponse
+     * @throws Throwable
      */
     public function requestHandler(Request $httpRequest)
     {
@@ -45,10 +46,8 @@ class TypeController extends BaseController
      *
      * @return array
      * @throws InvalidJsonRpcMethodException
-     * @throws TypeNotFoundException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
+     * @throws NotAuthorizedException
+     * @throws TypeDeleteException
      */
     private function invoke(int $userId, string $method, array $parameters = [])
     {
@@ -68,7 +67,6 @@ class TypeController extends BaseController
      * @param array $parameters
      *
      * @return array
-     * @throws TypeNotFoundException
      */
     private function getType(array $parameters)
     {
@@ -83,7 +81,6 @@ class TypeController extends BaseController
 
     /**
      * @return array
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     private function getTypes()
     {
@@ -92,10 +89,10 @@ class TypeController extends BaseController
 
     /**
      * @param array $parameters
-     *
      * @param int   $userId
      *
      * @throws NotAuthorizedException
+     * @throws TypeDeleteException
      */
     private function deleteType(array $parameters, int $userId)
     {

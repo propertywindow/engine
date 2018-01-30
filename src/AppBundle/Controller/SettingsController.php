@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace AppBundle\Controller;
 
@@ -14,17 +15,15 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Throwable;
 
 /**
- * @Route(service="settings_controller")
+ * @Route(service="AppBundle\Controller\SettingsController")
  */
 class SettingsController extends BaseController
 {
     /**
      * @Route("/settings" , name="settings")
-     *
      * @param Request $httpRequest
      *
      * @return HttpResponse
-     *
      * @throws Throwable
      */
     public function requestHandler(Request $httpRequest)
@@ -45,7 +44,6 @@ class SettingsController extends BaseController
      * @param array  $parameters
      *
      * @return array
-     *
      * @throws InvalidJsonRpcMethodException
      * @throws NotAuthorizedException
      * @throws SettingsNotFoundException
@@ -67,7 +65,6 @@ class SettingsController extends BaseController
 
     /**
      * @return array
-     *
      * @throws SettingsNotFoundException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
@@ -83,7 +80,6 @@ class SettingsController extends BaseController
      * @param array $parameters
      *
      * @return array
-     *
      * @throws NotAuthorizedException
      * @throws SettingsNotFoundException
      * @throws \Doctrine\ORM\ORMException

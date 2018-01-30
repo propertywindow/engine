@@ -1,10 +1,9 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace AuthenticationBundle\Controller;
 
 use AppBundle\Controller\BaseController;
-use AuthenticationBundle\Exceptions\NotAuthorizedException;
-use AuthenticationBundle\Exceptions\ServiceNotFoundException;
 use AuthenticationBundle\Service\Service\Mapper;
 use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -15,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Throwable;
 
 /**
- * @Route(service="service_controller")
+ * @Route(service="AuthenticationBundle\Controller\ServiceController")
  */
 class ServiceController extends BaseController
 {

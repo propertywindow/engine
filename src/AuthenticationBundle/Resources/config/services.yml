@@ -1,49 +1,33 @@
 services:
-    user_service:
-          class: AuthenticationBundle\Service\UserService
+    AuthenticationBundle\Service\UserService:
           arguments: ["@doctrine.orm.entity_manager"]
-    user_settings_service:
-          class: AuthenticationBundle\Service\UserSettingsService
+    AuthenticationBundle\Service\UserSettingsService:
           arguments: ["@doctrine.orm.entity_manager"]
-    user_type_service:
-          class: AuthenticationBundle\Service\UserTypeService
+    AuthenticationBundle\Service\UserTypeService:
           arguments: ["@doctrine.orm.entity_manager"]
-    blacklist_service:
-          class: AuthenticationBundle\Service\BlacklistService
+    AuthenticationBundle\Service\BlacklistService:
           arguments: ["@doctrine.orm.entity_manager"]
-    service_service:
-          class: AuthenticationBundle\Service\ServiceService
+    AuthenticationBundle\Service\ServiceService:
           arguments: ["@doctrine.orm.entity_manager"]
-    service_group_service:
-          class: AuthenticationBundle\Service\ServiceGroupService
+    AuthenticationBundle\Service\ServiceGroupService:
           arguments: ["@doctrine.orm.entity_manager"]
-    service_template_service:
-          class: AuthenticationBundle\Service\ServiceTemplateService
+    AuthenticationBundle\Service\ServiceTemplateService:
           arguments: ["@doctrine.orm.entity_manager"]
-    service_map_service:
-          class: AuthenticationBundle\Service\ServiceMapService
+    AuthenticationBundle\Service\ServiceMapService:
           arguments: ["@doctrine.orm.entity_manager"]
-    service_controller:
-          class: AuthenticationBundle\Controller\ServiceController
+    AuthenticationBundle\Controller\ServiceController:
           autowire: true
-    service_group_controller:
-          class: AuthenticationBundle\Controller\ServiceGroupController
+    AuthenticationBundle\Controller\ServiceGroupController:
           autowire: true
-    service_template_controller:
-          class: AuthenticationBundle\Controller\ServiceTemplateController
+    AuthenticationBundle\Controller\ServiceTemplateController:
           autowire: true
-    blacklist_controller:
-          class: AuthenticationBundle\Controller\BlacklistController
+    AuthenticationBundle\Controller\BlacklistController:
           autowire: true
-    login_controller:
-          class: AuthenticationBundle\Controller\LoginController
+    AuthenticationBundle\Controller\LoginController:
           autowire: true
-    user_controller:
-          class: AuthenticationBundle\Controller\UserController
+    AuthenticationBundle\Controller\UserController:
           autowire: true
-    user_settings_controller:
-            class: AuthenticationBundle\Controller\UserSettingsController
+    AuthenticationBundle\Controller\UserSettingsController:
             autowire: true
-    menu_controller:
-          class: AuthenticationBundle\Controller\MenuController
+    AuthenticationBundle\Controller\MenuController:
           autowire: true

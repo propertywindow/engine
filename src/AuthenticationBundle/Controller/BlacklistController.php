@@ -1,10 +1,10 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace AuthenticationBundle\Controller;
 
 use AppBundle\Controller\BaseController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
-use AuthenticationBundle\Exceptions\BlacklistNotFoundException;
 use AuthenticationBundle\Service\Blacklist\Mapper;
 use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -15,16 +15,16 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Throwable;
 
 /**
- * @Route(service="blacklist_controller")
+ * @Route(service="AuthenticationBundle\Controller\BlacklistController")
  */
 class BlacklistController extends BaseController
 {
     /**
      * @Route("/authentication/blacklist" , name="blacklist")
-     *
      * @param Request $httpRequest
      *
      * @return HttpResponse
+     * @throws Throwable
      */
     public function requestHandler(Request $httpRequest)
     {
@@ -45,10 +45,7 @@ class BlacklistController extends BaseController
      *
      * @return array
      * @throws InvalidJsonRpcMethodException
-     * @throws BlacklistNotFoundException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
+     * @throws NotAuthorizedException
      */
     private function invoke(int $userId, string $method, array $parameters = [])
     {
@@ -117,7 +114,6 @@ class BlacklistController extends BaseController
      * @param array $parameters
      *
      * @return array
-     * @throws NotAuthorizedException
      */
     private function createBlacklist(array $parameters)
     {
@@ -128,7 +124,7 @@ class BlacklistController extends BaseController
             throw new InvalidArgumentException("No ip argument provided");
         }
 
-        $user  = $this->userService->getUser($parameters['user_id']);
+        $user = $this->userService->getUser($parameters['user_id']);
 
         return Mapper::fromBlacklist($this->blacklistService->createBlacklist($parameters['ip'], $user));
     }

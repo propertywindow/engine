@@ -1,28 +1,19 @@
 services:
-    property_service:
-          class: PropertyBundle\Service\PropertyService
+    PropertyBundle\Service\PropertyService:
           arguments: ["@doctrine.orm.entity_manager"]
-    kind_service:
-          class: PropertyBundle\Service\KindService
+    PropertyBundle\Service\KindService:
           arguments: ["@doctrine.orm.entity_manager"]
-    terms_service:
-          class: PropertyBundle\Service\TermsService
+    PropertyBundle\Service\TermsService:
           arguments: ["@doctrine.orm.entity_manager"]
-    type_service:
-          class: PropertyBundle\Service\TypeService
+    PropertyBundle\Service\TypeService:
           arguments: ["@doctrine.orm.entity_manager"]
-    sub_type_service:
-          class: PropertyBundle\Service\SubTypeService
+    PropertyBundle\Service\SubTypeService:
           arguments: ["@doctrine.orm.entity_manager"]
-    gallery_service:
-          class: PropertyBundle\Service\GalleryService
+    PropertyBundle\Service\GalleryService:
           arguments: ["@doctrine.orm.entity_manager"]
-    property_controller:
-          class: PropertyBundle\Controller\PropertyController
+    PropertyBundle\Controller\PropertyController:
           autowire: true
-    type_controller:
-          class: PropertyBundle\Controller\TypeController
+    PropertyBundle\Controller\TypeController:
           autowire: true
-    sub_type_controller:
-          class: PropertyBundle\Controller\SubTypeController
+    PropertyBundle\Controller\SubTypeController:
           autowire: true

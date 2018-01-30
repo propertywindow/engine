@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace AlertBundle\Controller;
 
@@ -15,16 +16,16 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Throwable;
 
 /**
- * @Route(service="alert_controller")
+ * @Route(service="AlertBundle\Controller\AlertController")
  */
 class AlertController extends BaseController
 {
     /**
      * @Route("/alert" , name="alert")
-     *
      * @param Request $httpRequest
      *
      * @return HttpResponse
+     * @throws Throwable
      */
     public function requestHandler(Request $httpRequest)
     {
@@ -44,9 +45,9 @@ class AlertController extends BaseController
      * @param array  $parameters
      *
      * @return array
-     *
-     * @throws InvalidJsonRpcMethodException
      * @throws AlertNotFoundException
+     * @throws InvalidJsonRpcMethodException
+     * @throws NotAuthorizedException
      */
     private function invoke(int $userId, string $method, array $parameters = [])
     {
@@ -65,7 +66,7 @@ class AlertController extends BaseController
      * @param array $parameters
      *
      * @return array
-     *
+     * @throws AlertNotFoundException
      * @throws NotAuthorizedException
      */
     private function getAlert(int $userId, array $parameters)
@@ -89,8 +90,6 @@ class AlertController extends BaseController
      * @param int $userId
      *
      * @return array
-     *
-     * @throws NotAuthorizedException
      */
     private function getAlerts(int $userId)
     {

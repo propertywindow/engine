@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Throwable;
 
 /**
- * @Route(service="property_controller")
+ * @Route(service="PropertyBundle\Controller\PropertyController")
  */
 class PropertyController extends BaseController
 {

@@ -1,23 +1,16 @@
 services:
-  notification_service:
-      class: ConversationBundle\Service\NotificationService
+  ConversationBundle\Service\NotificationService:
       arguments: ["@doctrine.orm.entity_manager"]
-  conversation_service:
-      class: ConversationBundle\Service\ConversationService
+  ConversationBundle\Service\ConversationService:
       arguments: ["@doctrine.orm.entity_manager"]
-  message_service:
-      class: ConversationBundle\Service\MessageService
+  ConversationBundle\Service\MessageService:
       arguments: ["@doctrine.orm.entity_manager"]
-  mailer_service:
-      class: ConversationBundle\Service\MailerService
-      arguments: ["@doctrine.orm.entity_manager", '@twig', '@log_mail_service']
-  notification_controller:
-      class: ConversationBundle\Controller\NotificationController
+  ConversationBundle\Service\MailerService:
+      arguments: ["@doctrine.orm.entity_manager", '@twig', 'LogBundle\Service\LogMailService']
+  ConversationBundle\Controller\NotificationController:
       autowire: true
-  conversation_controller:
-      class: ConversationBundle\Controller\ConversationController
+  ConversationBundle\Controller\ConversationController:
       autowire: true
-  email_controller:
-      class: ConversationBundle\Controller\EmailController
+  ConversationBundle\Controller\EmailController:
       autowire: true
 

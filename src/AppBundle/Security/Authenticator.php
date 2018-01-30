@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace AppBundle\Security;
 
@@ -8,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use AuthenticationBundle\Service\UserService;
 
 /**
- * @package AppBundle\Security
+ * Authenticator
  */
 class Authenticator
 {
@@ -100,7 +101,7 @@ class Authenticator
         }
 
 
-        if (hash_hmac('sha1', $timestamp."-".$userId, $secret) !== $signature) {
+        if (hash_hmac('sha1', $timestamp . "-" . $userId, $secret) !== $signature) {
             throw new CouldNotAuthenticateUserException("User not recognized");
         }
 

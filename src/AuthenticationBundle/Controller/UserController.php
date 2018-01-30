@@ -16,13 +16,14 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Throwable;
 
 /**
- * @Route(service="user_controller")
+ * @Route(service="AuthenticationBundle\Controller\UserController")
  */
 class UserController extends BaseController
 {
     /**
      * @Route("/authentication/user" , name="user")
      * @param Request $httpRequest
+     *
      * @return HttpResponse
      * @throws Throwable
      */
@@ -39,13 +40,19 @@ class UserController extends BaseController
     }
 
     /**
-     * @param int $userId
+     * @param int    $userId
      * @param string $method
-     * @param array $parameters
+     * @param array  $parameters
+     *
      * @return array
      * @throws InvalidJsonRpcMethodException
      * @throws NotAuthorizedException
+     * @throws Throwable
      * @throws UserAlreadyExistException
+     * @throws \AgentBundle\Exceptions\AgentSettingsNotFoundException
+     * @throws \AuthenticationBundle\Exceptions\UserSettingsNotFoundException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Syntax
      */
     private function invoke(int $userId, string $method, array $parameters = [])
     {
@@ -77,8 +84,9 @@ class UserController extends BaseController
 
 
     /**
-     * @param int $userId
+     * @param int   $userId
      * @param array $parameters
+     *
      * @return array
      * @throws NotAuthorizedException
      */
@@ -88,8 +96,8 @@ class UserController extends BaseController
             throw new InvalidArgumentException("No argument provided");
         }
 
-        $id = (int)$parameters['id'];
-        $user = $this->userService->getUser($id);
+        $id      = (int)$parameters['id'];
+        $user    = $this->userService->getUser($id);
         $getUser = $this->userService->getUser($userId);
 
         if ($getUser->getAgent()->getId() !== $user->getAgent()->getId()) {
@@ -101,21 +109,23 @@ class UserController extends BaseController
 
     /**
      * @param int $userId
+     *
      * @return array
      */
     private function getUsers(int $userId)
     {
-        $user = $this->userService->getUser($userId);
-        $adminType = $this->userTypeService->getUserType(1);
+        $user          = $this->userService->getUser($userId);
+        $adminType     = $this->userTypeService->getUserType(1);
         $colleagueType = $this->userTypeService->getUserType(3);
-        $users = $this->userService->getUsers($user, $adminType, $colleagueType);
+        $users         = $this->userService->getUsers($user, $adminType, $colleagueType);
 
         return Mapper::fromUsers(...$users);
     }
 
     /**
-     * @param int $userId
+     * @param int   $userId
      * @param array $parameters
+     *
      * @return array
      * @throws NotAuthorizedException
      */
@@ -131,33 +141,40 @@ class UserController extends BaseController
             throw new NotAuthorizedException($userId);
         }
 
-        $agent = $this->agentService->getAgent((int)$parameters['id']);
+        $agent         = $this->agentService->getAgent((int)$parameters['id']);
         $colleagueType = $this->userTypeService->getUserType(3);
-        $users = $this->userService->getAgentUsers($agent, $colleagueType);
+        $users         = $this->userService->getAgentUsers($agent, $colleagueType);
 
         return Mapper::fromUsers(...$users);
     }
 
     /**
      * @param int $userId
+     *
      * @return array
      */
     private function getColleagues(int $userId)
     {
-        $user = $this->userService->getUser($userId);
+        $user     = $this->userService->getUser($userId);
         $userType = $this->userTypeService->getUserType(3);
         $agentIds = $this->agentService->getAgentIdsFromGroup((int)$user->getAgent()->getId());
-        $users = $this->userService->getColleagues($agentIds, $userType);
+        $users    = $this->userService->getColleagues($agentIds, $userType);
 
         return Mapper::fromUsers(...$users);
     }
 
     /**
-     * @param int $userId
+     * @param int   $userId
      * @param array $parameters
+     *
      * @return array $user
      * @throws NotAuthorizedException
+     * @throws Throwable
      * @throws UserAlreadyExistException
+     * @throws \AgentBundle\Exceptions\AgentSettingsNotFoundException
+     * @throws \AuthenticationBundle\Exceptions\UserSettingsNotFoundException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Syntax
      */
     private function createUser(int $userId, array $parameters)
     {
@@ -205,12 +222,12 @@ class UserController extends BaseController
             throw new UserAlreadyExistException($parameters['email']);
         }
 
-        $userType = $this->userTypeService->getUserType($parameters['user_type_id']);
+        $userType    = $this->userTypeService->getUserType($parameters['user_type_id']);
         $createdUser = $this->userService->createUser($parameters, $user->getAgent(), $userType);
-        $password = $this->randomPassword();
+        $password    = $this->randomPassword();
 
         $mailParameters = [
-            'name' => $parameters['first_name'],
+            'name'     => $parameters['first_name'],
             'password' => $password,
         ];
 
@@ -228,8 +245,9 @@ class UserController extends BaseController
     }
 
     /**
-     * @param int $userId
+     * @param int   $userId
      * @param array $parameters
+     *
      * @return array
      * @throws NotAuthorizedException
      */
@@ -239,7 +257,7 @@ class UserController extends BaseController
             throw new InvalidArgumentException("Identifier not provided");
         }
 
-        $id = (int)$parameters['id'];
+        $id   = (int)$parameters['id'];
         $user = $this->userService->getUser($userId);
 
         $updateUser = $this->userService->getUser($id);
@@ -293,8 +311,9 @@ class UserController extends BaseController
     }
 
     /**
-     * @param int $userId
+     * @param int   $userId
      * @param array $parameters
+     *
      * @throws NotAuthorizedException
      */
     private function setPassword(int $userId, array $parameters)
@@ -306,8 +325,8 @@ class UserController extends BaseController
             throw new InvalidArgumentException("password parameter not provided");
         }
 
-        $id = (int)$parameters['id'];
-        $user = $this->userService->getUser($userId);
+        $id         = (int)$parameters['id'];
+        $user       = $this->userService->getUser($userId);
         $updateUser = $this->userService->getUser($id);
 
         if ($updateUser->getId() !== $user->getId()) {
@@ -321,8 +340,9 @@ class UserController extends BaseController
     }
 
     /**
-     * @param int $userId
+     * @param int   $userId
      * @param array $parameters
+     *
      * @throws NotAuthorizedException
      */
     private function disableUser(int $userId, array $parameters)
@@ -331,8 +351,8 @@ class UserController extends BaseController
             throw new InvalidArgumentException("No argument provided");
         }
 
-        $id = (int)$parameters['id'];
-        $user = $this->userService->getUser($userId);
+        $id         = (int)$parameters['id'];
+        $user       = $this->userService->getUser($userId);
         $updateUser = $this->userService->getUser($id);
 
         if ($updateUser->getAgent()->getId() !== $user->getAgent()->getId()) {
@@ -343,8 +363,9 @@ class UserController extends BaseController
     }
 
     /**
-     * @param int $userId
+     * @param int   $userId
      * @param array $parameters
+     *
      * @throws NotAuthorizedException
      */
     private function deleteUser(int $userId, array $parameters)
@@ -353,7 +374,7 @@ class UserController extends BaseController
             throw new InvalidArgumentException("No argument provided");
         }
 
-        $id = (int)$parameters['id'];
+        $id   = (int)$parameters['id'];
         $user = $this->userService->getUser($userId);
 
         if ((int)$user->getUserType()->getId() > self::USER_AGENT) {
@@ -365,6 +386,7 @@ class UserController extends BaseController
 
     /**
      * @param int $userId
+     *
      * @return array
      */
     private function verify(int $userId)

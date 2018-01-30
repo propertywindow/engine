@@ -51,7 +51,7 @@ use Exception;
 use Throwable;
 
 /**
- * @Route(service="base_controller")
+ * @Route(service="AppBundle\Controller\BaseController")
  */
 class BaseController extends Controller
 {
@@ -364,6 +364,10 @@ class BaseController extends Controller
      * @throws CouldNotParseJsonRequestException
      * @throws InvalidJsonRpcMethodException
      * @throws InvalidJsonRpcRequestException
+     * @throws \AppBundle\Exceptions\SettingsNotFoundException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     public function prepareRequest(Request $httpRequest, bool $authenticate = true, bool $impersonate = false)
     {

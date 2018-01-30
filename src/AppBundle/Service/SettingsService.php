@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace AppBundle\Service;
 
@@ -6,7 +7,7 @@ use AppBundle\Entity\Settings;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
- * @package AppBundle\Service
+ * Settings Service
  */
 class SettingsService
 {
@@ -25,7 +26,6 @@ class SettingsService
 
     /**
      * @return Settings $settings
-     *
      * @throws \AppBundle\Exceptions\SettingsNotFoundException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
@@ -33,8 +33,8 @@ class SettingsService
      */
     public function getSettings()
     {
-        $repository   = $this->entityManager->getRepository('AppBundle:Settings');
-        $settings = $repository->findById(1);
+        $repository = $this->entityManager->getRepository(Settings::class);
+        $settings   = $repository->findById(1);
 
         return $settings;
     }

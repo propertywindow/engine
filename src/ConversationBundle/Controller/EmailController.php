@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace ConversationBundle\Controller;
 
@@ -10,23 +11,22 @@ use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Response;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
-use ConversationBundle\Exceptions\NotificationNotFoundException;
 use ConversationBundle\Service\Inbox\Mapper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Throwable;
 
 /**
- * @Route(service="email_controller")
+ * @Route(service="ConversationBundle\Controller\EmailController")
  */
 class EmailController extends BaseController
 {
     /**
      * @Route("/email" , name="email")
-     *
      * @param Request $httpRequest
      *
      * @return HttpResponse
+     * @throws Throwable
      */
     public function requestHandler(Request $httpRequest)
     {
@@ -46,11 +46,8 @@ class EmailController extends BaseController
      * @param array  $parameters
      *
      * @return array
+     * @throws EmailNotSetException
      * @throws InvalidJsonRpcMethodException
-     * @throws NotificationNotFoundException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     private function invoke(int $userId, string $method, array $parameters = [])
     {
@@ -71,7 +68,6 @@ class EmailController extends BaseController
      * @param array $parameters
      *
      * @return array
-     *
      * @throws EmailNotSetException
      */
     private function getMailbox(int $userId, array $parameters)
@@ -98,7 +94,7 @@ class EmailController extends BaseController
         if ($emails) {
             rsort($emails);
             foreach ($emails as $e) {
-                $overview = imap_fetch_overview($connection, $e.':'.$iCheck->Nmsgs, 0);
+                $overview = imap_fetch_overview($connection, $e . ':' . $iCheck->Nmsgs, 0);
 
                 $email = new Email();
 
@@ -121,7 +117,6 @@ class EmailController extends BaseController
      * @param int $userId
      *
      * @return array
-     *
      * @throws EmailNotSetException
      */
     private function getMailboxes(int $userId)
@@ -134,10 +129,10 @@ class EmailController extends BaseController
         }
 
         $server = '{'
-                  .$userSettings->getIMAPAddress().':'
-                  .$userSettings->getIMAPPort().'/'
-                  .strtolower($userSettings->getIMAPSecure())
-                  .'}';
+                  . $userSettings->getIMAPAddress() . ':'
+                  . $userSettings->getIMAPPort() . '/'
+                  . strtolower($userSettings->getIMAPSecure())
+                  . '}';
 
         $connection = imap_open(
             $server,

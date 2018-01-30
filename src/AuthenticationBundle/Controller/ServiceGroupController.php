@@ -1,10 +1,9 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace AuthenticationBundle\Controller;
 
 use AppBundle\Controller\BaseController;
-use AuthenticationBundle\Exceptions\NotAuthorizedException;
-use AuthenticationBundle\Exceptions\ServiceNotFoundException;
 use AuthenticationBundle\Service\ServiceGroup\Mapper;
 use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -15,16 +14,16 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Throwable;
 
 /**
- * @Route(service="service_group_controller")
+ * @Route(service="AuthenticationBundle\Controller\ServiceGroupController")
  */
 class ServiceGroupController extends BaseController
 {
     /**
      * @Route("/services/service_group" , name="service_group")
-     *
      * @param Request $httpRequest
      *
      * @return HttpResponse
+     * @throws Throwable
      */
     public function requestHandler(Request $httpRequest)
     {
@@ -45,10 +44,6 @@ class ServiceGroupController extends BaseController
      *
      * @return array
      * @throws InvalidJsonRpcMethodException
-     * @throws ServiceNotFoundException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     private function invoke(int $userId, string $method, array $parameters = [])
     {
@@ -67,7 +62,6 @@ class ServiceGroupController extends BaseController
      * @param array $parameters
      *
      * @return array
-     * @throws NotAuthorizedException
      */
     private function getServiceGroup(int $userId, array $parameters)
     {
@@ -87,8 +81,6 @@ class ServiceGroupController extends BaseController
      * @param int $userId
      *
      * @return array
-     *
-     * @throws NotAuthorizedException
      */
     private function getServiceGroups(int $userId)
     {

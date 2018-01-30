@@ -1,10 +1,9 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace AuthenticationBundle\Controller;
 
 use AppBundle\Controller\BaseController;
-use AuthenticationBundle\Exceptions\NotAuthorizedException;
-use AuthenticationBundle\Exceptions\ServiceNotFoundException;
 use AuthenticationBundle\Service\Menu\Mapper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Response;
@@ -14,16 +13,16 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Throwable;
 
 /**
- * @Route(service="menu_controller")
+ * @Route(service="AuthenticationBundle\Controller\MenuController")
  */
 class MenuController extends BaseController
 {
     /**
      * @Route("/services/menu" , name="menu")
-     *
      * @param Request $httpRequest
      *
      * @return HttpResponse
+     * @throws Throwable
      */
     public function requestHandler(Request $httpRequest)
     {
@@ -44,10 +43,6 @@ class MenuController extends BaseController
      *
      * @return array
      * @throws InvalidJsonRpcMethodException
-     * @throws ServiceNotFoundException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     private function invoke(int $userId, string $method, array $parameters = [])
     {
@@ -63,8 +58,6 @@ class MenuController extends BaseController
      * @param int $userId
      *
      * @return array
-     *
-     * @throws NotAuthorizedException
      */
     private function getMenu(int $userId)
     {

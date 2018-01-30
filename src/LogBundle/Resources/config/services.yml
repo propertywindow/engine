@@ -1,22 +1,15 @@
 services:
-    log_activity_service:
-          class: LogBundle\Service\LogActivityService
+    LogBundle\Service\LogActivityService:
           arguments: ['@doctrine.orm.entity_manager']
-    log_traffic_service:
-          class: LogBundle\Service\LogTrafficService
+    LogBundle\Service\LogTrafficService:
           arguments: ['@doctrine.orm.entity_manager']
-    log_login_service:
-          class: LogBundle\Service\LogLoginService
+    LogBundle\Service\LogLoginService:
           arguments: ['@doctrine.orm.entity_manager']
-    log_mail_service:
-          class: LogBundle\Service\LogMailService
+    LogBundle\Service\LogMailService:
           arguments: ['@doctrine.orm.entity_manager']
-    log_error_service:
-          class: LogBundle\Service\LogErrorService
+    LogBundle\Service\LogErrorService:
           arguments: ['@doctrine.orm.entity_manager']
-    slack_service:
-          class: LogBundle\Service\SlackService
-          arguments: ['@settings_service']
-    activity_controller:
-          class: LogBundle\Controller\ActivityController
+    LogBundle\Service\SlackService:
+          arguments: ['AppBundle\Service\SettingsService']
+    LogBundle\Controller\ActivityController:
           autowire: true

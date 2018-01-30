@@ -1,14 +1,17 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace ConversationBundle\Service;
 
+use AgentBundle\Exceptions\AgentSettingsNotFoundException;
 use AuthenticationBundle\Entity\User;
+use AuthenticationBundle\Exceptions\UserSettingsNotFoundException;
 use Doctrine\ORM\EntityManagerInterface;
 use LogBundle\Service\LogMailService;
 use Twig_Environment;
 
 /**
- * @package ConversationBundle\Service
+ * Mailer Service
  */
 class MailerService
 {
@@ -50,6 +53,11 @@ class MailerService
      * @param bool   $personal
      *
      * @return bool
+     * @throws AgentSettingsNotFoundException
+     * @throws UserSettingsNotFoundException
+     * @throws \Throwable
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Syntax
      */
     public function sendMail(
         User $user,

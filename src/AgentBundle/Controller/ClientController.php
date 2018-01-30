@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Throwable;
 
 /**
- * @Route(service="client_controller")
+ * @Route(service="AgentBundle\Controller\ClientController")
  */
 class ClientController extends BaseController
 {

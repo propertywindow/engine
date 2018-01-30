@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Throwable;
 
 /**
- * @Route(service="agent_group_controller")
+ * @Route(service="AgentBundle\Controller\AgentGroupController")
  */
 class AgentGroupController extends BaseController
 {
