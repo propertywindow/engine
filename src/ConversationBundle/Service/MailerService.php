@@ -37,6 +37,21 @@ class MailerService
     private $twig;
 
     /**
+     * @var AgentSettingsRepository
+     */
+    private $agentRepository;
+
+    /**
+     * @var UserSettingsRepository
+     */
+    private $userRepository;
+
+    /**
+     * @var EmailTemplateRepository
+     */
+    private $templateRepository;
+
+    /**
      * @param EntityManagerInterface $entityManger
      * @param Twig_Environment       $twig
      * @param LogMailService         $logMailService
@@ -46,9 +61,12 @@ class MailerService
         Twig_Environment $twig,
         LogMailService $logMailService
     ) {
-        $this->entityManager  = $entityManger;
-        $this->twig           = $twig;
-        $this->logMailService = $logMailService;
+        $this->entityManager      = $entityManger;
+        $this->twig               = $twig;
+        $this->logMailService     = $logMailService;
+        $this->agentRepository    = $this->entityManager->getRepository(AgentSettings::class);
+        $this->userRepository     = $this->entityManager->getRepository(UserSettings::class);
+        $this->templateRepository = $this->entityManager->getRepository(EmailTemplate::class);
     }
 
     /**
@@ -72,22 +90,17 @@ class MailerService
         array $parameters,
         bool $personal = false
     ) {
-        /** @var EmailTemplateRepository $settings */
-        $template = $this->entityManager->getRepository(EmailTemplate::class)->findOneBy([
+
+        /** @var EmailTemplate $template */
+        $template = $this->templateRepository->findOneBy([
             'agent' => $user->getAgent(),
             'name'  => $templateName,
         ]);
 
-        /** @var AgentSettingsRepository $settings */
-        $settings = $this->entityManager->getRepository(AgentSettings::class)->findByAgent(
-            $user->getAgent()
-        );
-
         if ($personal) {
-            /** @var UserSettingsRepository $settings */
-            $settings = $this->entityManager->getRepository(UserSettings::class)->findByUser(
-                $user
-            );
+            $settings = $this->userRepository->findByUser($user);
+        } else {
+            $settings = $this->agentRepository->findByAgent($user->getAgent());
         }
 
         $transport = \Swift_SmtpTransport::newInstance()

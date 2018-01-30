@@ -207,8 +207,6 @@ class NotificationController extends BaseController
     {
         // todo: check rights
 
-        $user = $this->userService->getUser($userId);
-
         if (!array_key_exists('id', $parameters) || empty($parameters['id'])) {
             throw new InvalidArgumentException("Identifier not provided");
         }

@@ -46,20 +46,18 @@ class SlackService extends AbstractLogger
 
     /**
      * @param SettingsService $settingsService
-     * @param string[]|null   $levels
      *
      * @throws SettingsNotFoundException
      */
-    public function __construct(SettingsService $settingsService, array $levels = null)
+    public function __construct(SettingsService $settingsService)
     {
-        $settings = $settingsService->getSettings();
-
+        $settings           = $settingsService->getSettings();
         $this->hookUri      = $settings->getSlackURL();
         $this->name         = $settings->getSlackUsername();
         $this->slackEnabled = $settings->getSlackEnabled();
         $this->iconUrl      = null;
 
-        $this->levels = $levels !== null ? $levels : [
+        $this->levels = [
             'emergency',
             'alert',
             'critical',

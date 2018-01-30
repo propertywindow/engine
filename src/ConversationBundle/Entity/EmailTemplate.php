@@ -8,7 +8,6 @@ use Symfony\Bundle\FrameworkBundle\Tests\Fixtures\Validation\Category;
 
 /**
  * EmailTemplate
- *
  * @ORM\Table(name="email_template")
  * @ORM\Entity(repositoryClass="ConversationBundle\Repository\EmailTemplateRepository")
  * @ORM\HasLifecycleCallbacks
@@ -17,7 +16,6 @@ class EmailTemplate
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -38,28 +36,24 @@ class EmailTemplate
 
     /**
      * @var string
-     *
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="subject", type="string", length=255)
      */
     private $subject;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="body_html", type="text")
      */
     private $bodyHTML;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="body_txt", type="text")
      */
     private $bodyTXT;
@@ -67,28 +61,23 @@ class EmailTemplate
 
     /**
      * @var bool
-     *
      * @ORM\Column(name="active", type="boolean")
      */
     private $active;
 
     /**
      * @var \DateTime $created
-     *
      * @ORM\Column(type="datetime")
      */
     protected $created;
 
     /**
      * @var \DateTime $updated
-     *
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $updated;
 
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -97,13 +86,11 @@ class EmailTemplate
     }
 
     /**
-     * Set agent
-     *
      * @param \AgentBundle\Entity\Agent $agent
      *
      * @return EmailTemplate
      */
-    public function setAgent(Agent $agent = null)
+    public function setAgent(Agent $agent = null): EmailTemplate
     {
         $this->agent = $agent;
 
@@ -111,23 +98,19 @@ class EmailTemplate
     }
 
     /**
-     * Get agent
-     *
      * @return \AgentBundle\Entity\Agent
      */
-    public function getAgent()
+    public function getAgent(): Agent
     {
         return $this->agent;
     }
 
     /**
-     * Set category
-     *
      * @param EmailTemplateCategory $category
      *
      * @return EmailTemplate
      */
-    public function setCategory(EmailTemplateCategory $category = null)
+    public function setCategory(EmailTemplateCategory $category = null): EmailTemplate
     {
         $this->category = $category;
 
@@ -135,23 +118,19 @@ class EmailTemplate
     }
 
     /**
-     * Get category
-     *
      * @return Category
      */
-    public function getCategory()
+    public function getCategory(): Category
     {
         return $this->category;
     }
 
     /**
-     * Set name
-     *
      * @param string $name
      *
      * @return EmailTemplate
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
 
@@ -159,23 +138,19 @@ class EmailTemplate
     }
 
     /**
-     * Get name
-     *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
     /**
-     * Set subject
-     *
      * @param string $subject
      *
      * @return EmailTemplate
      */
-    public function setSubject($subject)
+    public function setSubject(string $subject): EmailTemplate
     {
         $this->subject = $subject;
 
@@ -183,23 +158,19 @@ class EmailTemplate
     }
 
     /**
-     * Get subject
-     *
      * @return string
      */
-    public function getSubject()
+    public function getSubject(): string
     {
         return $this->subject;
     }
 
     /**
-     * Set bodyHTML
-     *
      * @param string $bodyHTML
      *
      * @return EmailTemplate
      */
-    public function setBodyHTML($bodyHTML)
+    public function setBodyHTML($bodyHTML): EmailTemplate
     {
         $this->bodyHTML = $bodyHTML;
 
@@ -207,8 +178,6 @@ class EmailTemplate
     }
 
     /**
-     * Get bodyHTML
-     *
      * @return string
      */
     public function getBodyHTML()
@@ -217,13 +186,11 @@ class EmailTemplate
     }
 
     /**
-     * Set bodyTXT
-     *
      * @param string $bodyTXT
      *
      * @return EmailTemplate
      */
-    public function setBodyTXT($bodyTXT)
+    public function setBodyTXT($bodyTXT): EmailTemplate
     {
         $this->bodyTXT = $bodyTXT;
 
@@ -231,8 +198,6 @@ class EmailTemplate
     }
 
     /**
-     * Get bodyTXT
-     *
      * @return string
      */
     public function getBodyTXT()
@@ -241,13 +206,11 @@ class EmailTemplate
     }
 
     /**
-     * Set active
-     *
      * @param boolean $active
      *
      * @return EmailTemplate
      */
-    public function setActive($active)
+    public function setActive($active): EmailTemplate
     {
         $this->active = $active;
 
@@ -255,8 +218,6 @@ class EmailTemplate
     }
 
     /**
-     * Get active
-     *
      * @return bool
      */
     public function getActive()
@@ -266,7 +227,6 @@ class EmailTemplate
 
     /**
      * Gets triggered only on insert
-     *
      * @ORM\PrePersist
      */
     public function onPrePersist()
@@ -276,7 +236,6 @@ class EmailTemplate
 
     /**
      * Gets triggered every time on update
-     *
      * @ORM\PreUpdate
      */
     public function onPreUpdate()

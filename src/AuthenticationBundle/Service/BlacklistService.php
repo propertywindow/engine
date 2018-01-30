@@ -57,9 +57,9 @@ class BlacklistService
     /**
      * @param string $ipAddress
      *
-     * @return Blacklist
+     * @return Blacklist|null
      */
-    public function checkBlacklist(string $ipAddress): Blacklist
+    public function checkBlacklist(string $ipAddress)
     {
         return $this->repository->findOneBy(['ip' => $ipAddress]);
     }

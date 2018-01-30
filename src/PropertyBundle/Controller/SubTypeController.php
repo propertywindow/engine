@@ -5,8 +5,11 @@ namespace PropertyBundle\Controller;
 
 use AppBundle\Controller\BaseController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
+use AuthenticationBundle\Exceptions\UserNotFoundException;
 use InvalidArgumentException;
 use PropertyBundle\Exceptions\SubTypeDeleteException;
+use PropertyBundle\Exceptions\SubTypeNotFoundException;
+use PropertyBundle\Exceptions\TypeNotFoundException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Response;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
@@ -48,6 +51,9 @@ class SubTypeController extends BaseController
      * @throws InvalidJsonRpcMethodException
      * @throws NotAuthorizedException
      * @throws SubTypeDeleteException
+     * @throws SubTypeNotFoundException
+     * @throws TypeNotFoundException
+     * @throws UserNotFoundException
      */
     private function invoke(int $userId, string $method, array $parameters = [])
     {
@@ -67,6 +73,7 @@ class SubTypeController extends BaseController
      * @param array $parameters
      *
      * @return array
+     * @throws SubTypeNotFoundException
      */
     private function getSubType(array $parameters)
     {
@@ -83,11 +90,10 @@ class SubTypeController extends BaseController
      * @param array $parameters
      *
      * @return array
+     * @throws TypeNotFoundException
      */
     private function getSubTypes(array $parameters)
     {
-        $typeId = null;
-
         if (!array_key_exists('type_id', $parameters)) {
             throw new InvalidArgumentException("No type_id argument provided");
         }
@@ -103,6 +109,8 @@ class SubTypeController extends BaseController
      *
      * @throws NotAuthorizedException
      * @throws SubTypeDeleteException
+     * @throws SubTypeNotFoundException
+     * @throws UserNotFoundException
      */
     private function deleteSubType(array $parameters, int $userId)
     {
