@@ -465,6 +465,7 @@ class PropertyController extends BaseController
      * @throws NotAuthorizedException
      * @throws PropertyNotFoundException
      * @throws UserNotFoundException
+     * @throws \PropertyBundle\Exceptions\TermsNotFoundException
      */
     private function setPropertySold(int $userId, array $parameters)
     {
@@ -485,7 +486,8 @@ class PropertyController extends BaseController
             throw new NotAuthorizedException($userId);
         }
 
-        $updatedProperty = $this->propertyService->setPropertySold($id, $soldPrice);
+        $term            = $this->termsService->getTerm(9);
+        $updatedProperty = $this->propertyService->setPropertySold($id, $soldPrice, $term);
 
         $this->logActivityService->createActivity(
             $user,

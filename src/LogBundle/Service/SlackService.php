@@ -15,7 +15,7 @@ use LogBundle\Service\Message\Message;
 class SlackService extends AbstractLogger
 {
     /**
-     * @var string
+     * @var array
      */
     protected $levels;
 

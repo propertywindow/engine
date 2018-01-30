@@ -5,6 +5,7 @@ namespace PropertyBundle\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
 use PropertyBundle\Entity\Property;
+use PropertyBundle\Entity\Terms;
 use PropertyBundle\Exceptions\PropertyNotFoundException;
 use PropertyBundle\Repository\PropertyRepository;
 
@@ -147,13 +148,14 @@ class PropertyService
     }
 
     /**
-     * @param int $id
-     * @param int $soldPrice
+     * @param int   $id
+     * @param int   $soldPrice
+     * @param Terms $term
      *
      * @return Property
      * @throws PropertyNotFoundException
      */
-    public function setPropertySold(int $id, int $soldPrice): Property
+    public function setPropertySold(int $id, int $soldPrice, Terms $term): Property
     {
         $property = $this->repository->find($id);
 
@@ -162,8 +164,8 @@ class PropertyService
             throw new PropertyNotFoundException($id);
         }
 
-        $property->setOnline($soldPrice);
-        $property->setTerms(9);
+        $property->setSoldPrice($soldPrice);
+        $property->setTerms($term);
 
         $this->entityManager->flush();
 

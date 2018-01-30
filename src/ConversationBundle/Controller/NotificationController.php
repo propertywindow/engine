@@ -66,7 +66,7 @@ class NotificationController extends BaseController
             case "createNotification":
                 return $this->createNotification($userId, $parameters);
             case "updateNotification":
-                return $this->updateNotification($userId, $parameters);
+                return $this->updateNotification($parameters);
             case "deleteNotification":
                 return $this->deleteNotification($userId, $parameters);
         }
@@ -195,15 +195,13 @@ class NotificationController extends BaseController
     }
 
     /**
-     * @param int   $userId
      * @param array $parameters
      *
      * @return array
      * @throws NotificationNotFoundException
-     * @throws UserNotFoundException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    private function updateNotification(int $userId, array $parameters)
+    private function updateNotification(array $parameters)
     {
         // todo: check rights
 
