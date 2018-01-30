@@ -1,12 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace AgentBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Appointment
- *
  * @ORM\Table(name="appointment")
  * @ORM\Entity(repositoryClass="AgentBundle\Repository\AppointmentRepository")
  * @ORM\HasLifecycleCallbacks
@@ -15,7 +14,6 @@ class Appointment
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -24,86 +22,73 @@ class Appointment
 
     /**
      * @var int
-     *
      * @ORM\Column(name="user_id", type="integer")
      */
     private $userId;
 
     /**
      * @var int
-     *
      * @ORM\Column(name="buyer_id", type="integer", nullable=true)
      */
     private $buyerId;
 
     /**
      * @var int
-     *
      * @ORM\Column(name="property_id", type="integer", nullable=true)
      */
     private $propertyId;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="subject", type="string", length=255)
      */
     private $subject;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="description", type="blob")
      */
     private $description;
 
     /**
      * @var \DateTime
-     *
      * @ORM\Column(name="start", type="datetime")
      */
     private $start;
 
     /**
      * @var \DateTime
-     *
      * @ORM\Column(name="end", type="datetime", nullable=true)
      */
     private $end;
 
     /**
      * @var \DateTime $created
-     *
      * @ORM\Column(type="datetime")
      */
     protected $created;
 
     /**
      * @var \DateTime $updated
-     *
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $updated;
 
 
     /**
-     * Get id
-     *
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
     /**
-     * Set userId
-     *
-     * @param integer $userId
+     * @param int $userId
      *
      * @return Appointment
      */
-    public function setUserId($userId)
+    public function setUserId(int $userId): Appointment
     {
         $this->userId = $userId;
 
@@ -111,23 +96,19 @@ class Appointment
     }
 
     /**
-     * Get userId
-     *
      * @return int
      */
-    public function getUserId()
+    public function getUserId(): int
     {
         return $this->userId;
     }
 
     /**
-     * Set buyerId
-     *
-     * @param integer $buyerId
+     * @param int $buyerId
      *
      * @return Appointment
      */
-    public function setBuyerId($buyerId)
+    public function setBuyerId($buyerId): Appointment
     {
         $this->buyerId = $buyerId;
 
@@ -135,8 +116,6 @@ class Appointment
     }
 
     /**
-     * Get buyerId
-     *
      * @return int
      */
     public function getBuyerId()
@@ -145,13 +124,11 @@ class Appointment
     }
 
     /**
-     * Set propertyId
-     *
      * @param integer $propertyId
      *
      * @return Appointment
      */
-    public function setPropertyId($propertyId)
+    public function setPropertyId($propertyId): Appointment
     {
         $this->propertyId = $propertyId;
 
@@ -159,8 +136,6 @@ class Appointment
     }
 
     /**
-     * Get propertyId
-     *
      * @return int
      */
     public function getPropertyId()
@@ -169,13 +144,11 @@ class Appointment
     }
 
     /**
-     * Set subject
-     *
      * @param string $subject
      *
      * @return Appointment
      */
-    public function setSubject($subject)
+    public function setSubject($subject): Appointment
     {
         $this->subject = $subject;
 
@@ -183,8 +156,6 @@ class Appointment
     }
 
     /**
-     * Get subject
-     *
      * @return string
      */
     public function getSubject()
@@ -193,13 +164,11 @@ class Appointment
     }
 
     /**
-     * Set description
-     *
      * @param string $description
      *
      * @return Appointment
      */
-    public function setDescription($description)
+    public function setDescription($description): Appointment
     {
         $this->description = $description;
 
@@ -207,8 +176,6 @@ class Appointment
     }
 
     /**
-     * Get description
-     *
      * @return string
      */
     public function getDescription()
@@ -217,13 +184,11 @@ class Appointment
     }
 
     /**
-     * Set start
-     *
      * @param \DateTime $start
      *
      * @return Appointment
      */
-    public function setStart($start)
+    public function setStart($start): Appointment
     {
         $this->start = $start;
 
@@ -231,8 +196,6 @@ class Appointment
     }
 
     /**
-     * Get start
-     *
      * @return \DateTime
      */
     public function getStart()
@@ -241,13 +204,11 @@ class Appointment
     }
 
     /**
-     * Set end
-     *
      * @param \DateTime $end
      *
      * @return Appointment
      */
-    public function setEnd($end)
+    public function setEnd($end): Appointment
     {
         $this->end = $end;
 
@@ -255,8 +216,6 @@ class Appointment
     }
 
     /**
-     * Get end
-     *
      * @return \DateTime
      */
     public function getEnd()
@@ -266,7 +225,6 @@ class Appointment
 
     /**
      * Gets triggered only on insert
-     *
      * @ORM\PrePersist
      */
     public function onPrePersist()
@@ -276,7 +234,6 @@ class Appointment
 
     /**
      * Gets triggered every time on update
-     *
      * @ORM\PreUpdate
      */
     public function onPreUpdate()

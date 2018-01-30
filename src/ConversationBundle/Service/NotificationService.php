@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace ConversationBundle\Service;
 
@@ -28,10 +29,14 @@ class NotificationService
      * @param int $id
      *
      * @return Notification $notification
+     * @throws \ConversationBundle\Exceptions\NotificationNotFoundException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     public function getNotification(int $id)
     {
-        $repository   = $this->entityManager->getRepository('ConversationBundle:Notification');
+        $repository   = $this->entityManager->getRepository(Notification::class);
         $notification = $repository->findById($id);
 
         return $notification;
@@ -44,7 +49,7 @@ class NotificationService
      */
     public function getNotifications(User $user)
     {
-        $repository = $this->entityManager->getRepository('ConversationBundle:Notification');
+        $repository = $this->entityManager->getRepository(Notification::class);
 
         return $repository->getByUserId($user->getId());
     }
@@ -56,17 +61,17 @@ class NotificationService
      */
     public function listNotifications(User $user)
     {
-        $repository = $this->entityManager->getRepository('ConversationBundle:Notification');
+        $repository = $this->entityManager->getRepository(Notification::class);
 
         return $repository->listAll($user);
     }
 
     /**
      * @param Notification $notification
-     *
      * @param array        $userIdentifiers
      *
      * @return Notification
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function createNotification(Notification $notification, array $userIdentifiers)
     {
@@ -82,6 +87,7 @@ class NotificationService
      * @param array        $userIdentifiers
      *
      * @return Notification
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function updateNotification(Notification $notification, array $userIdentifiers)
     {
@@ -93,10 +99,15 @@ class NotificationService
 
     /**
      * @param int $id
+     *
+     * @throws \ConversationBundle\Exceptions\NotificationNotFoundException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     public function deleteNotification(int $id)
     {
-        $notificationRepository = $this->entityManager->getRepository('ConversationBundle:Notification');
+        $notificationRepository = $this->entityManager->getRepository(Notification::class);
         $notification           = $notificationRepository->findById($id);
 
         $this->entityManager->remove($notification);

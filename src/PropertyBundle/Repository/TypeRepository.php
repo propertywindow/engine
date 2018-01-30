@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace PropertyBundle\Repository;
 
@@ -7,8 +8,7 @@ use PropertyBundle\Entity\Type;
 use PropertyBundle\Exceptions\TypeNotFoundException;
 
 /**
- * TypeRepository
- *
+ * Type Repository
  */
 class TypeRepository extends EntityRepository
 {
@@ -17,9 +17,6 @@ class TypeRepository extends EntityRepository
      *
      * @return Type
      * @throws TypeNotFoundException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     public function findById(int $id): Type
     {
@@ -35,7 +32,6 @@ class TypeRepository extends EntityRepository
 
     /**
      * @return Type[]
-     * @throws \Doctrine\ORM\RuntimeException
      */
     public function listAll(): array
     {
@@ -47,6 +43,7 @@ class TypeRepository extends EntityRepository
 
         $results = $qb->getQuery()->getResult();
 
+        /** @var Type[] $results */
         return $results;
     }
 }

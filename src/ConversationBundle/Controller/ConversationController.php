@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace ConversationBundle\Controller;
 
@@ -6,6 +7,7 @@ use AppBundle\Controller\BaseController;
 use ConversationBundle\Entity\Conversation;
 use ConversationBundle\Entity\Message;
 use ConversationBundle\Exceptions\ConversationForRecipientNotFoundException;
+use ConversationBundle\Exceptions\ConversationNotFoundException;
 use ConversationBundle\Exceptions\NoColleagueException;
 use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -17,13 +19,12 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Throwable;
 
 /**
- * @Route(service="conversation_controller")
+ * @Route(service="ConversationBundle\Controller\ConversationController")
  */
 class ConversationController extends BaseController
 {
     /**
      * @Route("/conversation" , name="conversation")
-     *
      * @param Request $httpRequest
      *
      * @return HttpResponse
@@ -47,9 +48,10 @@ class ConversationController extends BaseController
      * @param array  $parameters
      *
      * @return array
+     * @throws ConversationForRecipientNotFoundException
+     * @throws ConversationNotFoundException
      * @throws InvalidJsonRpcMethodException
      * @throws NoColleagueException
-     * @throws \ConversationBundle\Exceptions\ConversationNotFoundException
      */
     private function invoke(int $userId, string $method, array $parameters = [])
     {
@@ -75,7 +77,7 @@ class ConversationController extends BaseController
      * @param array $parameters
      *
      * @return array
-     * @throws \ConversationBundle\Exceptions\ConversationNotFoundException
+     * @throws ConversationNotFoundException
      */
     private function getConversation(array $parameters)
     {
@@ -105,7 +107,6 @@ class ConversationController extends BaseController
      * @param array $parameters
      *
      * @return array $conversation
-     *
      * @throws NoColleagueException
      */
     private function createConversation(int $userId, array $parameters)
@@ -156,7 +157,7 @@ class ConversationController extends BaseController
      * @param array $parameters
      *
      * @return array
-     * @throws \ConversationBundle\Exceptions\ConversationNotFoundException
+     * @throws ConversationNotFoundException
      */
     private function getMessages(int $userId, array $parameters)
     {
@@ -200,7 +201,7 @@ class ConversationController extends BaseController
             throw new ConversationForRecipientNotFoundException();
         }
 
-        $messages     = $this->messageService->getMessages($conversation);
+        $messages = $this->messageService->getMessages($conversation);
 
         foreach ($messages as $message) {
             if (!$message->getSeen() && $message->getRecipient()->getId() === $userId) {

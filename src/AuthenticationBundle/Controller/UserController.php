@@ -1,11 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace AuthenticationBundle\Controller;
 
 use AppBundle\Controller\BaseController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use AuthenticationBundle\Exceptions\UserAlreadyExistException;
-use AuthenticationBundle\Exceptions\UserNotFoundException;
 use AuthenticationBundle\Service\User\Mapper;
 use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -16,16 +16,16 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Throwable;
 
 /**
- * @Route(service="user_controller")
+ * @Route(service="AuthenticationBundle\Controller\UserController")
  */
 class UserController extends BaseController
 {
     /**
      * @Route("/authentication/user" , name="user")
-     *
      * @param Request $httpRequest
      *
      * @return HttpResponse
+     * @throws Throwable
      */
     public function requestHandler(Request $httpRequest)
     {
@@ -45,12 +45,14 @@ class UserController extends BaseController
      * @param array  $parameters
      *
      * @return array
-     *
      * @throws InvalidJsonRpcMethodException
-     * @throws UserNotFoundException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
+     * @throws NotAuthorizedException
+     * @throws Throwable
+     * @throws UserAlreadyExistException
+     * @throws \AgentBundle\Exceptions\AgentSettingsNotFoundException
+     * @throws \AuthenticationBundle\Exceptions\UserSettingsNotFoundException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Syntax
      */
     private function invoke(int $userId, string $method, array $parameters = [])
     {
@@ -109,7 +111,6 @@ class UserController extends BaseController
      * @param int $userId
      *
      * @return array
-     * @throws NotAuthorizedException
      */
     private function getUsers(int $userId)
     {
@@ -122,7 +123,8 @@ class UserController extends BaseController
     }
 
     /**
-     * @param int $userId
+     * @param int   $userId
+     * @param array $parameters
      *
      * @return array
      * @throws NotAuthorizedException
@@ -150,7 +152,6 @@ class UserController extends BaseController
      * @param int $userId
      *
      * @return array
-     * @throws NotAuthorizedException
      */
     private function getColleagues(int $userId)
     {
@@ -167,9 +168,13 @@ class UserController extends BaseController
      * @param array $parameters
      *
      * @return array $user
-     *
      * @throws NotAuthorizedException
+     * @throws Throwable
      * @throws UserAlreadyExistException
+     * @throws \AgentBundle\Exceptions\AgentSettingsNotFoundException
+     * @throws \AuthenticationBundle\Exceptions\UserSettingsNotFoundException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Syntax
      */
     private function createUser(int $userId, array $parameters)
     {
@@ -244,7 +249,6 @@ class UserController extends BaseController
      * @param array $parameters
      *
      * @return array
-     *
      * @throws NotAuthorizedException
      */
     private function updateUser(int $userId, array $parameters)

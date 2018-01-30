@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace AgentBundle\Entity;
 
@@ -6,7 +7,6 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Agency
- *
  * @ORM\Table(name="agency")
  * @ORM\Entity(repositoryClass="AgentBundle\Repository\AgencyRepository")
  * @ORM\HasLifecycleCallbacks
@@ -15,7 +15,6 @@ class Agency
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -24,107 +23,91 @@ class Agency
 
     /**
      * @var int
-     *
      * @ORM\Column(name="agent_id", type="integer")
      */
     private $agentId;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="street", type="string", length=255)
      */
     private $street;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="house_number", type="string", length=10)
      */
     private $houseNumber;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="postcode", type="string", length=10)
      */
     private $postcode;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="city", type="string", length=255)
      */
     private $city;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="country", type="string", length=255)
      */
     private $country;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="phone", type="string", length=255)
+     * @ORM\Column(name="phone", type="string", length=255, nullable=true)
      */
     private $phone;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="fax", type="string", length=255)
+     * @ORM\Column(name="fax", type="string", length=255, nullable=true)
      */
     private $fax;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="email", type="string", length=255)
      */
     private $email;
 
     /**
      * @var \DateTime $created
-     *
      * @ORM\Column(type="datetime")
      */
     protected $created;
 
     /**
      * @var \DateTime $updated
-     *
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $updated;
 
 
     /**
-     * Get id
-     *
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
     /**
-     * Set agentId
-     *
-     * @param integer $agentId
+     * @param int $agentId
      *
      * @return Agency
      */
-    public function setAgentId($agentId)
+    public function setAgentId(int $agentId): Agency
     {
         $this->agentId = $agentId;
 
@@ -132,23 +115,19 @@ class Agency
     }
 
     /**
-     * Get agentId
-     *
      * @return int
      */
-    public function getAgentId()
+    public function getAgentId(): int
     {
         return $this->agentId;
     }
 
     /**
-     * Set name
-     *
      * @param string $name
      *
      * @return Agency
      */
-    public function setName($name)
+    public function setName($name): Agency
     {
         $this->name = $name;
 
@@ -156,8 +135,6 @@ class Agency
     }
 
     /**
-     * Get name
-     *
      * @return string
      */
     public function getName()
@@ -166,13 +143,11 @@ class Agency
     }
 
     /**
-     * Set street
-     *
      * @param string $street
      *
      * @return Agency
      */
-    public function setStreet($street)
+    public function setStreet($street): Agency
     {
         $this->street = $street;
 
@@ -180,8 +155,6 @@ class Agency
     }
 
     /**
-     * Get street
-     *
      * @return string
      */
     public function getStreet()
@@ -190,13 +163,11 @@ class Agency
     }
 
     /**
-     * Set houseNumber
-     *
      * @param string $houseNumber
      *
      * @return Agency
      */
-    public function setHouseNumber($houseNumber)
+    public function setHouseNumber($houseNumber): Agency
     {
         $this->houseNumber = $houseNumber;
 
@@ -204,8 +175,6 @@ class Agency
     }
 
     /**
-     * Get houseNumber
-     *
      * @return string
      */
     public function getHouseNumber()
@@ -214,13 +183,11 @@ class Agency
     }
 
     /**
-     * Set postcode
-     *
      * @param string $postcode
      *
      * @return Agency
      */
-    public function setPostcode($postcode)
+    public function setPostcode($postcode): Agency
     {
         $this->postcode = $postcode;
 
@@ -228,8 +195,6 @@ class Agency
     }
 
     /**
-     * Get postcode
-     *
      * @return string
      */
     public function getPostcode()
@@ -238,13 +203,11 @@ class Agency
     }
 
     /**
-     * Set city
-     *
      * @param string $city
      *
      * @return Agency
      */
-    public function setCity($city)
+    public function setCity($city): Agency
     {
         $this->city = $city;
 
@@ -252,8 +215,6 @@ class Agency
     }
 
     /**
-     * Get city
-     *
      * @return string
      */
     public function getCity()
@@ -262,13 +223,11 @@ class Agency
     }
 
     /**
-     * Set country
-     *
      * @param string $country
      *
      * @return Agency
      */
-    public function setCountry($country)
+    public function setCountry($country): Agency
     {
         $this->country = $country;
 
@@ -276,8 +235,6 @@ class Agency
     }
 
     /**
-     * Get country
-     *
      * @return string
      */
     public function getCountry()
@@ -286,13 +243,11 @@ class Agency
     }
 
     /**
-     * Set phone
-     *
      * @param string $phone
      *
      * @return Agency
      */
-    public function setPhone($phone)
+    public function setPhone($phone): Agency
     {
         $this->phone = $phone;
 
@@ -300,8 +255,6 @@ class Agency
     }
 
     /**
-     * Get phone
-     *
      * @return string
      */
     public function getPhone()
@@ -310,13 +263,11 @@ class Agency
     }
 
     /**
-     * Set fax
-     *
      * @param string $fax
      *
      * @return Agency
      */
-    public function setFax($fax)
+    public function setFax($fax): Agency
     {
         $this->fax = $fax;
 
@@ -324,8 +275,6 @@ class Agency
     }
 
     /**
-     * Get fax
-     *
      * @return string
      */
     public function getFax()
@@ -334,13 +283,11 @@ class Agency
     }
 
     /**
-     * Set email
-     *
      * @param string $email
      *
      * @return Agency
      */
-    public function setEmail($email)
+    public function setEmail(string $email): Agency
     {
         $this->email = $email;
 
@@ -348,18 +295,15 @@ class Agency
     }
 
     /**
-     * Get email
-     *
      * @return string
      */
-    public function getEmail()
+    public function getEmail(): string
     {
         return $this->email;
     }
 
     /**
      * Gets triggered only on insert
-     *
      * @ORM\PrePersist
      */
     public function onPrePersist()
@@ -369,7 +313,6 @@ class Agency
 
     /**
      * Gets triggered every time on update
-     *
      * @ORM\PreUpdate
      */
     public function onPreUpdate()

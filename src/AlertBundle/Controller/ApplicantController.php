@@ -1,9 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace AlertBundle\Controller;
 
 use AlertBundle\Entity\Applicant;
 use AlertBundle\Exceptions\ApplicantAlreadyExistException;
+use AlertBundle\Exceptions\ApplicationNotFoundException;
 use AlertBundle\Service\Applicant\Mapper;
 use AppBundle\Controller\BaseController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
@@ -17,16 +19,16 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Throwable;
 
 /**
- * @Route(service="applicant_controller")
+ * @Route(service="AlertBundle\Controller\ApplicantController")
  */
 class ApplicantController extends BaseController
 {
     /**
      * @Route("/applicant" , name="applicant")
-     *
      * @param Request $httpRequest
      *
      * @return HttpResponse
+     * @throws Throwable
      */
     public function requestHandler(Request $httpRequest)
     {
@@ -46,9 +48,11 @@ class ApplicantController extends BaseController
      * @param array  $parameters
      *
      * @return array
-     *
-     * @throws InvalidJsonRpcMethodException
+     * @throws ApplicantAlreadyExistException
      * @throws ApplicantNotFoundException
+     * @throws InvalidJsonRpcMethodException
+     * @throws NotAuthorizedException
+     * @throws ApplicationNotFoundException
      */
     private function invoke(int $userId, string $method, array $parameters = [])
     {
@@ -71,7 +75,7 @@ class ApplicantController extends BaseController
      * @param array $parameters
      *
      * @return array
-     *
+     * @throws ApplicantNotFoundException
      * @throws NotAuthorizedException
      */
     private function getApplicant(int $userId, array $parameters)
@@ -95,8 +99,6 @@ class ApplicantController extends BaseController
      * @param int $userId
      *
      * @return array
-     *
-     * @throws NotAuthorizedException
      */
     private function getApplicants(int $userId)
     {
@@ -110,8 +112,6 @@ class ApplicantController extends BaseController
      * @param array $parameters
      *
      * @return array $user
-     *
-     * @throws NotAuthorizedException
      * @throws ApplicantAlreadyExistException
      */
     private function createApplicant(int $userId, array $parameters)
@@ -154,7 +154,9 @@ class ApplicantController extends BaseController
      * @param int   $userId
      * @param array $parameters
      *
+     * @throws ApplicantNotFoundException
      * @throws NotAuthorizedException
+     * @throws ApplicationNotFoundException
      */
     private function deleteApplicant(int $userId, array $parameters)
     {

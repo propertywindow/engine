@@ -1,32 +1,30 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace AgentBundle\Controller;
 
 use AppBundle\Controller\BaseController;
-use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use AuthenticationBundle\Exceptions\UserAlreadyExistException;
-use AuthenticationBundle\Exceptions\UserNotFoundException;
 use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Response;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
-use AgentBundle\Exceptions\AgentNotFoundException;
 use AgentBundle\Service\Client\Mapper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Throwable;
 
 /**
- * @Route(service="client_controller")
+ * @Route(service="AgentBundle\Controller\ClientController")
  */
 class ClientController extends BaseController
 {
     /**
      * @Route("/contacts/client" , name="client")
-     *
      * @param Request $httpRequest
      *
      * @return HttpResponse
+     * @throws Throwable
      */
     public function requestHandler(Request $httpRequest)
     {
@@ -47,10 +45,7 @@ class ClientController extends BaseController
      *
      * @return array
      * @throws InvalidJsonRpcMethodException
-     * @throws UserNotFoundException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
+     * @throws UserAlreadyExistException
      */
     private function invoke(int $userId, string $method, array $parameters = [])
     {
@@ -70,7 +65,6 @@ class ClientController extends BaseController
      * @param array $parameters
      *
      * @return array
-     * @throws AgentNotFoundException
      */
     private function getClient(array $parameters)
     {
@@ -87,7 +81,6 @@ class ClientController extends BaseController
      * @param int $userId
      *
      * @return array
-     * @throws NotAuthorizedException
      */
     private function getClients(int $userId)
     {
@@ -101,7 +94,6 @@ class ClientController extends BaseController
      * @param array $parameters
      *
      * @return array $user
-     *
      * @throws UserAlreadyExistException
      */
     private function createClient(int $userId, array $parameters)

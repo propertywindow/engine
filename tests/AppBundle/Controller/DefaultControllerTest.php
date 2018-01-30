@@ -1,12 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace Tests\AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
- * Class DefaultControllerTest
- * @package Tests\AppBundle\Controller
+ * Default Controller Test
  */
 class DefaultControllerTest extends WebTestCase
 {

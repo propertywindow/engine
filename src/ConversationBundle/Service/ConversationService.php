@@ -1,14 +1,14 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace ConversationBundle\Service;
 
 use AuthenticationBundle\Entity\User;
-use ConversationBundle\Exceptions\ConversationForRecipientNotFoundException;
 use Doctrine\ORM\EntityManagerInterface;
 use ConversationBundle\Entity\Conversation;
 
 /**
- * @package ConversationBundle\Service
+ * Conversation Service
  */
 class ConversationService
 {
@@ -33,7 +33,7 @@ class ConversationService
      */
     public function getConversation(int $id)
     {
-        $repository   = $this->entityManager->getRepository('ConversationBundle:Conversation');
+        $repository   = $this->entityManager->getRepository(Conversation::class);
         $conversation = $repository->findById($id);
 
         return $conversation;
@@ -46,7 +46,7 @@ class ConversationService
      */
     public function getConversations(User $user)
     {
-        $repository = $this->entityManager->getRepository('ConversationBundle:Conversation');
+        $repository = $this->entityManager->getRepository(Conversation::class);
 
         return $repository->findByUser($user);
     }
@@ -59,7 +59,7 @@ class ConversationService
      */
     public function findByUsers(User $author, User $recipient)
     {
-        $repository   = $this->entityManager->getRepository('ConversationBundle:Conversation');
+        $repository   = $this->entityManager->getRepository(Conversation::class);
         $conversation = $repository->findOneBy(['uniqueId' => $author->getId() + $recipient->getId()]);
 
         /** @var Conversation $conversation */

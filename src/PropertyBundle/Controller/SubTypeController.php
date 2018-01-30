@@ -1,30 +1,31 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace PropertyBundle\Controller;
 
 use AppBundle\Controller\BaseController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use InvalidArgumentException;
+use PropertyBundle\Exceptions\SubTypeDeleteException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Response;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
-use PropertyBundle\Exceptions\SubTypeNotFoundException;
 use PropertyBundle\Service\SubType\Mapper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Throwable;
 
 /**
- * @Route(service="sub_type_controller")
+ * @Route(service="PropertyBundle\Controller\SubTypeController")
  */
 class SubTypeController extends BaseController
 {
     /**
      * @Route("/property/subtype" , name="subtype")
-     *
      * @param Request $httpRequest
      *
      * @return HttpResponse
+     * @throws Throwable
      */
     public function requestHandler(Request $httpRequest)
     {
@@ -45,10 +46,8 @@ class SubTypeController extends BaseController
      *
      * @return array
      * @throws InvalidJsonRpcMethodException
-     * @throws SubTypeNotFoundException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
+     * @throws NotAuthorizedException
+     * @throws SubTypeDeleteException
      */
     private function invoke(int $userId, string $method, array $parameters = [])
     {
@@ -68,7 +67,6 @@ class SubTypeController extends BaseController
      * @param array $parameters
      *
      * @return array
-     * @throws SubTypeNotFoundException
      */
     private function getSubType(array $parameters)
     {
@@ -85,7 +83,6 @@ class SubTypeController extends BaseController
      * @param array $parameters
      *
      * @return array
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     private function getSubTypes(array $parameters)
     {
@@ -105,6 +102,7 @@ class SubTypeController extends BaseController
      * @param int   $userId
      *
      * @throws NotAuthorizedException
+     * @throws SubTypeDeleteException
      */
     private function deleteSubType(array $parameters, int $userId)
     {

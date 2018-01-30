@@ -1,17 +1,12 @@
 services:
-  alert_service:
-      class: AlertBundle\Service\AlertService
+  AlertBundle\Service\AlertService:
       arguments: ["@doctrine.orm.entity_manager"]
-  application_service:
-      class: AlertBundle\Service\ApplicationService
+  AlertBundle\Service\ApplicationService:
       arguments: ["@doctrine.orm.entity_manager"]
-  applicant_service:
-      class: AlertBundle\Service\ApplicantService
+  AlertBundle\Service\ApplicantService:
       arguments: ["@doctrine.orm.entity_manager"]
-  alert_controller:
-      class: AlertBundle\Controller\AlertController
+  AlertBundle\Controller\AlertController:
       autowire: true
-  applicant_controller:
-      class: AlertBundle\Controller\ApplicantController
+  AlertBundle\Controller\ApplicantController:
       autowire: true
 

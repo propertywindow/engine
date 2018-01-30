@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace ConversationBundle\Service;
 
@@ -8,7 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use ConversationBundle\Entity\Conversation;
 
 /**
- * @package ConversationBundle\Service
+ * Message Service
  */
 class MessageService
 {

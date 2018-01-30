@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace AgentBundle\Controller;
 
@@ -6,8 +7,6 @@ use AgentBundle\Entity\AgentGroup;
 use AgentBundle\Exceptions\AgentGroupNotFoundException;
 use AppBundle\Controller\BaseController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
-use AuthenticationBundle\Exceptions\UserAlreadyExistException;
-use AuthenticationBundle\Exceptions\UserNotFoundException;
 use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Response;
@@ -18,16 +17,16 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Throwable;
 
 /**
- * @Route(service="agent_group_controller")
+ * @Route(service="AgentBundle\Controller\AgentGroupController")
  */
 class AgentGroupController extends BaseController
 {
     /**
      * @Route("/agent_group" , name="agent_group")
-     *
      * @param Request $httpRequest
      *
      * @return HttpResponse
+     * @throws Throwable
      */
     public function requestHandler(Request $httpRequest)
     {
@@ -47,11 +46,9 @@ class AgentGroupController extends BaseController
      * @param array  $parameters
      *
      * @return array
+     * @throws AgentGroupNotFoundException
      * @throws InvalidJsonRpcMethodException
-     * @throws UserNotFoundException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
+     * @throws NotAuthorizedException
      */
     private function invoke(int $userId, string $method, array $parameters = [])
     {
@@ -110,9 +107,7 @@ class AgentGroupController extends BaseController
      * @param array $parameters
      *
      * @return array $user
-     *
      * @throws NotAuthorizedException
-     * @throws UserAlreadyExistException
      */
     private function createAgentGroup(int $userId, array $parameters)
     {
@@ -136,14 +131,14 @@ class AgentGroupController extends BaseController
 
         $this->agentGroupService->createAgentGroup($agentGroup);
 
-        $folder = '../image_data/'.$agentGroup->getId();
+        $folder = '../image_data/' . $agentGroup->getId();
 
         if (!file_exists($folder)) {
             $createFolders = [
                 $folder,
-                $folder.'/logo',
-                $folder.'/properties',
-                $folder.'/users',
+                $folder . '/logo',
+                $folder . '/properties',
+                $folder . '/users',
             ];
 
             foreach ($createFolders as $createFolder) {
@@ -162,7 +157,7 @@ class AgentGroupController extends BaseController
      * @param array $parameters
      *
      * @return array
-     *
+     * @throws AgentGroupNotFoundException
      * @throws NotAuthorizedException
      */
     private function updateAgentGroup(int $userId, array $parameters)
@@ -191,6 +186,7 @@ class AgentGroupController extends BaseController
      * @param int   $userId
      * @param array $parameters
      *
+     * @throws AgentGroupNotFoundException
      * @throws NotAuthorizedException
      */
     private function deleteAgentGroup(int $userId, array $parameters)

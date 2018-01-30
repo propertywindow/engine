@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace AgentBundle\DataFixtures\ORM;
 
@@ -142,10 +143,7 @@ class LoadAgentData extends AbstractFixture implements OrderedFixtureInterface
 
         $manager->flush();
     }
-
-
-
-
+    
     /**
      * @return integer
      */

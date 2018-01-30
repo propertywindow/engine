@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace AgentBundle\Controller;
 
@@ -7,23 +8,22 @@ use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Response;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
-use AgentBundle\Exceptions\AgentNotFoundException;
 use AgentBundle\Service\AgentSettings\Mapper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Throwable;
 
 /**
- * @Route(service="agent_settings_controller")
+ * @Route(service="AgentBundle\Controller\AgentSettingsController")
  */
 class AgentSettingsController extends BaseController
 {
     /**
      * @Route("/agent_settings" , name="agent_settings")
-     *
      * @param Request $httpRequest
      *
      * @return HttpResponse
+     * @throws Throwable
      */
     public function requestHandler(Request $httpRequest)
     {
@@ -43,12 +43,8 @@ class AgentSettingsController extends BaseController
      * @param array  $parameters
      *
      * @return array
-     *
      * @throws InvalidJsonRpcMethodException
-     * @throws AgentNotFoundException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
+     * @throws NotAuthorizedException
      */
     private function invoke(int $userId, string $method, array $parameters = [])
     {
@@ -66,8 +62,6 @@ class AgentSettingsController extends BaseController
      * @param int $userId
      *
      * @return array
-     *
-     * @throws AgentNotFoundException
      */
     private function getSettings(int $userId)
     {
@@ -81,7 +75,6 @@ class AgentSettingsController extends BaseController
      * @param array $parameters
      *
      * @return array
-     *
      * @throws NotAuthorizedException
      */
     private function updateSettings(int $userId, array $parameters)

@@ -1,10 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace PropertyBundle\Controller;
 
 use AppBundle\Controller\BaseController;
 
 use InvalidArgumentException;
+use PropertyBundle\Entity\Property;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Response;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
@@ -17,16 +19,16 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Throwable;
 
 /**
- * @Route(service="property_controller")
+ * @Route(service="PropertyBundle\Controller\PropertyController")
  */
 class PropertyController extends BaseController
 {
     /**
      * @Route("/property" , name="property")
-     *
      * @param Request $httpRequest
      *
      * @return HttpResponse
+     * @throws Throwable
      */
     public function requestHandler(Request $httpRequest)
     {
@@ -47,7 +49,10 @@ class PropertyController extends BaseController
      *
      * @return array
      * @throws InvalidJsonRpcMethodException
+     * @throws NotAuthorizedException
+     * @throws PropertyAlreadyExistsException
      * @throws PropertyNotFoundException
+     * @throws \AgentBundle\Exceptions\AgentNotFoundException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
@@ -85,6 +90,7 @@ class PropertyController extends BaseController
      *
      * @return array
      * @throws NotAuthorizedException
+     * @throws PropertyNotFoundException
      */
     private function getProperty(int $userId, array $parameters)
     {
@@ -144,6 +150,10 @@ class PropertyController extends BaseController
      * @param array $parameters
      *
      * @return array
+     * @throws \AgentBundle\Exceptions\AgentNotFoundException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     private function getAllProperties(int $userId, array $parameters)
     {
@@ -169,7 +179,6 @@ class PropertyController extends BaseController
      * @param array $parameters
      *
      * @return array $property
-     *
      * @throws NotAuthorizedException
      * @throws PropertyAlreadyExistsException
      */
@@ -220,18 +229,33 @@ class PropertyController extends BaseController
             throw new PropertyAlreadyExistsException($parameters['client_id']);
         }
 
-        $client     = $this->clientService->getClient($parameters['client_id']);
-        $kind       = $this->kindService->getKind($parameters['kind_id']);
-        $terms      = $this->termsService->getTerm($parameters['terms_id']);
-        $subType    = $this->subTypeService->getSubType($parameters['sub_type_id']);
-        $property   = $this->propertyService->createProperty(
-            $parameters,
-            $user->getAgent(),
-            $client,
-            $kind,
-            $terms,
-            $subType
-        );
+        $property = new Property();
+
+        $property->setKind($this->kindService->getKind($parameters['kind_id']));
+        $property->setTerms($this->termsService->getTerm($parameters['terms_id']));
+        $property->setAgent($user->getAgent());
+        $property->setClient($this->clientService->getClient($parameters['client_id']));
+        $property->setSubType($this->subTypeService->getSubType($parameters['sub_type_id']));
+        $property->setStreet(ucwords($parameters['street']));
+        $property->setHouseNumber($parameters['house_number']);
+        $property->setPostcode($parameters['postcode']);
+        $property->setCity(ucwords($parameters['city']));
+        $property->setCountry($parameters['country']);
+        $property->setLat($parameters['lat']);
+        $property->setLng($parameters['lng']);
+
+        if (array_key_exists('online', $parameters) && $parameters['online'] !== null) {
+            $property->setOnline((bool)$parameters['online']);
+        }
+        if (array_key_exists('price', $parameters) && $parameters['price'] !== null) {
+            $property->setPrice((int)$parameters['price']);
+        }
+        if (array_key_exists('espc', $parameters) && $parameters['espc'] !== null) {
+            $property->setEspc((bool)$parameters['espc']);
+        }
+
+        $this->propertyService->createProperty($property);
+
         $propertyId = (int)$property->getId();
 
         $this->logActivityService->createActivity(
@@ -244,10 +268,10 @@ class PropertyController extends BaseController
         );
 
         $this->slackService->info(
-            $user->getAgent()->getAgentGroup()->getName().
-            ' ('.$user->getFirstName().
-            ' '.$user->getLastName().
-            ') added a new property: #'.$propertyId
+            $user->getAgent()->getAgentGroup()->getName() .
+            ' (' . $user->getFirstName() .
+            ' ' . $user->getLastName() .
+            ') added a new property: #' . $propertyId
         );
 
         // todo: also insert Details, Gallery, GeneralNotes
@@ -261,8 +285,8 @@ class PropertyController extends BaseController
      * @param array $parameters
      *
      * @return array
-     *
      * @throws NotAuthorizedException
+     * @throws PropertyNotFoundException
      */
     private function updateProperty(int $userId, array $parameters)
     {
@@ -300,7 +324,7 @@ class PropertyController extends BaseController
         }
 
         if (array_key_exists('online', $parameters) && $parameters['online'] !== null) {
-            $property->setOnline((int)$parameters['online']);
+            $property->setOnline((bool)$parameters['online']);
         }
 
         if (array_key_exists('street', $parameters) && $parameters['street'] !== null) {
@@ -374,6 +398,7 @@ class PropertyController extends BaseController
      * @param array $parameters
      *
      * @throws NotAuthorizedException
+     * @throws PropertyNotFoundException
      */
     private function archiveProperty(int $userId, array $parameters)
     {
@@ -389,7 +414,7 @@ class PropertyController extends BaseController
             throw new NotAuthorizedException($userId);
         }
 
-        $this->propertyService->archiveProperty($id);
+        $this->propertyService->archiveProperty($property);
 
         $this->logActivityService->createActivity(
             $user,
@@ -408,6 +433,7 @@ class PropertyController extends BaseController
      * @param array $parameters
      *
      * @throws NotAuthorizedException
+     * @throws PropertyNotFoundException
      */
     private function deleteProperty(int $userId, array $parameters)
     {
@@ -433,6 +459,7 @@ class PropertyController extends BaseController
      * @param array $parameters
      *
      * @throws NotAuthorizedException
+     * @throws PropertyNotFoundException
      */
     private function setPropertySold(int $userId, array $parameters)
     {
@@ -470,6 +497,7 @@ class PropertyController extends BaseController
      * @param array $parameters
      *
      * @throws NotAuthorizedException
+     * @throws PropertyNotFoundException
      */
     private function toggleOnline(int $userId, array $parameters)
     {

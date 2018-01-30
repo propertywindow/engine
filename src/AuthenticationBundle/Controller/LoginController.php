@@ -1,32 +1,29 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace AuthenticationBundle\Controller;
 
 use AppBundle\Controller\BaseController;
-use AuthenticationBundle\Exceptions\LoginFailedException;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Response;
-use AppBundle\Exceptions\CouldNotAuthenticateUserException;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Throwable;
 
 /**
- * @Route(service="login_controller")
+ * @Route(service="AuthenticationBundle\Controller\LoginController")
  */
 class LoginController extends BaseController
 {
     /**
      * @Route("/authentication/login" , name="login")
-     *
      * @param Request $httpRequest
      *
      * @return HttpResponse
-     *
-     * @throws CouldNotAuthenticateUserException
+     * @throws Throwable
      */
     public function requestHandler(Request $httpRequest)
     {
@@ -46,8 +43,8 @@ class LoginController extends BaseController
      * @param array  $parameters
      *
      * @return array
-     *
      * @throws InvalidJsonRpcMethodException
+     * @throws NotAuthorizedException
      */
     private function invoke(string $method, string $ipAddress, array $parameters = [])
     {
@@ -66,8 +63,6 @@ class LoginController extends BaseController
      * @param array  $parameters
      *
      * @return array
-     *
-     * @throws LoginFailedException
      */
     private function login(string $ipAddress, array $parameters)
     {
@@ -106,7 +101,7 @@ class LoginController extends BaseController
 
         $timestamp      = time();
         $secret         = $user->getPassword();
-        $signature      = hash_hmac("sha1", $timestamp."-".$user->getId(), $secret);
+        $signature      = hash_hmac("sha1", $timestamp . "-" . $user->getId(), $secret);
         $payload        = [
             "user"      => $user->getId(),
             "password"  => $secret,
@@ -127,7 +122,6 @@ class LoginController extends BaseController
      * @param array $parameters
      *
      * @return array
-     *
      * @throws NotAuthorizedException
      */
     private function impersonate(array $parameters)
@@ -156,7 +150,7 @@ class LoginController extends BaseController
 
         $timestamp      = time();
         $secret         = $impersonate->getPassword();
-        $signature      = hash_hmac("sha1", $timestamp."-".$impersonate->getId(), $secret);
+        $signature      = hash_hmac("sha1", $timestamp . "-" . $impersonate->getId(), $secret);
         $payload        = [
             "user"      => $impersonate->getId(),
             "password"  => $secret,

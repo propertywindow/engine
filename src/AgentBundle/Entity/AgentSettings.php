@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace AgentBundle\Entity;
 
@@ -6,7 +7,6 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * AgentSettings
- *
  * @ORM\Table(name="agent_settings")
  * @ORM\Entity(repositoryClass="AgentBundle\Repository\AgentSettingsRepository")
  */
@@ -14,7 +14,6 @@ class AgentSettings
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -29,121 +28,103 @@ class AgentSettings
 
     /**
      * @var string
-     *
      * @ORM\Column(name="language", type="string", length=2)
      */
     private $language = 'en';
 
     /**
      * @var string
-     *
      * @ORM\Column(name="currency", type="string", length=3)
      */
     private $currency = 'EUR';
 
     /**
      * @var string
-     *
      * @ORM\Column(name="email_name", type="string", length=255, nullable=true)
      */
     private $emailName;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="email_address", type="string", length=255, nullable=true)
      */
     private $emailAddress;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="IMAP_address", type="string", length=255, nullable=true)
      */
     private $IMAPAddress;
 
     /**
      * @var int
-     *
      * @ORM\Column(name="IMAP_port", type="integer", nullable=true)
      */
     private $IMAPPort;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="IMAP_secure", type="string", length=3, nullable=true)
      */
     private $IMAPSecure;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="IMAP_username", type="string", length=255, nullable=true)
      */
     private $IMAPUsername;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="IMAP_password", type="string", length=255, nullable=true)
      */
     private $IMAPPassword;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="SMTP_address", type="string", length=255, nullable=true)
      */
     private $SMTPAddress;
 
     /**
      * @var int
-     *
      * @ORM\Column(name="SMTP_port", type="integer", nullable=true)
      */
     private $SMTPPort;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="SMTP_secure", type="string", length=3, nullable=true)
      */
     private $SMTPSecure;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="SMTP_username", type="string", length=255, nullable=true)
      */
     private $SMTPUsername;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="SMTP_password", type="string", length=255, nullable=true)
      */
     private $SMTPPassword;
 
 
     /**
-     * Get id
-     *
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
     /**
-     * Set agent
-     *
      * @param Agent $agent
      *
      * @return AgentSettings
      */
-    public function setAgent(Agent $agent = null)
+    public function setAgent(Agent $agent): AgentSettings
     {
         $this->agent = $agent;
 
@@ -151,23 +132,19 @@ class AgentSettings
     }
 
     /**
-     * Get agent
-     *
      * @return Agent
      */
-    public function getAgent()
+    public function getAgent(): Agent
     {
         return $this->agent;
     }
 
     /**
-     * Set language
-     *
      * @param string $language
      *
      * @return AgentSettings
      */
-    public function setLanguage($language)
+    public function setLanguage(string $language): AgentSettings
     {
         $this->language = $language;
 
@@ -175,23 +152,19 @@ class AgentSettings
     }
 
     /**
-     * Get language
-     *
      * @return string
      */
-    public function getLanguage()
+    public function getLanguage(): string
     {
         return $this->language;
     }
 
     /**
-     * Set currency
-     *
      * @param string $currency
      *
      * @return AgentSettings
      */
-    public function setCurrency($currency)
+    public function setCurrency(string $currency)
     {
         $this->currency = $currency;
 
@@ -199,23 +172,19 @@ class AgentSettings
     }
 
     /**
-     * Get currency
-     *
      * @return string
      */
-    public function getCurrency()
+    public function getCurrency(): string
     {
         return $this->currency;
     }
 
     /**
-     * Set emailName
-     *
      * @param string $emailName
      *
      * @return AgentSettings
      */
-    public function setEmailName($emailName)
+    public function setEmailName($emailName): AgentSettings
     {
         $this->emailName = $emailName;
 
@@ -223,8 +192,6 @@ class AgentSettings
     }
 
     /**
-     * Get emailName
-     *
      * @return string
      */
     public function getEmailName()
@@ -233,13 +200,11 @@ class AgentSettings
     }
 
     /**
-     * Set emailAddress
-     *
      * @param string $emailAddress
      *
      * @return AgentSettings
      */
-    public function setEmailAddress($emailAddress)
+    public function setEmailAddress($emailAddress): AgentSettings
     {
         $this->emailAddress = $emailAddress;
 
@@ -247,8 +212,6 @@ class AgentSettings
     }
 
     /**
-     * Get emailAddress
-     *
      * @return string
      */
     public function getEmailAddress()
@@ -257,13 +220,11 @@ class AgentSettings
     }
 
     /**
-     * Set IMAPAddress
-     *
      * @param string $IMAPAddress
      *
      * @return AgentSettings
      */
-    public function setIMAPAddress($IMAPAddress)
+    public function setIMAPAddress($IMAPAddress): AgentSettings
     {
         $this->IMAPAddress = $IMAPAddress;
 
@@ -271,8 +232,6 @@ class AgentSettings
     }
 
     /**
-     * Get IMAPAddress
-     *
      * @return string
      */
     public function getIMAPAddress()
@@ -281,13 +240,11 @@ class AgentSettings
     }
 
     /**
-     * Set IMAPPort
-     *
      * @param int $IMAPPort
      *
      * @return AgentSettings
      */
-    public function setIMAPPort($IMAPPort)
+    public function setIMAPPort($IMAPPort): AgentSettings
     {
         $this->IMAPPort = $IMAPPort;
 
@@ -295,8 +252,6 @@ class AgentSettings
     }
 
     /**
-     * Get IMAPPort
-     *
      * @return integer
      */
     public function getIMAPPort()
@@ -305,13 +260,11 @@ class AgentSettings
     }
 
     /**
-     * Set IMAPSecure
-     *
      * @param string $IMAPSecure
      *
      * @return AgentSettings
      */
-    public function setIMAPSecure($IMAPSecure)
+    public function setIMAPSecure($IMAPSecure): AgentSettings
     {
         $this->IMAPSecure = $IMAPSecure;
 
@@ -319,8 +272,6 @@ class AgentSettings
     }
 
     /**
-     * Get IMAPSecure
-     *
      * @return string
      */
     public function getIMAPSecure()
@@ -329,13 +280,11 @@ class AgentSettings
     }
 
     /**
-     * Set IMAPUsername
-     *
      * @param string $IMAPUsername
      *
      * @return AgentSettings
      */
-    public function setIMAPUsername($IMAPUsername)
+    public function setIMAPUsername($IMAPUsername): AgentSettings
     {
         $this->IMAPUsername = $IMAPUsername;
 
@@ -343,8 +292,6 @@ class AgentSettings
     }
 
     /**
-     * Get IMAPUsername
-     *
      * @return string
      */
     public function getIMAPUsername()
@@ -353,13 +300,11 @@ class AgentSettings
     }
 
     /**
-     * Set IMAPPassword
-     *
      * @param string $IMAPPassword
      *
      * @return AgentSettings
      */
-    public function setIMAPPassword($IMAPPassword)
+    public function setIMAPPassword($IMAPPassword): AgentSettings
     {
         $this->IMAPPassword = $IMAPPassword;
 
@@ -367,8 +312,6 @@ class AgentSettings
     }
 
     /**
-     * Get IMAPPassword
-     *
      * @return string
      */
     public function getIMAPPassword()
@@ -377,13 +320,11 @@ class AgentSettings
     }
 
     /**
-     * Set SMTPAddress
-     *
      * @param string $SMTPAddress
      *
      * @return AgentSettings
      */
-    public function setSMTPAddress($SMTPAddress)
+    public function setSMTPAddress($SMTPAddress): AgentSettings
     {
         $this->SMTPAddress = $SMTPAddress;
 
@@ -391,8 +332,6 @@ class AgentSettings
     }
 
     /**
-     * Get SMTPAddress
-     *
      * @return string
      */
     public function getSMTPAddress()
@@ -401,13 +340,11 @@ class AgentSettings
     }
 
     /**
-     * Set SMTPPort
-     *
      * @param int $SMTPPort
      *
      * @return AgentSettings
      */
-    public function setSMTPPort($SMTPPort)
+    public function setSMTPPort($SMTPPort): AgentSettings
     {
         $this->SMTPPort = $SMTPPort;
 
@@ -415,8 +352,6 @@ class AgentSettings
     }
 
     /**
-     * Get SMTPPort
-     *
      * @return integer
      */
     public function getSMTPPort()
@@ -425,13 +360,11 @@ class AgentSettings
     }
 
     /**
-     * Set SMTPSecure
-     *
      * @param string $SMTPSecure
      *
      * @return AgentSettings
      */
-    public function setSMTPSecure($SMTPSecure)
+    public function setSMTPSecure($SMTPSecure): AgentSettings
     {
         $this->SMTPSecure = $SMTPSecure;
 
@@ -439,8 +372,6 @@ class AgentSettings
     }
 
     /**
-     * Get SMTPSecure
-     *
      * @return string
      */
     public function getSMTPSecure()
@@ -449,13 +380,11 @@ class AgentSettings
     }
 
     /**
-     * Set SMTPUsername
-     *
      * @param string $SMTPUsername
      *
      * @return AgentSettings
      */
-    public function setSMTPUsername($SMTPUsername)
+    public function setSMTPUsername($SMTPUsername): AgentSettings
     {
         $this->SMTPUsername = $SMTPUsername;
 
@@ -463,8 +392,6 @@ class AgentSettings
     }
 
     /**
-     * Get SMTPUsername
-     *
      * @return string
      */
     public function getSMTPUsername()
@@ -473,13 +400,11 @@ class AgentSettings
     }
 
     /**
-     * Set SMTPPassword
-     *
      * @param string $SMTPPassword
      *
      * @return AgentSettings
      */
-    public function setSMTPPassword($SMTPPassword)
+    public function setSMTPPassword($SMTPPassword): AgentSettings
     {
         $this->SMTPPassword = $SMTPPassword;
 
@@ -487,8 +412,6 @@ class AgentSettings
     }
 
     /**
-     * Get SMTPPassword
-     *
      * @return string
      */
     public function getSMTPPassword()

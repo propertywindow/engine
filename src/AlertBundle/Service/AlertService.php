@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace AlertBundle\Service;
 
@@ -8,7 +9,7 @@ use AlertBundle\Entity\Alert;
 use AlertBundle\Exceptions\AlertNotFoundException;
 
 /**
- * @package AlertBundle\Service
+ * Alert Service
  */
 class AlertService
 {
@@ -29,12 +30,11 @@ class AlertService
      * @param int $id
      *
      * @return Alert $alert
-     *
      * @throws AlertNotFoundException
      */
-    public function getAlert(int $id)
+    public function getAlert(int $id): Alert
     {
-        $repository = $this->entityManager->getRepository('AlertBundle:Alert');
+        $repository = $this->entityManager->getRepository(Alert::class);
         $alert      = $repository->findById($id);
 
         return $alert;
@@ -47,7 +47,7 @@ class AlertService
      */
     public function getAlerts(AgentGroup $agentGroup)
     {
-        $repository = $this->entityManager->getRepository('AlertBundle:Alert');
+        $repository = $this->entityManager->getRepository(Alert::class);
 
         return $repository->findByAgent($agentGroup);
     }
@@ -57,7 +57,7 @@ class AlertService
      *
      * @return Alert
      */
-    public function createAlert(Alert $alert)
+    public function createAlert(Alert $alert): Alert
     {
         $this->entityManager->persist($alert);
         $this->entityManager->flush();
@@ -70,7 +70,7 @@ class AlertService
      *
      * @return Alert
      */
-    public function updateAlert(Alert $alert)
+    public function updateAlert(Alert $alert): Alert
     {
         $this->entityManager->flush();
 

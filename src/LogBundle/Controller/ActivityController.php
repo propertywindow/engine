@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace LogBundle\Controller;
 
@@ -15,17 +16,15 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Throwable;
 
 /**
- * @Route(service="activity_controller")
+ * @Route(service="LogBundle\Controller\ActivityController")
  */
 class ActivityController extends BaseController
 {
     /**
      * @Route("/log/activity" , name="activity_log")
-     *
      * @param Request $httpRequest
      *
      * @return HttpResponse
-     *
      * @throws Throwable
      */
     public function requestHandler(Request $httpRequest)
@@ -46,7 +45,7 @@ class ActivityController extends BaseController
      * @param array  $parameters
      *
      * @return array
-     *
+     * @throws ActivityNotFoundException
      * @throws InvalidJsonRpcMethodException
      * @throws NotAuthorizedException
      */
@@ -71,7 +70,6 @@ class ActivityController extends BaseController
      * @param array $parameters
      *
      * @return array
-     *
      * @throws NotAuthorizedException
      */
     private function getActivity(int $userId, array $parameters)
@@ -94,7 +92,6 @@ class ActivityController extends BaseController
      * @param int $userId
      *
      * @return array
-     *
      * @throws ActivityNotFoundException
      */
     private function getActivityFromUser(int $userId)
@@ -108,7 +105,6 @@ class ActivityController extends BaseController
      * @param int $userId
      *
      * @return array
-     *
      * @throws NotAuthorizedException
      */
     private function getActivities(int $userId)

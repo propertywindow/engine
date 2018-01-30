@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace AuthenticationBundle\Controller;
 
@@ -15,13 +16,12 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Throwable;
 
 /**
- * @Route(service="service_template_controller")
+ * @Route(service="AuthenticationBundle\Controller\ServiceTemplateController")
  */
 class ServiceTemplateController extends BaseController
 {
     /**
      * @Route("/services/template" , name="service_template")
-     *
      * @param Request $httpRequest
      *
      * @return HttpResponse

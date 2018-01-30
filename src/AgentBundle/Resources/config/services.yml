@@ -1,25 +1,17 @@
 services:
-    agent_group_service:
-          class: AgentBundle\Service\AgentGroupService
+    AgentBundle\Service\AgentGroupService:
           arguments: ["@doctrine.orm.entity_manager"]
-    agent_service:
-          class: AgentBundle\Service\AgentService
+    AgentBundle\Service\AgentService:
           arguments: ["@doctrine.orm.entity_manager"]
-    agent_settings_service:
-          class: AgentBundle\Service\AgentSettingsService
+    AgentBundle\Service\AgentSettingsService:
           arguments: ["@doctrine.orm.entity_manager"]
-    client_service:
-          class: AgentBundle\Service\ClientService
+    AgentBundle\Service\ClientService:
           arguments: ["@doctrine.orm.entity_manager"]
-    agent_group_controller:
-          class: AgentBundle\Controller\AgentGroupController
+    AgentBundle\Controller\AgentGroupController:
           autowire: true
-    agent_controller:
-          class: AgentBundle\Controller\AgentController
+    AgentBundle\Controller\AgentController:
           autowire: true
-    agent_settings_controller:
-          class: AgentBundle\Controller\AgentSettingsController
+    AgentBundle\Controller\AgentSettingsController:
           autowire: true
-    client_controller:
-          class: AgentBundle\Controller\ClientController
+    AgentBundle\Controller\ClientController:
           autowire: true
