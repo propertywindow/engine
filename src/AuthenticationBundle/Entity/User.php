@@ -3,15 +3,12 @@
 namespace AuthenticationBundle\Entity;
 
 use AgentBundle\Entity\Agent;
-use ConversationBundle\Entity\Notification;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
- * User
- *
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="AuthenticationBundle\Repository\UserRepository")
  * @ORM\HasLifecycleCallbacks
@@ -161,23 +158,19 @@ class User
     protected $updated;
 
     /**
-     * Get id
-     *
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
     /**
-     * Set email
-     *
      * @param string $email
      *
      * @return User
      */
-    public function setEmail($email)
+    public function setEmail($email): User
     {
         $this->email = $email;
 
@@ -185,8 +178,6 @@ class User
     }
 
     /**
-     * Get email
-     *
      * @return string
      */
     public function getEmail()
@@ -195,13 +186,11 @@ class User
     }
 
     /**
-     * Set password
-     *
      * @param string $password
      *
      * @return User
      */
-    public function setPassword($password)
+    public function setPassword($password): User
     {
         $this->password = $password;
 
@@ -209,8 +198,6 @@ class User
     }
 
     /**
-     * Get password
-     *
      * @return string
      */
     public function getPassword()
@@ -219,13 +206,11 @@ class User
     }
 
     /**
-     * Set firstName
-     *
      * @param string $firstName
      *
      * @return User
      */
-    public function setFirstName($firstName)
+    public function setFirstName($firstName): User
     {
         $this->firstName = $firstName;
 
@@ -233,8 +218,6 @@ class User
     }
 
     /**
-     * Get firstName
-     *
      * @return string
      */
     public function getFirstName()
@@ -243,13 +226,11 @@ class User
     }
 
     /**
-     * Set lastName
-     *
      * @param string $lastName
      *
      * @return User
      */
-    public function setLastName($lastName)
+    public function setLastName($lastName): User
     {
         $this->lastName = $lastName;
 
@@ -257,8 +238,6 @@ class User
     }
 
     /**
-     * Get lastName
-     *
      * @return string
      */
     public function getLastName()
@@ -267,13 +246,11 @@ class User
     }
 
     /**
-     * Set street
-     *
      * @param string $street
      *
      * @return User
      */
-    public function setStreet($street)
+    public function setStreet($street): User
     {
         $this->street = $street;
 
@@ -281,8 +258,6 @@ class User
     }
 
     /**
-     * Get street
-     *
      * @return string
      */
     public function getStreet()
@@ -291,13 +266,11 @@ class User
     }
 
     /**
-     * Set houseNumber
-     *
      * @param string $houseNumber
      *
      * @return User
      */
-    public function setHouseNumber($houseNumber)
+    public function setHouseNumber($houseNumber): User
     {
         $this->houseNumber = $houseNumber;
 
@@ -305,8 +278,6 @@ class User
     }
 
     /**
-     * Get houseNumber
-     *
      * @return string
      */
     public function getHouseNumber()
@@ -315,13 +286,11 @@ class User
     }
 
     /**
-     * Set postcode
-     *
      * @param string $postcode
      *
      * @return User
      */
-    public function setPostcode($postcode)
+    public function setPostcode($postcode): User
     {
         $this->postcode = $postcode;
 
@@ -329,8 +298,6 @@ class User
     }
 
     /**
-     * Get postcode
-     *
      * @return string
      */
     public function getPostcode()
@@ -339,13 +306,11 @@ class User
     }
 
     /**
-     * Set city
-     *
      * @param string $city
      *
      * @return User
      */
-    public function setCity($city)
+    public function setCity($city): User
     {
         $this->city = $city;
 
@@ -353,8 +318,6 @@ class User
     }
 
     /**
-     * Get city
-     *
      * @return string
      */
     public function getCity()
@@ -363,13 +326,11 @@ class User
     }
 
     /**
-     * Set country
-     *
      * @param string $country
      *
      * @return User
      */
-    public function setCountry($country)
+    public function setCountry(string $country): User
     {
         $this->country = $country;
 
@@ -377,23 +338,19 @@ class User
     }
 
     /**
-     * Get country
-     *
      * @return string
      */
-    public function getCountry()
+    public function getCountry(): string
     {
         return $this->country;
     }
 
     /**
-     * Set phone
-     *
      * @param string $phone
      *
      * @return User
      */
-    public function setPhone($phone)
+    public function setPhone($phone): User
     {
         $this->phone = $phone;
 
@@ -401,8 +358,6 @@ class User
     }
 
     /**
-     * Get phone
-     *
      * @return string
      */
     public function getPhone()
@@ -411,8 +366,6 @@ class User
     }
 
     /**
-     * Set agent
-     *
      * @param \AgentBundle\Entity\Agent $agent
      *
      * @return User
@@ -425,8 +378,6 @@ class User
     }
 
     /**
-     * Get agent
-     *
      * @return \AgentBundle\Entity\Agent
      */
     public function getAgent(): Agent
@@ -435,13 +386,11 @@ class User
     }
 
     /**
-     * Set userType
-     *
      * @param UserType $userType
      *
      * @return User
      */
-    public function setUserType(UserType $userType = null)
+    public function setUserType(UserType $userType)
     {
         $this->userType = $userType;
 
@@ -449,23 +398,19 @@ class User
     }
 
     /**
-     * Get userType
-     *
      * @return UserType
      */
-    public function getUserType()
+    public function getUserType(): UserType
     {
         return $this->userType;
     }
 
     /**
-     * Set avatar
-     *
      * @param string $avatar
      *
      * @return User
      */
-    public function setAvatar($avatar)
+    public function setAvatar($avatar): User
     {
         $this->avatar = $avatar;
 
@@ -473,8 +418,6 @@ class User
     }
 
     /**
-     * Get avatar
-     *
      * @return string
      */
     public function getAvatar()
@@ -483,13 +426,11 @@ class User
     }
 
     /**
-     * Set lastLogin
-     *
      * @param \datetime $lastLogin
      *
      * @return User
      */
-    public function setLastLogin($lastLogin)
+    public function setLastLogin($lastLogin): User
     {
         $this->lastLogin = $lastLogin;
 
@@ -497,8 +438,6 @@ class User
     }
 
     /**
-     * Get lastLogin
-     *
      * @return \datetime
      */
     public function getLastLogin()
@@ -507,13 +446,11 @@ class User
     }
 
     /**
-     * Set lastOnline
-     *
      * @param \datetime $lastOnline
      *
      * @return User
      */
-    public function setLastOnline($lastOnline)
+    public function setLastOnline($lastOnline): User
     {
         $this->lastOnline = $lastOnline;
 
@@ -521,8 +458,6 @@ class User
     }
 
     /**
-     * Get lastOnline
-     *
      * @return \datetime
      */
     public function getLastOnline()
@@ -531,13 +466,11 @@ class User
     }
 
     /**
-     * Set active
-     *
-     * @param boolean $active
+     * @param bool $active
      *
      * @return User
      */
-    public function setActive($active)
+    public function setActive(bool $active): User
     {
         $this->active = $active;
 
@@ -545,11 +478,9 @@ class User
     }
 
     /**
-     * Get active
-     *
      * @return bool
      */
-    public function getActive()
+    public function getActive(): bool
     {
         return $this->active;
     }

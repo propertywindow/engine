@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace AgentBundle\Controller;
 
@@ -24,6 +25,8 @@ class AgentSettingsController extends BaseController
      * @param Request $httpRequest
      *
      * @return HttpResponse
+     *
+     * @throws Throwable
      */
     public function requestHandler(Request $httpRequest)
     {
@@ -45,10 +48,7 @@ class AgentSettingsController extends BaseController
      * @return array
      *
      * @throws InvalidJsonRpcMethodException
-     * @throws AgentNotFoundException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
+     * @throws NotAuthorizedException
      */
     private function invoke(int $userId, string $method, array $parameters = [])
     {
@@ -66,8 +66,6 @@ class AgentSettingsController extends BaseController
      * @param int $userId
      *
      * @return array
-     *
-     * @throws AgentNotFoundException
      */
     private function getSettings(int $userId)
     {
