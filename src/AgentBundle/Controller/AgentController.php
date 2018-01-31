@@ -311,6 +311,7 @@ class AgentController extends BaseController
             $method       = sprintf('set%s', $property);
 
             // todo: check if method exists
+            // todo: make generic and move to baseController
 
             $entity->$method($value);
         }

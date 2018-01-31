@@ -7,7 +7,6 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Conversation
- *
  * @ORM\Table(name="conversation")
  * @ORM\Entity(repositoryClass="ConversationBundle\Repository\ConversationRepository")
  * @ORM\HasLifecycleCallbacks
@@ -16,7 +15,6 @@ class Conversation
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -37,43 +35,36 @@ class Conversation
 
     /**
      * @var int
-     *
      * @ORM\Column(name="unique_id", type="integer")
      */
     private $uniqueId;
 
     /**
      * @var \DateTime $created
-     *
      * @ORM\Column(type="datetime")
      */
     protected $created;
 
     /**
      * @var \DateTime $updated
-     *
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $updated;
 
     /**
-     * Get id
-     *
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
     /**
-     * Set author
-     *
      * @param \AuthenticationBundle\Entity\User $author
      *
      * @return Conversation
      */
-    public function setAuthor(User $author = null)
+    public function setAuthor(User $author): Conversation
     {
         $this->author = $author;
 
@@ -81,23 +72,19 @@ class Conversation
     }
 
     /**
-     * Get fromUser
-     *
      * @return \AuthenticationBundle\Entity\User
      */
-    public function getAuthor()
+    public function getAuthor(): User
     {
         return $this->author;
     }
 
     /**
-     * Set recipient
-     *
      * @param \AuthenticationBundle\Entity\User $recipient
      *
      * @return Conversation
      */
-    public function setRecipient(User $recipient = null)
+    public function setRecipient(User $recipient): Conversation
     {
         $this->recipient = $recipient;
 
@@ -105,23 +92,19 @@ class Conversation
     }
 
     /**
-     * Get recipient
-     *
      * @return \AuthenticationBundle\Entity\User
      */
-    public function getRecipient()
+    public function getRecipient(): User
     {
         return $this->recipient;
     }
 
     /**
-     * Set uniqueId
-     *
      * @param integer $uniqueId
      *
      * @return Conversation
      */
-    public function setUniqueId($uniqueId)
+    public function setUniqueId(int $uniqueId)
     {
         $this->uniqueId = $uniqueId;
 
@@ -129,18 +112,15 @@ class Conversation
     }
 
     /**
-     * Get uniqueId
-     *
      * @return int
      */
-    public function getUniqueId()
+    public function getUniqueId(): int
     {
         return $this->uniqueId;
     }
 
     /**
      * Gets triggered only on insert
-     *
      * @ORM\PrePersist
      */
     public function onPrePersist()
@@ -150,7 +130,6 @@ class Conversation
 
     /**
      * Gets triggered every time on update
-     *
      * @ORM\PreUpdate
      */
     public function onPreUpdate()
