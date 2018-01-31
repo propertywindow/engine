@@ -134,10 +134,25 @@ class AgentController extends BaseController
      */
     private function createAgent(int $userId, array $parameters)
     {
-        $user = $this->userService->getUser($userId);
+        $user     = $this->userService->getUser($userId);
+        $required = [
+            'office',
+            'email',
+            'first_name',
+            'last_name',
+            'street',
+            'house_number',
+            'postcode',
+            'city',
+            'country',
+        ];
 
         if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
             throw new NotAuthorizedException($userId);
+        }
+
+        if (count(array_intersect_key(array_flip($required), $parameters)) !== count($required)) {
+            throw new InvalidArgumentException("there is a required parameter missing");
         }
 
         if (!array_key_exists('agent_group_id', $parameters)) {
@@ -145,40 +160,15 @@ class AgentController extends BaseController
                 throw new InvalidArgumentException("name or agent_group_id parameter not provided");
             }
         }
+
         if (!array_key_exists('name', $parameters)) {
             if (!array_key_exists('agent_group_id', $parameters) && $parameters['agent_group_id'] !== null) {
                 throw new InvalidArgumentException("name or agent_group_id parameter not provided");
             }
         }
-        if (!array_key_exists('office', $parameters) && $parameters['office'] !== null) {
-            throw new InvalidArgumentException("office parameter not provided");
-        }
-        if (!array_key_exists('email', $parameters) && $parameters['email'] !== null) {
-            throw new InvalidArgumentException("email parameter not provided");
-        }
+
         if (!filter_var($parameters['email'], FILTER_VALIDATE_EMAIL)) {
             throw new InvalidArgumentException("email parameter not valid");
-        }
-        if (!array_key_exists('first_name', $parameters) && $parameters['first_name'] !== null) {
-            throw new InvalidArgumentException("first_name parameter not provided");
-        }
-        if (!array_key_exists('last_name', $parameters) && $parameters['last_name'] !== null) {
-            throw new InvalidArgumentException("last_name parameter not provided");
-        }
-        if (!array_key_exists('street', $parameters) && $parameters['street'] !== null) {
-            throw new InvalidArgumentException("street parameter not provided");
-        }
-        if (!array_key_exists('house_number', $parameters) && $parameters['house_number'] !== null) {
-            throw new InvalidArgumentException("house_number parameter not provided");
-        }
-        if (!array_key_exists('postcode', $parameters) && $parameters['postcode'] !== null) {
-            throw new InvalidArgumentException("postcode parameter not provided");
-        }
-        if (!array_key_exists('city', $parameters) && $parameters['city'] !== null) {
-            throw new InvalidArgumentException("city parameter not provided");
-        }
-        if (!array_key_exists('country', $parameters) && $parameters['country'] !== null) {
-            throw new InvalidArgumentException("country parameter not provided");
         }
 
         if ($this->userService->getUserByEmail($parameters['email'])) {
