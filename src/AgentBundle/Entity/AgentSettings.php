@@ -6,7 +6,6 @@ namespace AgentBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * AgentSettings
  * @ORM\Table(name="agent_settings")
  * @ORM\Entity(repositoryClass="AgentBundle\Repository\AgentSettingsRepository")
  */

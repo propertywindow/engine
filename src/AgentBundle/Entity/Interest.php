@@ -5,8 +5,6 @@ namespace AgentBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Interest
- *
  * @ORM\Table(name="interest")
  * @ORM\Entity(repositoryClass="AgentBundle\Repository\InterestRepository")
  * @ORM\HasLifecycleCallbacks
@@ -15,7 +13,6 @@ class Interest
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -24,50 +21,42 @@ class Interest
 
     /**
      * @var int
-     *
      * @ORM\Column(name="buyer_id", type="integer")
      */
     private $buyerId;
 
     /**
      * @var int
-     *
      * @ORM\Column(name="property_id", type="integer")
      */
     private $propertyId;
 
     /**
      * @var \DateTime $created
-     *
      * @ORM\Column(type="datetime")
      */
     protected $created;
 
     /**
      * @var \DateTime $updated
-     *
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $updated;
 
     /**
-     * Get id
-     *
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
     /**
-     * Set buyerId
-     *
      * @param integer $buyerId
      *
      * @return Interest
      */
-    public function setBuyerId($buyerId)
+    public function setBuyerId(int $buyerId): Interest
     {
         $this->buyerId = $buyerId;
 
@@ -75,23 +64,19 @@ class Interest
     }
 
     /**
-     * Get buyerId
-     *
      * @return int
      */
-    public function getBuyerId()
+    public function getBuyerId(): int
     {
         return $this->buyerId;
     }
 
     /**
-     * Set propertyId
-     *
      * @param integer $propertyId
      *
      * @return Interest
      */
-    public function setPropertyId($propertyId)
+    public function setPropertyId(int $propertyId): Interest
     {
         $this->propertyId = $propertyId;
 
@@ -99,18 +84,15 @@ class Interest
     }
 
     /**
-     * Get propertyId
-     *
      * @return int
      */
-    public function getPropertyId()
+    public function getPropertyId(): int
     {
         return $this->propertyId;
     }
 
     /**
      * Gets triggered only on insert
-     *
      * @ORM\PrePersist
      */
     public function onPrePersist()
@@ -120,7 +102,6 @@ class Interest
 
     /**
      * Gets triggered every time on update
-     *
      * @ORM\PreUpdate
      */
     public function onPreUpdate()

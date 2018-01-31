@@ -5,8 +5,6 @@ namespace AgentBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Offer
- *
  * @ORM\Table(name="offer")
  * @ORM\Entity(repositoryClass="AgentBundle\Repository\OfferRepository")
  * @ORM\HasLifecycleCallbacks
@@ -15,7 +13,6 @@ class Offer
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -24,57 +21,48 @@ class Offer
 
     /**
      * @var int
-     *
      * @ORM\Column(name="buyer_id", type="integer")
      */
     private $buyerId;
 
     /**
      * @var int
-     *
      * @ORM\Column(name="property_id", type="integer")
      */
     private $propertyId;
 
     /**
      * @var int
-     *
      * @ORM\Column(name="amount", type="integer")
      */
     private $amount;
 
     /**
      * @var \DateTime $created
-     *
      * @ORM\Column(type="datetime")
      */
     protected $created;
 
     /**
      * @var \DateTime $updated
-     *
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $updated;
 
     /**
-     * Get id
-     *
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
     /**
-     * Set buyerId
-     *
      * @param integer $buyerId
      *
      * @return Offer
      */
-    public function setBuyerId($buyerId)
+    public function setBuyerId(int $buyerId): Offer
     {
         $this->buyerId = $buyerId;
 
@@ -82,23 +70,19 @@ class Offer
     }
 
     /**
-     * Get buyerId
-     *
      * @return int
      */
-    public function getBuyerId()
+    public function getBuyerId(): int
     {
         return $this->buyerId;
     }
 
     /**
-     * Set propertyId
-     *
      * @param integer $propertyId
      *
      * @return Offer
      */
-    public function setPropertyId($propertyId)
+    public function setPropertyId(int $propertyId): Offer
     {
         $this->propertyId = $propertyId;
 
@@ -106,23 +90,19 @@ class Offer
     }
 
     /**
-     * Get propertyId
-     *
      * @return int
      */
-    public function getPropertyId()
+    public function getPropertyId(): int
     {
         return $this->propertyId;
     }
 
     /**
-     * Set amount
-     *
      * @param integer $amount
      *
      * @return Offer
      */
-    public function setAmount($amount)
+    public function setAmount(int $amount): Offer
     {
         $this->amount = $amount;
 
@@ -130,18 +110,15 @@ class Offer
     }
 
     /**
-     * Get amount
-     *
      * @return int
      */
-    public function getAmount()
+    public function getAmount(): int
     {
         return $this->amount;
     }
 
     /**
      * Gets triggered only on insert
-     *
      * @ORM\PrePersist
      */
     public function onPrePersist()
@@ -151,7 +128,6 @@ class Offer
 
     /**
      * Gets triggered every time on update
-     *
      * @ORM\PreUpdate
      */
     public function onPreUpdate()

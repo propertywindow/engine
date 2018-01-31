@@ -5,8 +5,6 @@ namespace AgentBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Surveys
- *
  * @ORM\Table(name="surveys")
  * @ORM\Entity(repositoryClass="AgentBundle\Repository\SurveysRepository")
  * @ORM\HasLifecycleCallbacks
@@ -15,7 +13,6 @@ class Surveys
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -24,71 +21,60 @@ class Surveys
 
     /**
      * @var int
-     *
      * @ORM\Column(name="surveyor_id", type="integer")
      */
     private $surveyorId;
 
     /**
      * @var int
-     *
      * @ORM\Column(name="buyer_id", type="integer")
      */
     private $buyerId;
 
     /**
      * @var int
-     *
      * @ORM\Column(name="property_id", type="integer")
      */
     private $propertyId;
 
     /**
      * @var \DateTime
-     *
      * @ORM\Column(name="datetime", type="datetime")
      */
     private $datetime;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="notes", type="blob")
      */
     private $notes;
 
     /**
      * @var \DateTime $created
-     *
      * @ORM\Column(type="datetime")
      */
     protected $created;
 
     /**
      * @var \DateTime $updated
-     *
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $updated;
 
     /**
-     * Get id
-     *
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
     /**
-     * Set surveyorId
-     *
      * @param integer $surveyorId
      *
      * @return Surveys
      */
-    public function setSurveyorId($surveyorId)
+    public function setSurveyorId(int $surveyorId): Surveys
     {
         $this->surveyorId = $surveyorId;
 
@@ -96,23 +82,19 @@ class Surveys
     }
 
     /**
-     * Get surveyorId
-     *
      * @return int
      */
-    public function getSurveyorId()
+    public function getSurveyorId(): int
     {
         return $this->surveyorId;
     }
 
     /**
-     * Set buyerId
-     *
      * @param integer $buyerId
      *
      * @return Surveys
      */
-    public function setBuyerId($buyerId)
+    public function setBuyerId($buyerId): Surveys
     {
         $this->buyerId = $buyerId;
 
@@ -120,8 +102,6 @@ class Surveys
     }
 
     /**
-     * Get buyerId
-     *
      * @return int
      */
     public function getBuyerId()
@@ -130,13 +110,11 @@ class Surveys
     }
 
     /**
-     * Set propertyId
-     *
      * @param integer $propertyId
      *
      * @return Surveys
      */
-    public function setPropertyId($propertyId)
+    public function setPropertyId(int $propertyId): Surveys
     {
         $this->propertyId = $propertyId;
 
@@ -144,23 +122,19 @@ class Surveys
     }
 
     /**
-     * Get propertyId
-     *
      * @return int
      */
-    public function getPropertyId()
+    public function getPropertyId(): int
     {
         return $this->propertyId;
     }
 
     /**
-     * Set datetime
-     *
      * @param \DateTime $datetime
      *
      * @return Surveys
      */
-    public function setDatetime($datetime)
+    public function setDatetime(\DateTime $datetime): Surveys
     {
         $this->datetime = $datetime;
 
@@ -168,23 +142,19 @@ class Surveys
     }
 
     /**
-     * Get datetime
-     *
      * @return \DateTime
      */
-    public function getDatetime()
+    public function getDatetime(): \DateTime
     {
         return $this->datetime;
     }
 
     /**
-     * Set notes
-     *
      * @param string $notes
      *
      * @return Surveys
      */
-    public function setNotes($notes)
+    public function setNotes($notes): Surveys
     {
         $this->notes = $notes;
 
@@ -192,8 +162,6 @@ class Surveys
     }
 
     /**
-     * Get notes
-     *
      * @return string
      */
     public function getNotes()
@@ -203,7 +171,6 @@ class Surveys
 
     /**
      * Gets triggered only on insert
-     *
      * @ORM\PrePersist
      */
     public function onPrePersist()
@@ -213,7 +180,6 @@ class Surveys
 
     /**
      * Gets triggered every time on update
-     *
      * @ORM\PreUpdate
      */
     public function onPreUpdate()

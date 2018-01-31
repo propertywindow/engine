@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace ConversationBundle\Controller;
 
 use AppBundle\Controller\BaseController;
+use AuthenticationBundle\Exceptions\UserNotFoundException;
+use AuthenticationBundle\Exceptions\UserSettingsNotFoundException;
 use ConversationBundle\Entity\Email;
 use ConversationBundle\Entity\Mailbox;
 use ConversationBundle\Exceptions\EmailNotSetException;
@@ -48,6 +50,8 @@ class EmailController extends BaseController
      * @return array
      * @throws EmailNotSetException
      * @throws InvalidJsonRpcMethodException
+     * @throws UserNotFoundException
+     * @throws UserSettingsNotFoundException
      */
     private function invoke(int $userId, string $method, array $parameters = [])
     {
@@ -69,6 +73,8 @@ class EmailController extends BaseController
      *
      * @return array
      * @throws EmailNotSetException
+     * @throws UserNotFoundException
+     * @throws UserSettingsNotFoundException
      */
     private function getMailbox(int $userId, array $parameters)
     {
@@ -91,7 +97,7 @@ class EmailController extends BaseController
         $emails     = imap_search($connection, 'ALL');
         $iCheck     = imap_check($connection);
 
-        if ($emails) {
+        if (!empty($emails)) {
             rsort($emails);
             foreach ($emails as $e) {
                 $overview = imap_fetch_overview($connection, $e . ':' . $iCheck->Nmsgs, 0);
@@ -118,6 +124,8 @@ class EmailController extends BaseController
      *
      * @return array
      * @throws EmailNotSetException
+     * @throws UserNotFoundException
+     * @throws UserSettingsNotFoundException
      */
     private function getMailboxes(int $userId)
     {

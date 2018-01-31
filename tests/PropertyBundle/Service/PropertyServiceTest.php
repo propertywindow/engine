@@ -80,8 +80,21 @@ class PropertyServiceTest extends TestCase
         $this->assertEquals($client, $this->property->getClient());
         $this->assertEquals($terms, $this->property->getTerms());
         $this->assertEquals($subtype, $this->property->getSubType());
-        $this->assertEquals('Edinburgh', $this->property->getCity());
         $this->assertInternalType('bool', $this->property->getOnline());
+        $this->assertEquals(true, $this->property->getOnline());
+        $this->assertEquals('Dalkeith Street', $this->property->getStreet());
+        $this->assertEquals('3', $this->property->getHouseNumber());
+        $this->assertEquals('EH15 2HP', $this->property->getPostcode());
+        $this->assertEquals('Edinburgh', $this->property->getCity());
+        $this->assertEquals('GB', $this->property->getCountry());
+        $this->assertInternalType('int', $this->property->getPrice());
+        $this->assertEquals(725000, $this->property->getPrice());
+        $this->assertEquals(55.948368, $this->property->getLat());
+        $this->assertEquals(-3.101990, $this->property->getLng());
+        $this->assertInternalType('bool', $this->property->getEspc());
+        $this->assertEquals(false, $this->property->getEspc());
+        $this->assertInternalType('bool', $this->property->getArchived());
+        $this->assertEquals(false, $this->property->getArchived());
     }
 
     public function testArchiveProperty()

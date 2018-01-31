@@ -8,6 +8,7 @@ use AuthenticationBundle\Entity\UserType;
 use Doctrine\ORM\EntityRepository;
 use AuthenticationBundle\Entity\User;
 use AuthenticationBundle\Exceptions\UserNotFoundException;
+use Doctrine\ORM\OptimisticLockException;
 
 /**
  * UserRepository
@@ -36,7 +37,7 @@ class UserRepository extends EntityRepository
      * @param int[] $identifiers
      *
      * @return User[]
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws OptimisticLockException
      */
     public function findByUserIdentifiers(array $identifiers): array
     {
@@ -56,8 +57,8 @@ class UserRepository extends EntityRepository
             $i             = 0;
             $insertedUsers = [];
             foreach ($userIdentifiersNotFound as $identifier) {
-                $user = new User($identifier);
-                // todo: fix this
+                $user = new User();
+                $user->setId($identifier);
 
                 $entityManager->persist($user);
                 $insertedUsers[] = $user;

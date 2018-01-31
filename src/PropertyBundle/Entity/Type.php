@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace PropertyBundle\Entity;
 
@@ -7,8 +8,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Type
- *
  * @ORM\Table(name="property_type")
  * @ORM\Entity(repositoryClass="PropertyBundle\Repository\TypeRepository")
  * @ORM\HasLifecycleCallbacks
@@ -17,7 +16,6 @@ class Type
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -31,28 +29,24 @@ class Type
 
     /**
      * @var string
-     *
      * @ORM\Column(name="en", type="string", length=255)
      */
     private $en;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="nl", type="string", length=255)
      */
     private $nl;
 
     /**
      * @var \DateTime $created
-     *
      * @ORM\Column(type="datetime")
      */
     protected $created;
 
     /**
      * @var \DateTime $updated
-     *
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $updated;
@@ -66,23 +60,19 @@ class Type
     }
 
     /**
-     * Get id
-     *
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
     /**
-     * Add subType
-     *
      * @param SubType $subTypes
      *
      * @return Type
      */
-    public function addSubType(SubType $subTypes)
+    public function addSubType(SubType $subTypes): Type
     {
         $this->subTypes[] = $subTypes;
 
@@ -90,8 +80,6 @@ class Type
     }
 
     /**
-     * Remove subType
-     *
      * @param SubType $subType
      */
     public function removeSubType(SubType $subType)
@@ -100,8 +88,6 @@ class Type
     }
 
     /**
-     * Get subTypes
-     *
      * @return Collection
      */
     public function getSubTypes()
@@ -110,13 +96,11 @@ class Type
     }
 
     /**
-     * Set en
-     *
      * @param string $en
      *
      * @return Type
      */
-    public function setEn($en)
+    public function setEn(string $en): Type
     {
         $this->en = $en;
 
@@ -124,23 +108,19 @@ class Type
     }
 
     /**
-     * Get en
-     *
      * @return string
      */
-    public function getEn()
+    public function getEn(): string
     {
         return $this->en;
     }
 
     /**
-     * Set nl
-     *
      * @param string $nl
      *
      * @return Type
      */
-    public function setNl($nl)
+    public function setNl(string $nl): Type
     {
         $this->nl = $nl;
 
@@ -148,18 +128,15 @@ class Type
     }
 
     /**
-     * Get nl
-     *
      * @return string
      */
-    public function getNl()
+    public function getNl(): string
     {
         return $this->nl;
     }
 
     /**
      * Gets triggered only on insert
-     *
      * @ORM\PrePersist
      */
     public function onPrePersist()
@@ -169,7 +146,6 @@ class Type
 
     /**
      * Gets triggered every time on update
-     *
      * @ORM\PreUpdate
      */
     public function onPreUpdate()

@@ -5,8 +5,6 @@ namespace AgentBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Solicitor
- *
  * @ORM\Table(name="solicitor")
  * @ORM\Entity(repositoryClass="AgentBundle\Repository\SolicitorRepository")
  * @ORM\HasLifecycleCallbacks
@@ -15,7 +13,6 @@ class Solicitor
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -24,113 +21,96 @@ class Solicitor
 
     /**
      * @var int
-     *
      * @ORM\Column(name="agent_id", type="integer")
      */
     private $agentId;
 
     /**
      * @var int
-     *
      * @ORM\Column(name="agency_id", type="integer")
      */
     private $agencyId;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="street", type="string", length=255)
      */
     private $street;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="house_number", type="string", length=10)
      */
     private $houseNumber;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="postcode", type="string", length=10)
      */
     private $postcode;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="city", type="string", length=255)
      */
     private $city;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="country", type="string", length=255)
      */
     private $country;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="phone", type="string", length=255, nullable=true)
      */
     private $phone;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="fax", type="string", length=255, nullable=true)
      */
     private $fax;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="email", type="string", length=255, nullable=true)
      */
     private $email;
 
     /**
      * @var \DateTime $created
-     *
      * @ORM\Column(type="datetime")
      */
     protected $created;
 
     /**
      * @var \DateTime $updated
-     *
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $updated;
 
     /**
-     * Get id
-     *
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
     /**
-     * Set agentId
-     *
      * @param integer $agentId
      *
      * @return Solicitor
      */
-    public function setAgentId($agentId)
+    public function setAgentId(int $agentId): Solicitor
     {
         $this->agentId = $agentId;
 
@@ -138,23 +118,19 @@ class Solicitor
     }
 
     /**
-     * Get agentId
-     *
      * @return int
      */
-    public function getAgentId()
+    public function getAgentId(): int
     {
         return $this->agentId;
     }
 
     /**
-     * Set agencyId
-     *
      * @param integer $agencyId
      *
      * @return Solicitor
      */
-    public function setAgencyId($agencyId)
+    public function setAgencyId(int $agencyId): Solicitor
     {
         $this->agencyId = $agencyId;
 
@@ -162,23 +138,19 @@ class Solicitor
     }
 
     /**
-     * Get agencyId
-     *
      * @return int
      */
-    public function getAgencyId()
+    public function getAgencyId(): int
     {
         return $this->agencyId;
     }
 
     /**
-     * Set name
-     *
      * @param string $name
      *
      * @return Solicitor
      */
-    public function setName($name)
+    public function setName(string $name): Solicitor
     {
         $this->name = $name;
 
@@ -186,23 +158,19 @@ class Solicitor
     }
 
     /**
-     * Get name
-     *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
     /**
-     * Set street
-     *
      * @param string $street
      *
      * @return Solicitor
      */
-    public function setStreet($street)
+    public function setStreet(string $street): Solicitor
     {
         $this->street = $street;
 
@@ -210,23 +178,19 @@ class Solicitor
     }
 
     /**
-     * Get street
-     *
      * @return string
      */
-    public function getStreet()
+    public function getStreet(): string
     {
         return $this->street;
     }
 
     /**
-     * Set houseNumber
-     *
      * @param string $houseNumber
      *
      * @return Solicitor
      */
-    public function setHouseNumber($houseNumber)
+    public function setHouseNumber(string $houseNumber): Solicitor
     {
         $this->houseNumber = $houseNumber;
 
@@ -234,23 +198,19 @@ class Solicitor
     }
 
     /**
-     * Get houseNumber
-     *
      * @return string
      */
-    public function getHouseNumber()
+    public function getHouseNumber(): string
     {
         return $this->houseNumber;
     }
 
     /**
-     * Set postcode
-     *
      * @param string $postcode
      *
      * @return Solicitor
      */
-    public function setPostcode($postcode)
+    public function setPostcode(string $postcode): Solicitor
     {
         $this->postcode = $postcode;
 
@@ -258,23 +218,19 @@ class Solicitor
     }
 
     /**
-     * Get postcode
-     *
      * @return string
      */
-    public function getPostcode()
+    public function getPostcode(): string
     {
         return $this->postcode;
     }
 
     /**
-     * Set city
-     *
      * @param string $city
      *
      * @return Solicitor
      */
-    public function setCity($city)
+    public function setCity(string $city): Solicitor
     {
         $this->city = $city;
 
@@ -282,23 +238,19 @@ class Solicitor
     }
 
     /**
-     * Get city
-     *
      * @return string
      */
-    public function getCity()
+    public function getCity(): string
     {
         return $this->city;
     }
 
     /**
-     * Set country
-     *
      * @param string $country
      *
      * @return Solicitor
      */
-    public function setCountry($country)
+    public function setCountry(string $country): Solicitor
     {
         $this->country = $country;
 
@@ -306,23 +258,19 @@ class Solicitor
     }
 
     /**
-     * Get country
-     *
      * @return string
      */
-    public function getCountry()
+    public function getCountry(): string
     {
         return $this->country;
     }
 
     /**
-     * Set phone
-     *
      * @param string $phone
      *
      * @return Solicitor
      */
-    public function setPhone($phone)
+    public function setPhone($phone): Solicitor
     {
         $this->phone = $phone;
 
@@ -330,8 +278,6 @@ class Solicitor
     }
 
     /**
-     * Get phone
-     *
      * @return string
      */
     public function getPhone()
@@ -340,13 +286,11 @@ class Solicitor
     }
 
     /**
-     * Set fax
-     *
      * @param string $fax
      *
      * @return Solicitor
      */
-    public function setFax($fax)
+    public function setFax($fax): Solicitor
     {
         $this->fax = $fax;
 
@@ -354,8 +298,6 @@ class Solicitor
     }
 
     /**
-     * Get fax
-     *
      * @return string
      */
     public function getFax()
@@ -364,13 +306,11 @@ class Solicitor
     }
 
     /**
-     * Set email
-     *
      * @param string $email
      *
      * @return Solicitor
      */
-    public function setEmail($email)
+    public function setEmail($email): Solicitor
     {
         $this->email = $email;
 
@@ -378,8 +318,6 @@ class Solicitor
     }
 
     /**
-     * Get email
-     *
      * @return string
      */
     public function getEmail()
@@ -389,7 +327,6 @@ class Solicitor
 
     /**
      * Gets triggered only on insert
-     *
      * @ORM\PrePersist
      */
     public function onPrePersist()
@@ -399,7 +336,6 @@ class Solicitor
 
     /**
      * Gets triggered every time on update
-     *
      * @ORM\PreUpdate
      */
     public function onPreUpdate()

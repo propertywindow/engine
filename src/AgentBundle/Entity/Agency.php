@@ -6,7 +6,6 @@ namespace AgentBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Agency
  * @ORM\Table(name="agency")
  * @ORM\Entity(repositoryClass="AgentBundle\Repository\AgencyRepository")
  * @ORM\HasLifecycleCallbacks

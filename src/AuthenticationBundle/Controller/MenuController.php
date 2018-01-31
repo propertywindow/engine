@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace AuthenticationBundle\Controller;
 
 use AppBundle\Controller\BaseController;
+use AuthenticationBundle\Exceptions\UserNotFoundException;
+use AuthenticationBundle\Exceptions\UserSettingsNotFoundException;
 use AuthenticationBundle\Service\Menu\Mapper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Response;
@@ -27,8 +29,8 @@ class MenuController extends BaseController
     public function requestHandler(Request $httpRequest)
     {
         try {
-            list($userId, $method, $parameters) = $this->prepareRequest($httpRequest);
-            $jsonRpcResponse = Response::success($this->invoke($userId, $method, $parameters));
+            list($userId, $method) = $this->prepareRequest($httpRequest);
+            $jsonRpcResponse = Response::success($this->invoke($userId, $method));
         } catch (Throwable $throwable) {
             $jsonRpcResponse = $this->throwable($throwable, $httpRequest);
         }
@@ -39,12 +41,13 @@ class MenuController extends BaseController
     /**
      * @param int    $userId
      * @param string $method
-     * @param array  $parameters
      *
      * @return array
      * @throws InvalidJsonRpcMethodException
+     * @throws UserNotFoundException
+     * @throws UserSettingsNotFoundException
      */
-    private function invoke(int $userId, string $method, array $parameters = [])
+    private function invoke(int $userId, string $method)
     {
         switch ($method) {
             case "getMenu":
@@ -58,6 +61,8 @@ class MenuController extends BaseController
      * @param int $userId
      *
      * @return array
+     * @throws UserNotFoundException
+     * @throws UserSettingsNotFoundException
      */
     private function getMenu(int $userId)
     {

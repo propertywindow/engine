@@ -10,7 +10,6 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Property
- *
  * @ORM\Table(name="property")
  * @ORM\Entity(repositoryClass="PropertyBundle\Repository\PropertyRepository")
  * @ORM\HasLifecycleCallbacks
@@ -19,7 +18,6 @@ class Property
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -68,98 +66,84 @@ class Property
 
     /**
      * @var bool
-     *
      * @ORM\Column(name="online", type="boolean", options={"default": false})
      */
     private $online = false;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="street", type="string", length=255)
      */
     private $street;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="house_number", type="string", length=10)
      */
     private $houseNumber;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="postcode", type="string", length=10)
      */
     private $postcode;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="city", type="string", length=255)
      */
     private $city;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="country", type="string", length=255)
      */
     private $country;
 
     /**
      * @var int
-     *
      * @ORM\Column(name="price", type="integer")
      */
     private $price = 0;
 
     /**
      * @var int
-     *
      * @ORM\Column(name="sold_price", type="integer", nullable=true)
      */
     private $soldPrice;
 
     /**
      * @var bool
-     *
      * @ORM\Column(name="espc", type="boolean", options={"default": false})
      */
     private $espc = false;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="lat", type="string", length=20)
      */
     private $lat;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="lng", type="string", length=20)
      */
     private $lng;
 
     /**
      * @var bool
-     *
      * @ORM\Column(name="archived", type="boolean", options={"default": false})
      */
     private $archived = false;
 
     /**
      * @var \DateTime $created
-     *
      * @ORM\Column(type="datetime")
      */
     protected $created;
 
     /**
      * @var \DateTime $updated
-     *
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $updated;
@@ -173,18 +157,14 @@ class Property
     }
 
     /**
-     * Get id
-     *
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
     /**
-     * Add image
-     *
      * @param Gallery $image
      *
      * @return Property
@@ -197,8 +177,6 @@ class Property
     }
 
     /**
-     * Remove image
-     *
      * @param Gallery $image
      */
     public function removeImage(Gallery $image)
@@ -207,8 +185,6 @@ class Property
     }
 
     /**
-     * Get images
-     *
      * @return Collection
      */
     public function getImages()
@@ -217,13 +193,11 @@ class Property
     }
 
     /**
-     * Set agent
-     *
      * @param \AgentBundle\Entity\Agent $agent
      *
      * @return Property
      */
-    public function setAgent(Agent $agent = null)
+    public function setAgent(Agent $agent = null): Property
     {
         $this->agent = $agent;
 
@@ -231,24 +205,20 @@ class Property
     }
 
     /**
-     * Get agent
-     *
      * @return \AgentBundle\Entity\Agent
      */
-    public function getAgent()
+    public function getAgent(): Agent
     {
         return $this->agent;
     }
 
 
     /**
-     * Set client
-     *
      * @param \AgentBundle\Entity\Client $client
      *
      * @return Property
      */
-    public function setClient(Client $client = null)
+    public function setClient(Client $client = null): Property
     {
         $this->client = $client;
 
@@ -256,11 +226,9 @@ class Property
     }
 
     /**
-     * Get client
-     *
      * @return \AgentBundle\Entity\Client
      */
-    public function getClient()
+    public function getClient(): Client
     {
         return $this->client;
     }
@@ -280,18 +248,14 @@ class Property
     }
 
     /**
-     * Get kind
-     *
      * @return Kind
      */
-    public function getKind()
+    public function getKind(): Kind
     {
         return $this->kind;
     }
 
     /**
-     * Set terms
-     *
      * @param Terms $terms
      *
      * @return Property
@@ -304,8 +268,6 @@ class Property
     }
 
     /**
-     * Get terms
-     *
      * @return Terms
      */
     public function getTerms()
@@ -314,8 +276,6 @@ class Property
     }
 
     /**
-     * Set subType
-     *
      * @param SubType $subType
      *
      * @return Property
@@ -328,8 +288,6 @@ class Property
     }
 
     /**
-     * Get subType
-     *
      * @return SubType
      */
     public function getSubType()
@@ -338,8 +296,6 @@ class Property
     }
 
     /**
-     * Set details
-     *
      * @param Details $details
      *
      * @return Property
@@ -352,8 +308,6 @@ class Property
     }
 
     /**
-     * Get details
-     *
      * @return Details
      */
     public function getDetails()
@@ -362,8 +316,6 @@ class Property
     }
 
     /**
-     * Set online
-     *
      * @param boolean $online
      *
      * @return Property
@@ -376,8 +328,6 @@ class Property
     }
 
     /**
-     * Get online
-     *
      * @return bool
      */
     public function getOnline()
@@ -386,8 +336,6 @@ class Property
     }
 
     /**
-     * Set street
-     *
      * @param string $street
      *
      * @return Property
@@ -400,8 +348,6 @@ class Property
     }
 
     /**
-     * Get street
-     *
      * @return string
      */
     public function getStreet()
@@ -410,8 +356,6 @@ class Property
     }
 
     /**
-     * Set houseNumber
-     *
      * @param string $houseNumber
      *
      * @return Property
@@ -424,8 +368,6 @@ class Property
     }
 
     /**
-     * Get houseNumber
-     *
      * @return string
      */
     public function getHouseNumber()
@@ -434,8 +376,6 @@ class Property
     }
 
     /**
-     * Set postcode
-     *
      * @param string $postcode
      *
      * @return Property
@@ -448,8 +388,6 @@ class Property
     }
 
     /**
-     * Get postcode
-     *
      * @return string
      */
     public function getPostcode()
@@ -458,8 +396,6 @@ class Property
     }
 
     /**
-     * Set city
-     *
      * @param string $city
      *
      * @return Property
@@ -472,8 +408,6 @@ class Property
     }
 
     /**
-     * Get city
-     *
      * @return string
      */
     public function getCity()
@@ -482,8 +416,6 @@ class Property
     }
 
     /**
-     * Set country
-     *
      * @param string $country
      *
      * @return Property
@@ -496,8 +428,6 @@ class Property
     }
 
     /**
-     * Get country
-     *
      * @return string
      */
     public function getCountry()
@@ -506,8 +436,6 @@ class Property
     }
 
     /**
-     * Set price
-     *
      * @param integer $price
      *
      * @return Property
@@ -520,8 +448,6 @@ class Property
     }
 
     /**
-     * Get price
-     *
      * @return int
      */
     public function getPrice()
@@ -530,8 +456,6 @@ class Property
     }
 
     /**
-     * Set soldPrice
-     *
      * @param integer $soldPrice
      *
      * @return Property
@@ -544,8 +468,6 @@ class Property
     }
 
     /**
-     * Get soldPrice
-     *
      * @return int
      */
     public function getSoldPrice()
@@ -554,13 +476,11 @@ class Property
     }
 
     /**
-     * Set espc
-     *
      * @param boolean $espc
      *
      * @return Property
      */
-    public function setEspc($espc)
+    public function setEspc(bool $espc)
     {
         $this->espc = $espc;
 
@@ -568,18 +488,14 @@ class Property
     }
 
     /**
-     * Get espc
-     *
      * @return bool
      */
-    public function getEspc()
+    public function getEspc(): bool
     {
         return $this->espc;
     }
 
     /**
-     * Set lat
-     *
      * @param string $lat
      *
      * @return Property
@@ -592,8 +508,6 @@ class Property
     }
 
     /**
-     * Get lat
-     *
      * @return string
      */
     public function getLat()
@@ -602,8 +516,6 @@ class Property
     }
 
     /**
-     * Set lng
-     *
      * @param string $lng
      *
      * @return Property
@@ -616,8 +528,6 @@ class Property
     }
 
     /**
-     * Get lng
-     *
      * @return string
      */
     public function getLng()
@@ -626,8 +536,6 @@ class Property
     }
 
     /**
-     * Set archived
-     *
      * @param boolean $archived
      *
      * @return Property
@@ -640,8 +548,6 @@ class Property
     }
 
     /**
-     * Get archived
-     *
      * @return bool
      */
     public function getArchived()
@@ -669,7 +575,6 @@ class Property
 
     /**
      * Get created
-     *
      * @return \DateTime
      */
     public function getCreated()
@@ -679,7 +584,6 @@ class Property
 
     /**
      * Get updated
-     *
      * @return \DateTime
      */
     public function getUpdated()

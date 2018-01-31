@@ -18,7 +18,6 @@ class User
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -27,7 +26,6 @@ class User
 
     /**
      * @var string
-     *
      * @ORM\Column(name="email", type="string", length=255, unique=true)
      * @Assert\Email()
      */
@@ -35,63 +33,54 @@ class User
 
     /**
      * @var string
-     *
      * @ORM\Column(name="password", type="string", length=255, nullable=true)
      */
     private $password;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="first_name", type="string", length=255)
      */
     private $firstName;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="last_name", type="string", length=255)
      */
     private $lastName;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="street", type="string", length=255)
      */
     private $street;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="house_number", type="string", length=10)
      */
     private $houseNumber;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="postcode", type="string", length=10)
      */
     private $postcode;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="city", type="string", length=255)
      */
     private $city;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="country", type="string", length=2)
      */
     private $country;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="phone", type="string", length=255, nullable=true)
      */
     private $phone;
@@ -110,52 +99,53 @@ class User
 
     /**
      * @var string
-     *
      * @ORM\Column(name="avatar", type="string", length=255, nullable=true)
      */
     private $avatar;
 
     /**
      * @var \datetime
-     *
      * @ORM\Column(name="last_login", type="datetime", length=255, nullable=true)
      */
     private $lastLogin;
 
     /**
      * @var \datetime
-     *
      * @ORM\Column(name="last_online", type="datetime", length=255, nullable=true)
      */
     private $lastOnline;
 
     /**
      * @var bool
-     *
      * @ORM\Column(name="active", type="boolean", options={"default": false})
      */
     private $active = false;
 
     /**
      * @var Collection
-     *
      * @ORM\ManyToMany(targetEntity="ConversationBundle\Entity\Notification", mappedBy="users")
      */
     private $notifications;
 
     /**
      * @var \DateTime $created
-     *
      * @ORM\Column(type="datetime")
      */
     protected $created;
 
     /**
      * @var \DateTime $updated
-     *
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $updated;
+
+    /**
+     * @param int $id
+     */
+    public function setId(int $id)
+    {
+        $this->id = $id;
+    }
 
     /**
      * @return int

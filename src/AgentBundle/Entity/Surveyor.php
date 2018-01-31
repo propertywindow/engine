@@ -5,8 +5,6 @@ namespace AgentBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Surveyor
- *
  * @ORM\Table(name="surveyor")
  * @ORM\Entity(repositoryClass="AgentBundle\Repository\SurveyorRepository")
  * @ORM\HasLifecycleCallbacks
@@ -15,7 +13,6 @@ class Surveyor
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -24,106 +21,90 @@ class Surveyor
 
     /**
      * @var int
-     *
      * @ORM\Column(name="agent_id", type="integer")
      */
     private $agentId;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="phone", type="string", length=255, nullable=true)
      */
     private $phone;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="fax", type="string", length=255, nullable=true)
      */
     private $fax;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="email", type="string", length=255, nullable=true)
      */
     private $email;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="street", type="string", length=255)
      */
     private $street;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="house_number", type="string", length=10)
      */
     private $houseNumber;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="postcode", type="string", length=10)
      */
     private $postcode;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="city", type="string", length=255)
      */
     private $city;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="country", type="string", length=255)
      */
     private $country;
 
     /**
      * @var \DateTime $created
-     *
      * @ORM\Column(type="datetime")
      */
     protected $created;
 
     /**
      * @var \DateTime $updated
-     *
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $updated;
 
     /**
-     * Get id
-     *
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
     /**
-     * Set agentId
-     *
      * @param integer $agentId
      *
      * @return Surveyor
      */
-    public function setAgentId($agentId)
+    public function setAgentId(int $agentId): Surveyor
     {
         $this->agentId = $agentId;
 
@@ -131,23 +112,19 @@ class Surveyor
     }
 
     /**
-     * Get agentId
-     *
      * @return int
      */
-    public function getAgentId()
+    public function getAgentId(): int
     {
         return $this->agentId;
     }
 
     /**
-     * Set name
-     *
      * @param string $name
      *
      * @return Surveyor
      */
-    public function setName($name)
+    public function setName(string $name): Surveyor
     {
         $this->name = $name;
 
@@ -155,23 +132,19 @@ class Surveyor
     }
 
     /**
-     * Get name
-     *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
     /**
-     * Set phone
-     *
      * @param string $phone
      *
      * @return Surveyor
      */
-    public function setPhone($phone)
+    public function setPhone($phone): Surveyor
     {
         $this->phone = $phone;
 
@@ -179,8 +152,6 @@ class Surveyor
     }
 
     /**
-     * Get phone
-     *
      * @return string
      */
     public function getPhone()
@@ -189,13 +160,11 @@ class Surveyor
     }
 
     /**
-     * Set fax
-     *
      * @param string $fax
      *
      * @return Surveyor
      */
-    public function setFax($fax)
+    public function setFax($fax): Surveyor
     {
         $this->fax = $fax;
 
@@ -203,8 +172,6 @@ class Surveyor
     }
 
     /**
-     * Get fax
-     *
      * @return string
      */
     public function getFax()
@@ -213,13 +180,11 @@ class Surveyor
     }
 
     /**
-     * Set email
-     *
      * @param string $email
      *
      * @return Surveyor
      */
-    public function setEmail($email)
+    public function setEmail($email): Surveyor
     {
         $this->email = $email;
 
@@ -227,8 +192,6 @@ class Surveyor
     }
 
     /**
-     * Get email
-     *
      * @return string
      */
     public function getEmail()
@@ -237,13 +200,11 @@ class Surveyor
     }
 
     /**
-     * Set street
-     *
      * @param string $street
      *
      * @return Surveyor
      */
-    public function setStreet($street)
+    public function setStreet($street): Surveyor
     {
         $this->street = $street;
 
@@ -251,8 +212,6 @@ class Surveyor
     }
 
     /**
-     * Get street
-     *
      * @return string
      */
     public function getStreet()
@@ -261,13 +220,11 @@ class Surveyor
     }
 
     /**
-     * Set houseNumber
-     *
      * @param string $houseNumber
      *
      * @return Surveyor
      */
-    public function setHouseNumber($houseNumber)
+    public function setHouseNumber($houseNumber): Surveyor
     {
         $this->houseNumber = $houseNumber;
 
@@ -275,8 +232,6 @@ class Surveyor
     }
 
     /**
-     * Get houseNumber
-     *
      * @return string
      */
     public function getHouseNumber()
@@ -285,13 +240,11 @@ class Surveyor
     }
 
     /**
-     * Set postcode
-     *
      * @param string $postcode
      *
      * @return Surveyor
      */
-    public function setPostcode($postcode)
+    public function setPostcode($postcode): Surveyor
     {
         $this->postcode = $postcode;
 
@@ -299,8 +252,6 @@ class Surveyor
     }
 
     /**
-     * Get postcode
-     *
      * @return string
      */
     public function getPostcode()
@@ -309,13 +260,11 @@ class Surveyor
     }
 
     /**
-     * Set city
-     *
      * @param string $city
      *
      * @return Surveyor
      */
-    public function setCity($city)
+    public function setCity($city): Surveyor
     {
         $this->city = $city;
 
@@ -323,8 +272,6 @@ class Surveyor
     }
 
     /**
-     * Get city
-     *
      * @return string
      */
     public function getCity()
@@ -333,13 +280,11 @@ class Surveyor
     }
 
     /**
-     * Set country
-     *
      * @param string $country
      *
      * @return Surveyor
      */
-    public function setCountry($country)
+    public function setCountry($country): Surveyor
     {
         $this->country = $country;
 
@@ -347,8 +292,6 @@ class Surveyor
     }
 
     /**
-     * Get country
-     *
      * @return string
      */
     public function getCountry()
@@ -358,7 +301,6 @@ class Surveyor
 
     /**
      * Gets triggered only on insert
-     *
      * @ORM\PrePersist
      */
     public function onPrePersist()
@@ -368,7 +310,6 @@ class Surveyor
 
     /**
      * Gets triggered every time on update
-     *
      * @ORM\PreUpdate
      */
     public function onPreUpdate()

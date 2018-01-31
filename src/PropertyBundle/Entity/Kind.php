@@ -5,8 +5,6 @@ namespace PropertyBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Kind
- *
  * @ORM\Table(name="property_kind")
  * @ORM\Entity(repositoryClass="PropertyBundle\Repository\KindRepository")
  * @ORM\HasLifecycleCallbacks
@@ -15,7 +13,6 @@ class Kind
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -24,50 +21,42 @@ class Kind
 
     /**
      * @var string
-     *
      * @ORM\Column(name="en", type="string", length=255)
      */
     private $en;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="nl", type="string", length=255)
      */
     private $nl;
 
     /**
      * @var \DateTime $created
-     *
      * @ORM\Column(type="datetime")
      */
     protected $created;
 
     /**
      * @var \DateTime $updated
-     *
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $updated;
 
     /**
-     * Get id
-     *
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
     /**
-     * Set en
-     *
      * @param string $en
      *
      * @return Kind
      */
-    public function setEn($en)
+    public function setEn(string $en): Kind
     {
         $this->en = $en;
 
@@ -75,23 +64,19 @@ class Kind
     }
 
     /**
-     * Get en
-     *
      * @return string
      */
-    public function getEn()
+    public function getEn(): string
     {
         return $this->en;
     }
 
     /**
-     * Set nl
-     *
      * @param string $nl
      *
      * @return Kind
      */
-    public function setNl($nl)
+    public function setNl(string $nl): Kind
     {
         $this->nl = $nl;
 
@@ -99,11 +84,9 @@ class Kind
     }
 
     /**
-     * Get nl
-     *
      * @return string
      */
-    public function getNl()
+    public function getNl(): string
     {
         return $this->nl;
     }

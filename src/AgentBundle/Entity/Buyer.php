@@ -5,8 +5,6 @@ namespace AgentBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Buyer
- *
  * @ORM\Table(name="buyer")
  * @ORM\Entity(repositoryClass="AgentBundle\Repository\BuyerRepository")
  * @ORM\HasLifecycleCallbacks
@@ -15,7 +13,6 @@ class Buyer
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -24,91 +21,77 @@ class Buyer
 
     /**
      * @var int
-     *
      * @ORM\Column(name="solicitor_id", type="integer")
      */
     private $solicitorId;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="first_name", type="string", length=255)
      */
     private $firstName;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="last_name", type="string", length=255)
      */
     private $lastName;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="street", type="string", length=255)
      */
     private $street;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="house_number", type="string", length=10)
      */
     private $houseNumber;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="postcode", type="string", length=10)
      */
     private $postcode;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="city", type="string", length=255)
      */
     private $city;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="country", type="string", length=255)
      */
     private $country;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="email", type="string", length=255, nullable=true)
      */
     private $email;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="phone", type="string", length=255, nullable=true)
      */
     private $phone;
 
     /**
      * @var \DateTime $created
-     *
      * @ORM\Column(type="datetime")
      */
     protected $created;
 
     /**
      * @var \DateTime $updated
-     *
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $updated;
 
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -117,8 +100,6 @@ class Buyer
     }
 
     /**
-     * Set solicitorId
-     *
      * @param integer $solicitorId
      *
      * @return Buyer
@@ -131,8 +112,6 @@ class Buyer
     }
 
     /**
-     * Get solicitorId
-     *
      * @return int
      */
     public function getSolicitorId()
@@ -141,8 +120,6 @@ class Buyer
     }
 
     /**
-     * Set firstName
-     *
      * @param string $firstName
      *
      * @return Buyer
@@ -155,8 +132,6 @@ class Buyer
     }
 
     /**
-     * Get firstName
-     *
      * @return string
      */
     public function getFirstName()
@@ -165,8 +140,6 @@ class Buyer
     }
 
     /**
-     * Set lastName
-     *
      * @param string $lastName
      *
      * @return Buyer
@@ -179,8 +152,6 @@ class Buyer
     }
 
     /**
-     * Get lastName
-     *
      * @return string
      */
     public function getLastName()
@@ -189,8 +160,6 @@ class Buyer
     }
 
     /**
-     * Set street
-     *
      * @param string $street
      *
      * @return Buyer
@@ -203,8 +172,6 @@ class Buyer
     }
 
     /**
-     * Get street
-     *
      * @return string
      */
     public function getAddress()
@@ -213,8 +180,6 @@ class Buyer
     }
 
     /**
-     * Set houseNumber
-     *
      * @param string $houseNumber
      *
      * @return Buyer
@@ -227,8 +192,6 @@ class Buyer
     }
 
     /**
-     * Get houseNumber
-     *
      * @return string
      */
     public function getHouseNumber()
@@ -237,8 +200,6 @@ class Buyer
     }
 
     /**
-     * Set postcode
-     *
      * @param string $postcode
      *
      * @return Buyer
@@ -251,8 +212,6 @@ class Buyer
     }
 
     /**
-     * Get postcode
-     *
      * @return string
      */
     public function getPostcode()
@@ -261,8 +220,6 @@ class Buyer
     }
 
     /**
-     * Set city
-     *
      * @param string $city
      *
      * @return Buyer
@@ -275,8 +232,6 @@ class Buyer
     }
 
     /**
-     * Get city
-     *
      * @return string
      */
     public function getCity()
@@ -285,8 +240,6 @@ class Buyer
     }
 
     /**
-     * Set country
-     *
      * @param string $country
      *
      * @return Buyer
@@ -299,8 +252,6 @@ class Buyer
     }
 
     /**
-     * Get country
-     *
      * @return string
      */
     public function getCountry()
@@ -309,8 +260,6 @@ class Buyer
     }
 
     /**
-     * Set email
-     *
      * @param string $email
      *
      * @return Buyer
@@ -323,8 +272,6 @@ class Buyer
     }
 
     /**
-     * Get email
-     *
      * @return string
      */
     public function getEmail()
@@ -333,8 +280,6 @@ class Buyer
     }
 
     /**
-     * Set phone
-     *
      * @param string $phone
      *
      * @return Buyer
@@ -347,8 +292,6 @@ class Buyer
     }
 
     /**
-     * Get phone
-     *
      * @return string
      */
     public function getPhone()
@@ -358,7 +301,6 @@ class Buyer
 
     /**
      * Gets triggered only on insert
-     *
      * @ORM\PrePersist
      */
     public function onPrePersist()
@@ -368,7 +310,6 @@ class Buyer
 
     /**
      * Gets triggered every time on update
-     *
      * @ORM\PreUpdate
      */
     public function onPreUpdate()

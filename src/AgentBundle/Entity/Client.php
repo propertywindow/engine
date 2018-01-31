@@ -6,8 +6,6 @@ use AuthenticationBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Client
- *
  * @ORM\Table(name="client")
  * @ORM\Entity(repositoryClass="AgentBundle\Repository\ClientRepository")
  * @ORM\HasLifecycleCallbacks
@@ -16,7 +14,6 @@ class Client
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -37,43 +34,36 @@ class Client
 
     /**
      * @var bool
-     *
      * @ORM\Column(name="transparency", type="boolean")
      */
     private $transparency = false;
 
     /**
      * @var \DateTime $created
-     *
      * @ORM\Column(type="datetime")
      */
     protected $created;
 
     /**
      * @var \DateTime $updated
-     *
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $updated;
 
     /**
-     * Get id
-     *
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
     /**
-     * Set user
-     *
      * @param \AuthenticationBundle\Entity\User $user
      *
      * @return Client
      */
-    public function setUser(User $user = null)
+    public function setUser(User $user): Client
     {
         $this->user = $user;
 
@@ -81,23 +71,19 @@ class Client
     }
 
     /**
-     * Get user
-     *
      * @return \AuthenticationBundle\Entity\User
      */
-    public function getUser()
+    public function getUser(): User
     {
         return $this->user;
     }
 
     /**
-     * Set agent
-     *
      * @param Agent $agent
      *
      * @return Client
      */
-    public function setAgent(Agent $agent = null)
+    public function setAgent(Agent $agent): Client
     {
         $this->agent = $agent;
 
@@ -105,23 +91,19 @@ class Client
     }
 
     /**
-     * Get agent
-     *
      * @return Agent
      */
-    public function getAgent()
+    public function getAgent(): Agent
     {
         return $this->agent;
     }
 
     /**
-     * Set transparency
-     *
      * @param boolean $transparency
      *
      * @return Client
      */
-    public function setTransparency($transparency)
+    public function setTransparency(bool $transparency)
     {
         $this->transparency = $transparency;
 
@@ -129,18 +111,15 @@ class Client
     }
 
     /**
-     * Get transparency
-     *
      * @return bool
      */
-    public function getTransparency()
+    public function getTransparency(): bool
     {
         return $this->transparency;
     }
 
     /**
      * Gets triggered only on insert
-     *
      * @ORM\PrePersist
      */
     public function onPrePersist()
@@ -150,7 +129,6 @@ class Client
 
     /**
      * Gets triggered every time on update
-     *
      * @ORM\PreUpdate
      */
     public function onPreUpdate()

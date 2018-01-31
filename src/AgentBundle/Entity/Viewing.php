@@ -5,8 +5,6 @@ namespace AgentBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Viewing
- *
  * @ORM\Table(name="viewing")
  * @ORM\Entity(repositoryClass="AgentBundle\Repository\ViewingRepository")
  * @ORM\HasLifecycleCallbacks
@@ -15,7 +13,6 @@ class Viewing
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -24,99 +21,84 @@ class Viewing
 
     /**
      * @var int
-     *
      * @ORM\Column(name="property_id", type="integer")
      */
     private $propertyId;
 
     /**
      * @var int
-     *
      * @ORM\Column(name="buyer_id", type="integer")
      */
     private $buyerId;
 
     /**
      * @var bool
-     *
      * @ORM\Column(name="open_viewing", type="boolean")
      */
     private $openViewing;
 
     /**
      * @var \DateTime
-     *
      * @ORM\Column(name="start", type="datetime")
      */
     private $start;
 
     /**
      * @var \DateTime
-     *
      * @ORM\Column(name="end", type="datetime", nullable=true)
      */
     private $end;
 
     /**
      * @var bool
-     *
      * @ORM\Column(name="weekly", type="boolean")
      */
     private $weekly;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="feedback", type="string", length=255)
      */
     private $feedback;
 
     /**
      * @var int
-     *
      * @ORM\Column(name="staff", type="integer")
      */
     private $staff;
 
     /**
      * @var bool
-     *
      * @ORM\Column(name="confirmation", type="boolean")
      */
     private $confirmation;
 
     /**
      * @var \DateTime $created
-     *
      * @ORM\Column(type="datetime")
      */
     protected $created;
 
     /**
      * @var \DateTime $updated
-     *
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $updated;
 
     /**
-     * Get id
-     *
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
     /**
-     * Set propertyId
-     *
      * @param integer $propertyId
      *
      * @return Viewing
      */
-    public function setPropertyId($propertyId)
+    public function setPropertyId(int $propertyId): Viewing
     {
         $this->propertyId = $propertyId;
 
@@ -124,23 +106,19 @@ class Viewing
     }
 
     /**
-     * Get propertyId
-     *
      * @return int
      */
-    public function getPropertyId()
+    public function getPropertyId(): int
     {
         return $this->propertyId;
     }
 
     /**
-     * Set buyerId
-     *
      * @param integer $buyerId
      *
      * @return Viewing
      */
-    public function setBuyerId($buyerId)
+    public function setBuyerId($buyerId): Viewing
     {
         $this->buyerId = $buyerId;
 
@@ -148,8 +126,6 @@ class Viewing
     }
 
     /**
-     * Get buyerId
-     *
      * @return int
      */
     public function getBuyerId()
@@ -158,13 +134,11 @@ class Viewing
     }
 
     /**
-     * Set openViewing
-     *
      * @param boolean $openViewing
      *
      * @return Viewing
      */
-    public function setOpenViewing($openViewing)
+    public function setOpenViewing(bool $openViewing): Viewing
     {
         $this->openViewing = $openViewing;
 
@@ -172,23 +146,19 @@ class Viewing
     }
 
     /**
-     * Get openViewing
-     *
      * @return bool
      */
-    public function getOpenViewing()
+    public function getOpenViewing(): bool
     {
         return $this->openViewing;
     }
 
     /**
-     * Set start
-     *
      * @param \DateTime $start
      *
      * @return Viewing
      */
-    public function setStart($start)
+    public function setStart($start): Viewing
     {
         $this->start = $start;
 
@@ -196,8 +166,6 @@ class Viewing
     }
 
     /**
-     * Get start
-     *
      * @return \DateTime
      */
     public function getStart()
@@ -206,13 +174,11 @@ class Viewing
     }
 
     /**
-     * Set end
-     *
      * @param \DateTime $end
      *
      * @return Viewing
      */
-    public function setEnd($end)
+    public function setEnd($end): Viewing
     {
         $this->end = $end;
 
@@ -220,8 +186,6 @@ class Viewing
     }
 
     /**
-     * Get end
-     *
      * @return \DateTime
      */
     public function getEnd()
@@ -230,13 +194,11 @@ class Viewing
     }
 
     /**
-     * Set weekly
-     *
      * @param boolean $weekly
      *
      * @return Viewing
      */
-    public function setWeekly($weekly)
+    public function setWeekly(bool $weekly): Viewing
     {
         $this->weekly = $weekly;
 
@@ -244,23 +206,19 @@ class Viewing
     }
 
     /**
-     * Get weekly
-     *
      * @return bool
      */
-    public function getWeekly()
+    public function getWeekly(): bool
     {
         return $this->weekly;
     }
 
     /**
-     * Set feedback
-     *
      * @param string $feedback
      *
      * @return Viewing
      */
-    public function setFeedback($feedback)
+    public function setFeedback($feedback): Viewing
     {
         $this->feedback = $feedback;
 
@@ -268,8 +226,6 @@ class Viewing
     }
 
     /**
-     * Get feedback
-     *
      * @return string
      */
     public function getFeedback()
@@ -278,13 +234,11 @@ class Viewing
     }
 
     /**
-     * Set staff
-     *
      * @param integer $staff
      *
      * @return Viewing
      */
-    public function setStaff($staff)
+    public function setStaff($staff): Viewing
     {
         $this->staff = $staff;
 
@@ -292,8 +246,6 @@ class Viewing
     }
 
     /**
-     * Get staff
-     *
      * @return int
      */
     public function getStaff()
@@ -302,13 +254,11 @@ class Viewing
     }
 
     /**
-     * Set confirmation
-     *
      * @param boolean $confirmation
      *
      * @return Viewing
      */
-    public function setConfirmation($confirmation)
+    public function setConfirmation(bool $confirmation): Viewing
     {
         $this->confirmation = $confirmation;
 
@@ -316,18 +266,15 @@ class Viewing
     }
 
     /**
-     * Get confirmation
-     *
      * @return bool
      */
-    public function getConfirmation()
+    public function getConfirmation(): bool
     {
         return $this->confirmation;
     }
 
     /**
      * Gets triggered only on insert
-     *
      * @ORM\PrePersist
      */
     public function onPrePersist()
@@ -337,7 +284,6 @@ class Viewing
 
     /**
      * Gets triggered every time on update
-     *
      * @ORM\PreUpdate
      */
     public function onPreUpdate()
