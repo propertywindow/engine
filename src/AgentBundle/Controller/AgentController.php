@@ -189,23 +189,7 @@ class AgentController extends BaseController
 
         $agent->setAgentGroup($this->agentGroupService->getAgentGroup($parameters['agent_group_id']));
 
-        foreach ($parameters as $property => $value) {
-            if ($property === 'office') {
-                $value = ucfirst($value);
-            }
-            if ($property === 'email') {
-                $value = strtolower($value);
-            }
-            if ($property === 'street' || $property === 'city') {
-                $value = ucwords($value);
-            }
-
-            $propertyPart = explode('_', $property);
-            $property     = implode('', array_map('ucfirst', $propertyPart));
-            $method       = sprintf('set%s', $property);
-
-            $agent->$method($value);
-        }
+        $this->convertParameters($agent, $parameters);
 
         $this->agentService->createAgent($agent);
         $newUser = new User();
@@ -279,23 +263,7 @@ class AgentController extends BaseController
             }
         }
 
-        foreach ($parameters as $property => $value) {
-            if ($property === 'office') {
-                $value = ucfirst($value);
-            }
-            if ($property === 'email') {
-                $value = strtolower($value);
-            }
-            if ($property === 'street' || $property === 'city') {
-                $value = ucwords($value);
-            }
-
-            $propertyPart = explode('_', $property);
-            $property     = implode('', array_map('ucfirst', $propertyPart));
-            $method       = sprintf('set%s', $property);
-
-            $agent->$method($value);
-        }
+        $this->convertParameters($agent, $parameters);
 
         // todo: also update user with new address, only on address change
 
@@ -328,5 +296,32 @@ class AgentController extends BaseController
         // todo: check for users (colleagues) and properties before deleting, just warning
 
         $this->agentService->deleteAgent($id);
+    }
+
+    /**
+     * @param       $entity
+     * @param array $parameters
+     */
+    private function convertParameters($entity, array $parameters)
+    {
+        foreach ($parameters as $property => $value) {
+            if ($property === 'office') {
+                $value = ucfirst($value);
+            }
+            if ($property === 'email') {
+                $value = strtolower($value);
+            }
+            if ($property === 'street' || $property === 'city') {
+                $value = ucwords($value);
+            }
+
+            $propertyPart = explode('_', $property);
+            $property     = implode('', array_map('ucfirst', $propertyPart));
+            $method       = sprintf('set%s', $property);
+
+            // todo: check if method exists
+
+            $entity->$method($value);
+        }
     }
 }
