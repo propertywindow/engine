@@ -21,10 +21,10 @@ class Agency
     private $id;
 
     /**
-     * @var int
-     * @ORM\Column(name="agent_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="Agent")
+     * @ORM\JoinColumn(name="agent_id", referencedColumnName="id")
      */
-    private $agentId;
+    private $agent;
 
     /**
      * @var string
@@ -102,23 +102,23 @@ class Agency
     }
 
     /**
-     * @param int $agentId
+     * @param Agent $agent
      *
      * @return Agency
      */
-    public function setAgentId(int $agentId): Agency
+    public function setAgent(Agent $agent): Agency
     {
-        $this->agentId = $agentId;
+        $this->agent = $agent;
 
         return $this;
     }
 
     /**
-     * @return int
+     * @return Agent
      */
-    public function getAgentId(): int
+    public function getAgent(): Agent
     {
-        return $this->agentId;
+        return $this->agent;
     }
 
     /**
