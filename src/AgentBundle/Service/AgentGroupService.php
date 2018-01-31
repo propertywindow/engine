@@ -35,20 +35,18 @@ class AgentGroupService
     /**
      * @param int $id
      *
-     * @return AgentGroup $agentGroup
+     * @return AgentGroup
      * @throws AgentGroupNotFoundException
      */
-    public function getAgentGroup(int $id)
+    public function getAgentGroup(int $id): AgentGroup
     {
-        $agentGroup = $this->repository->findById($id);
-
-        return $agentGroup;
+        return $this->repository->findById($id);
     }
 
     /**
      * @return AgentGroup[]
      */
-    public function getAgentGroups()
+    public function getAgentGroups(): array
     {
         return $this->repository->listAll();
     }
@@ -58,7 +56,7 @@ class AgentGroupService
      *
      * @return AgentGroup
      */
-    public function createAgentGroup(AgentGroup $agentGroup)
+    public function createAgentGroup(AgentGroup $agentGroup): AgentGroup
     {
         $this->entityManager->persist($agentGroup);
         $this->entityManager->flush();
@@ -71,7 +69,7 @@ class AgentGroupService
      *
      * @return AgentGroup
      */
-    public function updateAgentGroup(AgentGroup $agentGroup)
+    public function updateAgentGroup(AgentGroup $agentGroup): AgentGroup
     {
         $this->entityManager->flush();
 

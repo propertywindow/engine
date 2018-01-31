@@ -4,11 +4,16 @@ declare(strict_types=1);
 namespace PropertyBundle\Controller;
 
 use AgentBundle\Exceptions\AgentNotFoundException;
+use AgentBundle\Exceptions\ClientNotFoundException;
 use AppBundle\Controller\BaseController;
 
 use AuthenticationBundle\Exceptions\UserNotFoundException;
+use AuthenticationBundle\Exceptions\UserSettingsNotFoundException;
 use InvalidArgumentException;
 use PropertyBundle\Entity\Property;
+use PropertyBundle\Exceptions\KindNotFoundException;
+use PropertyBundle\Exceptions\SubTypeNotFoundException;
+use PropertyBundle\Exceptions\TermsNotFoundException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Response;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
@@ -50,12 +55,16 @@ class PropertyController extends BaseController
      * @param array  $parameters
      *
      * @return array
-     * @throws AgentNotFoundException
+     * @throws ClientNotFoundException
      * @throws InvalidJsonRpcMethodException
+     * @throws KindNotFoundException
      * @throws NotAuthorizedException
      * @throws PropertyAlreadyExistsException
      * @throws PropertyNotFoundException
+     * @throws SubTypeNotFoundException
+     * @throws TermsNotFoundException
      * @throws UserNotFoundException
+     * @throws UserSettingsNotFoundException
      */
     public function invoke(int $userId, string $method, array $parameters = [])
     {
@@ -92,6 +101,7 @@ class PropertyController extends BaseController
      * @throws NotAuthorizedException
      * @throws PropertyNotFoundException
      * @throws UserNotFoundException
+     * @throws UserSettingsNotFoundException
      */
     private function getProperty(int $userId, array $parameters)
     {
@@ -137,6 +147,7 @@ class PropertyController extends BaseController
      *
      * @return array
      * @throws UserNotFoundException
+     * @throws UserSettingsNotFoundException
      */
     private function getProperties(int $userId)
     {
@@ -153,7 +164,7 @@ class PropertyController extends BaseController
      *
      * @return array
      * @throws UserNotFoundException
-     * @throws AgentNotFoundException
+     * @throws UserSettingsNotFoundException
      */
     private function getAllProperties(int $userId, array $parameters)
     {
@@ -164,7 +175,7 @@ class PropertyController extends BaseController
 
         $user         = $this->userService->getUser($userId);
         $userSettings = $this->userSettingsService->getSettings($user);
-        $agentIds     = $this->agentService->getAgentIdsFromGroup((int)$user->getAgent()->getId());
+        $agentIds     = $this->agentService->getAgentIdsFromGroup($user->getAgent());
 
         list($properties, $count) = $this->propertyService->listAllProperties($agentIds, $limit, $offset);
 
@@ -182,6 +193,11 @@ class PropertyController extends BaseController
      * @throws NotAuthorizedException
      * @throws PropertyAlreadyExistsException
      * @throws UserNotFoundException
+     * @throws UserSettingsNotFoundException
+     * @throws ClientNotFoundException
+     * @throws KindNotFoundException
+     * @throws SubTypeNotFoundException
+     * @throws TermsNotFoundException
      */
     private function createProperty(int $userId, array $parameters)
     {
@@ -286,9 +302,14 @@ class PropertyController extends BaseController
      * @param array $parameters
      *
      * @return array
+     * @throws ClientNotFoundException
+     * @throws KindNotFoundException
      * @throws NotAuthorizedException
      * @throws PropertyNotFoundException
+     * @throws SubTypeNotFoundException
+     * @throws TermsNotFoundException
      * @throws UserNotFoundException
+     * @throws UserSettingsNotFoundException
      */
     private function updateProperty(int $userId, array $parameters)
     {
@@ -465,7 +486,7 @@ class PropertyController extends BaseController
      * @throws NotAuthorizedException
      * @throws PropertyNotFoundException
      * @throws UserNotFoundException
-     * @throws \PropertyBundle\Exceptions\TermsNotFoundException
+     * @throws TermsNotFoundException
      */
     private function setPropertySold(int $userId, array $parameters)
     {

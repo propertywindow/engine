@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace AgentBundle\Repository;
 
 use AgentBundle\Entity\Agent;
+use AgentBundle\Entity\AgentGroup;
 use AgentBundle\Exceptions\AgentNotFoundException;
 use Doctrine\ORM\EntityRepository;
 
@@ -47,20 +48,20 @@ class AgentRepository extends EntityRepository
     }
 
     /**
-     * @param int $agentGroupId
+     * @param AgentGroup $agentGroup
      *
      * @return int[] $ids
      */
-    public function getAgentIdsFromGroupId(int $agentGroupId): array
+    public function getAgentIdsFromGroup(AgentGroup $agentGroup): array
     {
         $ids = [];
         $qb  = $this->getEntityManager()->createQueryBuilder()
                     ->select('a')
                     ->from('AgentBundle:Agent', 'a');
 
-        $qb->where("a.agentGroup = :agentGroupId")
+        $qb->where("a.agentGroup = :agentGroup")
            ->orderBy('a.id', 'DESC')
-           ->setParameter('agentGroupId', $agentGroupId);
+           ->setParameter('agentGroup', $agentGroup);
 
         $agents = $qb->getQuery()->getResult();
 

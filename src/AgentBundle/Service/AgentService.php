@@ -35,14 +35,12 @@ class AgentService
     /**
      * @param int $id
      *
-     * @return Agent $agent
+     * @return Agent
      * @throws AgentNotFoundException
      */
-    public function getAgent(int $id)
+    public function getAgent(int $id): Agent
     {
-        $agent      = $this->repository->findById($id);
-
-        return $agent;
+        return $this->repository->findById($id);
     }
 
     /**
@@ -54,26 +52,21 @@ class AgentService
     }
 
     /**
-     * @param int $agentId
+     * @param Agent $agent
      *
-     * @return int[] $groupIds
-     * @throws AgentNotFoundException
+     * @return int[]
      */
-    public function getAgentIdsFromGroup(int $agentId)
+    public function getAgentIdsFromGroup(Agent $agent): array
     {
-        $agent      = $this->repository->findById($agentId);
-        $groupIds   = $this->repository->getAgentIdsFromGroupId((int)$agent->getAgentGroup()->getId());
-
-        return $groupIds;
+        return $this->repository->getAgentIdsFromGroup($agent->getAgentGroup());
     }
-
 
     /**
      * @param Agent $agent
      *
      * @return Agent
      */
-    public function createAgent(Agent $agent)
+    public function createAgent(Agent $agent): Agent
     {
         $this->entityManager->persist($agent);
         $this->entityManager->flush();
@@ -86,7 +79,7 @@ class AgentService
      *
      * @return Agent
      */
-    public function updateAgent(Agent $agent)
+    public function updateAgent(Agent $agent): Agent
     {
         $this->entityManager->flush();
 
@@ -100,7 +93,7 @@ class AgentService
      */
     public function deleteAgent(int $id)
     {
-        $agent           = $this->repository->findById($id);
+        $agent = $this->repository->findById($id);
 
         $this->entityManager->remove($agent);
         $this->entityManager->flush();

@@ -185,41 +185,29 @@ class AgentController extends BaseController
             throw new UserAlreadyExistException($parameters['email']);
         }
 
-        $agent      = new Agent();
-        $agentGroup = $this->agentGroupService->getAgentGroup($parameters['agent_group_id']);
+        $agent = new Agent();
 
-        $agent->setAgentGroup($agentGroup);
-        $agent->setOffice($parameters['office']);
-        $agent->setStreet(ucwords($parameters['street']));
-        $agent->setHouseNumber($parameters['house_number']);
-        $agent->setPostcode($parameters['postcode']);
-        $agent->setCity(ucwords($parameters['city']));
-        $agent->setCountry($parameters['country']);
-        $agent->setEmail($parameters['email']);
+        $agent->setAgentGroup($this->agentGroupService->getAgentGroup($parameters['agent_group_id']));
 
-        if (array_key_exists('property_limit', $parameters) && $parameters['property_limit'] !== null) {
-            $agent->setPropertyLimit((int)$parameters['property_limit']);
-        }
-        if (array_key_exists('phone', $parameters) && $parameters['phone'] !== null) {
-            $agent->setPhone((string)$parameters['phone']);
-        }
-        if (array_key_exists('fax', $parameters) && $parameters['fax'] !== null) {
-            $agent->setFax((string)$parameters['fax']);
-        }
-        if (array_key_exists('espc', $parameters) && $parameters['espc'] !== null) {
-            $agent->setEspc((bool)$parameters['espc']);
-        }
-        if (array_key_exists('web_print', $parameters) && $parameters['web_print'] !== null) {
-            $agent->setWebprint((bool)$parameters['web_print']);
-        }
-        if (array_key_exists('logo', $parameters) && $parameters['logo'] !== null) {
-            $agent->setLogo((string)$parameters['logo']);
-        }
-        if (array_key_exists('website', $parameters) && $parameters['website'] !== null) {
-            $agent->setWebsite((string)$parameters['website']);
+        foreach ($parameters as $property => $value) {
+            if ($property === 'office') {
+                $value = ucfirst($value);
+            }
+            if ($property === 'email') {
+                $value = strtolower($value);
+            }
+            if ($property === 'street' || $property === 'city') {
+                $value = ucwords($value);
+            }
+
+            $propertyPart = explode('_', $property);
+            $property     = implode('', array_map('ucfirst', $propertyPart));
+            $method       = sprintf('set%s', $property);
+
+            $agent->$method($value);
         }
 
-        $agent   = $this->agentService->createAgent($agent);
+        $this->agentService->createAgent($agent);
         $newUser = new User();
 
         $newUser->setEmail(strtolower($parameters['email']));
@@ -291,51 +279,25 @@ class AgentController extends BaseController
             }
         }
 
-        if (array_key_exists('office', $parameters) && $parameters['office'] !== null) {
-            $agent->setOffice(ucfirst($parameters['office']));
+        foreach ($parameters as $property => $value) {
+            if ($property === 'office') {
+                $value = ucfirst($value);
+            }
+            if ($property === 'email') {
+                $value = strtolower($value);
+            }
+            if ($property === 'street' || $property === 'city') {
+                $value = ucwords($value);
+            }
+
+            $propertyPart = explode('_', $property);
+            $property     = implode('', array_map('ucfirst', $propertyPart));
+            $method       = sprintf('set%s', $property);
+
+            $agent->$method($value);
         }
-        if (array_key_exists('phone', $parameters) && $parameters['phone'] !== null) {
-            $agent->setPhone($parameters['phone']);
-        }
-        if (array_key_exists('fax', $parameters) && $parameters['fax'] !== null) {
-            $agent->setFax($parameters['fax']);
-        }
-        if (array_key_exists('email', $parameters) && $parameters['email'] !== null) {
-            $agent->setEmail($parameters['email']);
-        }
-        if (array_key_exists('website', $parameters) && $parameters['website'] !== null) {
-            $agent->setWebsite($parameters['website']);
-        }
-        if (array_key_exists('logo', $parameters) && $parameters['logo'] !== null) {
-            $agent->setLogo($parameters['logo']);
-        }
-        if (array_key_exists('street', $parameters) && $parameters['street'] !== null) {
-            $agent->setStreet($parameters['street']);
-        }
-        if (array_key_exists('house_number', $parameters) && $parameters['house_number'] !== null) {
-            $agent->setHouseNumber($parameters['house_number']);
-        }
-        if (array_key_exists('postcode', $parameters) && $parameters['postcode'] !== null) {
-            $agent->setPostcode($parameters['postcode']);
-        }
-        if (array_key_exists('city', $parameters) && $parameters['city'] !== null) {
-            $agent->setCity($parameters['city']);
-        }
-        if (array_key_exists('country', $parameters) && $parameters['country'] !== null) {
-            $agent->setCountry($parameters['country']);
-        }
-        if (array_key_exists('property_limit', $parameters) && $parameters['property_limit'] !== null) {
-            $agent->setPropertyLimit((int)$parameters['property_limit']);
-        }
-        if (array_key_exists('web_print', $parameters) && $parameters['web_print'] !== null) {
-            $agent->setWebprint((bool)$parameters['web_print']);
-        }
-        if (array_key_exists('espc', $parameters) && $parameters['espc'] !== null) {
-            $agent->setEspc((bool)$parameters['espc']);
-        }
-        if (array_key_exists('archived', $parameters) && $parameters['archived'] !== null) {
-            $agent->setArchived((bool)$parameters['archived']);
-        }
+
+        // todo: also update user with new address, only on address change
 
         return Mapper::fromAgent($this->agentService->updateAgent($agent));
     }
@@ -363,7 +325,7 @@ class AgentController extends BaseController
 
         $id = (int)$parameters['id'];
 
-        // todo: check for users and properties before deleting, just warning
+        // todo: check for users (colleagues) and properties before deleting, just warning
 
         $this->agentService->deleteAgent($id);
     }

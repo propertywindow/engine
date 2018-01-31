@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace ConversationBundle\Controller;
 
 use AppBundle\Controller\BaseController;
+use AuthenticationBundle\Exceptions\UserNotFoundException;
+use AuthenticationBundle\Exceptions\UserTypeNotFoundException;
 use ConversationBundle\Entity\Conversation;
 use ConversationBundle\Entity\Message;
 use ConversationBundle\Exceptions\ConversationForRecipientNotFoundException;
@@ -108,6 +110,8 @@ class ConversationController extends BaseController
      *
      * @return array $conversation
      * @throws NoColleagueException
+     * @throws UserNotFoundException
+     * @throws UserTypeNotFoundException
      */
     private function createConversation(int $userId, array $parameters)
     {
@@ -121,7 +125,7 @@ class ConversationController extends BaseController
         $author    = $this->userService->getUser($userId);
         $recipient = $this->userService->getUser((int)$parameters['recipient_id']);
         $userType  = $this->userTypeService->getUserType(3);
-        $agentIds  = $this->agentService->getAgentIdsFromGroup((int)$author->getAgent()->getId());
+        $agentIds  = $this->agentService->getAgentIdsFromGroup($author->getAgent());
 
         if (!$this->userService->isColleague($recipient->getId(), $agentIds, $userType)) {
             throw new NoColleagueException((int)$parameters['recipient_id']);

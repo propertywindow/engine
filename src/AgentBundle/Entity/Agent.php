@@ -147,7 +147,7 @@ class Agent
      *
      * @return Agent
      */
-    public function setAgentGroup(AgentGroup $agentGroup)
+    public function setAgentGroup(AgentGroup $agentGroup): Agent
     {
         $this->agentGroup = $agentGroup;
 
@@ -247,7 +247,7 @@ class Agent
      *
      * @return Agent
      */
-    public function setEmail($email): Agent
+    public function setEmail(string $email): Agent
     {
         $this->email = $email;
 
@@ -257,7 +257,7 @@ class Agent
     /**
      * @return string
      */
-    public function getEmail()
+    public function getEmail(): string
     {
         return $this->email;
     }
@@ -407,7 +407,7 @@ class Agent
      *
      * @return Agent
      */
-    public function setPropertyLimit($propertyLimit): Agent
+    public function setPropertyLimit(int $propertyLimit): Agent
     {
         $this->propertyLimit = $propertyLimit;
 
@@ -417,7 +417,7 @@ class Agent
     /**
      * @return int
      */
-    public function getPropertyLimit()
+    public function getPropertyLimit(): int
     {
         return $this->propertyLimit;
     }
@@ -427,7 +427,7 @@ class Agent
      *
      * @return Agent
      */
-    public function setWebprint($webprint): Agent
+    public function setWebprint(bool $webprint): Agent
     {
         $this->webprint = $webprint;
 
@@ -447,7 +447,7 @@ class Agent
      *
      * @return Agent
      */
-    public function setEspc($espc): Agent
+    public function setEspc(bool $espc): Agent
     {
         $this->espc = $espc;
 

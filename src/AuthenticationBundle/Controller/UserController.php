@@ -4,11 +4,14 @@ declare(strict_types=1);
 namespace AuthenticationBundle\Controller;
 
 use AgentBundle\Exceptions\AgentNotFoundException;
+use AgentBundle\Exceptions\AgentSettingsNotFoundException;
 use AppBundle\Controller\BaseController;
 use AuthenticationBundle\Entity\User;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use AuthenticationBundle\Exceptions\UserAlreadyExistException;
 use AuthenticationBundle\Exceptions\UserNotFoundException;
+use AuthenticationBundle\Exceptions\UserSettingsNotFoundException;
+use AuthenticationBundle\Exceptions\UserTypeNotFoundException;
 use AuthenticationBundle\Service\User\Mapper;
 use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -116,6 +119,7 @@ class UserController extends BaseController
      *
      * @return array
      * @throws UserNotFoundException
+     * @throws UserTypeNotFoundException
      */
     private function getUsers(int $userId)
     {
@@ -132,9 +136,10 @@ class UserController extends BaseController
      * @param array $parameters
      *
      * @return array
+     * @throws AgentNotFoundException
      * @throws NotAuthorizedException
      * @throws UserNotFoundException
-     * @throws AgentNotFoundException
+     * @throws UserTypeNotFoundException
      */
     private function getAgentUsers(int $userId, array $parameters)
     {
@@ -161,12 +166,13 @@ class UserController extends BaseController
      * @return array
      * @throws UserNotFoundException
      * @throws AgentNotFoundException
+     * @throws UserTypeNotFoundException
      */
     private function getColleagues(int $userId)
     {
         $user     = $this->userService->getUser($userId);
         $userType = $this->userTypeService->getUserType(3);
-        $agentIds = $this->agentService->getAgentIdsFromGroup((int)$user->getAgent()->getId());
+        $agentIds = $this->agentService->getAgentIdsFromGroup($user->getAgent());
         $users    = $this->userService->getColleagues($agentIds, $userType);
 
         return Mapper::fromUsers(...$users);
@@ -180,8 +186,8 @@ class UserController extends BaseController
      * @throws NotAuthorizedException
      * @throws Throwable
      * @throws UserAlreadyExistException
-     * @throws \AgentBundle\Exceptions\AgentSettingsNotFoundException
-     * @throws \AuthenticationBundle\Exceptions\UserSettingsNotFoundException
+     * @throws AgentSettingsNotFoundException
+     * @throws UserSettingsNotFoundException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Syntax
      */
