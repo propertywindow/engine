@@ -52,13 +52,9 @@ class AgentServiceTest extends TestCase
         $this->assertEquals('GB', $this->agent->getCountry());
         $this->assertEquals('info@propertywindow.com', $this->agent->getEmail());
         $this->assertEquals('01316571666', $this->agent->getPhone());
-        $this->assertInternalType('int', $this->agent->getPropertyLimit());
         $this->assertEquals(200, $this->agent->getPropertyLimit());
-        $this->assertInternalType('bool', $this->agent->getEspc());
         $this->assertEquals(false, $this->agent->getEspc());
-        $this->assertInternalType('bool', $this->agent->getArchived());
         $this->assertEquals(false, $this->agent->getArchived());
-        $this->assertInternalType('int', $this->agent->getUserId());
         $this->assertEquals(3, $this->agent->getUserId());
     }
 }

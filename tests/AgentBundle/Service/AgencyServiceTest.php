@@ -25,7 +25,7 @@ class AgencyServiceTest extends TestCase
         $this->agency = new Agency();
     }
 
-    public function testCreateAgent()
+    public function testCreateAgency()
     {
         $agentGroup = new Agent();
 
