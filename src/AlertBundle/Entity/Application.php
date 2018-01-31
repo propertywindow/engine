@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace AlertBundle\Entity;
 
@@ -8,8 +9,6 @@ use PropertyBundle\Entity\SubType;
 use PropertyBundle\Entity\Terms;
 
 /**
- * Application
- *
  * @ORM\Table(name="alert_application")
  * @ORM\Entity(repositoryClass="AlertBundle\Repository\ApplicationRepository")
  * @ORM\HasLifecycleCallbacks
@@ -18,7 +17,6 @@ class Application
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -39,35 +37,30 @@ class Application
 
     /**
      * @var string
-     *
      * @ORM\Column(name="postcode", type="string", length=10)
      */
     private $postcode;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="country", type="string", length=2)
      */
     private $country;
 
     /**
      * @var int
-     *
      * @ORM\Column(name="distance", type="integer")
      */
     private $distance = 10;
 
     /**
      * @var int
-     *
      * @ORM\Column(name="min_price", type="integer")
      */
     private $minPrice = 0;
 
     /**
      * @var int
-     *
      * @ORM\Column(name="max_price", type="integer")
      */
     private $maxPrice = 100000;
@@ -80,7 +73,6 @@ class Application
 
     /**
      * @var int
-     *
      * @ORM\Column(name="rooms", type="integer")
      */
     private $rooms = 0;
@@ -93,43 +85,36 @@ class Application
 
     /**
      * @var bool
-     *
      * @ORM\Column(name="active", type="boolean")
      */
     private $active = true;
 
     /**
      * @var \DateTime $created
-     *
      * @ORM\Column(type="datetime")
      */
     protected $created;
 
     /**
      * @var \DateTime $updated
-     *
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $updated;
 
     /**
-     * Get id
-     *
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
     /**
-     * Set applicant
-     *
      * @param Applicant $applicant
      *
      * @return Application
      */
-    public function setApplicant(Applicant $applicant = null)
+    public function setApplicant(Applicant $applicant): Application
     {
         $this->applicant = $applicant;
 
@@ -137,23 +122,19 @@ class Application
     }
 
     /**
-     * Get applicant
-     *
      * @return Applicant
      */
-    public function getApplicant()
+    public function getApplicant(): Applicant
     {
         return $this->applicant;
     }
 
     /**
-     * Set kind
-     *
      * @param \PropertyBundle\Entity\Kind $kind
      *
      * @return Application
      */
-    public function setKind(Kind $kind = null)
+    public function setKind(Kind $kind = null): Application
     {
         $this->kind = $kind;
 
@@ -161,23 +142,19 @@ class Application
     }
 
     /**
-     * Get kind
-     *
-     * @return Applicant
+     * @return Kind
      */
-    public function getKind()
+    public function getKind(): Kind
     {
         return $this->kind;
     }
 
     /**
-     * Set postcode
-     *
      * @param string $postcode
      *
      * @return Application
      */
-    public function setPostcode($postcode)
+    public function setPostcode(string $postcode): Application
     {
         $this->postcode = $postcode;
 
@@ -185,23 +162,19 @@ class Application
     }
 
     /**
-     * Get postcode
-     *
      * @return string
      */
-    public function getPostcode()
+    public function getPostcode(): string
     {
         return $this->postcode;
     }
 
     /**
-     * Set country
-     *
      * @param string $country
      *
      * @return Application
      */
-    public function setCountry($country)
+    public function setCountry(string $country): Application
     {
         $this->country = $country;
 
@@ -209,23 +182,19 @@ class Application
     }
 
     /**
-     * Get country
-     *
      * @return string
      */
-    public function getCountry()
+    public function getCountry(): string
     {
         return $this->country;
     }
 
     /**
-     * Set distance
-     *
      * @param integer $distance
      *
      * @return Application
      */
-    public function setDistance($distance)
+    public function setDistance(int $distance): Application
     {
         $this->distance = $distance;
 
@@ -233,18 +202,14 @@ class Application
     }
 
     /**
-     * Get distance
-     *
      * @return int
      */
-    public function getDistance()
+    public function getDistance(): int
     {
         return $this->distance;
     }
 
     /**
-     * Set minPrice
-     *
      * @param integer $minPrice
      *
      * @return Application
@@ -257,8 +222,6 @@ class Application
     }
 
     /**
-     * Get minPrice
-     *
      * @return int
      */
     public function getMinPrice()
@@ -267,8 +230,6 @@ class Application
     }
 
     /**
-     * Set maxPrice
-     *
      * @param integer $maxPrice
      *
      * @return Application
@@ -281,8 +242,6 @@ class Application
     }
 
     /**
-     * Get maxPrice
-     *
      * @return int
      */
     public function getMaxPrice()
@@ -291,8 +250,6 @@ class Application
     }
 
     /**
-     * Set subType
-     *
      * @param \PropertyBundle\Entity\SubType $subType
      *
      * @return Application
@@ -305,8 +262,6 @@ class Application
     }
 
     /**
-     * Get subType
-     *
      * @return Applicant
      */
     public function getSubType()
@@ -315,8 +270,6 @@ class Application
     }
 
     /**
-     * Set rooms
-     *
      * @param integer $rooms
      *
      * @return Application
@@ -329,8 +282,6 @@ class Application
     }
 
     /**
-     * Get rooms
-     *
      * @return int
      */
     public function getRooms()
@@ -339,8 +290,6 @@ class Application
     }
 
     /**
-     * Set terms
-     *
      * @param \PropertyBundle\Entity\Terms $terms
      *
      * @return Application
@@ -353,8 +302,6 @@ class Application
     }
 
     /**
-     * Get terms
-     *
      * @return Applicant
      */
     public function getTerms()
@@ -363,13 +310,11 @@ class Application
     }
 
     /**
-     * Set active
-     *
      * @param boolean $active
      *
      * @return Application
      */
-    public function setActive($active)
+    public function setActive(bool $active): Application
     {
         $this->active = $active;
 
@@ -377,18 +322,15 @@ class Application
     }
 
     /**
-     * Get active
-     *
      * @return bool
      */
-    public function getActive()
+    public function getActive(): bool
     {
         return $this->active;
     }
 
     /**
      * Gets triggered only on insert
-     *
      * @ORM\PrePersist
      */
     public function onPrePersist()
@@ -398,7 +340,6 @@ class Application
 
     /**
      * Gets triggered every time on update
-     *
      * @ORM\PreUpdate
      */
     public function onPreUpdate()

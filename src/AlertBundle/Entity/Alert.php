@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace AlertBundle\Entity;
 
@@ -6,8 +7,6 @@ use Doctrine\ORM\Mapping as ORM;
 use PropertyBundle\Entity\Property;
 
 /**
- * Alert
- *
  * @ORM\Table(name="alert")
  * @ORM\Entity(repositoryClass="AlertBundle\Repository\AlertRepository")
  * @ORM\HasLifecycleCallbacks
@@ -16,7 +15,6 @@ class Alert
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -38,43 +36,36 @@ class Alert
 
     /**
      * @var bool
-     *
      * @ORM\Column(name="read", type="boolean")
      */
     private $read = true;
 
     /**
      * @var \DateTime $created
-     *
      * @ORM\Column(type="datetime")
      */
     protected $created;
 
     /**
      * @var \DateTime $updated
-     *
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $updated;
 
     /**
-     * Get id
-     *
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
     /**
-     * Set applicant
-     *
      * @param Applicant $applicant
      *
      * @return Alert
      */
-    public function setApplicant(Applicant $applicant = null)
+    public function setApplicant(Applicant $applicant): Alert
     {
         $this->applicant = $applicant;
 
@@ -82,18 +73,14 @@ class Alert
     }
 
     /**
-     * Get applicant
-     *
      * @return Applicant
      */
-    public function getApplicant()
+    public function getApplicant(): Applicant
     {
         return $this->applicant;
     }
 
     /**
-     * Set property
-     *
      * @param \PropertyBundle\Entity\Property $property
      *
      * @return Alert
@@ -106,8 +93,6 @@ class Alert
     }
 
     /**
-     * Get property
-     *
      * @return \PropertyBundle\Entity\Property
      */
     public function getProperty()
@@ -116,13 +101,11 @@ class Alert
     }
 
     /**
-     * Set read
-     *
      * @param boolean $read
      *
      * @return Alert
      */
-    public function setRead($read)
+    public function setRead(bool $read): Alert
     {
         $this->read = $read;
 
@@ -130,18 +113,15 @@ class Alert
     }
 
     /**
-     * Get read
-     *
      * @return bool
      */
-    public function getRead()
+    public function getRead(): bool
     {
         return $this->read;
     }
 
     /**
      * Gets triggered only on insert
-     *
      * @ORM\PrePersist
      */
     public function onPrePersist()
@@ -151,7 +131,6 @@ class Alert
 
     /**
      * Gets triggered every time on update
-     *
      * @ORM\PreUpdate
      */
     public function onPreUpdate()

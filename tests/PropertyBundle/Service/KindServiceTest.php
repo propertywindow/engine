@@ -24,7 +24,7 @@ class KindServiceTest extends TestCase
         $this->kind = new Kind();
     }
 
-    public function testCreateTerm()
+    public function testCreateKind()
     {
         $this->kind->setEn('Sale');
         $this->kind->setNl('Koop');

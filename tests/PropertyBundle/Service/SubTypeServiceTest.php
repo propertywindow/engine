@@ -25,7 +25,7 @@ class SubTypeServiceTest extends TestCase
         $this->subType = new SubType();
     }
 
-    public function testCreateTerm()
+    public function testCreateSubType()
     {
         $type = new Type();
 

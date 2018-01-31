@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace AlertBundle\DataFixtures\ORM;
 
@@ -8,8 +9,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
 /**
- * Class LoadApplicationData
- * @package AlertBundle\DataFixtures\ORM
+ * Load Application Data
  */
 class LoadApplicationData extends AbstractFixture implements OrderedFixtureInterface
 {

@@ -24,7 +24,7 @@ class TypeServiceTest extends TestCase
         $this->type = new Type();
     }
 
-    public function testCreateTerm()
+    public function testCreateType()
     {
         $this->type->setEn('House');
         $this->type->setNl('Huis');

@@ -47,7 +47,16 @@ class UserServiceTest extends TestCase
 
         $this->assertEquals($agent, $this->user->getAgent());
         $this->assertEquals($userType, $this->user->getUserType());
+        $this->assertEquals('geurtsmarc@hotmail.com', $this->user->getEmail());
+        $this->assertEquals('Marc', $this->user->getFirstName());
+        $this->assertEquals('Geurts', $this->user->getLastName());
+        $this->assertEquals('Graafsedijk', $this->user->getStreet());
+        $this->assertEquals('19', $this->user->getHouseNumber());
+        $this->assertEquals('5437 NG', $this->user->getPostcode());
         $this->assertEquals('Beers', $this->user->getCity());
+        $this->assertEquals('NL', $this->user->getCountry());
         $this->assertInternalType('bool', $this->user->getActive());
+        $this->assertEquals(true, $this->user->getActive());
+        $this->assertEquals('1/users/1.jpg', $this->user->getAvatar());
     }
 }
