@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace AgentBundle\Entity;
 
+use AuthenticationBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
+use PropertyBundle\Entity\Property;
 
 /**
  * @ORM\Table(name="appointment")
@@ -21,22 +23,22 @@ class Appointment
     private $id;
 
     /**
-     * @var int
-     * @ORM\Column(name="user_id", type="integer")
+     * @ORM\OneToOne(targetEntity="AuthenticationBundle\Entity\User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
-    private $userId;
+    protected $user;
 
     /**
-     * @var int
-     * @ORM\Column(name="buyer_id", type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Buyer")
+     * @ORM\JoinColumn(name="buyer_id", referencedColumnName="id")
      */
-    private $buyerId;
+    private $buyer;
 
     /**
-     * @var int
-     * @ORM\Column(name="property_id", type="integer", nullable=true)
+     * @ORM\OneToOne(targetEntity="PropertyBundle\Entity\Property")
+     * @ORM\JoinColumn(name="property_id", referencedColumnName="id")
      */
-    private $propertyId;
+    protected $property;
 
     /**
      * @var string
@@ -76,71 +78,71 @@ class Appointment
 
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
-     * @param int $userId
+     * @param \AuthenticationBundle\Entity\User $user
      *
      * @return Appointment
      */
-    public function setUserId(int $userId): Appointment
+    public function setUser(User $user): Appointment
     {
-        $this->userId = $userId;
+        $this->user = $user;
 
         return $this;
     }
 
     /**
-     * @return int
+     * @return \AuthenticationBundle\Entity\User
      */
-    public function getUserId(): int
+    public function getUser(): User
     {
-        return $this->userId;
+        return $this->user;
     }
 
     /**
-     * @param int $buyerId
+     * @param Buyer $buyer
      *
      * @return Appointment
      */
-    public function setBuyerId($buyerId): Appointment
+    public function setBuyer(Buyer $buyer): Appointment
     {
-        $this->buyerId = $buyerId;
+        $this->buyer = $buyer;
 
         return $this;
     }
 
     /**
-     * @return int
+     * @return Buyer
      */
-    public function getBuyerId()
+    public function getBuyer(): Buyer
     {
-        return $this->buyerId;
+        return $this->buyer;
     }
 
     /**
-     * @param integer $propertyId
+     * @param \PropertyBundle\Entity\Property $property
      *
      * @return Appointment
      */
-    public function setPropertyId($propertyId): Appointment
+    public function setProperty(Property $property): Appointment
     {
-        $this->propertyId = $propertyId;
+        $this->property = $property;
 
         return $this;
     }
 
     /**
-     * @return int
+     * @return \PropertyBundle\Entity\Property
      */
-    public function getPropertyId()
+    public function getProperty(): Property
     {
-        return $this->propertyId;
+        return $this->property;
     }
 
     /**
@@ -148,7 +150,7 @@ class Appointment
      *
      * @return Appointment
      */
-    public function setSubject($subject): Appointment
+    public function setSubject(string $subject): Appointment
     {
         $this->subject = $subject;
 
@@ -158,7 +160,7 @@ class Appointment
     /**
      * @return string
      */
-    public function getSubject()
+    public function getSubject(): string
     {
         return $this->subject;
     }
@@ -168,7 +170,7 @@ class Appointment
      *
      * @return Appointment
      */
-    public function setDescription($description): Appointment
+    public function setDescription(string $description): Appointment
     {
         $this->description = $description;
 
@@ -178,7 +180,7 @@ class Appointment
     /**
      * @return string
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->description;
     }
@@ -188,7 +190,7 @@ class Appointment
      *
      * @return Appointment
      */
-    public function setStart($start): Appointment
+    public function setStart(\DateTime $start): Appointment
     {
         $this->start = $start;
 
@@ -198,7 +200,7 @@ class Appointment
     /**
      * @return \DateTime
      */
-    public function getStart()
+    public function getStart(): \DateTime
     {
         return $this->start;
     }
@@ -208,7 +210,7 @@ class Appointment
      *
      * @return Appointment
      */
-    public function setEnd($end): Appointment
+    public function setEnd(\DateTime $end): Appointment
     {
         $this->end = $end;
 
@@ -218,9 +220,49 @@ class Appointment
     /**
      * @return \DateTime
      */
-    public function getEnd()
+    public function getEnd(): \DateTime
     {
         return $this->end;
+    }
+
+    /**
+     * @param \DateTime|null $created
+     *
+     * @return Appointment
+     */
+    public function setCreated(?\DateTime $created): Appointment
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreated(): \DateTime
+    {
+        return $this->created;
+    }
+
+    /**
+     * @param \DateTime|null $updated
+     *
+     * @return Appointment
+     */
+    public function setUpdated(?\DateTime $updated): Appointment
+    {
+        $this->updated = $updated;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getUpdated(): ?\DateTime
+    {
+        return $this->updated;
     }
 
     /**

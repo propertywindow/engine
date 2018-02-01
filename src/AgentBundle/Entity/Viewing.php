@@ -2,7 +2,9 @@
 
 namespace AgentBundle\Entity;
 
+use AuthenticationBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
+use PropertyBundle\Entity\Property;
 
 /**
  * @ORM\Table(name="viewing")
@@ -20,16 +22,16 @@ class Viewing
     private $id;
 
     /**
-     * @var int
-     * @ORM\Column(name="property_id", type="integer")
+     * @ORM\OneToOne(targetEntity="PropertyBundle\Entity\Property")
+     * @ORM\JoinColumn(name="property_id", referencedColumnName="id")
      */
-    private $propertyId;
+    protected $property;
 
     /**
-     * @var int
-     * @ORM\Column(name="buyer_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="Buyer")
+     * @ORM\JoinColumn(name="buyer_id", referencedColumnName="id")
      */
-    private $buyerId;
+    private $buyer;
 
     /**
      * @var bool
@@ -62,10 +64,10 @@ class Viewing
     private $feedback;
 
     /**
-     * @var int
-     * @ORM\Column(name="staff", type="integer")
+     * @ORM\OneToOne(targetEntity="AuthenticationBundle\Entity\User")
+     * @ORM\JoinColumn(name="staff_id", referencedColumnName="id")
      */
-    private $staff;
+    protected $staff;
 
     /**
      * @var bool
@@ -86,51 +88,51 @@ class Viewing
     protected $updated;
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
-     * @param integer $propertyId
+     * @param \PropertyBundle\Entity\Property $property
      *
      * @return Viewing
      */
-    public function setPropertyId(int $propertyId): Viewing
+    public function setProperty(Property $property): Viewing
     {
-        $this->propertyId = $propertyId;
+        $this->property = $property;
 
         return $this;
     }
 
     /**
-     * @return int
+     * @return \PropertyBundle\Entity\Property
      */
-    public function getPropertyId(): int
+    public function getProperty(): Property
     {
-        return $this->propertyId;
+        return $this->property;
     }
 
     /**
-     * @param integer $buyerId
+     * @param Buyer $buyer
      *
      * @return Viewing
      */
-    public function setBuyerId($buyerId): Viewing
+    public function setBuyer(Buyer $buyer): Viewing
     {
-        $this->buyerId = $buyerId;
+        $this->buyer = $buyer;
 
         return $this;
     }
 
     /**
-     * @return int
+     * @return Buyer
      */
-    public function getBuyerId()
+    public function getBuyer(): Buyer
     {
-        return $this->buyerId;
+        return $this->buyer;
     }
 
     /**
@@ -234,11 +236,11 @@ class Viewing
     }
 
     /**
-     * @param integer $staff
+     * @param \AuthenticationBundle\Entity\User $staff
      *
      * @return Viewing
      */
-    public function setStaff($staff): Viewing
+    public function setStaff(User $staff): Viewing
     {
         $this->staff = $staff;
 
@@ -246,9 +248,9 @@ class Viewing
     }
 
     /**
-     * @return int
+     * @return \AuthenticationBundle\Entity\User
      */
-    public function getStaff()
+    public function getStaff(): User
     {
         return $this->staff;
     }
@@ -271,6 +273,46 @@ class Viewing
     public function getConfirmation(): bool
     {
         return $this->confirmation;
+    }
+
+    /**
+     * @param \DateTime|null $created
+     *
+     * @return Viewing
+     */
+    public function setCreated(?\DateTime $created): Viewing
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreated(): \DateTime
+    {
+        return $this->created;
+    }
+
+    /**
+     * @param \DateTime|null $updated
+     *
+     * @return Viewing
+     */
+    public function setUpdated(?\DateTime $updated): Viewing
+    {
+        $this->updated = $updated;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getUpdated(): ?\DateTime
+    {
+        return $this->updated;
     }
 
     /**

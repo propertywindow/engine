@@ -3,6 +3,7 @@
 namespace AgentBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use PropertyBundle\Entity\Property;
 
 /**
  * @ORM\Table(name="offer")
@@ -20,16 +21,16 @@ class Offer
     private $id;
 
     /**
-     * @var int
-     * @ORM\Column(name="buyer_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="Buyer")
+     * @ORM\JoinColumn(name="buyer_id", referencedColumnName="id")
      */
-    private $buyerId;
+    private $buyer;
 
     /**
-     * @var int
-     * @ORM\Column(name="property_id", type="integer")
+     * @ORM\OneToOne(targetEntity="PropertyBundle\Entity\Property")
+     * @ORM\JoinColumn(name="property_id", referencedColumnName="id")
      */
-    private $propertyId;
+    protected $property;
 
     /**
      * @var int
@@ -50,51 +51,51 @@ class Offer
     protected $updated;
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
-     * @param integer $buyerId
+     * @param Buyer $buyer
      *
      * @return Offer
      */
-    public function setBuyerId(int $buyerId): Offer
+    public function setBuyer(Buyer $buyer): Offer
     {
-        $this->buyerId = $buyerId;
+        $this->buyer = $buyer;
 
         return $this;
     }
 
     /**
-     * @return int
+     * @return Buyer
      */
-    public function getBuyerId(): int
+    public function getBuyer(): Buyer
     {
-        return $this->buyerId;
+        return $this->buyer;
     }
 
     /**
-     * @param integer $propertyId
+     * @param \PropertyBundle\Entity\Property $property
      *
      * @return Offer
      */
-    public function setPropertyId(int $propertyId): Offer
+    public function setProperty(Property $property): Offer
     {
-        $this->propertyId = $propertyId;
+        $this->property = $property;
 
         return $this;
     }
 
     /**
-     * @return int
+     * @return \PropertyBundle\Entity\Property
      */
-    public function getPropertyId(): int
+    public function getProperty(): Property
     {
-        return $this->propertyId;
+        return $this->property;
     }
 
     /**
@@ -115,6 +116,46 @@ class Offer
     public function getAmount(): int
     {
         return $this->amount;
+    }
+
+    /**
+     * @param \DateTime|null $created
+     *
+     * @return Offer
+     */
+    public function setCreated(?\DateTime $created): Offer
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreated(): \DateTime
+    {
+        return $this->created;
+    }
+
+    /**
+     * @param \DateTime|null $updated
+     *
+     * @return Offer
+     */
+    public function setUpdated(?\DateTime $updated): Offer
+    {
+        $this->updated = $updated;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getUpdated(): ?\DateTime
+    {
+        return $this->updated;
     }
 
     /**
