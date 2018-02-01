@@ -18,6 +18,7 @@ use AppBundle\Models\JsonRpc\Error;
 use AppBundle\Models\JsonRpc\Response;
 use AppBundle\Security\Authenticator;
 use AppBundle\Service\SettingsService;
+use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use AuthenticationBundle\Service\BlacklistService;
 use AuthenticationBundle\Service\ServiceMapService;
 use AuthenticationBundle\Service\ServiceService;
@@ -445,7 +446,6 @@ class BaseController extends Controller
      * @param Request   $httpRequest
      *
      * @return Response
-     *
      * @throws Throwable
      */
     public function throwable(Throwable $throwable, Request $httpRequest)
@@ -476,5 +476,31 @@ class BaseController extends Controller
         $this->slackService->critical($throwable->getMessage());
 
         return Response::failure(new Error(self::INTERNAL_ERROR, $throwable->getMessage()));
+    }
+
+    /**
+     * @param int $userRight
+     * @param int $userCheck
+     *
+     * @throws NotAuthorizedException
+     */
+    public function isAuthorized(int $userRight, int $userCheck)
+    {
+        if ($userRight !== $userCheck) {
+            throw new NotAuthorizedException($userCheck);
+        }
+    }
+
+    /**
+     * @param array $required
+     * @param array $parameters
+     */
+    public function checkParameters(array $required, array $parameters)
+    {
+        // todo: add which parameter is missing, maybe even email format etc
+
+        if (count(array_intersect_key(array_flip($required), $parameters)) === count($required)) {
+            throw new InvalidArgumentException("there is a required parameter missing");
+        }
     }
 }

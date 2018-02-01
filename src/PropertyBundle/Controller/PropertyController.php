@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace PropertyBundle\Controller;
 
-use AgentBundle\Exceptions\AgentNotFoundException;
 use AgentBundle\Exceptions\ClientNotFoundException;
 use AppBundle\Controller\BaseController;
 
@@ -115,20 +114,16 @@ class PropertyController extends BaseController
 
         $property = $this->propertyService->getProperty($id);
 
-        if ($property->getAgent()->getId() !== $user->getAgent()->getId()) {
-            throw new NotAuthorizedException($userId);
-        }
+        $this->isAuthorized($property->getAgent()->getId(), $user->getAgent()->getId());
 
         if ($user->getUserType()->getId() === self::USER_API) {
-            if (!array_key_exists('ip', $parameters)) {
-                throw new InvalidArgumentException("No ip argument provided");
-            }
-            if (!array_key_exists('browser', $parameters)) {
-                throw new InvalidArgumentException("No browser argument provided");
-            }
-            if (!array_key_exists('location', $parameters)) {
-                throw new InvalidArgumentException("No location argument provided");
-            }
+            $required = [
+                'ip',
+                'browser',
+                'location',
+            ];
+
+            $this->checkParameters($required, $parameters);
 
             $this->logTrafficService->createTraffic(
                 $id,

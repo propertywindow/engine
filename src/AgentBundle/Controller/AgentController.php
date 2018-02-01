@@ -151,10 +151,7 @@ class AgentController extends BaseController
             throw new NotAuthorizedException($userId);
         }
 
-        // todo: make generic, and add which parameter is missing, maybe even email format etc
-        if (count(array_intersect_key(array_flip($required), $parameters)) !== count($required)) {
-            throw new InvalidArgumentException("there is a required parameter missing");
-        }
+        $this->checkParameters($required, $parameters);
 
         if (!array_key_exists('agent_group_id', $parameters)) {
             if (!array_key_exists('name', $parameters) && $parameters['name'] !== null) {
