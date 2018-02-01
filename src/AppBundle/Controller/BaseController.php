@@ -14,11 +14,13 @@ use AppBundle\Exceptions\CouldNotAuthenticateUserException;
 use AppBundle\Exceptions\JsonRpc\CouldNotParseJsonRequestException;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcRequestException;
+use AppBundle\Exceptions\SettingsNotFoundException;
 use AppBundle\Models\JsonRpc\Error;
 use AppBundle\Models\JsonRpc\Response;
 use AppBundle\Security\Authenticator;
 use AppBundle\Service\SettingsService;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
+use AuthenticationBundle\Exceptions\UserNotFoundException;
 use AuthenticationBundle\Service\BlacklistService;
 use AuthenticationBundle\Service\ServiceMapService;
 use AuthenticationBundle\Service\ServiceService;
@@ -365,10 +367,8 @@ class BaseController extends Controller
      * @throws CouldNotParseJsonRequestException
      * @throws InvalidJsonRpcMethodException
      * @throws InvalidJsonRpcRequestException
-     * @throws \AppBundle\Exceptions\SettingsNotFoundException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
+     * @throws SettingsNotFoundException
+     * @throws UserNotFoundException
      */
     public function prepareRequest(Request $httpRequest, bool $authenticate = true, bool $impersonate = false)
     {
@@ -499,8 +499,35 @@ class BaseController extends Controller
     {
         // todo: add which parameter is missing, maybe even email format etc
 
-        if (count(array_intersect_key(array_flip($required), $parameters)) === count($required)) {
+        if (count(array_intersect_key(array_flip($required), $parameters)) !== count($required)) {
             throw new InvalidArgumentException("there is a required parameter missing");
+        }
+    }
+
+    /**
+     * @param       $entity
+     * @param array $parameters
+     */
+    public function convertParameters($entity, array $parameters)
+    {
+        foreach ($parameters as $property => $value) {
+            if ($property === 'office') {
+                $value = ucfirst($value);
+            }
+            if ($property === 'email') {
+                $value = strtolower($value);
+            }
+            if ($property === 'street' || $property === 'city') {
+                $value = ucwords($value);
+            }
+
+            $propertyPart = explode('_', $property);
+            $property     = implode('', array_map('ucfirst', $propertyPart));
+            $method       = sprintf('set%s', $property);
+
+            if (is_callable([$entity, $method])) {
+                $entity->$method($value);
+            }
         }
     }
 }

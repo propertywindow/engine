@@ -203,39 +203,19 @@ class PropertyController extends BaseController
             throw new NotAuthorizedException($userId);
         }
 
-        if (!array_key_exists('client_id', $parameters) && $parameters['client_id'] !== null) {
-            throw new InvalidArgumentException("client_id parameter not provided");
-        }
-        if (!array_key_exists('kind_id', $parameters) && $parameters['kind_id'] !== null) {
-            throw new InvalidArgumentException("kind parameter not provided");
-        }
-        if (!array_key_exists('sub_type_id', $parameters) && $parameters['sub_type_id'] !== null) {
-            throw new InvalidArgumentException("sub_type_id parameter not provided");
-        }
-        if (!array_key_exists('terms_id', $parameters) && $parameters['terms_id'] !== null) {
-            throw new InvalidArgumentException("terms_id parameter not provided");
-        }
-        if (!array_key_exists('street', $parameters) && $parameters['street'] !== null) {
-            throw new InvalidArgumentException("street parameter not provided");
-        }
-        if (!array_key_exists('house_number', $parameters) && $parameters['house_number'] !== null) {
-            throw new InvalidArgumentException("house_number parameter not provided");
-        }
-        if (!array_key_exists('postcode', $parameters) && $parameters['postcode'] !== null) {
-            throw new InvalidArgumentException("postcode parameter not provided");
-        }
-        if (!array_key_exists('city', $parameters) && $parameters['city'] !== null) {
-            throw new InvalidArgumentException("city parameter not provided");
-        }
-        if (!array_key_exists('country', $parameters) && $parameters['country'] !== null) {
-            throw new InvalidArgumentException("country parameter not provided");
-        }
-        if (!array_key_exists('lat', $parameters) && $parameters['lat'] !== null) {
-            throw new InvalidArgumentException("lat parameter not provided");
-        }
-        if (!array_key_exists('lng', $parameters) && $parameters['lng'] !== null) {
-            throw new InvalidArgumentException("lng parameter not provided");
-        }
+        $this->checkParameters([
+            'client_id',
+            'kind_id',
+            'sub_type_id',
+            'terms_id',
+            'street',
+            'house_number',
+            'postcode',
+            'city',
+            'country',
+            'lat',
+            'lng',
+        ], $parameters);
 
         if ($this->propertyService->checkExistence($parameters)) {
             throw new PropertyAlreadyExistsException($parameters['client_id']);

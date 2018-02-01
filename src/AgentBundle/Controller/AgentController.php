@@ -134,8 +134,13 @@ class AgentController extends BaseController
      */
     private function createAgent(int $userId, array $parameters)
     {
-        $user     = $this->userService->getUser($userId);
-        $required = [
+        $user = $this->userService->getUser($userId);
+
+        if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
+            throw new NotAuthorizedException($userId);
+        }
+
+        $this->checkParameters([
             'office',
             'email',
             'first_name',
@@ -145,13 +150,7 @@ class AgentController extends BaseController
             'postcode',
             'city',
             'country',
-        ];
-
-        if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
-            throw new NotAuthorizedException($userId);
-        }
-
-        $this->checkParameters($required, $parameters);
+        ], $parameters);
 
         if (!array_key_exists('agent_group_id', $parameters)) {
             if (!array_key_exists('name', $parameters) && $parameters['name'] !== null) {
@@ -176,6 +175,7 @@ class AgentController extends BaseController
         $agent = new Agent();
 
         $agent->setAgentGroup($this->agentGroupService->getAgentGroup($parameters['agent_group_id']));
+        unset($parameters['agent_group_id']);
 
         $this->convertParameters($agent, $parameters);
 
@@ -284,33 +284,5 @@ class AgentController extends BaseController
         // todo: check for users (colleagues) and properties before deleting, just warning
 
         $this->agentService->deleteAgent($id);
-    }
-
-    /**
-     * @param       $entity
-     * @param array $parameters
-     */
-    private function convertParameters($entity, array $parameters)
-    {
-        foreach ($parameters as $property => $value) {
-            if ($property === 'office') {
-                $value = ucfirst($value);
-            }
-            if ($property === 'email') {
-                $value = strtolower($value);
-            }
-            if ($property === 'street' || $property === 'city') {
-                $value = ucwords($value);
-            }
-
-            $propertyPart = explode('_', $property);
-            $property     = implode('', array_map('ucfirst', $propertyPart));
-            $method       = sprintf('set%s', $property);
-
-            // todo: check if method exists
-            // todo: make generic and move to baseController
-
-            $entity->$method($value);
-        }
     }
 }
