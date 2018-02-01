@@ -2,9 +2,6 @@ before_commands:
     - "composer install"
 
 build:
-  dependencies:
-    before:
-      - 'sudo apt-get update -y'
   environment:
     php:
       version: '7.1'

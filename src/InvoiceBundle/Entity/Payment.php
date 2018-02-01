@@ -1,12 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace InvoiceBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Payment
- *
  * @ORM\Table(name="payment")
  * @ORM\Entity(repositoryClass="InvoiceBundle\Repository\PaymentRepository")
  * @ORM\HasLifecycleCallbacks
@@ -15,7 +14,6 @@ class Payment
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -23,82 +21,69 @@ class Payment
     private $id;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="invoice_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="InvoiceBundle\Entity\Invoice")
+     * @ORM\JoinColumn(name="invoice_id", referencedColumnName="id")
      */
-    private $invoiceId;
+    private $invoice;
 
     /**
      * @var int
-     *
      * @ORM\Column(name="amount", type="integer")
      */
     private $amount;
 
     /**
      * @var \DateTime
-     *
      * @ORM\Column(name="datetime", type="datetime")
      */
     private $datetime;
 
     /**
      * @var \DateTime $created
-     *
      * @ORM\Column(type="datetime")
      */
     protected $created;
 
     /**
      * @var \DateTime $updated
-     *
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $updated;
 
     /**
-     * Get id
-     *
-     * @return int
+     * @return int|null
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
-     * Set invoiceId
-     *
-     * @param integer $invoiceId
+     * @param Invoice $invoice
      *
      * @return Payment
      */
-    public function setInvoiceId($invoiceId)
+    public function setInvoice(Invoice $invoice): Payment
     {
-        $this->invoiceId = $invoiceId;
+        $this->invoice = $invoice;
 
         return $this;
     }
 
     /**
-     * Get invoiceId
-     *
-     * @return int
+     * @return Invoice
      */
-    public function getInvoiceId()
+    public function getInvoice(): Invoice
     {
-        return $this->invoiceId;
+        return $this->invoice;
     }
 
     /**
-     * Set amount
-     *
      * @param integer $amount
      *
      * @return Payment
      */
-    public function setAmount($amount)
+    public function setAmount(int $amount): Payment
     {
         $this->amount = $amount;
 
@@ -106,23 +91,19 @@ class Payment
     }
 
     /**
-     * Get amount
-     *
      * @return int
      */
-    public function getAmount()
+    public function getAmount(): int
     {
         return $this->amount;
     }
 
     /**
-     * Set datetime
-     *
      * @param \DateTime $datetime
      *
      * @return Payment
      */
-    public function setDatetime($datetime)
+    public function setDatetime(\DateTime $datetime): Payment
     {
         $this->datetime = $datetime;
 
@@ -130,18 +111,15 @@ class Payment
     }
 
     /**
-     * Get datetime
-     *
      * @return \DateTime
      */
-    public function getDatetime()
+    public function getDatetime(): \DateTime
     {
         return $this->datetime;
     }
 
     /**
      * Gets triggered only on insert
-     *
      * @ORM\PrePersist
      */
     public function onPrePersist()
@@ -151,7 +129,6 @@ class Payment
 
     /**
      * Gets triggered every time on update
-     *
      * @ORM\PreUpdate
      */
     public function onPreUpdate()

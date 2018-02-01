@@ -1,12 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace AuthenticationBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Service
- *
  * @ORM\Table(name="service")
  * @ORM\Entity(repositoryClass="AuthenticationBundle\Repository\ServiceRepository")
  * @ORM\HasLifecycleCallbacks
@@ -15,7 +14,6 @@ class Service
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -30,78 +28,66 @@ class Service
 
     /**
      * @var string
-     *
      * @ORM\Column(name="function_name", type="string", length=255, nullable=true)
      */
     private $functionName;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="en", type="string", length=255)
      */
     private $en;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="nl", type="string", length=255)
      */
     private $nl;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="icon", type="string")
+     * @ORM\Column(name="icon", type="string", nullable=true)
      */
     private $icon;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="url", type="string", length=255, nullable=true)
      */
     private $url;
 
     /**
      * @var bool
-     *
      * @ORM\Column(name="visible", type="boolean", options={"default": false})
      */
     private $visible = false;
 
     /**
      * @var \DateTime $created
-     *
      * @ORM\Column(type="datetime")
      */
     protected $created;
 
     /**
      * @var \DateTime $updated
-     *
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $updated;
 
     /**
-     * Get id
-     *
-     * @return int
+     * @return int|null
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
-     * Set serviceGroup
-     *
      * @param ServiceGroup $serviceGroup
      *
      * @return Service
      */
-    public function setServiceGroup(ServiceGroup $serviceGroup = null)
+    public function setServiceGroup(ServiceGroup $serviceGroup): Service
     {
         $this->serviceGroup = $serviceGroup;
 
@@ -109,23 +95,19 @@ class Service
     }
 
     /**
-     * Get serviceGroup
-     *
      * @return ServiceGroup
      */
-    public function getServiceGroup()
+    public function getServiceGroup(): ServiceGroup
     {
         return $this->serviceGroup;
     }
 
     /**
-     * Set functionName
-     *
-     * @param string $functionName
+     * @param string|null $functionName
      *
      * @return Service
      */
-    public function setFunctionName($functionName)
+    public function setFunctionName(?string $functionName): Service
     {
         $this->functionName = $functionName;
 
@@ -133,23 +115,19 @@ class Service
     }
 
     /**
-     * Get functionName
-     *
      * @return string
      */
-    public function getFunctionName()
+    public function getFunctionName(): ?string
     {
         return $this->functionName;
     }
 
     /**
-     * Set en
-     *
      * @param string $en
      *
      * @return Service
      */
-    public function setEn($en)
+    public function setEn(string $en): Service
     {
         $this->en = $en;
 
@@ -157,23 +135,19 @@ class Service
     }
 
     /**
-     * Get en
-     *
      * @return string
      */
-    public function getEn()
+    public function getEn(): string
     {
         return $this->en;
     }
 
     /**
-     * Set nl
-     *
      * @param string $nl
      *
      * @return Service
      */
-    public function setNl($nl)
+    public function setNl(string $nl): Service
     {
         $this->nl = $nl;
 
@@ -181,23 +155,19 @@ class Service
     }
 
     /**
-     * Get nl
-     *
      * @return string
      */
-    public function getNl()
+    public function getNl(): string
     {
         return $this->nl;
     }
 
     /**
-     * Set icon
-     *
-     * @param string $icon
+     * @param string|null $icon
      *
      * @return Service
      */
-    public function setIcon($icon)
+    public function setIcon(?string $icon): Service
     {
         $this->icon = $icon;
 
@@ -205,13 +175,19 @@ class Service
     }
 
     /**
-     * Set url
-     *
-     * @param string $url
+     * @return string
+     */
+    public function getIcon(): ?string
+    {
+        return $this->icon;
+    }
+
+    /**
+     * @param string|null $url
      *
      * @return Service
      */
-    public function setUrl($url)
+    public function setUrl(?string $url): Service
     {
         $this->url = $url;
 
@@ -219,23 +195,19 @@ class Service
     }
 
     /**
-     * Get url
-     *
      * @return string
      */
-    public function getUrl()
+    public function getUrl(): ?string
     {
         return $this->url;
     }
 
     /**
-     * Set visible
-     *
      * @param boolean $visible
      *
      * @return Service
      */
-    public function setVisible($visible)
+    public function setVisible(bool $visible): Service
     {
         $this->visible = $visible;
 
@@ -243,28 +215,15 @@ class Service
     }
 
     /**
-     * Get visible
-     *
      * @return bool
      */
-    public function getVisible()
+    public function getVisible(): bool
     {
         return $this->visible;
     }
 
     /**
-     * Get icon
-     *
-     * @return string
-     */
-    public function getIcon()
-    {
-        return $this->icon;
-    }
-
-    /**
      * Gets triggered only on insert
-
      * @ORM\PrePersist
      */
     public function onPrePersist()
@@ -274,7 +233,6 @@ class Service
 
     /**
      * Gets triggered every time on update
-
      * @ORM\PreUpdate
      */
     public function onPreUpdate()

@@ -1,12 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace InvoiceBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Product
- *
  * @ORM\Table(name="product")
  * @ORM\Entity(repositoryClass="InvoiceBundle\Repository\ProductRepository")
  * @ORM\HasLifecycleCallbacks
@@ -15,7 +14,6 @@ class Product
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -24,57 +22,48 @@ class Product
 
     /**
      * @var string
-     *
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="description", type="blob")
      */
     private $description;
 
     /**
      * @var int
-     *
      * @ORM\Column(name="price", type="integer")
      */
     private $price;
 
     /**
      * @var \DateTime $created
-     *
      * @ORM\Column(type="datetime")
      */
     protected $created;
 
     /**
      * @var \DateTime $updated
-     *
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $updated;
 
     /**
-     * Get id
-     *
-     * @return int
+     * @return int|null
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
-     * Set name
-     *
      * @param string $name
      *
      * @return Product
      */
-    public function setName($name)
+    public function setName(string $name): Product
     {
         $this->name = $name;
 
@@ -82,23 +71,19 @@ class Product
     }
 
     /**
-     * Get name
-     *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
     /**
-     * Set description
-     *
      * @param string $description
      *
      * @return Product
      */
-    public function setDescription($description)
+    public function setDescription(string $description): Product
     {
         $this->description = $description;
 
@@ -106,23 +91,19 @@ class Product
     }
 
     /**
-     * Get description
-     *
      * @return string
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->description;
     }
 
     /**
-     * Set price
-     *
      * @param integer $price
      *
      * @return Product
      */
-    public function setPrice($price)
+    public function setPrice(int $price): Product
     {
         $this->price = $price;
 
@@ -130,18 +111,15 @@ class Product
     }
 
     /**
-     * Get price
-     *
      * @return int
      */
-    public function getPrice()
+    public function getPrice(): int
     {
         return $this->price;
     }
 
     /**
      * Gets triggered only on insert
-     *
      * @ORM\PrePersist
      */
     public function onPrePersist()
@@ -151,7 +129,6 @@ class Product
 
     /**
      * Gets triggered every time on update
-     *
      * @ORM\PreUpdate
      */
     public function onPreUpdate()
