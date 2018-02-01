@@ -3,8 +3,10 @@ declare(strict_types=1);
 
 namespace AgentBundle\Controller;
 
+use AgentBundle\Exceptions\AgentSettingsNotFoundException;
 use AppBundle\Controller\BaseController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
+use AuthenticationBundle\Exceptions\UserNotFoundException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Response;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
@@ -43,8 +45,10 @@ class AgentSettingsController extends BaseController
      * @param array  $parameters
      *
      * @return array
+     * @throws AgentSettingsNotFoundException
      * @throws InvalidJsonRpcMethodException
      * @throws NotAuthorizedException
+     * @throws UserNotFoundException
      */
     private function invoke(int $userId, string $method, array $parameters = [])
     {
@@ -62,6 +66,8 @@ class AgentSettingsController extends BaseController
      * @param int $userId
      *
      * @return array
+     * @throws AgentSettingsNotFoundException
+     * @throws UserNotFoundException
      */
     private function getSettings(int $userId)
     {
@@ -76,6 +82,8 @@ class AgentSettingsController extends BaseController
      *
      * @return array
      * @throws NotAuthorizedException
+     * @throws AgentSettingsNotFoundException
+     * @throws UserNotFoundException
      */
     private function updateSettings(int $userId, array $parameters)
     {
@@ -92,42 +100,8 @@ class AgentSettingsController extends BaseController
             }
         }
 
-        if (array_key_exists('email_name', $parameters) && $parameters['email_name'] !== null) {
-            $settings->setEmailName(ucwords($parameters['email_name']));
-        }
-        if (array_key_exists('email_address', $parameters) && $parameters['email_address'] !== null) {
-            $settings->setEmailAddress($parameters['email_address']);
-        }
-        if (array_key_exists('IMAP_address', $parameters) && $parameters['IMAP_address'] !== null) {
-            $settings->setIMAPAddress($parameters['IMAP_address']);
-        }
-        if (array_key_exists('IMAP_secure', $parameters) && $parameters['IMAP_secure'] !== null) {
-            $settings->setIMAPSecure($parameters['IMAP_secure']);
-        }
-        if (array_key_exists('IMAP_port', $parameters) && $parameters['IMAP_port'] !== null) {
-            $settings->setIMAPPort($parameters['IMAP_port']);
-        }
-        if (array_key_exists('IMAP_username', $parameters) && $parameters['IMAP_username'] !== null) {
-            $settings->setIMAPUsername($parameters['IMAP_username']);
-        }
-        if (array_key_exists('IMAP_password', $parameters) && $parameters['IMAP_password'] !== null) {
-            $settings->setIMAPPassword($parameters['IMAP_password']);
-        }
-        if (array_key_exists('SMTP_address', $parameters) && $parameters['SMTP_address'] !== null) {
-            $settings->setSMTPAddress($parameters['SMTP_address']);
-        }
-        if (array_key_exists('SMTP_secure', $parameters) && $parameters['SMTP_secure'] !== null) {
-            $settings->setSMTPSecure($parameters['SMTP_secure']);
-        }
-        if (array_key_exists('SMTP_port', $parameters) && $parameters['SMTP_port'] !== null) {
-            $settings->setSMTPPort($parameters['SMTP_port']);
-        }
-        if (array_key_exists('SMTP_username', $parameters) && $parameters['SMTP_username'] !== null) {
-            $settings->setSMTPUsername($parameters['SMTP_username']);
-        }
-        if (array_key_exists('SMTP_password', $parameters) && $parameters['SMTP_password'] !== null) {
-            $settings->setSMTPPassword($parameters['SMTP_password']);
-        }
+        $this->convertParameters($settings, $parameters);
+
 
         return Mapper::fromAgentSettings($this->agentSettingsService->updateSettings($settings));
     }

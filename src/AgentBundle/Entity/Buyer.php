@@ -20,10 +20,10 @@ class Buyer
     private $id;
 
     /**
-     * @var int
-     * @ORM\Column(name="solicitor_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="Solicitor")
+     * @ORM\JoinColumn(name="solicitor_id", referencedColumnName="id")
      */
-    private $solicitorId;
+    private $solicitor;
 
     /**
      * @var string
@@ -100,23 +100,23 @@ class Buyer
     }
 
     /**
-     * @param integer $solicitorId
+     * @param Solicitor $solicitor
      *
      * @return Buyer
      */
-    public function setSolicitorId($solicitorId)
+    public function setSolicitor(Solicitor $solicitor)
     {
-        $this->solicitorId = $solicitorId;
+        $this->solicitor = $solicitor;
 
         return $this;
     }
 
     /**
-     * @return int
+     * @return Solicitor
      */
-    public function getSolicitorId()
+    public function getSolicitor(): Solicitor
     {
-        return $this->solicitorId;
+        return $this->solicitor;
     }
 
     /**

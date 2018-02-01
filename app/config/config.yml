@@ -6,7 +6,6 @@ imports:
     - { resource: "@PropertyBundle/Resources/config/services.yml" }
     - { resource: "@AlertBundle/Resources/config/services.yml" }
     - { resource: "@InvoiceBundle/Resources/config/services.yml" }
-    - { resource: "@OfferBundle/Resources/config/services.yml" }
     - { resource: "@AppointmentBundle/Resources/config/services.yml" }
     - { resource: "@LogBundle/Resources/config/services.yml" }
     - { resource: "@ConversationBundle/Resources/config/services.yml" }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Tests\AgentBundle\Entity;
 
 use AgentBundle\Entity\Buyer;
+use AgentBundle\Entity\Solicitor;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -28,6 +29,11 @@ class BuyerTest extends TestCase
     {
         $this->assertNull($this->buyer->getId());
 
+        $solicitor = new Solicitor();
+
+        $this->buyer->setSolicitor($solicitor);
+        $this->assertEquals($solicitor, $this->buyer->getSolicitor());
+
         $this->buyer->setFirstName('Marc');
         $this->assertEquals('Marc', $this->buyer->getFirstName());
 
@@ -40,8 +46,8 @@ class BuyerTest extends TestCase
         $this->buyer->setHouseNumber('27');
         $this->assertEquals('27', $this->buyer->getHouseNumber());
 
-        $this->buyer->setPostcode('27');
-        $this->assertEquals('27', $this->buyer->getPostcode());
+        $this->buyer->setPostcode('EH15 1DE');
+        $this->assertEquals('EH15 1DE', $this->buyer->getPostcode());
 
         $this->buyer->setCity('Edinburgh');
         $this->assertEquals('Edinburgh', $this->buyer->getCity());

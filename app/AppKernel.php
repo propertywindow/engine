@@ -29,7 +29,6 @@ class AppKernel extends Kernel
             new AuthenticationBundle\AuthenticationBundle(),
             new PropertyBundle\PropertyBundle(),
             new InvoiceBundle\InvoiceBundle(),
-            new OfferBundle\OfferBundle(),
             new LogBundle\LogBundle(),
             new ConversationBundle\ConversationBundle(),
         ];
@@ -75,6 +74,8 @@ class AppKernel extends Kernel
 
     /**
      * @param LoaderInterface $loader
+     *
+     * @throws Exception
      */
     public function registerContainerConfiguration(LoaderInterface $loader)
     {

@@ -20,16 +20,16 @@ class Solicitor
     private $id;
 
     /**
-     * @var int
-     * @ORM\Column(name="agent_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="Agent")
+     * @ORM\JoinColumn(name="agent_id", referencedColumnName="id")
      */
-    private $agentId;
+    private $agent;
 
     /**
-     * @var int
-     * @ORM\Column(name="agency_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="Agency")
+     * @ORM\JoinColumn(name="agency_id", referencedColumnName="id")
      */
-    private $agencyId;
+    private $agency;
 
     /**
      * @var string
@@ -98,51 +98,51 @@ class Solicitor
     protected $updated;
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
-     * @param integer $agentId
+     * @param Agent $agent
      *
      * @return Solicitor
      */
-    public function setAgentId(int $agentId): Solicitor
+    public function setAgent(Agent $agent): Solicitor
     {
-        $this->agentId = $agentId;
+        $this->agent = $agent;
 
         return $this;
     }
 
     /**
-     * @return int
+     * @return Agent
      */
-    public function getAgentId(): int
+    public function getAgent(): Agent
     {
-        return $this->agentId;
+        return $this->agent;
     }
 
     /**
-     * @param integer $agencyId
+     * @param Agency $agency
      *
      * @return Solicitor
      */
-    public function setAgencyId(int $agencyId): Solicitor
+    public function setAgency(Agency $agency): Solicitor
     {
-        $this->agencyId = $agencyId;
+        $this->agency = $agency;
 
         return $this;
     }
 
     /**
-     * @return int
+     * @return Agency
      */
-    public function getAgencyId(): int
+    public function getAgency(): Agency
     {
-        return $this->agencyId;
+        return $this->agency;
     }
 
     /**
@@ -323,6 +323,46 @@ class Solicitor
     public function getEmail()
     {
         return $this->email;
+    }
+
+    /**
+     * @param \DateTime|null $created
+     *
+     * @return Solicitor
+     */
+    public function setCreated(?\DateTime $created): Solicitor
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreated(): \DateTime
+    {
+        return $this->created;
+    }
+
+    /**
+     * @param \DateTime|null $updated
+     *
+     * @return Solicitor
+     */
+    public function setUpdated(?\DateTime $updated): Solicitor
+    {
+        $this->updated = $updated;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getUpdated(): ?\DateTime
+    {
+        return $this->updated;
     }
 
     /**

@@ -165,7 +165,6 @@ class UserController extends BaseController
      *
      * @return array
      * @throws UserNotFoundException
-     * @throws AgentNotFoundException
      * @throws UserTypeNotFoundException
      */
     private function getColleagues(int $userId)
@@ -199,38 +198,21 @@ class UserController extends BaseController
             throw new NotAuthorizedException($userId);
         }
 
-        if (!array_key_exists('email', $parameters) && $parameters['email'] !== null) {
-            throw new InvalidArgumentException("email parameter not provided");
-        }
+        $this->checkParameters([
+            'email',
+            'first_name',
+            'last_name',
+            'street',
+            'house_number',
+            'postcode',
+            'city',
+            'country',
+            'agent_id',
+            'user_type_id',
+        ], $parameters);
+
         if (!filter_var($parameters['email'], FILTER_VALIDATE_EMAIL)) {
             throw new InvalidArgumentException("email parameter not valid");
-        }
-        if (!array_key_exists('first_name', $parameters) && $parameters['first_name'] !== null) {
-            throw new InvalidArgumentException("first_name parameter not provided");
-        }
-        if (!array_key_exists('last_name', $parameters) && $parameters['last_name'] !== null) {
-            throw new InvalidArgumentException("last_name parameter not provided");
-        }
-        if (!array_key_exists('street', $parameters) && $parameters['street'] !== null) {
-            throw new InvalidArgumentException("street parameter not provided");
-        }
-        if (!array_key_exists('house_number', $parameters) && $parameters['house_number'] !== null) {
-            throw new InvalidArgumentException("house_number parameter not provided");
-        }
-        if (!array_key_exists('postcode', $parameters) && $parameters['postcode'] !== null) {
-            throw new InvalidArgumentException("postcode parameter not provided");
-        }
-        if (!array_key_exists('city', $parameters) && $parameters['city'] !== null) {
-            throw new InvalidArgumentException("city parameter not provided");
-        }
-        if (!array_key_exists('country', $parameters) && $parameters['country'] !== null) {
-            throw new InvalidArgumentException("country parameter not provided");
-        }
-        if (!array_key_exists('agent_id', $parameters) && $parameters['agent_id'] !== null) {
-            throw new InvalidArgumentException("agent_id parameter not provided");
-        }
-        if (!array_key_exists('user_type_id', $parameters) && $parameters['user_type_id'] !== null) {
-            throw new InvalidArgumentException("user_type_id parameter not provided");
         }
 
         if ($this->userService->getUserByEmail($parameters['email'])) {
@@ -303,46 +285,7 @@ class UserController extends BaseController
             throw new NotAuthorizedException($userId);
         }
 
-        if (array_key_exists('first_name', $parameters) && $parameters['first_name'] !== null) {
-            $updateUser->setFirstName(ucfirst($parameters['first_name']));
-        }
-
-        if (array_key_exists('last_name', $parameters) && $parameters['last_name'] !== null) {
-            $updateUser->setLastName(ucfirst($parameters['last_name']));
-        }
-
-        if (array_key_exists('street', $parameters) && $parameters['street'] !== null) {
-            $updateUser->setStreet(ucwords($parameters['street']));
-        }
-
-        if (array_key_exists('house_number', $parameters) && $parameters['house_number'] !== null) {
-            $updateUser->setHouseNumber($parameters['house_number']);
-        }
-
-        if (array_key_exists('postcode', $parameters) && $parameters['postcode'] !== null) {
-            $updateUser->setPostcode($parameters['postcode']);
-        }
-
-        if (array_key_exists('city', $parameters) && $parameters['city'] !== null) {
-            $updateUser->setCity(ucwords($parameters['city']));
-        }
-
-        if (array_key_exists('country', $parameters) && $parameters['country'] !== null) {
-            $updateUser->setCountry($parameters['country']);
-        }
-
-        if (array_key_exists('active', $parameters) && $parameters['active'] !== null) {
-            $updateUser->setActive((bool)$parameters['active']);
-        }
-
-        if (array_key_exists('phone', $parameters) && $parameters['phone'] !== null) {
-            $updateUser->setPhone((string)$parameters['phone']);
-        }
-
-        if (array_key_exists('avatar', $parameters) && $parameters['avatar'] !== null) {
-            $updateUser->setAvatar((string)$parameters['avatar']);
-        }
-
+        $this->convertParameters($updateUser, $parameters);
 
         return Mapper::fromUser($this->userService->updateUser($updateUser));
     }

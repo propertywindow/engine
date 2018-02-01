@@ -31,11 +31,6 @@ appointment:
     type:     annotation
     prefix:   /appointment
 
-offer:
-    resource: "@OfferBundle/Controller/"
-    type:     annotation
-    prefix:   /offer
-
 invoice:
     resource: "@InvoiceBundle/Controller/"
     type:     annotation
