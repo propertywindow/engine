@@ -302,6 +302,46 @@ class Agency
     }
 
     /**
+     * @param \DateTime|null $created
+     *
+     * @return Agency
+     */
+    public function setCreated(?\DateTime $created): Agency
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreated(): \DateTime
+    {
+        return $this->created;
+    }
+
+    /**
+     * @param \DateTime|null $updated
+     *
+     * @return Agency
+     */
+    public function setUpdated(?\DateTime $updated): Agency
+    {
+        $this->updated = $updated;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getUpdated(): ?\DateTime
+    {
+        return $this->updated;
+    }
+
+    /**
      * Gets triggered only on insert
      * @ORM\PrePersist
      */

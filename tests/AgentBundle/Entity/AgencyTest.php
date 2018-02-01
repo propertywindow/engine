@@ -60,5 +60,13 @@ class AgencyTest extends TestCase
 
         $this->agency->setFax('');
         $this->assertEmpty($this->agency->getFax());
+
+        $created = new \DateTime();
+
+        $this->agency->setCreated($created);
+        $this->assertEquals($created, $this->agency->getCreated());
+
+        $this->agency->setUpdated(null);
+        $this->assertNull($this->agency->getUpdated());
     }
 }
