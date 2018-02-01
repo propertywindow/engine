@@ -150,18 +150,14 @@ class Notification
     }
 
     /**
-     * id
-     *
-     * @return int
+     * @return int|null
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
-     * Set user
-     *
      * @param \AuthenticationBundle\Entity\User $user
      *
      * @return Notification
@@ -174,8 +170,6 @@ class Notification
     }
 
     /**
-     * Get user
-     *
      * @return \AuthenticationBundle\Entity\User
      */
     public function getUser()

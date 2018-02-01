@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\AlertBundle\Service;
+namespace Tests\AlertBundle\Entity;
 
 use AlertBundle\Entity\Alert;
 use AlertBundle\Entity\Applicant;
@@ -9,9 +9,9 @@ use PHPUnit\Framework\TestCase;
 use PropertyBundle\Entity\Property;
 
 /**
- *  Alert Service Test
+ *  Alert Test
  */
-class AlertServiceTest extends TestCase
+class AlertTest extends TestCase
 {
     /**
      * @var Alert
@@ -26,19 +26,21 @@ class AlertServiceTest extends TestCase
         $this->alert = new Alert();
     }
 
-    public function testCreateAlert()
+    public function testGetterAndSetter()
     {
+        $this->assertNull($this->alert->getId());
+
         $applicant = new Applicant();
-        $property  = new Property();
 
         $this->alert->setApplicant($applicant);
-        $this->alert->setProperty($property);
-        $this->alert->setRead(false);
-
-
         $this->assertEquals($applicant, $this->alert->getApplicant());
+
+        $property = new Property();
+
+        $this->alert->setProperty($property);
         $this->assertEquals($property, $this->alert->getProperty());
-        $this->assertInternalType('bool', $this->alert->getRead());
-        $this->assertEquals(false, $this->alert->getRead());
+
+        $this->alert->setRead(false);
+        $this->assertFalse($this->alert->getRead());
     }
 }

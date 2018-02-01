@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\PropertyBundle\Service;
+namespace Tests\PropertyBundle\Entity;
 
-use PropertyBundle\Entity\Kind;
 use PHPUnit\Framework\TestCase;
+use PropertyBundle\Entity\Kind;
 
 /**
- *  Kind Service Test
+ *  Kind Test
  */
-class KindServiceTest extends TestCase
+class KindTest extends TestCase
 {
     /**
      * @var Kind
@@ -24,12 +24,14 @@ class KindServiceTest extends TestCase
         $this->kind = new Kind();
     }
 
-    public function testCreateKind()
+    public function testGetterAndSetter()
     {
-        $this->kind->setEn('Sale');
-        $this->kind->setNl('Koop');
+        $this->assertNull($this->kind->getId());
 
+        $this->kind->setEn('Sale');
         $this->assertEquals('Sale', $this->kind->getEn());
+
+        $this->kind->setNl('Koop');
         $this->assertEquals('Koop', $this->kind->getNl());
     }
 }

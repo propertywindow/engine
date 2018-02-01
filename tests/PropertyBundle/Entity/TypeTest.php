@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\PropertyBundle\Service;
+namespace Tests\PropertyBundle\Entity;
 
-use PropertyBundle\Entity\Type;
 use PHPUnit\Framework\TestCase;
+use PropertyBundle\Entity\Type;
 
 /**
- *  Type Service Test
+ *  Type Test
  */
-class TypeServiceTest extends TestCase
+class TypeTest extends TestCase
 {
     /**
      * @var Type
@@ -24,12 +24,14 @@ class TypeServiceTest extends TestCase
         $this->type = new Type();
     }
 
-    public function testCreateType()
+    public function testGetterAndSetter()
     {
-        $this->type->setEn('House');
-        $this->type->setNl('Huis');
+        $this->assertNull($this->type->getId());
 
+        $this->type->setEn('House');
         $this->assertEquals('House', $this->type->getEn());
+
+        $this->type->setNl('Huis');
         $this->assertEquals('Huis', $this->type->getNl());
     }
 }

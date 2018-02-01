@@ -1,16 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\AgentBundle\Service;
+namespace Tests\AgentBundle\Entity;
 
 use AgentBundle\Entity\Agency;
 use AgentBundle\Entity\Agent;
 use PHPUnit\Framework\TestCase;
 
 /**
- *  Agency Service Test
+ *  Agency Test
  */
-class AgencyServiceTest extends TestCase
+class AgencyTest extends TestCase
 {
     /**
      * @var Agency
@@ -25,30 +25,40 @@ class AgencyServiceTest extends TestCase
         $this->agency = new Agency();
     }
 
-    public function testCreateAgency()
+    public function testGetterAndSetter()
     {
-        $agentGroup = new Agent();
+        $this->assertNull($this->agency->getId());
 
-        $this->agency->setAgent($agentGroup);
+        $agent = new Agent();
+
+        $this->agency->setAgent($agent);
+        $this->assertEquals($agent, $this->agency->getAgent());
+
         $this->agency->setName('Agency');
-        $this->agency->setStreet('Portobello High Street');
-        $this->agency->setHouseNumber('27');
-        $this->agency->setPostcode('EH15 1DE');
-        $this->agency->setCity('Edinburgh');
-        $this->agency->setCountry('GB');
-        $this->agency->setEmail('info@propertywindow.com');
-        $this->agency->setPhone('01316571666');
-        $this->agency->setFax('');
-
-        $this->assertEquals($agentGroup, $this->agency->getAgent());
         $this->assertEquals('Agency', $this->agency->getName());
+
+        $this->agency->setStreet('Portobello High Street');
         $this->assertEquals('Portobello High Street', $this->agency->getStreet());
+
+        $this->agency->setHouseNumber('27');
         $this->assertEquals('27', $this->agency->getHouseNumber());
+
+        $this->agency->setPostcode('EH15 1DE');
         $this->assertEquals('EH15 1DE', $this->agency->getPostcode());
+
+        $this->agency->setCity('Edinburgh');
         $this->assertEquals('Edinburgh', $this->agency->getCity());
+
+        $this->agency->setCountry('GB');
         $this->assertEquals('GB', $this->agency->getCountry());
+
+        $this->agency->setEmail('info@propertywindow.com');
         $this->assertEquals('info@propertywindow.com', $this->agency->getEmail());
+
+        $this->agency->setPhone('01316571666');
         $this->assertEquals('01316571666', $this->agency->getPhone());
-        $this->assertEquals('', $this->agency->getFax());
+
+        $this->agency->setFax('');
+        $this->assertEmpty($this->agency->getFax());
     }
 }

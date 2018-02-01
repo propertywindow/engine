@@ -1,16 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\ConversationBundle\Service;
+namespace Tests\ConversationBundle\Entity;
 
 use AuthenticationBundle\Entity\User;
 use ConversationBundle\Entity\Conversation;
 use PHPUnit\Framework\TestCase;
 
 /**
- *  Conversation Service Test
+ *  Conversation Test
  */
-class ConversationServiceTest extends TestCase
+class ConversationTest extends TestCase
 {
     /**
      * @var Conversation
@@ -25,15 +25,18 @@ class ConversationServiceTest extends TestCase
         $this->conversation = new Conversation();
     }
 
-    public function testCreateConversation()
+    public function testGetterAndSetter()
     {
-        $author    = new User();
-        $recipient = new User();
+        $this->assertNull($this->conversation->getId());
+
+        $author = new User();
 
         $this->conversation->setAuthor($author);
-        $this->conversation->setRecipient($recipient);
-
         $this->assertEquals($author, $this->conversation->getAuthor());
+
+        $recipient = new User();
+
+        $this->conversation->setRecipient($recipient);
         $this->assertEquals($recipient, $this->conversation->getRecipient());
     }
 }

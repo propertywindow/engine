@@ -92,9 +92,9 @@ class Buyer
     protected $updated;
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -174,7 +174,7 @@ class Buyer
     /**
      * @return string
      */
-    public function getAddress()
+    public function getStreet()
     {
         return $this->street;
     }

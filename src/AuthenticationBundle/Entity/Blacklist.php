@@ -7,7 +7,6 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Blacklist
- *
  * @ORM\Table(name="blacklist")
  * @ORM\Entity(repositoryClass="AuthenticationBundle\Repository\BlacklistRepository")
  * @ORM\HasLifecycleCallbacks
@@ -16,7 +15,6 @@ class Blacklist
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -37,50 +35,42 @@ class Blacklist
 
     /**
      * @var string
-     *
      * @ORM\Column(name="ip", type="string", length=255)
      */
     private $ip;
 
     /**
      * @var int
-     *
      * @ORM\Column(name="amount", type="integer")
      */
     private $amount = 1;
 
     /**
      * @var \DateTime $created
-     *
      * @ORM\Column(type="datetime")
      */
     protected $created;
 
     /**
      * @var \DateTime $updated
-     *
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $updated;
 
     /**
-     * Get id
-     *
-     * @return int
+     * @return int|null
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
-     * Set user
-     *
      * @param User $user
      *
      * @return Blacklist
      */
-    public function setUser(User $user = null)
+    public function setUser(User $user = null): Blacklist
     {
         $this->user = $user;
 
@@ -88,23 +78,19 @@ class Blacklist
     }
 
     /**
-     * Get user
-     *
      * @return User
      */
-    public function getUser()
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
     /**
-     * Set agent
-     *
      * @param \AgentBundle\Entity\Agent $agent
      *
      * @return Blacklist
      */
-    public function setAgent(Agent $agent = null)
+    public function setAgent(Agent $agent = null): Blacklist
     {
         $this->agent = $agent;
 
@@ -112,23 +98,19 @@ class Blacklist
     }
 
     /**
-     * Get agent
-     *
      * @return \AgentBundle\Entity\Agent
      */
-    public function getAgent()
+    public function getAgent(): ?Agent
     {
         return $this->agent;
     }
 
     /**
-     * Set ip
-     *
      * @param string $ip
      *
      * @return Blacklist
      */
-    public function setIp($ip)
+    public function setIp($ip): Blacklist
     {
         $this->ip = $ip;
 
@@ -136,23 +118,19 @@ class Blacklist
     }
 
     /**
-     * Get ip
-     *
      * @return string
      */
-    public function getIp()
+    public function getIp(): ?string
     {
         return $this->ip;
     }
 
     /**
-     * Set amount
-     *
      * @param integer $amount
      *
      * @return Blacklist
      */
-    public function setAmount($amount)
+    public function setAmount(int $amount): Blacklist
     {
         $this->amount = $amount;
 
@@ -160,13 +138,27 @@ class Blacklist
     }
 
     /**
-     * Get amount
-     *
      * @return int
      */
-    public function getAmount()
+    public function getAmount(): int
     {
         return $this->amount;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getUpdated(): ?\DateTime
+    {
+        return $this->updated;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreated(): \DateTime
+    {
+        return $this->created;
     }
 
     /**
@@ -185,25 +177,5 @@ class Blacklist
     public function onPreUpdate()
     {
         $this->updated = new \DateTime("now");
-    }
-
-    /**
-     * Get updated
-     *
-     * @return \DateTime
-     */
-    public function getUpdated()
-    {
-        return $this->updated;
-    }
-
-    /**
-     * Get created
-     *
-     * @return \DateTime
-     */
-    public function getCreated()
-    {
-        return $this->created;
     }
 }

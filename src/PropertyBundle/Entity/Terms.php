@@ -5,8 +5,6 @@ namespace PropertyBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Terms
- *
  * @ORM\Table(name="property_terms")
  * @ORM\Entity(repositoryClass="PropertyBundle\Repository\TermsRepository")
  * @ORM\HasLifecycleCallbacks
@@ -15,7 +13,6 @@ class Terms
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -24,57 +21,48 @@ class Terms
 
     /**
      * @var string
-     *
      * @ORM\Column(name="en", type="string", length=255)
      */
     private $en;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="nl", type="string", length=255)
      */
     private $nl;
 
     /**
      * @var bool
-     *
      * @ORM\Column(name="show_price", type="boolean", options={"default": false})
      */
     private $showPrice = false;
 
     /**
      * @var \DateTime $created
-     *
      * @ORM\Column(type="datetime")
      */
     protected $created;
 
     /**
      * @var \DateTime $updated
-     *
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $updated;
 
     /**
-     * Get id
-     *
-     * @return int
+     * @return int|null
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
-     * Set en
-     *
      * @param string $en
      *
      * @return Terms
      */
-    public function setEn($en)
+    public function setEn(string $en): Terms
     {
         $this->en = $en;
 
@@ -82,23 +70,19 @@ class Terms
     }
 
     /**
-     * Get en
-     *
      * @return string
      */
-    public function getEn()
+    public function getEn(): string
     {
         return $this->en;
     }
 
     /**
-     * Set nl
-     *
      * @param string $nl
      *
      * @return Terms
      */
-    public function setNl($nl)
+    public function setNl(string $nl): Terms
     {
         $this->nl = $nl;
 
@@ -106,23 +90,19 @@ class Terms
     }
 
     /**
-     * Get nl
-     *
      * @return string
      */
-    public function getNl()
+    public function getNl(): string
     {
         return $this->nl;
     }
 
     /**
-     * Set showPrice
-     *
      * @param boolean $showPrice
      *
      * @return Terms
      */
-    public function setShowPrice($showPrice)
+    public function setShowPrice(bool $showPrice): Terms
     {
         $this->showPrice = $showPrice;
 
@@ -130,18 +110,15 @@ class Terms
     }
 
     /**
-     * Get showPrice
-     *
      * @return bool
      */
-    public function getShowPrice()
+    public function getShowPrice(): bool
     {
         return $this->showPrice;
     }
 
     /**
      * Gets triggered only on insert
-     *
      * @ORM\PrePersist
      */
     public function onPrePersist()
@@ -151,7 +128,6 @@ class Terms
 
     /**
      * Gets triggered every time on update
-     *
      * @ORM\PreUpdate
      */
     public function onPreUpdate()
