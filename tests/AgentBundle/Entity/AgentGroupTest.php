@@ -30,5 +30,13 @@ class AgentGroupTest extends TestCase
 
         $this->agentGroup->setName('Agent Group');
         $this->assertEquals('Agent Group', $this->agentGroup->getName());
+
+        $created = new \DateTime();
+
+        $this->agentGroup->setCreated($created);
+        $this->assertEquals($created, $this->agentGroup->getCreated());
+
+        $this->agentGroup->setUpdated(null);
+        $this->assertNull($this->agentGroup->getUpdated());
     }
 }

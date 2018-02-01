@@ -69,5 +69,13 @@ class AgentTest extends TestCase
 
         $this->agent->setUserId(3);
         $this->assertEquals(3, $this->agent->getUserId());
+
+        $created = new \DateTime();
+
+        $this->agent->setCreated($created);
+        $this->assertEquals($created, $this->agent->getCreated());
+
+        $this->agent->setUpdated(null);
+        $this->assertNull($this->agent->getUpdated());
     }
 }

@@ -51,9 +51,9 @@ class Client
     protected $updated;
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -116,6 +116,46 @@ class Client
     public function getTransparency(): bool
     {
         return $this->transparency;
+    }
+
+    /**
+     * @param \DateTime|null $created
+     *
+     * @return Client
+     */
+    public function setCreated(?\DateTime $created): Client
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreated(): \DateTime
+    {
+        return $this->created;
+    }
+
+    /**
+     * @param \DateTime|null $updated
+     *
+     * @return Client
+     */
+    public function setUpdated(?\DateTime $updated): Client
+    {
+        $this->updated = $updated;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getUpdated(): ?\DateTime
+    {
+        return $this->updated;
     }
 
     /**

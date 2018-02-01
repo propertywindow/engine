@@ -54,5 +54,13 @@ class BuyerTest extends TestCase
 
         $this->buyer->setPhone('01316571666');
         $this->assertEquals('01316571666', $this->buyer->getPhone());
+
+        $created = new \DateTime();
+
+        $this->buyer->setCreated($created);
+        $this->assertEquals($created, $this->buyer->getCreated());
+
+        $this->buyer->setUpdated(null);
+        $this->assertNull($this->buyer->getUpdated());
     }
 }

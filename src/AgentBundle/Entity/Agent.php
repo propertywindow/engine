@@ -483,6 +483,46 @@ class Agent
     }
 
     /**
+     * @param \DateTime|null $created
+     *
+     * @return Agent
+     */
+    public function setCreated(?\DateTime $created): Agent
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreated(): \DateTime
+    {
+        return $this->created;
+    }
+
+    /**
+     * @param \DateTime|null $updated
+     *
+     * @return Agent
+     */
+    public function setUpdated(?\DateTime $updated): Agent
+    {
+        $this->updated = $updated;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getUpdated(): ?\DateTime
+    {
+        return $this->updated;
+    }
+
+    /**
      * Gets triggered only on insert
      * @ORM\PrePersist
      */

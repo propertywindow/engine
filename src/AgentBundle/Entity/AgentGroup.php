@@ -67,6 +67,46 @@ class AgentGroup
     }
 
     /**
+     * @param \DateTime|null $created
+     *
+     * @return AgentGroup
+     */
+    public function setCreated(?\DateTime $created): AgentGroup
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreated(): \DateTime
+    {
+        return $this->created;
+    }
+
+    /**
+     * @param \DateTime|null $updated
+     *
+     * @return AgentGroup
+     */
+    public function setUpdated(?\DateTime $updated): AgentGroup
+    {
+        $this->updated = $updated;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getUpdated(): ?\DateTime
+    {
+        return $this->updated;
+    }
+
+    /**
      * Gets triggered only on insert
      * @ORM\PrePersist
      */
