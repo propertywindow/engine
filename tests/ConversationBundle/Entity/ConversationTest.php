@@ -38,5 +38,13 @@ class ConversationTest extends TestCase
 
         $this->conversation->setRecipient($recipient);
         $this->assertEquals($recipient, $this->conversation->getRecipient());
+
+        $created = new \DateTime();
+
+        $this->conversation->setCreated($created);
+        $this->assertEquals($created, $this->conversation->getCreated());
+
+        $this->conversation->setUpdated(null);
+        $this->assertNull($this->conversation->getUpdated());
     }
 }

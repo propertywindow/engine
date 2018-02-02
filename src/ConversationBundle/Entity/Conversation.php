@@ -120,6 +120,46 @@ class Conversation
     }
 
     /**
+     * @param \DateTime|null $created
+     *
+     * @return Conversation
+     */
+    public function setCreated(?\DateTime $created): Conversation
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreated(): \DateTime
+    {
+        return $this->created;
+    }
+
+    /**
+     * @param \DateTime|null $updated
+     *
+     * @return Conversation
+     */
+    public function setUpdated(?\DateTime $updated): Conversation
+    {
+        $this->updated = $updated;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getUpdated(): ?\DateTime
+    {
+        return $this->updated;
+    }
+
+    /**
      * Gets triggered only on insert
      * @ORM\PrePersist
      */

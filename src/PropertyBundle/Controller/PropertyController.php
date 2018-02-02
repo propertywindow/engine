@@ -307,9 +307,7 @@ class PropertyController extends BaseController
         $userSettings = $this->userSettingsService->getSettings($user);
         $property     = $this->propertyService->getProperty($id);
 
-        if ($property->getAgent()->getId() !== $user->getAgent()->getId()) {
-            throw new NotAuthorizedException($userId);
-        }
+        $this->isAuthorized($property->getAgent()->getId(), $user->getAgent()->getId());
 
         if (array_key_exists('client_id', $parameters) && $parameters['client_id'] !== null) {
             $client = $this->clientService->getClient($parameters['client_id']);
@@ -368,9 +366,7 @@ class PropertyController extends BaseController
         $user     = $this->userService->getUser($userId);
         $property = $this->propertyService->getProperty($id);
 
-        if ($property->getAgent()->getId() !== $user->getAgent()->getId()) {
-            throw new NotAuthorizedException($userId);
-        }
+        $this->isAuthorized($property->getAgent()->getId(), $user->getAgent()->getId());
 
         $this->propertyService->archiveProperty($property);
 
@@ -437,9 +433,7 @@ class PropertyController extends BaseController
         $user      = $this->userService->getUser($userId);
         $property  = $this->propertyService->getProperty($id);
 
-        if ($property->getAgent()->getId() !== $user->getAgent()->getId()) {
-            throw new NotAuthorizedException($userId);
-        }
+        $this->isAuthorized($property->getAgent()->getId(), $user->getAgent()->getId());
 
         $term            = $this->termsService->getTerm(9);
         $updatedProperty = $this->propertyService->setPropertySold($id, $soldPrice, $term);
@@ -477,9 +471,7 @@ class PropertyController extends BaseController
         $user     = $this->userService->getUser($userId);
         $property = $this->propertyService->getProperty($id);
 
-        if ($property->getAgent()->getId() !== $user->getAgent()->getId()) {
-            throw new NotAuthorizedException($userId);
-        }
+        $this->isAuthorized($property->getAgent()->getId(), $user->getAgent()->getId());
 
         $updatedProperty = $this->propertyService->toggleOnline($id, $online);
 

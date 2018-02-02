@@ -5,8 +5,6 @@ namespace ConversationBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Mailbox
- *
  * @ORM\Table(name="mailbox")
  * @ORM\Entity(repositoryClass="ConversationBundle\Repository\MailboxRepository")
  */
@@ -14,7 +12,6 @@ class Mailbox
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -24,35 +21,40 @@ class Mailbox
 
     /**
      * @var string
-     *
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="mailbox", type="string", length=255)
      */
     private $mailbox;
 
     /**
      * @var int
-     *
      * @ORM\Column(name="unread", type="integer")
      */
     private $unread = 0;
 
-
+    /**
+     * @var \DateTime $created
+     * @ORM\Column(type="datetime")
+     */
+    protected $created;
 
     /**
-     * Set id
-     *
+     * @var \DateTime $updated
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $updated;
+
+    /**
      * @param int $id
      *
      * @return Mailbox
      */
-    public function setId($id)
+    public function setId(int $id): Mailbox
     {
         $this->id = $id;
 
@@ -60,23 +62,19 @@ class Mailbox
     }
 
     /**
-     * Get id
-     *
-     * @return int
+     * @return int|null
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
-     * Set name
-     *
      * @param string $name
      *
      * @return Mailbox
      */
-    public function setName($name)
+    public function setName(string $name): Mailbox
     {
         $this->name = $name;
 
@@ -84,23 +82,19 @@ class Mailbox
     }
 
     /**
-     * Get name
-     *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
     /**
-     * Set mailbox
-     *
      * @param string $mailbox
      *
      * @return Mailbox
      */
-    public function setMailbox($mailbox)
+    public function setMailbox(string $mailbox): Mailbox
     {
         $this->mailbox = $mailbox;
 
@@ -108,24 +102,20 @@ class Mailbox
     }
 
     /**
-     * Get mailbox
-     *
      * @return string
      */
-    public function getMailbox()
+    public function getMailbox(): string
     {
         return $this->mailbox;
     }
 
 
     /**
-     * Set unread
-     *
      * @param int $unread
      *
      * @return Mailbox
      */
-    public function setUnread($unread)
+    public function setUnread(int $unread): Mailbox
     {
         $this->unread = $unread;
 
@@ -133,12 +123,68 @@ class Mailbox
     }
 
     /**
-     * Get unread
-     *
      * @return int
      */
-    public function getUnread()
+    public function getUnread(): int
     {
         return $this->unread;
+    }
+
+    /**
+     * @param \DateTime|null $created
+     *
+     * @return Mailbox
+     */
+    public function setCreated(?\DateTime $created): Mailbox
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreated(): \DateTime
+    {
+        return $this->created;
+    }
+
+    /**
+     * @param \DateTime|null $updated
+     *
+     * @return Mailbox
+     */
+    public function setUpdated(?\DateTime $updated): Mailbox
+    {
+        $this->updated = $updated;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getUpdated(): ?\DateTime
+    {
+        return $this->updated;
+    }
+
+    /**
+     * Gets triggered only on insert
+     * @ORM\PrePersist
+     */
+    public function onPrePersist()
+    {
+        $this->created = new \DateTime("now");
+    }
+
+    /**
+     * Gets triggered every time on update
+     * @ORM\PreUpdate
+     */
+    public function onPreUpdate()
+    {
+        $this->updated = new \DateTime("now");
     }
 }

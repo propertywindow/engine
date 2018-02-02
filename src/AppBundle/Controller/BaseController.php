@@ -389,18 +389,7 @@ class BaseController extends Controller
         $jsonString = file_get_contents('php://input');
         $jsonArray  = json_decode($jsonString, true);
 
-        if ($jsonArray === null) {
-            throw new CouldNotParseJsonRequestException("Could not parse JSON-RPC request");
-        }
-
-        if ($jsonArray['jsonrpc'] !== '2.0') {
-            throw new InvalidJsonRpcRequestException("Request does not match JSON-RPC 2.0 specification");
-        }
-
-        $method = $jsonArray['method'];
-        if (empty($method)) {
-            throw new InvalidJsonRpcMethodException("No request method found");
-        }
+        $this->checkJsonArray($jsonArray);
 
         $parameters = [];
         if (array_key_exists('params', $jsonArray)) {
@@ -408,9 +397,9 @@ class BaseController extends Controller
         }
 
         if ($authenticate) {
-            return [$userId, $method, $parameters];
+            return [$userId, $jsonArray['method'], $parameters];
         } else {
-            return [$method, $parameters];
+            return [$jsonArray['method'], $parameters];
         }
     }
 
@@ -528,6 +517,28 @@ class BaseController extends Controller
             if (is_callable([$entity, $method])) {
                 $entity->$method($value);
             }
+        }
+    }
+
+    /**
+     * @param array|null $jsonArray
+     *
+     * @throws CouldNotParseJsonRequestException
+     * @throws InvalidJsonRpcMethodException
+     * @throws InvalidJsonRpcRequestException
+     */
+    private function checkJsonArray(?array $jsonArray)
+    {
+        if ($jsonArray === null) {
+            throw new CouldNotParseJsonRequestException("Could not parse JSON-RPC request");
+        }
+
+        if ($jsonArray['jsonrpc'] !== '2.0') {
+            throw new InvalidJsonRpcRequestException("Request does not match JSON-RPC 2.0 specification");
+        }
+
+        if (empty($jsonArray['method'])) {
+            throw new InvalidJsonRpcMethodException("No request method found");
         }
     }
 }
