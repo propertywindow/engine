@@ -74,5 +74,13 @@ class UserTest extends TestCase
 
         $this->user->setAvatar('1/users/1.jpg');
         $this->assertEquals('1/users/1.jpg', $this->user->getAvatar());
+
+        $created = new \DateTime();
+
+        $this->user->setCreated($created);
+        $this->assertEquals($created, $this->user->getCreated());
+
+        $this->user->setUpdated(null);
+        $this->assertNull($this->user->getUpdated());
     }
 }

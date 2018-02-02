@@ -5,8 +5,6 @@ namespace AuthenticationBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * UserType
- *
  * @ORM\Table(name="user_type")
  * @ORM\Entity(repositoryClass="AuthenticationBundle\Repository\UserTypeRepository")
  * @ORM\HasLifecycleCallbacks
@@ -15,7 +13,6 @@ class UserType
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -24,57 +21,48 @@ class UserType
 
     /**
      * @var string
-     *
      * @ORM\Column(name="en", type="string", length=255)
      */
     private $en;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="nl", type="string", length=255)
      */
     private $nl;
 
     /**
      * @var bool
-     *
      * @ORM\Column(name="visible", type="boolean", options={"default": false})
      */
     private $visible = false;
 
     /**
      * @var \DateTime $created
-     *
      * @ORM\Column(type="datetime")
      */
     protected $created;
 
     /**
      * @var \DateTime $updated
-     *
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $updated;
 
     /**
-     * Get id
-     *
-     * @return int
+     * @return int|null
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
-     * Set en
-     *
      * @param string $en
      *
      * @return UserType
      */
-    public function setEn($en)
+    public function setEn(string $en): UserType
     {
         $this->en = $en;
 
@@ -82,23 +70,19 @@ class UserType
     }
 
     /**
-     * Get en
-     *
      * @return string
      */
-    public function getEn()
+    public function getEn(): string
     {
         return $this->en;
     }
 
     /**
-     * Set nl
-     *
      * @param string $nl
      *
      * @return UserType
      */
-    public function setNl($nl)
+    public function setNl(string $nl): UserType
     {
         $this->nl = $nl;
 
@@ -106,23 +90,19 @@ class UserType
     }
 
     /**
-     * Get nl
-     *
      * @return string
      */
-    public function getNl()
+    public function getNl(): string
     {
         return $this->nl;
     }
 
     /**
-     * Set visible
-     *
      * @param boolean $visible
      *
      * @return UserType
      */
-    public function setVisible($visible)
+    public function setVisible(bool $visible): UserType
     {
         $this->visible = $visible;
 
@@ -130,18 +110,55 @@ class UserType
     }
 
     /**
-     * Get visible
-     *
      * @return bool
      */
-    public function getVisible()
+    public function getVisible(): bool
     {
         return $this->visible;
     }
 
     /**
-     * Gets triggered only on insert
+     * @param \DateTime|null $created
+     *
+     * @return UserType
+     */
+    public function setCreated(?\DateTime $created): UserType
+    {
+        $this->created = $created;
 
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreated(): \DateTime
+    {
+        return $this->created;
+    }
+
+    /**
+     * @param \DateTime|null $updated
+     *
+     * @return UserType
+     */
+    public function setUpdated(?\DateTime $updated): UserType
+    {
+        $this->updated = $updated;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getUpdated(): ?\DateTime
+    {
+        return $this->updated;
+    }
+
+    /**
+     * Gets triggered only on insert
      * @ORM\PrePersist
      */
     public function onPrePersist()
@@ -151,7 +168,6 @@ class UserType
 
     /**
      * Gets triggered every time on update
-
      * @ORM\PreUpdate
      */
     public function onPreUpdate()

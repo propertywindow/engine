@@ -179,11 +179,11 @@ class AgentSettings
     }
 
     /**
-     * @param string $emailName
+     * @param string|null $emailName
      *
      * @return AgentSettings
      */
-    public function setEmailName($emailName): AgentSettings
+    public function setEmailName(?string $emailName): AgentSettings
     {
         $this->emailName = $emailName;
 
@@ -191,19 +191,19 @@ class AgentSettings
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getEmailName()
+    public function getEmailName(): ?string
     {
         return $this->emailName;
     }
 
     /**
-     * @param string $emailAddress
+     * @param string|null $emailAddress
      *
      * @return AgentSettings
      */
-    public function setEmailAddress($emailAddress): AgentSettings
+    public function setEmailAddress(?string $emailAddress): AgentSettings
     {
         $this->emailAddress = $emailAddress;
 
@@ -211,19 +211,19 @@ class AgentSettings
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getEmailAddress()
+    public function getEmailAddress(): ?string
     {
         return $this->emailAddress;
     }
 
     /**
-     * @param string $IMAPAddress
+     * @param string|null $IMAPAddress
      *
      * @return AgentSettings
      */
-    public function setIMAPAddress($IMAPAddress): AgentSettings
+    public function setIMAPAddress(?string $IMAPAddress): AgentSettings
     {
         $this->IMAPAddress = $IMAPAddress;
 
@@ -231,19 +231,19 @@ class AgentSettings
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getIMAPAddress()
+    public function getIMAPAddress(): ?string
     {
         return $this->IMAPAddress;
     }
 
     /**
-     * @param int $IMAPPort
+     * @param int|null $IMAPPort
      *
      * @return AgentSettings
      */
-    public function setIMAPPort($IMAPPort): AgentSettings
+    public function setIMAPPort(?int $IMAPPort): AgentSettings
     {
         $this->IMAPPort = $IMAPPort;
 
@@ -251,19 +251,19 @@ class AgentSettings
     }
 
     /**
-     * @return integer
+     * @return integer|null
      */
-    public function getIMAPPort()
+    public function getIMAPPort(): ?int
     {
         return $this->IMAPPort;
     }
 
     /**
-     * @param string $IMAPSecure
+     * @param string|null $IMAPSecure
      *
      * @return AgentSettings
      */
-    public function setIMAPSecure($IMAPSecure): AgentSettings
+    public function setIMAPSecure(?string $IMAPSecure): AgentSettings
     {
         $this->IMAPSecure = $IMAPSecure;
 
@@ -271,19 +271,19 @@ class AgentSettings
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getIMAPSecure()
+    public function getIMAPSecure(): ?string
     {
         return $this->IMAPSecure;
     }
 
     /**
-     * @param string $IMAPUsername
+     * @param string|null $IMAPUsername
      *
      * @return AgentSettings
      */
-    public function setIMAPUsername($IMAPUsername): AgentSettings
+    public function setIMAPUsername(?string $IMAPUsername): AgentSettings
     {
         $this->IMAPUsername = $IMAPUsername;
 
@@ -291,19 +291,19 @@ class AgentSettings
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getIMAPUsername()
+    public function getIMAPUsername(): ?string
     {
         return $this->IMAPUsername;
     }
 
     /**
-     * @param string $IMAPPassword
+     * @param string|null $IMAPPassword
      *
      * @return AgentSettings
      */
-    public function setIMAPPassword($IMAPPassword): AgentSettings
+    public function setIMAPPassword(?string $IMAPPassword): AgentSettings
     {
         $this->IMAPPassword = $IMAPPassword;
 
@@ -311,19 +311,19 @@ class AgentSettings
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getIMAPPassword()
+    public function getIMAPPassword(): ?string
     {
         return $this->IMAPPassword;
     }
 
     /**
-     * @param string $SMTPAddress
+     * @param string|null $SMTPAddress
      *
      * @return AgentSettings
      */
-    public function setSMTPAddress($SMTPAddress): AgentSettings
+    public function setSMTPAddress(?string $SMTPAddress): AgentSettings
     {
         $this->SMTPAddress = $SMTPAddress;
 
@@ -331,19 +331,19 @@ class AgentSettings
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getSMTPAddress()
+    public function getSMTPAddress(): ?string
     {
         return $this->SMTPAddress;
     }
 
     /**
-     * @param int $SMTPPort
+     * @param int|null $SMTPPort
      *
      * @return AgentSettings
      */
-    public function setSMTPPort($SMTPPort): AgentSettings
+    public function setSMTPPort(?int $SMTPPort): AgentSettings
     {
         $this->SMTPPort = $SMTPPort;
 
@@ -351,19 +351,19 @@ class AgentSettings
     }
 
     /**
-     * @return integer
+     * @return integer|null
      */
-    public function getSMTPPort()
+    public function getSMTPPort(): ?int
     {
         return $this->SMTPPort;
     }
 
     /**
-     * @param string $SMTPSecure
+     * @param string|null $SMTPSecure
      *
      * @return AgentSettings
      */
-    public function setSMTPSecure($SMTPSecure): AgentSettings
+    public function setSMTPSecure(?string $SMTPSecure): AgentSettings
     {
         $this->SMTPSecure = $SMTPSecure;
 
@@ -371,19 +371,19 @@ class AgentSettings
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getSMTPSecure()
+    public function getSMTPSecure(): ?string
     {
         return $this->SMTPSecure;
     }
 
     /**
-     * @param string $SMTPUsername
+     * @param string|null $SMTPUsername
      *
      * @return AgentSettings
      */
-    public function setSMTPUsername($SMTPUsername): AgentSettings
+    public function setSMTPUsername(?string $SMTPUsername): AgentSettings
     {
         $this->SMTPUsername = $SMTPUsername;
 
@@ -391,19 +391,19 @@ class AgentSettings
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getSMTPUsername()
+    public function getSMTPUsername(): ?string
     {
         return $this->SMTPUsername;
     }
 
     /**
-     * @param string $SMTPPassword
+     * @param string|null $SMTPPassword
      *
      * @return AgentSettings
      */
-    public function setSMTPPassword($SMTPPassword): AgentSettings
+    public function setSMTPPassword(?string $SMTPPassword): AgentSettings
     {
         $this->SMTPPassword = $SMTPPassword;
 
@@ -411,9 +411,9 @@ class AgentSettings
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getSMTPPassword()
+    public function getSMTPPassword(): ?string
     {
         return $this->SMTPPassword;
     }

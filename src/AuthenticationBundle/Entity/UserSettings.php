@@ -1,12 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace AuthenticationBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * UserSettings
- *
  * @ORM\Table(name="user_settings")
  * @ORM\Entity(repositoryClass="AuthenticationBundle\Repository\UserSettingsRepository")
  */
@@ -14,7 +13,6 @@ class UserSettings
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -29,114 +27,97 @@ class UserSettings
 
     /**
      * @var string
-     *
      * @ORM\Column(name="language", type="string", length=2)
      */
     private $language = 'en';
 
     /**
      * @var string
-     *
      * @ORM\Column(name="email_name", type="string", length=255, nullable=true)
      */
     private $emailName;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="email_address", type="string", length=255, nullable=true)
      */
     private $emailAddress;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="IMAP_address", type="string", length=255, nullable=true)
      */
     private $IMAPAddress;
 
     /**
      * @var int
-     *
      * @ORM\Column(name="IMAP_port", type="integer", nullable=true)
      */
     private $IMAPPort;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="IMAP_secure", type="string", length=3, nullable=true)
      */
     private $IMAPSecure;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="IMAP_username", type="string", length=255, nullable=true)
      */
     private $IMAPUsername;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="IMAP_password", type="string", length=255, nullable=true)
      */
     private $IMAPPassword;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="SMTP_address", type="string", length=255, nullable=true)
      */
     private $SMTPAddress;
 
     /**
      * @var int
-     *
      * @ORM\Column(name="SMTP_port", type="integer", nullable=true)
      */
     private $SMTPPort;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="SMTP_secure", type="string", length=3, nullable=true)
      */
     private $SMTPSecure;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="SMTP_username", type="string", length=255, nullable=true)
      */
     private $SMTPUsername;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="SMTP_password", type="string", length=255, nullable=true)
      */
     private $SMTPPassword;
 
 
     /**
-     * Get id
-     *
-     * @return int
+     * @return int|null
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
-     * Set user
-     *
      * @param User $user
      *
      * @return UserSettings
      */
-    public function setUser(User $user = null)
+    public function setUser(User $user): UserSettings
     {
         $this->user = $user;
 
@@ -144,23 +125,19 @@ class UserSettings
     }
 
     /**
-     * Get user
-     *
      * @return User
      */
-    public function getUser()
+    public function getUser(): User
     {
         return $this->user;
     }
 
     /**
-     * Set language
-     *
-     * @param string $language
+     * @param string|null $language
      *
      * @return UserSettings
      */
-    public function setLanguage($language)
+    public function setLanguage(?string $language): UserSettings
     {
         $this->language = $language;
 
@@ -168,23 +145,19 @@ class UserSettings
     }
 
     /**
-     * Get language
-     *
      * @return string
      */
-    public function getLanguage()
+    public function getLanguage(): ?string
     {
         return $this->language;
     }
 
     /**
-     * Set emailName
-     *
-     * @param string $emailName
+     * @param string|null $emailName
      *
      * @return UserSettings
      */
-    public function setEmailName($emailName)
+    public function setEmailName(?string $emailName): UserSettings
     {
         $this->emailName = $emailName;
 
@@ -192,23 +165,19 @@ class UserSettings
     }
 
     /**
-     * Get emailName
-     *
-     * @return string
+     * @return string|null
      */
-    public function getEmailName()
+    public function getEmailName(): ?string
     {
         return $this->emailName;
     }
 
     /**
-     * Set emailAddress
-     *
-     * @param string $emailAddress
+     * @param string|null $emailAddress
      *
      * @return UserSettings
      */
-    public function setEmailAddress($emailAddress)
+    public function setEmailAddress(?string $emailAddress): UserSettings
     {
         $this->emailAddress = $emailAddress;
 
@@ -216,23 +185,19 @@ class UserSettings
     }
 
     /**
-     * Get emailAddress
-     *
-     * @return string
+     * @return string|null
      */
-    public function getEmailAddress()
+    public function getEmailAddress(): ?string
     {
         return $this->emailAddress;
     }
 
     /**
-     * Set IMAPAddress
-     *
-     * @param string $IMAPAddress
+     * @param string|null $IMAPAddress
      *
      * @return UserSettings
      */
-    public function setIMAPAddress($IMAPAddress)
+    public function setIMAPAddress(?string $IMAPAddress): UserSettings
     {
         $this->IMAPAddress = $IMAPAddress;
 
@@ -240,23 +205,19 @@ class UserSettings
     }
 
     /**
-     * Get IMAPAddress
-     *
-     * @return string
+     * @return string|null
      */
-    public function getIMAPAddress()
+    public function getIMAPAddress(): ?string
     {
         return $this->IMAPAddress;
     }
 
     /**
-     * Set IMAPPort
-     *
-     * @param int $IMAPPort
+     * @param int|null $IMAPPort
      *
      * @return UserSettings
      */
-    public function setIMAPPort($IMAPPort)
+    public function setIMAPPort(?int $IMAPPort): UserSettings
     {
         $this->IMAPPort = $IMAPPort;
 
@@ -264,23 +225,19 @@ class UserSettings
     }
 
     /**
-     * Get IMAPPort
-     *
-     * @return integer
+     * @return integer|null
      */
-    public function getIMAPPort()
+    public function getIMAPPort(): ?int
     {
         return $this->IMAPPort;
     }
 
     /**
-     * Set IMAPSecure
-     *
-     * @param string $IMAPSecure
+     * @param string|null $IMAPSecure
      *
      * @return UserSettings
      */
-    public function setIMAPSecure($IMAPSecure)
+    public function setIMAPSecure(?string $IMAPSecure): UserSettings
     {
         $this->IMAPSecure = $IMAPSecure;
 
@@ -288,23 +245,19 @@ class UserSettings
     }
 
     /**
-     * Get IMAPSecure
-     *
-     * @return string
+     * @return string|null
      */
-    public function getIMAPSecure()
+    public function getIMAPSecure(): ?string
     {
         return $this->IMAPSecure;
     }
 
     /**
-     * Set IMAPUsername
-     *
-     * @param string $IMAPUsername
+     * @param string|null $IMAPUsername
      *
      * @return UserSettings
      */
-    public function setIMAPUsername($IMAPUsername)
+    public function setIMAPUsername(?string $IMAPUsername): UserSettings
     {
         $this->IMAPUsername = $IMAPUsername;
 
@@ -312,23 +265,19 @@ class UserSettings
     }
 
     /**
-     * Get IMAPUsername
-     *
-     * @return string
+     * @return string|null
      */
-    public function getIMAPUsername()
+    public function getIMAPUsername(): ?string
     {
         return $this->IMAPUsername;
     }
 
     /**
-     * Set IMAPPassword
-     *
-     * @param string $IMAPPassword
+     * @param string|null $IMAPPassword
      *
      * @return UserSettings
      */
-    public function setIMAPPassword($IMAPPassword)
+    public function setIMAPPassword(?string $IMAPPassword): UserSettings
     {
         $this->IMAPPassword = $IMAPPassword;
 
@@ -336,23 +285,19 @@ class UserSettings
     }
 
     /**
-     * Get IMAPPassword
-     *
-     * @return string
+     * @return string|null
      */
-    public function getIMAPPassword()
+    public function getIMAPPassword(): ?string
     {
         return $this->IMAPPassword;
     }
 
     /**
-     * Set SMTPAddress
-     *
-     * @param string $SMTPAddress
+     * @param string|null $SMTPAddress
      *
      * @return UserSettings
      */
-    public function setSMTPAddress($SMTPAddress)
+    public function setSMTPAddress(?string $SMTPAddress): UserSettings
     {
         $this->SMTPAddress = $SMTPAddress;
 
@@ -360,23 +305,19 @@ class UserSettings
     }
 
     /**
-     * Get SMTPAddress
-     *
-     * @return string
+     * @return string|null
      */
-    public function getSMTPAddress()
+    public function getSMTPAddress(): ?string
     {
         return $this->SMTPAddress;
     }
 
     /**
-     * Set SMTPPort
-     *
-     * @param int $SMTPPort
+     * @param int|null $SMTPPort
      *
      * @return UserSettings
      */
-    public function setSMTPPort($SMTPPort)
+    public function setSMTPPort(?int $SMTPPort): UserSettings
     {
         $this->SMTPPort = $SMTPPort;
 
@@ -384,23 +325,19 @@ class UserSettings
     }
 
     /**
-     * Get SMTPPort
-     *
-     * @return integer
+     * @return integer|null
      */
-    public function getSMTPPort()
+    public function getSMTPPort(): ?int
     {
         return $this->SMTPPort;
     }
 
     /**
-     * Set SMTPSecure
-     *
-     * @param string $SMTPSecure
+     * @param string|null $SMTPSecure
      *
      * @return UserSettings
      */
-    public function setSMTPSecure($SMTPSecure)
+    public function setSMTPSecure(?string $SMTPSecure): UserSettings
     {
         $this->SMTPSecure = $SMTPSecure;
 
@@ -408,23 +345,19 @@ class UserSettings
     }
 
     /**
-     * Get SMTPSecure
-     *
-     * @return string
+     * @return string|null
      */
-    public function getSMTPSecure()
+    public function getSMTPSecure(): ?string
     {
         return $this->SMTPSecure;
     }
 
     /**
-     * Set SMTPUsername
-     *
-     * @param string $SMTPUsername
+     * @param string|null $SMTPUsername
      *
      * @return UserSettings
      */
-    public function setSMTPUsername($SMTPUsername)
+    public function setSMTPUsername(?string $SMTPUsername): UserSettings
     {
         $this->SMTPUsername = $SMTPUsername;
 
@@ -432,23 +365,19 @@ class UserSettings
     }
 
     /**
-     * Get SMTPUsername
-     *
-     * @return string
+     * @return string|null
      */
-    public function getSMTPUsername()
+    public function getSMTPUsername(): ?string
     {
         return $this->SMTPUsername;
     }
 
     /**
-     * Set SMTPPassword
-     *
-     * @param string $SMTPPassword
+     * @param string|null $SMTPPassword
      *
      * @return UserSettings
      */
-    public function setSMTPPassword($SMTPPassword)
+    public function setSMTPPassword(?string $SMTPPassword): UserSettings
     {
         $this->SMTPPassword = $SMTPPassword;
 
@@ -456,11 +385,9 @@ class UserSettings
     }
 
     /**
-     * Get SMTPPassword
-     *
-     * @return string
+     * @return string|null
      */
-    public function getSMTPPassword()
+    public function getSMTPPassword(): ?string
     {
         return $this->SMTPPassword;
     }

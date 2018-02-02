@@ -484,6 +484,46 @@ class User
     }
 
     /**
+     * @param \DateTime|null $created
+     *
+     * @return User
+     */
+    public function setCreated(?\DateTime $created): User
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreated(): \DateTime
+    {
+        return $this->created;
+    }
+
+    /**
+     * @param \DateTime|null $updated
+     *
+     * @return User
+     */
+    public function setUpdated(?\DateTime $updated): User
+    {
+        $this->updated = $updated;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getUpdated(): ?\DateTime
+    {
+        return $this->updated;
+    }
+
+    /**
      * Gets triggered only on insert
      * @ORM\PrePersist
      */
