@@ -8,9 +8,9 @@ This is the propertywindow engine repository that runs on [Docker](https://www.d
 - Nginx
 - Opcache
 - Xdebug
-- PhpMyAdmin
 - PHP Unit Testing
 - PHP Codesniffer
+- Scrutinizer
 
 
 ---
@@ -94,6 +94,11 @@ $ php app/console doctrine:fixtures:load
 ## Testing
 
 > Before every commit please make sure the following tests pass successful.
+
+Run Testing:
+```bash
+$ composer test
+```
 
 PHP Unit Testing:
 ```bash
