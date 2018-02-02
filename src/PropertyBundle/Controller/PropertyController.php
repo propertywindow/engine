@@ -292,6 +292,16 @@ class PropertyController extends BaseController
             throw new InvalidArgumentException("Identifier not provided");
         }
 
+        $this->checkParameters([
+            'street',
+            'house_number',
+            'postcode',
+            'city',
+            'country',
+            'lat',
+            'lng',
+        ], $parameters);
+
         $id           = (int)$parameters['id'];
         $user         = $this->userService->getUser($userId);
         $userSettings = $this->userSettingsService->getSettings($user);
@@ -321,59 +331,8 @@ class PropertyController extends BaseController
             $property->setTerms($terms);
         }
 
-        if (array_key_exists('online', $parameters) && $parameters['online'] !== null) {
-            $property->setOnline((bool)$parameters['online']);
-        }
+        $this->convertParameters($property, $parameters);
 
-        if (array_key_exists('street', $parameters) && $parameters['street'] !== null) {
-            $property->setStreet((string)$parameters['street']);
-        } else {
-            throw new InvalidArgumentException("street parameter not provided");
-        }
-
-        if (array_key_exists('house_number', $parameters) && $parameters['house_number'] !== null) {
-            $property->setHouseNumber((string)$parameters['house_number']);
-        } else {
-            throw new InvalidArgumentException("house_number parameter not provided");
-        }
-
-        if (array_key_exists('postcode', $parameters) && $parameters['postcode'] !== null) {
-            $property->setPostcode((string)$parameters['postcode']);
-        } else {
-            throw new InvalidArgumentException("postcode parameter not provided");
-        }
-
-        if (array_key_exists('city', $parameters) && $parameters['city'] !== null) {
-            $property->setCity((string)$parameters['city']);
-        } else {
-            throw new InvalidArgumentException("city parameter not provided");
-        }
-
-        if (array_key_exists('country', $parameters) && $parameters['country'] !== null) {
-            $property->setCountry((string)$parameters['country']);
-        } else {
-            throw new InvalidArgumentException("country parameter not provided");
-        }
-
-        if (array_key_exists('price', $parameters) && $parameters['price'] !== null) {
-            $property->setPrice((int)$parameters['price']);
-        }
-
-        if (array_key_exists('espc', $parameters) && $parameters['espc'] !== null) {
-            $property->setEspc((bool)$parameters['espc']);
-        }
-
-        if (array_key_exists('lat', $parameters) && $parameters['lat'] !== null) {
-            $property->setLat((string)$parameters['lat']);
-        } else {
-            throw new InvalidArgumentException("lat parameter not provided");
-        }
-
-        if (array_key_exists('lng', $parameters) && $parameters['lng'] !== null) {
-            $property->setLng((string)$parameters['lng']);
-        } else {
-            throw new InvalidArgumentException("lng parameter not provided");
-        }
 
         $updatedProperty = $this->propertyService->updateProperty($property);
 
