@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace ConversationBundle\Entity;
 
@@ -6,8 +7,6 @@ use AuthenticationBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Message
- *
  * @ORM\Table(name="conversation_message")
  * @ORM\Entity(repositoryClass="ConversationBundle\Repository\MessageRepository")
  * @ORM\HasLifecycleCallbacks
@@ -16,7 +15,6 @@ class Message
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -43,57 +41,48 @@ class Message
 
     /**
      * @var string
-     *
      * @ORM\Column(name="message", type="string", length=255)
      */
     private $message;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="type", type="string", length=255, nullable=true)
      */
     private $type;
 
     /**
      * @var bool
-     *
      * @ORM\Column(name="seen", type="boolean", options={"default": false})
      */
     private $seen = false;
 
     /**
      * @var \DateTime $created
-     *
      * @ORM\Column(type="datetime")
      */
     protected $created;
 
     /**
      * @var \DateTime $updated
-     *
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $updated;
 
     /**
-     * Get id
-     *
-     * @return int
+     * @return int|null
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
-     * Set conversation
-     *
      * @param Conversation $conversation
      *
      * @return Message
      */
-    public function setConversation(Conversation $conversation = null)
+    public function setConversation(Conversation $conversation): Message
     {
         $this->conversation = $conversation;
 
@@ -101,23 +90,19 @@ class Message
     }
 
     /**
-     * Get conversation
-     *
      * @return Conversation
      */
-    public function getConversation()
+    public function getConversation(): Conversation
     {
         return $this->conversation;
     }
 
     /**
-     * Set author
-     *
      * @param \AuthenticationBundle\Entity\User $author
      *
      * @return Message
      */
-    public function setAuthor(User $author = null)
+    public function setAuthor(User $author): Message
     {
         $this->author = $author;
 
@@ -125,23 +110,19 @@ class Message
     }
 
     /**
-     * Get author
-     *
      * @return \AuthenticationBundle\Entity\User
      */
-    public function getAuthor()
+    public function getAuthor(): User
     {
         return $this->author;
     }
 
     /**
-     * Set recipient
-     *
      * @param \AuthenticationBundle\Entity\User $recipient
      *
      * @return Message
      */
-    public function setRecipient(User $recipient = null)
+    public function setRecipient(User $recipient): Message
     {
         $this->recipient = $recipient;
 
@@ -149,23 +130,19 @@ class Message
     }
 
     /**
-     * Get recipient
-     *
      * @return \AuthenticationBundle\Entity\User
      */
-    public function getRecipient()
+    public function getRecipient(): User
     {
         return $this->recipient;
     }
 
     /**
-     * Set message
-     *
      * @param string $message
      *
      * @return Message
      */
-    public function setMessage($message)
+    public function setMessage(string $message): Message
     {
         $this->message = $message;
 
@@ -173,23 +150,19 @@ class Message
     }
 
     /**
-     * Get message
-     *
      * @return string
      */
-    public function getMessage()
+    public function getMessage(): string
     {
         return $this->message;
     }
 
     /**
-     * Set type
-     *
-     * @param string $type
+     * @param string|null $type
      *
      * @return Message
      */
-    public function setType($type)
+    public function setType(?string $type): Message
     {
         $this->type = $type;
 
@@ -197,23 +170,19 @@ class Message
     }
 
     /**
-     * Get type
-     *
      * @return string
      */
-    public function getType()
+    public function getType(): ?string
     {
         return $this->type;
     }
 
     /**
-     * Set seen
-     *
      * @param boolean $seen
      *
      * @return Message
      */
-    public function setSeen($seen)
+    public function setSeen(bool $seen): Message
     {
         $this->seen = $seen;
 
@@ -221,13 +190,51 @@ class Message
     }
 
     /**
-     * Get seen
-     *
      * @return bool
      */
-    public function getSeen()
+    public function getSeen(): bool
     {
         return $this->seen;
+    }
+
+    /**
+     * @param \DateTime|null $created
+     *
+     * @return Message
+     */
+    public function setCreated(?\DateTime $created): Message
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreated(): \DateTime
+    {
+        return $this->created;
+    }
+
+    /**
+     * @param \DateTime|null $updated
+     *
+     * @return Message
+     */
+    public function setUpdated(?\DateTime $updated): Message
+    {
+        $this->updated = $updated;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getUpdated(): ?\DateTime
+    {
+        return $this->updated;
     }
 
     /**
@@ -246,25 +253,5 @@ class Message
     public function onPreUpdate()
     {
         $this->updated = new \DateTime("now");
-    }
-
-    /**
-     * Get created
-     *
-     * @return \DateTime
-     */
-    public function getCreated()
-    {
-        return $this->created;
-    }
-
-    /**
-     * Get updated
-     *
-     * @return \DateTime
-     */
-    public function getUpdated()
-    {
-        return $this->updated;
     }
 }

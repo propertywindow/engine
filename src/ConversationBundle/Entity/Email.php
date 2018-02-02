@@ -1,12 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace ConversationBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Email
- *
  * @ORM\Table(name="email")
  * @ORM\Entity(repositoryClass="ConversationBundle\Repository\EmailRepository")
  */
@@ -14,24 +13,20 @@ class Email
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
-
     /**
      * @var string
-     *
      * @ORM\Column(name="subject", type="string", length=255)
      */
     private $subject;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="from", type="string", length=255)
      */
     private $from;
@@ -39,26 +34,22 @@ class Email
 
     /**
      * @var \DateTime
-     *
      * @ORM\Column(name="date", type="datetime", nullable=true)
      */
     private $date;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="message", type="text")
      */
     private $message;
 
     /**
-     * Set id
-     *
      * @param int $id
      *
      * @return Email
      */
-    public function setId($id)
+    public function setId(int $id): Email
     {
         $this->id = $id;
 
@@ -66,23 +57,19 @@ class Email
     }
 
     /**
-     * Get id
-     *
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
     /**
-     * Set subject
-     *
      * @param string $subject
      *
      * @return Email
      */
-    public function setSubject($subject)
+    public function setSubject(string $subject): Email
     {
         $this->subject = $subject;
 
@@ -90,23 +77,19 @@ class Email
     }
 
     /**
-     * Get subject
-     *
      * @return string
      */
-    public function getSubject()
+    public function getSubject(): string
     {
         return $this->subject;
     }
 
     /**
-     * Set from
-     *
      * @param string $from
      *
      * @return Email
      */
-    public function setFrom($from)
+    public function setFrom(string $from): Email
     {
         $this->from = $from;
 
@@ -114,23 +97,19 @@ class Email
     }
 
     /**
-     * Get from
-     *
      * @return string
      */
-    public function getFrom()
+    public function getFrom(): string
     {
         return $this->from;
     }
 
     /**
-     * Set date
-     *
      * @param \DateTime $date
      *
      * @return Email
      */
-    public function setDate($date)
+    public function setDate(\DateTime $date): Email
     {
         $this->date = $date;
 
@@ -138,23 +117,19 @@ class Email
     }
 
     /**
-     * Get date
-     *
      * @return \DateTime
      */
-    public function getDate()
+    public function getDate(): \DateTime
     {
         return $this->date;
     }
 
     /**
-     * Set message
-     *
      * @param string $message
      *
      * @return Email
      */
-    public function setMessage($message)
+    public function setMessage(string $message): Email
     {
         $this->message = $message;
 
@@ -162,11 +137,9 @@ class Email
     }
 
     /**
-     * Get message
-     *
      * @return string
      */
-    public function getMessage()
+    public function getMessage(): string
     {
         return $this->message;
     }

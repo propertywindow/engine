@@ -6,7 +6,6 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Gallery
- *
  * @ORM\Table(name="property_gallery")
  * @ORM\Entity(repositoryClass="PropertyBundle\Repository\GalleryRepository")
  * @ORM\HasLifecycleCallbacks
@@ -15,7 +14,6 @@ class Gallery
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -30,64 +28,54 @@ class Gallery
 
     /**
      * @var string
-     *
      * @ORM\Column(name="path", type="string", length=255)
      */
     private $path;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="overlay", type="string", length=255, nullable=true)
      */
     private $overlay;
 
     /**
      * @var bool
-     *
      * @ORM\Column(name="main", type="boolean", options={"default": false})
      */
     private $main = false;
 
     /**
      * @var int
-     *
      * @ORM\Column(name="sort", type="integer")
      */
-    private $sort;
+    private $sort = 0;
 
     /**
      * @var \DateTime $created
-     *
      * @ORM\Column(type="datetime")
      */
     protected $created;
 
     /**
      * @var \DateTime $updated
-     *
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $updated;
 
     /**
-     * Get id
-     *
-     * @return int
+     * @return int|null
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
-     * Set property
-     *
      * @param Property $property
      *
      * @return Gallery
      */
-    public function setProperty(Property $property = null)
+    public function setProperty(Property $property): Gallery
     {
         $this->property = $property;
 
@@ -95,23 +83,19 @@ class Gallery
     }
 
     /**
-     * Get property
-     *
      * @return Property
      */
-    public function getProperty()
+    public function getProperty(): Property
     {
         return $this->property;
     }
 
     /**
-     * Set path
-     *
      * @param string $path
      *
      * @return Gallery
      */
-    public function setPath($path)
+    public function setPath(string $path): Gallery
     {
         $this->path = $path;
 
@@ -119,23 +103,19 @@ class Gallery
     }
 
     /**
-     * Get path
-     *
      * @return string
      */
-    public function getPath()
+    public function getPath(): string
     {
         return $this->path;
     }
 
     /**
-     * Set overlay
-     *
-     * @param string $overlay
+     * @param string|null $overlay
      *
      * @return Gallery
      */
-    public function setOverlay($overlay)
+    public function setOverlay(?string $overlay): Gallery
     {
         $this->overlay = $overlay;
 
@@ -143,23 +123,19 @@ class Gallery
     }
 
     /**
-     * Get overlay
-     *
-     * @return string
+     * @return string|null
      */
-    public function getOverlay()
+    public function getOverlay(): ?string
     {
         return $this->overlay;
     }
 
     /**
-     * Set main
-     *
      * @param boolean $main
      *
      * @return Gallery
      */
-    public function setMain($main)
+    public function setMain(bool $main): Gallery
     {
         $this->main = $main;
 
@@ -167,23 +143,19 @@ class Gallery
     }
 
     /**
-     * Get main
-     *
      * @return bool
      */
-    public function getMain()
+    public function getMain(): bool
     {
         return $this->main;
     }
 
     /**
-     * Set sort
-     *
      * @param integer $sort
      *
      * @return Gallery
      */
-    public function setSort($sort)
+    public function setSort(int $sort): Gallery
     {
         $this->sort = $sort;
 
@@ -191,18 +163,55 @@ class Gallery
     }
 
     /**
-     * Get sort
-     *
      * @return int
      */
-    public function getSort()
+    public function getSort(): int
     {
         return $this->sort;
     }
 
     /**
-     * Gets triggered only on insert
+     * @param \DateTime|null $created
+     *
+     * @return Gallery
+     */
+    public function setCreated(?\DateTime $created): Gallery
+    {
+        $this->created = $created;
 
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreated(): \DateTime
+    {
+        return $this->created;
+    }
+
+    /**
+     * @param \DateTime|null $updated
+     *
+     * @return Gallery
+     */
+    public function setUpdated(?\DateTime $updated): Gallery
+    {
+        $this->updated = $updated;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getUpdated(): ?\DateTime
+    {
+        return $this->updated;
+    }
+
+    /**
+     * Gets triggered only on insert
      * @ORM\PrePersist
      */
     public function onPrePersist()
@@ -212,59 +221,10 @@ class Gallery
 
     /**
      * Gets triggered every time on update
-
      * @ORM\PreUpdate
      */
     public function onPreUpdate()
     {
         $this->updated = new \DateTime("now");
-    }
-
-    /**
-     * Set created
-     *
-     * @param \DateTime $created
-     *
-     * @return Gallery
-     */
-    public function setCreated($created)
-    {
-        $this->created = $created;
-
-        return $this;
-    }
-
-    /**
-     * Get created
-     *
-     * @return \DateTime
-     */
-    public function getCreated()
-    {
-        return $this->created;
-    }
-
-    /**
-     * Set updated
-     *
-     * @param \DateTime $updated
-     *
-     * @return Gallery
-     */
-    public function setUpdated($updated)
-    {
-        $this->updated = $updated;
-
-        return $this;
-    }
-
-    /**
-     * Get updated
-     *
-     * @return \DateTime
-     */
-    public function getUpdated()
-    {
-        return $this->updated;
     }
 }

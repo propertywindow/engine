@@ -5,8 +5,6 @@ namespace PropertyBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * GeneralNotes
- *
  * @ORM\Table(name="property_general_notes")
  * @ORM\Entity(repositoryClass="PropertyBundle\Repository\GeneralNotesRepository")
  * @ORM\HasLifecycleCallbacks
@@ -15,7 +13,6 @@ class GeneralNotes
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -23,75 +20,63 @@ class GeneralNotes
     private $id;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="property_id", type="integer")
+     * @ORM\OneToOne(targetEntity="Property", inversedBy="details")
+     * @ORM\JoinColumn(name="property_id", referencedColumnName="id")
      */
-    private $propertyId;
+    protected $property;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="note", type="blob")
+     * @ORM\Column(name="note", type="blob", nullable=true)
      */
     private $note;
 
     /**
      * @var \DateTime $created
-     *
      * @ORM\Column(type="datetime")
      */
     protected $created;
 
     /**
      * @var \DateTime $updated
-     *
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $updated;
 
     /**
-     * Get id
-     *
-     * @return int
+     * @return int|null
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
-     * Set propertyId
-     *
-     * @param integer $propertyId
+     * @param Property $property
      *
      * @return GeneralNotes
      */
-    public function setPropertyId($propertyId)
+    public function setProperty(Property $property): GeneralNotes
     {
-        $this->propertyId = $propertyId;
+        $this->property = $property;
 
         return $this;
     }
 
     /**
-     * Get propertyId
-     *
-     * @return int
+     * @return Property
      */
-    public function getPropertyId()
+    public function getProperty(): Property
     {
-        return $this->propertyId;
+        return $this->property;
     }
 
     /**
-     * Set note
-     *
-     * @param string $note
+     * @param string|null $note
      *
      * @return GeneralNotes
      */
-    public function setNote($note)
+    public function setNote($note): GeneralNotes
     {
         $this->note = $note;
 
@@ -99,18 +84,55 @@ class GeneralNotes
     }
 
     /**
-     * Get note
-     *
-     * @return string
+     * @return string|null
      */
-    public function getNote()
+    public function getNote(): ?string
     {
         return $this->note;
     }
 
     /**
-     * Gets triggered only on insert
+     * @param \DateTime|null $created
      *
+     * @return GeneralNotes
+     */
+    public function setCreated(?\DateTime $created): GeneralNotes
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreated(): \DateTime
+    {
+        return $this->created;
+    }
+
+    /**
+     * @param \DateTime|null $updated
+     *
+     * @return GeneralNotes
+     */
+    public function setUpdated(?\DateTime $updated): GeneralNotes
+    {
+        $this->updated = $updated;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getUpdated(): ?\DateTime
+    {
+        return $this->updated;
+    }
+
+    /**
+     * Gets triggered only on insert
      * @ORM\PrePersist
      */
     public function onPrePersist()
@@ -120,7 +142,6 @@ class GeneralNotes
 
     /**
      * Gets triggered every time on update
-     *
      * @ORM\PreUpdate
      */
     public function onPreUpdate()

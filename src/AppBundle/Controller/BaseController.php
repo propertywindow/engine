@@ -505,6 +505,8 @@ class BaseController extends Controller
      */
     public function convertParameters($entity, array $parameters)
     {
+        // todo: add array parameter for which parameters are allowed
+
         foreach ($parameters as $property => $value) {
             if ($property === 'office') {
                 $value = ucfirst($value);
