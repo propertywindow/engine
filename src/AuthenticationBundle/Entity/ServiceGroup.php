@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace AuthenticationBundle\Entity;
 
@@ -7,8 +8,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * ServiceGroup
- *
  * @ORM\Table(name="service_group")
  * @ORM\Entity(repositoryClass="AuthenticationBundle\Repository\ServiceGroupRepository")
  * @ORM\HasLifecycleCallbacks
@@ -17,7 +16,6 @@ class ServiceGroup
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -31,42 +29,36 @@ class ServiceGroup
 
     /**
      * @var string
-     *
      * @ORM\Column(name="en", type="string", length=255)
      */
     private $en;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="nl", type="string", length=255)
      */
     private $nl;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="icon", type="string")
+     * @ORM\Column(name="icon", type="string", nullable=true)
      */
     private $icon;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="url", type="string", length=255, nullable=true)
      */
     private $url;
 
     /**
      * @var \DateTime $created
-     *
      * @ORM\Column(type="datetime")
      */
     protected $created;
 
     /**
      * @var \DateTime $updated
-     *
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $updated;
@@ -80,23 +72,19 @@ class ServiceGroup
     }
 
     /**
-     * Get id
-     *
-     * @return int
+     * @return int|null
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
-     * Add service
-     *
      * @param Service $service
      *
      * @return ServiceGroup
      */
-    public function addService(Service $service)
+    public function addService(Service $service): ServiceGroup
     {
         $this->services[] = $service;
 
@@ -104,8 +92,6 @@ class ServiceGroup
     }
 
     /**
-     * Remove service
-     *
      * @param Service $service
      */
     public function removeService(Service $service)
@@ -114,23 +100,19 @@ class ServiceGroup
     }
 
     /**
-     * Get services
-     *
      * @return Collection
      */
-    public function getServices()
+    public function getServices(): Collection
     {
         return $this->services;
     }
 
     /**
-     * Set en
-     *
      * @param string $en
      *
      * @return ServiceGroup
      */
-    public function setEn($en)
+    public function setEn(string $en): ServiceGroup
     {
         $this->en = $en;
 
@@ -138,23 +120,19 @@ class ServiceGroup
     }
 
     /**
-     * Get en
-     *
      * @return string
      */
-    public function getEn()
+    public function getEn(): string
     {
         return $this->en;
     }
 
     /**
-     * Set nl
-     *
      * @param string $nl
      *
      * @return ServiceGroup
      */
-    public function setNl($nl)
+    public function setNl(string $nl): ServiceGroup
     {
         $this->nl = $nl;
 
@@ -162,23 +140,19 @@ class ServiceGroup
     }
 
     /**
-     * Get nl
-     *
      * @return string
      */
-    public function getNl()
+    public function getNl(): string
     {
         return $this->nl;
     }
 
     /**
-     * Set icon
-     *
-     * @param string $icon
+     * @param string|null $icon
      *
      * @return ServiceGroup
      */
-    public function setIcon($icon)
+    public function setIcon(?string $icon): ServiceGroup
     {
         $this->icon = $icon;
 
@@ -186,23 +160,19 @@ class ServiceGroup
     }
 
     /**
-     * Get icon
-     *
      * @return string
      */
-    public function getIcon()
+    public function getIcon(): ?string
     {
         return $this->icon;
     }
 
     /**
-     * Set url
-     *
-     * @param string $url
+     * @param string|null $url
      *
      * @return ServiceGroup
      */
-    public function setUrl($url)
+    public function setUrl(?string $url): ServiceGroup
     {
         $this->url = $url;
 
@@ -210,11 +180,9 @@ class ServiceGroup
     }
 
     /**
-     * Get url
-     *
      * @return string
      */
-    public function getUrl()
+    public function getUrl(): ?string
     {
         return $this->url;
     }

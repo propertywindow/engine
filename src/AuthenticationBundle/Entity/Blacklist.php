@@ -146,11 +146,15 @@ class Blacklist
     }
 
     /**
-     * @return \DateTime
+     * @param \DateTime|null $created
+     *
+     * @return Blacklist
      */
-    public function getUpdated(): ?\DateTime
+    public function setCreated(?\DateTime $created): Blacklist
     {
-        return $this->updated;
+        $this->created = $created;
+
+        return $this;
     }
 
     /**
@@ -159,6 +163,26 @@ class Blacklist
     public function getCreated(): \DateTime
     {
         return $this->created;
+    }
+
+    /**
+     * @param \DateTime|null $updated
+     *
+     * @return Blacklist
+     */
+    public function setUpdated(?\DateTime $updated): Blacklist
+    {
+        $this->updated = $updated;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getUpdated(): ?\DateTime
+    {
+        return $this->updated;
     }
 
     /**

@@ -58,11 +58,23 @@ class AgentTest extends TestCase
         $this->agent->setPhone('01316571666');
         $this->assertEquals('01316571666', $this->agent->getPhone());
 
+        $this->agent->setFax('');
+        $this->assertEmpty($this->agent->getFax());
+
+        $this->agent->setWebsite('https://www.propertywindow.nl');
+        $this->assertEquals('https://www.propertywindow.nl', $this->agent->getWebsite());
+
+        $this->agent->setLogo('');
+        $this->assertEmpty($this->agent->getLogo());
+
         $this->agent->setPropertyLimit(200);
         $this->assertEquals(200, $this->agent->getPropertyLimit());
 
         $this->agent->setEspc(true);
         $this->assertTrue($this->agent->getEspc());
+
+        $this->agent->setWebprint(false);
+        $this->assertFalse($this->agent->getWebprint());
 
         $this->agent->setArchived(false);
         $this->assertFalse($this->agent->getArchived());

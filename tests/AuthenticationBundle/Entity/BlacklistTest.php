@@ -45,5 +45,13 @@ class BlacklistTest extends TestCase
 
         $this->blacklist->setUser($user);
         $this->assertEquals($user, $this->blacklist->getUser());
+
+        $created = new \DateTime();
+
+        $this->blacklist->setCreated($created);
+        $this->assertEquals($created, $this->blacklist->getCreated());
+
+        $this->blacklist->setUpdated(null);
+        $this->assertNull($this->blacklist->getUpdated());
     }
 }
