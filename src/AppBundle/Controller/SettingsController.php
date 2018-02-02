@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use AppBundle\Exceptions\SettingsNotFoundException;
+use AuthenticationBundle\Exceptions\UserNotFoundException;
 use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Response;
@@ -47,9 +48,7 @@ class SettingsController extends BaseController
      * @throws InvalidJsonRpcMethodException
      * @throws NotAuthorizedException
      * @throws SettingsNotFoundException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
+     * @throws UserNotFoundException
      */
     private function invoke(int $userId, string $method, array $parameters = [])
     {
@@ -66,9 +65,6 @@ class SettingsController extends BaseController
     /**
      * @return array
      * @throws SettingsNotFoundException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     private function getSettings()
     {
@@ -82,17 +78,13 @@ class SettingsController extends BaseController
      * @return array
      * @throws NotAuthorizedException
      * @throws SettingsNotFoundException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
+     * @throws UserNotFoundException
      */
     private function updateSettings(int $userId, array $parameters)
     {
         $user = $this->userService->getUser($userId);
 
-        if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
-            throw new NotAuthorizedException($userId);
-        }
+        $this->isAuthorized($user->getUserType()->getId(), self::USER_ADMIN);
 
         $settings = $this->settingsService->getSettings();
 

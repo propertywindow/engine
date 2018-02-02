@@ -92,7 +92,7 @@ class UserSettingsController extends BaseController
 
         if ($settings->getId() !== $user->getId()) {
             if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
-                throw new NotAuthorizedException($userId);
+                throw new NotAuthorizedException();
             }
         }
 

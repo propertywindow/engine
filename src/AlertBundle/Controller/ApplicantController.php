@@ -51,7 +51,6 @@ class ApplicantController extends BaseController
      * @return array
      * @throws ApplicantAlreadyExistException
      * @throws ApplicantNotFoundException
-     * @throws ApplicationNotFoundException
      * @throws InvalidJsonRpcMethodException
      * @throws NotAuthorizedException
      * @throws UserNotFoundException
@@ -91,9 +90,7 @@ class ApplicantController extends BaseController
         $user      = $this->userService->getUser($userId);
         $applicant = $this->applicantService->getApplicant($id);
 
-        if ($user->getAgent()->getAgentGroup() !== $applicant->getAgentGroup()) {
-            throw new NotAuthorizedException($userId);
-        }
+        $this->isAuthorized($user->getAgent()->getAgentGroup()->getId(), $applicant->getAgentGroup()->getId());
 
         return Mapper::fromApplicant($applicant);
     }
@@ -160,7 +157,6 @@ class ApplicantController extends BaseController
      * @param array $parameters
      *
      * @throws ApplicantNotFoundException
-     * @throws ApplicationNotFoundException
      * @throws NotAuthorizedException
      * @throws UserNotFoundException
      */
@@ -174,9 +170,7 @@ class ApplicantController extends BaseController
         $user      = $this->userService->getUser($userId);
         $applicant = $this->applicantService->getApplicant($id);
 
-        if ($user->getAgent()->getAgentGroup() !== $applicant->getAgentGroup()) {
-            throw new NotAuthorizedException($userId);
-        }
+        $this->isAuthorized($user->getAgent()->getAgentGroup()->getId(), $applicant->getAgentGroup()->getId());
 
         $applications = $this->applicationService->getApplicationFromApplicant($applicant);
 

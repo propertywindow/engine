@@ -7,7 +7,6 @@ use AgentBundle\Exceptions\ClientNotFoundException;
 use AppBundle\Controller\BaseController;
 
 use AuthenticationBundle\Exceptions\UserNotFoundException;
-use AuthenticationBundle\Exceptions\UserSettingsNotFoundException;
 use InvalidArgumentException;
 use PropertyBundle\Entity\Property;
 use PropertyBundle\Exceptions\KindNotFoundException;
@@ -63,7 +62,6 @@ class PropertyController extends BaseController
      * @throws SubTypeNotFoundException
      * @throws TermsNotFoundException
      * @throws UserNotFoundException
-     * @throws UserSettingsNotFoundException
      */
     public function invoke(int $userId, string $method, array $parameters = [])
     {
@@ -100,7 +98,6 @@ class PropertyController extends BaseController
      * @throws NotAuthorizedException
      * @throws PropertyNotFoundException
      * @throws UserNotFoundException
-     * @throws UserSettingsNotFoundException
      */
     private function getProperty(int $userId, array $parameters)
     {
@@ -108,22 +105,19 @@ class PropertyController extends BaseController
             throw new InvalidArgumentException("No argument provided");
         }
 
-        $id           = (int)$parameters['id'];
-        $user         = $this->userService->getUser($userId);
-        $userSettings = $this->userSettingsService->getSettings($user);
+        $id   = (int)$parameters['id'];
+        $user = $this->userService->getUser($userId);
 
         $property = $this->propertyService->getProperty($id);
 
         $this->isAuthorized($property->getAgent()->getId(), $user->getAgent()->getId());
 
         if ($user->getUserType()->getId() === self::USER_API) {
-            $required = [
+            $this->checkParameters([
                 'ip',
                 'browser',
                 'location',
-            ];
-
-            $this->checkParameters($required, $parameters);
+            ], $parameters);
 
             $this->logTrafficService->createTraffic(
                 $id,
@@ -134,7 +128,7 @@ class PropertyController extends BaseController
             );
         }
 
-        return Mapper::fromProperty($userSettings->getLanguage(), $property);
+        return Mapper::fromProperty($user->getSettings()->getLanguage(), $property);
     }
 
     /**
@@ -142,14 +136,12 @@ class PropertyController extends BaseController
      *
      * @return array
      * @throws UserNotFoundException
-     * @throws UserSettingsNotFoundException
      */
     private function getProperties(int $userId)
     {
-        $user         = $this->userService->getUser($userId);
-        $userSettings = $this->userSettingsService->getSettings($user);
+        $user = $this->userService->getUser($userId);
 
-        return Mapper::fromProperties($userSettings->getLanguage(), ...
+        return Mapper::fromProperties($user->getSettings()->getLanguage(), ...
             $this->propertyService->listProperties($user->getAgent()->getId()));
     }
 
@@ -159,7 +151,6 @@ class PropertyController extends BaseController
      *
      * @return array
      * @throws UserNotFoundException
-     * @throws UserSettingsNotFoundException
      */
     private function getAllProperties(int $userId, array $parameters)
     {
@@ -168,14 +159,13 @@ class PropertyController extends BaseController
         $offset = array_key_exists('offset', $parameters) &&
                   $parameters['offset'] !== null ? (int)$parameters['offset'] : 0;
 
-        $user         = $this->userService->getUser($userId);
-        $userSettings = $this->userSettingsService->getSettings($user);
-        $agentIds     = $this->agentService->getAgentIdsFromGroup($user->getAgent());
+        $user     = $this->userService->getUser($userId);
+        $agentIds = $this->agentService->getAgentIdsFromGroup($user->getAgent());
 
         list($properties, $count) = $this->propertyService->listAllProperties($agentIds, $limit, $offset);
 
         return [
-            'properties' => Mapper::fromProperties($userSettings->getLanguage(), ...$properties),
+            'properties' => Mapper::fromProperties($user->getSettings()->getLanguage(), ...$properties),
             'count'      => $count,
         ];
     }
@@ -188,7 +178,6 @@ class PropertyController extends BaseController
      * @throws NotAuthorizedException
      * @throws PropertyAlreadyExistsException
      * @throws UserNotFoundException
-     * @throws UserSettingsNotFoundException
      * @throws ClientNotFoundException
      * @throws KindNotFoundException
      * @throws SubTypeNotFoundException
@@ -196,11 +185,10 @@ class PropertyController extends BaseController
      */
     private function createProperty(int $userId, array $parameters)
     {
-        $user         = $this->userService->getUser($userId);
-        $userSettings = $this->userSettingsService->getSettings($user);
+        $user = $this->userService->getUser($userId);
 
         if ($user->getUserType()->getId() === self::USER_CLIENT || $user->getUserType()->getId() === self::USER_API) {
-            throw new NotAuthorizedException($userId);
+            throw new NotAuthorizedException();
         }
 
         $this->checkParameters([
@@ -269,7 +257,7 @@ class PropertyController extends BaseController
         // todo: also insert Details, Gallery, GeneralNotes
         // todo: create data folder
 
-        return Mapper::fromProperty($userSettings->getLanguage(), $property);
+        return Mapper::fromProperty($user->getSettings()->getLanguage(), $property);
     }
 
     /**
@@ -284,7 +272,6 @@ class PropertyController extends BaseController
      * @throws SubTypeNotFoundException
      * @throws TermsNotFoundException
      * @throws UserNotFoundException
-     * @throws UserSettingsNotFoundException
      */
     private function updateProperty(int $userId, array $parameters)
     {
@@ -302,10 +289,9 @@ class PropertyController extends BaseController
             'lng',
         ], $parameters);
 
-        $id           = (int)$parameters['id'];
-        $user         = $this->userService->getUser($userId);
-        $userSettings = $this->userSettingsService->getSettings($user);
-        $property     = $this->propertyService->getProperty($id);
+        $id       = (int)$parameters['id'];
+        $user     = $this->userService->getUser($userId);
+        $property = $this->propertyService->getProperty($id);
 
         $this->isAuthorized($property->getAgent()->getId(), $user->getAgent()->getId());
 
@@ -343,7 +329,7 @@ class PropertyController extends BaseController
             $this->get('jms_serializer')->serialize($updatedProperty, 'json')
         );
 
-        return Mapper::fromProperty($userSettings->getLanguage(), $updatedProperty);
+        return Mapper::fromProperty($user->getSettings()->getLanguage(), $updatedProperty);
 
         // todo: also update Details, Gallery, GeneralNotes
     }
@@ -400,7 +386,7 @@ class PropertyController extends BaseController
         $user = $this->userService->getUser($userId);
 
         if ((int)$user->getUserType()->getId() > self::USER_AGENT) {
-            throw new NotAuthorizedException($userId);
+            throw new NotAuthorizedException();
         }
 
         $this->propertyService->deleteProperty($id);

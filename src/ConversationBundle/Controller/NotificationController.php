@@ -278,10 +278,7 @@ class NotificationController extends BaseController
         $user = $this->userService->getUser($userId);
 
         // todo: check rights
-
-        if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
-            throw new NotAuthorizedException($userId);
-        }
+        $this->isAuthorized($user->getUserType()->getId(), self::USER_ADMIN);
 
         $id = (int)$parameters['id'];
 

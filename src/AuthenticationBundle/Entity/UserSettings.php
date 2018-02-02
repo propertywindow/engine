@@ -20,7 +20,7 @@ class UserSettings
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AuthenticationBundle\Entity\User")
+     * @ORM\OneToOne(targetEntity="AuthenticationBundle\Entity\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true)
      */
     protected $user;

@@ -128,6 +128,11 @@ class User
     private $notifications;
 
     /**
+     * @ORM\OneToOne(targetEntity="UserSettings", mappedBy="user")
+     */
+    protected $settings;
+
+    /**
      * @var \DateTime $created
      * @ORM\Column(type="datetime")
      */
@@ -481,6 +486,14 @@ class User
     public function getNotifications(): array
     {
         return $this->notifications->getValues();
+    }
+
+    /**
+     * @return UserSettings
+     */
+    public function getSettings(): UserSettings
+    {
+        return $this->settings;
     }
 
     /**

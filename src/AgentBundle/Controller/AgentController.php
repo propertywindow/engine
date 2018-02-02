@@ -110,9 +110,7 @@ class AgentController extends BaseController
     {
         $user = $this->userService->getUser($userId);
 
-        if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
-            throw new NotAuthorizedException($userId);
-        }
+        $this->isAuthorized($user->getUserType()->getId(), self::USER_ADMIN);
 
         return Mapper::fromAgents(...$this->agentService->getAgents());
     }
@@ -136,9 +134,7 @@ class AgentController extends BaseController
     {
         $user = $this->userService->getUser($userId);
 
-        if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
-            throw new NotAuthorizedException($userId);
-        }
+        $this->isAuthorized($user->getUserType()->getId(), self::USER_ADMIN);
 
         $this->checkParameters([
             'office',
@@ -242,13 +238,11 @@ class AgentController extends BaseController
         $agent = $this->agentService->getAgent($id);
 
         if ((int)$user->getUserType()->getId() > self::USER_AGENT) {
-            throw new NotAuthorizedException($userId);
+            throw new NotAuthorizedException();
         }
 
         if ($agent->getId() !== $user->getAgent()->getId()) {
-            if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
-                throw new NotAuthorizedException($userId);
-            }
+            $this->isAuthorized($user->getUserType()->getId(), self::USER_ADMIN);
         }
 
         $this->convertParameters($agent, $parameters);
@@ -275,9 +269,7 @@ class AgentController extends BaseController
 
         $user = $this->userService->getUser($userId);
 
-        if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
-            throw new NotAuthorizedException($userId);
-        }
+        $this->isAuthorized($user->getUserType()->getId(), self::USER_ADMIN);
 
         $id = (int)$parameters['id'];
 

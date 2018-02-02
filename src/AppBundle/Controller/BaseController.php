@@ -476,7 +476,7 @@ class BaseController extends Controller
     public function isAuthorized(int $userRight, int $userCheck)
     {
         if ($userRight !== $userCheck) {
-            throw new NotAuthorizedException($userCheck);
+            throw new NotAuthorizedException();
         }
     }
 

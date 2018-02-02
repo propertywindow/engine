@@ -9,18 +9,8 @@ use AppBundle\Exceptions\Exception;
  */
 class NotAuthorizedException extends Exception
 {
-    /**
-     * @var int
-     */
-    private $id;
-
-    /**
-     * @param int $id
-     */
-    public function __construct(int $id)
+    public function __construct()
     {
-        $this->id = $id;
-
-        parent::__construct(sprintf("User id %d is not authorized.", $id));
+        parent::__construct(sprintf("User is not authorized."));
     }
 }

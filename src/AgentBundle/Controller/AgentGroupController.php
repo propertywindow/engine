@@ -7,6 +7,7 @@ use AgentBundle\Entity\AgentGroup;
 use AgentBundle\Exceptions\AgentGroupNotFoundException;
 use AppBundle\Controller\BaseController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
+use AuthenticationBundle\Exceptions\UserNotFoundException;
 use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Response;
@@ -49,6 +50,7 @@ class AgentGroupController extends BaseController
      * @throws AgentGroupNotFoundException
      * @throws InvalidJsonRpcMethodException
      * @throws NotAuthorizedException
+     * @throws UserNotFoundException
      */
     private function invoke(int $userId, string $method, array $parameters = [])
     {
@@ -90,14 +92,13 @@ class AgentGroupController extends BaseController
      *
      * @return array
      * @throws NotAuthorizedException
+     * @throws UserNotFoundException
      */
     private function getAgentGroups(int $userId)
     {
         $user = $this->userService->getUser($userId);
 
-        if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
-            throw new NotAuthorizedException($userId);
-        }
+        $this->isAuthorized($user->getUserType()->getId(), self::USER_ADMIN);
 
         return Mapper::fromAgentGroups(...$this->agentGroupService->getAgentGroups());
     }
@@ -108,14 +109,13 @@ class AgentGroupController extends BaseController
      *
      * @return array $user
      * @throws NotAuthorizedException
+     * @throws UserNotFoundException
      */
     private function createAgentGroup(int $userId, array $parameters)
     {
         $user = $this->userService->getUser($userId);
 
-        if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
-            throw new NotAuthorizedException($userId);
-        }
+        $this->isAuthorized($user->getUserType()->getId(), self::USER_ADMIN);
 
         if (!array_key_exists('name', $parameters)) {
             if (!array_key_exists('agent_group_id', $parameters) && $parameters['agent_group_id'] !== null) {
@@ -159,6 +159,7 @@ class AgentGroupController extends BaseController
      * @return array
      * @throws AgentGroupNotFoundException
      * @throws NotAuthorizedException
+     * @throws UserNotFoundException
      */
     private function updateAgentGroup(int $userId, array $parameters)
     {
@@ -170,9 +171,7 @@ class AgentGroupController extends BaseController
         $user        = $this->userService->getUser($userId);
         $updateAgent = $this->agentGroupService->getAgentGroup($id);
 
-        if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
-            throw new NotAuthorizedException($userId);
-        }
+        $this->isAuthorized($user->getUserType()->getId(), self::USER_ADMIN);
 
         if (array_key_exists('name', $parameters) && $parameters['name'] !== null) {
             $updateAgent->setName(ucfirst((string)$parameters['name']));
@@ -188,6 +187,7 @@ class AgentGroupController extends BaseController
      *
      * @throws AgentGroupNotFoundException
      * @throws NotAuthorizedException
+     * @throws UserNotFoundException
      */
     private function deleteAgentGroup(int $userId, array $parameters)
     {
@@ -197,9 +197,7 @@ class AgentGroupController extends BaseController
 
         $user = $this->userService->getUser($userId);
 
-        if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
-            throw new NotAuthorizedException($userId);
-        }
+        $this->isAuthorized($user->getUserType()->getId(), self::USER_ADMIN);
 
         $id = (int)$parameters['id'];
 

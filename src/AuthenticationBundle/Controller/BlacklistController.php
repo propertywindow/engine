@@ -92,7 +92,7 @@ class BlacklistController extends BaseController
         if ($user->getAgent()->getId() !== $blacklist->getAgent()->getId() ||
             (int)$user->getUserType()->getId() !== self::USER_ADMIN
         ) {
-            throw new NotAuthorizedException($userId);
+            throw new NotAuthorizedException();
         }
 
         return Mapper::fromBlacklist($blacklist);
@@ -111,7 +111,7 @@ class BlacklistController extends BaseController
         $user = $this->userService->getUser($userId);
 
         if ((int)$user->getUserType()->getId() > self::USER_AGENT) {
-            throw new NotAuthorizedException($userId);
+            throw new NotAuthorizedException();
         }
 
         $agent     = $this->agentService->getAgent($user->getAgent()->getId());
@@ -153,7 +153,7 @@ class BlacklistController extends BaseController
         $user = $this->userService->getUser($userId);
 
         if ((int)$user->getUserType()->getId() > self::USER_AGENT) {
-            throw new NotAuthorizedException($userId);
+            throw new NotAuthorizedException();
         }
 
         if (!array_key_exists('id', $parameters)) {

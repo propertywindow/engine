@@ -23,7 +23,6 @@ class ServiceController extends BaseController
 {
     /**
      * @Route("/services/service" , name="service")
-     *
      * @param Request $httpRequest
      *
      * @return HttpResponse
@@ -78,12 +77,11 @@ class ServiceController extends BaseController
             throw new InvalidArgumentException("No argument provided");
         }
 
-        $id           = (int)$parameters['id'];
-        $user         = $this->userService->getUser($userId);
-        $service      = $this->serviceService->getService($id);
-        $userSettings = $this->userSettingsService->getSettings($user);
+        $id      = (int)$parameters['id'];
+        $user    = $this->userService->getUser($userId);
+        $service = $this->serviceService->getService($id);
 
-        return Mapper::fromService($userSettings->getLanguage(), $service);
+        return Mapper::fromService($user->getSettings()->getLanguage(), $service);
     }
 
     /**
@@ -102,8 +100,8 @@ class ServiceController extends BaseController
 
         $user         = $this->userService->getUser($userId);
         $serviceGroup = $this->serviceGroupService->getServiceGroup($parameters['service_group_id']);
-        $userSettings = $this->userSettingsService->getSettings($user);
 
-        return Mapper::fromServices($userSettings->getLanguage(), ...$this->serviceService->getServices($serviceGroup));
+        return Mapper::fromServices($user->getSettings()->getLanguage(), ...
+            $this->serviceService->getServices($serviceGroup));
     }
 }

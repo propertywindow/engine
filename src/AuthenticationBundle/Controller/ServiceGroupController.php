@@ -78,9 +78,8 @@ class ServiceGroupController extends BaseController
         $id           = (int)$parameters['id'];
         $user         = $this->userService->getUser($userId);
         $serviceGroup = $this->serviceGroupService->getServiceGroup($id);
-        $userSettings = $this->userSettingsService->getSettings($user);
 
-        return Mapper::fromServiceGroup($userSettings->getLanguage(), $serviceGroup);
+        return Mapper::fromServiceGroup($user->getSettings()->getLanguage(), $serviceGroup);
     }
 
     /**
@@ -92,9 +91,8 @@ class ServiceGroupController extends BaseController
     private function getServiceGroups(int $userId): array
     {
         $user         = $this->userService->getUser($userId);
-        $userSettings = $this->userSettingsService->getSettings($user);
 
-        return Mapper::fromServiceGroups($userSettings->getLanguage(), ...
+        return Mapper::fromServiceGroups($user->getSettings()->getLanguage(), ...
             $this->serviceGroupService->getServiceGroups());
     }
 }

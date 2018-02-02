@@ -6,6 +6,7 @@ namespace AlertBundle\Controller;
 use AlertBundle\Service\Alert\Mapper;
 use AppBundle\Controller\BaseController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
+use AuthenticationBundle\Exceptions\UserNotFoundException;
 use InvalidArgumentException;
 use AlertBundle\Exceptions\AlertNotFoundException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -48,6 +49,7 @@ class AlertController extends BaseController
      * @throws AlertNotFoundException
      * @throws InvalidJsonRpcMethodException
      * @throws NotAuthorizedException
+     * @throws UserNotFoundException
      */
     private function invoke(int $userId, string $method, array $parameters = [])
     {
@@ -68,6 +70,7 @@ class AlertController extends BaseController
      * @return array
      * @throws AlertNotFoundException
      * @throws NotAuthorizedException
+     * @throws UserNotFoundException
      */
     private function getAlert(int $userId, array $parameters)
     {
@@ -79,9 +82,10 @@ class AlertController extends BaseController
         $user  = $this->userService->getUser($userId);
         $alert = $this->alertService->getAlert($id);
 
-        if ($user->getAgent()->getAgentGroup() !== $alert->getApplicant()->getAgentGroup()) {
-            throw new NotAuthorizedException($userId);
-        }
+        $this->isAuthorized(
+            $user->getAgent()->getAgentGroup()->getId(),
+            $alert->getApplicant()->getAgentGroup()->getId()
+        );
 
         return Mapper::fromAlert($alert);
     }
@@ -90,6 +94,7 @@ class AlertController extends BaseController
      * @param int $userId
      *
      * @return array
+     * @throws UserNotFoundException
      */
     private function getAlerts(int $userId)
     {

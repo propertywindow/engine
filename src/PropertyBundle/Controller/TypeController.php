@@ -5,8 +5,10 @@ namespace PropertyBundle\Controller;
 
 use AppBundle\Controller\BaseController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
+use AuthenticationBundle\Exceptions\UserNotFoundException;
 use InvalidArgumentException;
 use PropertyBundle\Exceptions\TypeDeleteException;
+use PropertyBundle\Exceptions\TypeNotFoundException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Response;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
@@ -48,6 +50,8 @@ class TypeController extends BaseController
      * @throws InvalidJsonRpcMethodException
      * @throws NotAuthorizedException
      * @throws TypeDeleteException
+     * @throws TypeNotFoundException
+     * @throws UserNotFoundException
      */
     private function invoke(int $userId, string $method, array $parameters = [])
     {
@@ -67,6 +71,7 @@ class TypeController extends BaseController
      * @param array $parameters
      *
      * @return array
+     * @throws TypeNotFoundException
      */
     private function getType(array $parameters)
     {
@@ -93,6 +98,8 @@ class TypeController extends BaseController
      *
      * @throws NotAuthorizedException
      * @throws TypeDeleteException
+     * @throws UserNotFoundException
+     * @throws TypeNotFoundException
      */
     private function deleteType(array $parameters, int $userId)
     {
@@ -102,9 +109,7 @@ class TypeController extends BaseController
 
         $user = $this->userService->getUser($userId);
 
-        if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
-            throw new NotAuthorizedException($userId);
-        }
+        $this->isAuthorized($user->getUserType()->getId(), self::USER_ADMIN);
 
         $id = (int)$parameters['id'];
 

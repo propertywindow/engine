@@ -107,9 +107,7 @@ class UserController extends BaseController
         $user    = $this->userService->getUser($id);
         $getUser = $this->userService->getUser($userId);
 
-        if ($getUser->getAgent()->getId() !== $user->getAgent()->getId()) {
-            throw new NotAuthorizedException($userId);
-        }
+        $this->isAuthorized($getUser->getAgent()->getId(), $user->getAgent()->getId());
 
         return Mapper::fromUser($getUser);
     }
@@ -149,9 +147,7 @@ class UserController extends BaseController
             throw new InvalidArgumentException("No argument provided");
         }
 
-        if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
-            throw new NotAuthorizedException($userId);
-        }
+        $this->isAuthorized($user->getUserType()->getId(), self::USER_ADMIN);
 
         $agent         = $this->agentService->getAgent((int)$parameters['id']);
         $colleagueType = $this->userTypeService->getUserType(3);
@@ -195,7 +191,7 @@ class UserController extends BaseController
         $user = $this->userService->getUser($userId);
 
         if ((int)$user->getUserType()->getId() > self::USER_AGENT) {
-            throw new NotAuthorizedException($userId);
+            throw new NotAuthorizedException();
         }
 
         $this->checkParameters([
@@ -276,15 +272,11 @@ class UserController extends BaseController
             throw new InvalidArgumentException("Identifier not provided");
         }
 
-        $id   = (int)$parameters['id'];
-        $user = $this->userService->getUser($userId);
-
+        $id         = (int)$parameters['id'];
+        $user       = $this->userService->getUser($userId);
         $updateUser = $this->userService->getUser($id);
 
-        if ($updateUser->getAgent()->getId() !== $user->getAgent()->getId()) {
-            throw new NotAuthorizedException($userId);
-        }
-
+        $this->isAuthorized($updateUser->getAgent()->getId(), $user->getAgent()->getId());
         $this->convertParameters($updateUser, $parameters);
 
         return Mapper::fromUser($this->userService->updateUser($updateUser));
@@ -310,9 +302,7 @@ class UserController extends BaseController
         $user       = $this->userService->getUser($userId);
         $updateUser = $this->userService->getUser($id);
 
-        if ($updateUser->getId() !== $user->getId()) {
-            throw new NotAuthorizedException($userId);
-        }
+        $this->isAuthorized($updateUser->getId(), $user->getId());
 
         $updateUser->setPassword(md5((string)$parameters['password']));
         $updateUser->setActive(true);
@@ -337,9 +327,7 @@ class UserController extends BaseController
         $user       = $this->userService->getUser($userId);
         $updateUser = $this->userService->getUser($id);
 
-        if ($updateUser->getAgent()->getId() !== $user->getAgent()->getId()) {
-            throw new NotAuthorizedException($userId);
-        }
+        $this->isAuthorized($updateUser->getAgent()->getId(), $user->getAgent()->getId());
 
         $this->userService->disableUser($user);
     }
@@ -361,7 +349,7 @@ class UserController extends BaseController
         $user = $this->userService->getUser($userId);
 
         if ((int)$user->getUserType()->getId() > self::USER_AGENT) {
-            throw new NotAuthorizedException($userId);
+            throw new NotAuthorizedException();
         }
 
         $this->userService->deleteUser($id);

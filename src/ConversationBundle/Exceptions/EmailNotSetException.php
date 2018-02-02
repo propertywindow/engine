@@ -1,26 +1,17 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace ConversationBundle\Exceptions;
 
 use AppBundle\Exceptions\Exception;
 
 /**
- * @package ConversationBundle\Exceptions
+ * EmailNotSet Exception
  */
 class EmailNotSetException extends Exception
 {
-    /**
-     * @var int
-     */
-    private $id;
-
-    /**
-     * @param int $id
-     */
-    public function __construct(int $id)
+    public function __construct()
     {
-        $this->id = $id;
-
-        parent::__construct(sprintf("Could not find email settings for user with id: %d", $id));
+        parent::__construct(sprintf("Could not find email settings"));
     }
 }

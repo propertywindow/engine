@@ -3,8 +3,10 @@ declare(strict_types=1);
 
 namespace LogBundle\Controller;
 
+use AgentBundle\Exceptions\AgentNotFoundException;
 use AppBundle\Controller\BaseController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
+use AuthenticationBundle\Exceptions\UserNotFoundException;
 use InvalidArgumentException;
 use LogBundle\Exceptions\ActivityNotFoundException;
 use LogBundle\Service\Activity\Mapper;
@@ -46,8 +48,10 @@ class ActivityController extends BaseController
      *
      * @return array
      * @throws ActivityNotFoundException
+     * @throws AgentNotFoundException
      * @throws InvalidJsonRpcMethodException
      * @throws NotAuthorizedException
+     * @throws UserNotFoundException
      */
     private function invoke(int $userId, string $method, array $parameters = [])
     {
@@ -70,7 +74,9 @@ class ActivityController extends BaseController
      * @param array $parameters
      *
      * @return array
+     * @throws ActivityNotFoundException
      * @throws NotAuthorizedException
+     * @throws UserNotFoundException
      */
     private function getActivity(int $userId, array $parameters)
     {
@@ -81,9 +87,7 @@ class ActivityController extends BaseController
         $user = $this->userService->getUser($userId);
         $id   = (int)$parameters['id'];
 
-        if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
-            throw new NotAuthorizedException($userId);
-        }
+        $this->isAuthorized($user->getUserType()->getId(), self::USER_ADMIN);
 
         return Mapper::fromActivity($this->logActivityService->getActivity($id));
     }
@@ -92,7 +96,7 @@ class ActivityController extends BaseController
      * @param int $userId
      *
      * @return array
-     * @throws ActivityNotFoundException
+     * @throws UserNotFoundException
      */
     private function getActivityFromUser(int $userId)
     {
@@ -106,14 +110,13 @@ class ActivityController extends BaseController
      *
      * @return array
      * @throws NotAuthorizedException
+     * @throws UserNotFoundException
      */
     private function getActivities(int $userId)
     {
         $user = $this->userService->getUser($userId);
 
-        if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
-            throw new NotAuthorizedException($userId);
-        }
+        $this->isAuthorized($user->getUserType()->getId(), self::USER_ADMIN);
 
         return Mapper::fromActivities(...$this->logActivityService->getActivities($user->getAgent()));
     }
@@ -124,6 +127,8 @@ class ActivityController extends BaseController
      * @param array $parameters
      *
      * @return array
+     * @throws UserNotFoundException
+     * @throws AgentNotFoundException
      */
     private function getPropertyChanges(int $userId, array $parameters)
     {

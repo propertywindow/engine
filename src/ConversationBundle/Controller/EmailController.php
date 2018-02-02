@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace ConversationBundle\Controller;
 
 use AppBundle\Controller\BaseController;
+use AuthenticationBundle\Entity\UserSettings;
 use AuthenticationBundle\Exceptions\UserNotFoundException;
-use AuthenticationBundle\Exceptions\UserSettingsNotFoundException;
 use ConversationBundle\Entity\Email;
 use ConversationBundle\Entity\Mailbox;
 use ConversationBundle\Exceptions\EmailNotSetException;
@@ -51,7 +51,6 @@ class EmailController extends BaseController
      * @throws EmailNotSetException
      * @throws InvalidJsonRpcMethodException
      * @throws UserNotFoundException
-     * @throws UserSettingsNotFoundException
      */
     private function invoke(int $userId, string $method, array $parameters = [])
     {
@@ -65,8 +64,6 @@ class EmailController extends BaseController
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
     }
 
-    // todo: get mail settings: https://emailsettings.firetrust.com/settings?q=test.user@gmail.com
-
     /**
      * @param int   $userId
      * @param array $parameters
@@ -74,7 +71,6 @@ class EmailController extends BaseController
      * @return array
      * @throws EmailNotSetException
      * @throws UserNotFoundException
-     * @throws UserSettingsNotFoundException
      */
     private function getMailbox(int $userId, array $parameters)
     {
@@ -82,11 +78,9 @@ class EmailController extends BaseController
             throw new InvalidArgumentException("mailbox parameter not provided");
         }
         $user         = $this->userService->getUser($userId);
-        $userSettings = $this->userSettingsService->getSettings($user);
+        $userSettings = $user->getSettings();
 
-        if (!$userSettings->getIMAPAddress()) {
-            throw new EmailNotSetException($userId);
-        }
+        $this->checkMailbox($userSettings);
 
         $mailbox    = [];
         $connection = imap_open(
@@ -125,16 +119,13 @@ class EmailController extends BaseController
      * @return array
      * @throws EmailNotSetException
      * @throws UserNotFoundException
-     * @throws UserSettingsNotFoundException
      */
     private function getMailboxes(int $userId)
     {
         $user         = $this->userService->getUser($userId);
-        $userSettings = $this->userSettingsService->getSettings($user);
+        $userSettings = $user->getSettings();
 
-        if (!$userSettings->getIMAPAddress()) {
-            throw new EmailNotSetException($userId);
-        }
+        $this->checkMailbox($userSettings);
 
         $server = '{'
                   . $userSettings->getIMAPAddress() . ':'
@@ -173,5 +164,22 @@ class EmailController extends BaseController
         imap_close($connection);
 
         return Mapper::fromMailboxes(...$mailboxes);
+    }
+
+    /**
+     * @param UserSettings $userSettings
+     *
+     * @throws EmailNotSetException
+     */
+    private function checkMailbox($userSettings)
+    {
+        if (!$userSettings->getIMAPAddress() ||
+            !$userSettings->getIMAPPort() ||
+            !$userSettings->getIMAPSecure() ||
+            !$userSettings->getIMAPUsername() ||
+            !$userSettings->getIMAPPassword()
+        ) {
+            throw new EmailNotSetException();
+        }
     }
 }

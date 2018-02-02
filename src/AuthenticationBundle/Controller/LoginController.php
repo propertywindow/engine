@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace AuthenticationBundle\Controller;
 
 use AppBundle\Controller\BaseController;
+use AuthenticationBundle\Exceptions\BlacklistNotFoundException;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use AuthenticationBundle\Exceptions\UserNotFoundException;
 use InvalidArgumentException;
@@ -44,6 +45,7 @@ class LoginController extends BaseController
      * @param array  $parameters
      *
      * @return array
+     * @throws BlacklistNotFoundException
      * @throws InvalidJsonRpcMethodException
      * @throws NotAuthorizedException
      * @throws UserNotFoundException
@@ -65,6 +67,7 @@ class LoginController extends BaseController
      * @param array  $parameters
      *
      * @return array
+     * @throws BlacklistNotFoundException
      */
     private function login(string $ipAddress, array $parameters)
     {
@@ -141,12 +144,12 @@ class LoginController extends BaseController
         $impersonate   = $this->userService->getUser($impersonateId);
 
         if ((int)$user->getUserType()->getId() > self::USER_AGENT) {
-            throw new NotAuthorizedException($userId);
+            throw new NotAuthorizedException();
         }
 
         if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
             if ($user->getAgent() !== $impersonate->getAgent()) {
-                throw new NotAuthorizedException($userId);
+                throw new NotAuthorizedException();
             }
         }
 

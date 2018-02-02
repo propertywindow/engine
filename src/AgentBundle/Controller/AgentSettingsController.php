@@ -91,12 +91,12 @@ class AgentSettingsController extends BaseController
         $settings = $this->agentSettingsService->getSettings($user->getAgent());
 
         if ((int)$user->getUserType()->getId() > self::USER_AGENT) {
-            throw new NotAuthorizedException($userId);
+            throw new NotAuthorizedException();
         }
 
         if ($settings->getAgent()->getId() !== $user->getAgent()->getId()) {
             if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
-                throw new NotAuthorizedException($userId);
+                throw new NotAuthorizedException();
             }
         }
 
