@@ -11,7 +11,6 @@ use ConversationBundle\Entity\Message;
 use ConversationBundle\Exceptions\ConversationForRecipientNotFoundException;
 use ConversationBundle\Exceptions\ConversationNotFoundException;
 use ConversationBundle\Exceptions\NoColleagueException;
-use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Response;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
@@ -54,6 +53,8 @@ class ConversationController extends BaseController
      * @throws ConversationNotFoundException
      * @throws InvalidJsonRpcMethodException
      * @throws NoColleagueException
+     * @throws UserNotFoundException
+     * @throws UserTypeNotFoundException
      */
     private function invoke(int $userId, string $method, array $parameters = [])
     {
@@ -83,19 +84,18 @@ class ConversationController extends BaseController
      */
     private function getConversation(array $parameters)
     {
-        if (!array_key_exists('id', $parameters)) {
-            throw new InvalidArgumentException("No argument provided");
-        }
+        $this->checkParameters([
+            'id',
+        ], $parameters);
 
-        $id = (int)$parameters['id'];
-
-        return Mapper::fromConversation($this->conversationService->getConversation($id));
+        return Mapper::fromConversation($this->conversationService->getConversation((int)$parameters['id']));
     }
 
     /**
      * @param int $userId
      *
      * @return array
+     * @throws UserNotFoundException
      */
     private function getConversations(int $userId)
     {
@@ -115,12 +115,10 @@ class ConversationController extends BaseController
      */
     private function createConversation(int $userId, array $parameters)
     {
-        if (!array_key_exists('recipient_id', $parameters) && $parameters['recipient_id'] !== null) {
-            throw new InvalidArgumentException("recipient_id parameter not provided");
-        }
-        if (!array_key_exists('message', $parameters) && $parameters['message'] !== null) {
-            throw new InvalidArgumentException("message parameter not provided");
-        }
+        $this->checkParameters([
+            'recipient_id',
+            'message',
+        ], $parameters);
 
         $author    = $this->userService->getUser($userId);
         $recipient = $this->userService->getUser((int)$parameters['recipient_id']);
@@ -165,12 +163,11 @@ class ConversationController extends BaseController
      */
     private function getMessages(int $userId, array $parameters)
     {
-        if (!array_key_exists('id', $parameters)) {
-            throw new InvalidArgumentException("No argument provided");
-        }
+        $this->checkParameters([
+            'id',
+        ], $parameters);
 
-        $id           = (int)$parameters['id'];
-        $conversation = $this->conversationService->getConversation($id);
+        $conversation = $this->conversationService->getConversation((int)$parameters['id']);
 
         $messages = $this->messageService->getMessages($conversation);
 
@@ -190,12 +187,13 @@ class ConversationController extends BaseController
      *
      * @return array
      * @throws ConversationForRecipientNotFoundException
+     * @throws UserNotFoundException
      */
     private function getConversationByRecipient(int $userId, array $parameters)
     {
-        if (!array_key_exists('recipient_id', $parameters) && $parameters['recipient_id'] !== null) {
-            throw new InvalidArgumentException("recipient_id parameter not provided");
-        }
+        $this->checkParameters([
+            'recipient_id',
+        ], $parameters);
 
         $author       = $this->userService->getUser($userId);
         $recipient    = $this->userService->getUser((int)$parameters['recipient_id']);
@@ -220,6 +218,7 @@ class ConversationController extends BaseController
      * @param int $userId
      *
      * @return array $messages
+     * @throws UserNotFoundException
      */
     private function getUnread(int $userId)
     {

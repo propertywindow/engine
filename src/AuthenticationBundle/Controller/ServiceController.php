@@ -8,7 +8,6 @@ use AuthenticationBundle\Exceptions\ServiceGroupNotFoundException;
 use AuthenticationBundle\Exceptions\ServiceNotFoundException;
 use AuthenticationBundle\Exceptions\UserNotFoundException;
 use AuthenticationBundle\Service\Service\Mapper;
-use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Response;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
@@ -73,13 +72,12 @@ class ServiceController extends BaseController
      */
     private function getService(int $userId, array $parameters)
     {
-        if (!array_key_exists('id', $parameters)) {
-            throw new InvalidArgumentException("No argument provided");
-        }
+        $this->checkParameters([
+            'id',
+        ], $parameters);
 
-        $id      = (int)$parameters['id'];
         $user    = $this->userService->getUser($userId);
-        $service = $this->serviceService->getService($id);
+        $service = $this->serviceService->getService((int)$parameters['id']);
 
         return Mapper::fromService($user->getSettings()->getLanguage(), $service);
     }
@@ -94,9 +92,9 @@ class ServiceController extends BaseController
      */
     private function getServices(int $userId, array $parameters)
     {
-        if (!array_key_exists('service_group_id', $parameters)) {
-            throw new InvalidArgumentException("No argument provided");
-        }
+        $this->checkParameters([
+            'service_group_id',
+        ], $parameters);
 
         $user         = $this->userService->getUser($userId);
         $serviceGroup = $this->serviceGroupService->getServiceGroup($parameters['service_group_id']);

@@ -78,13 +78,11 @@ class AgentGroupController extends BaseController
      */
     private function getAgentGroup(array $parameters)
     {
-        if (!array_key_exists('id', $parameters)) {
-            throw new InvalidArgumentException("No argument provided");
-        }
+        $this->checkParameters([
+            'id',
+        ], $parameters);
 
-        $id = (int)$parameters['id'];
-
-        return Mapper::fromAgentGroup($this->agentGroupService->getAgentGroup($id));
+        return Mapper::fromAgentGroup($this->agentGroupService->getAgentGroup((int)$parameters['id']));
     }
 
     /**
@@ -163,9 +161,9 @@ class AgentGroupController extends BaseController
      */
     private function updateAgentGroup(int $userId, array $parameters)
     {
-        if (!array_key_exists('id', $parameters) || empty($parameters['id'])) {
-            throw new InvalidArgumentException("Identifier not provided");
-        }
+        $this->checkParameters([
+            'id',
+        ], $parameters);
 
         $id          = (int)$parameters['id'];
         $user        = $this->userService->getUser($userId);
@@ -191,9 +189,9 @@ class AgentGroupController extends BaseController
      */
     private function deleteAgentGroup(int $userId, array $parameters)
     {
-        if (!array_key_exists('id', $parameters)) {
-            throw new InvalidArgumentException("No argument provided");
-        }
+        $this->checkParameters([
+            'id',
+        ], $parameters);
 
         $user = $this->userService->getUser($userId);
 

@@ -74,9 +74,10 @@ class EmailController extends BaseController
      */
     private function getMailbox(int $userId, array $parameters)
     {
-        if (!array_key_exists('mailbox', $parameters) && $parameters['mailbox'] !== null) {
-            throw new InvalidArgumentException("mailbox parameter not provided");
-        }
+        $this->checkParameters([
+            'mailbox',
+        ], $parameters);
+
         $user         = $this->userService->getUser($userId);
         $userSettings = $user->getSettings();
 
@@ -173,11 +174,11 @@ class EmailController extends BaseController
      */
     private function checkMailbox($userSettings)
     {
-        if (!$userSettings->getIMAPAddress() ||
-            !$userSettings->getIMAPPort() ||
-            !$userSettings->getIMAPSecure() ||
-            !$userSettings->getIMAPUsername() ||
-            !$userSettings->getIMAPPassword()
+        if ($userSettings->getIMAPAddress() === null ||
+            $userSettings->getIMAPPort() === null ||
+            $userSettings->getIMAPSecure() === null ||
+            $userSettings->getIMAPUsername() === null ||
+            $userSettings->getIMAPPassword() === null
         ) {
             throw new EmailNotSetException();
         }

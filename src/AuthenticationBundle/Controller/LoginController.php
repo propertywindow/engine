@@ -7,7 +7,6 @@ use AppBundle\Controller\BaseController;
 use AuthenticationBundle\Exceptions\BlacklistNotFoundException;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use AuthenticationBundle\Exceptions\UserNotFoundException;
-use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Response;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
@@ -71,12 +70,10 @@ class LoginController extends BaseController
      */
     private function login(string $ipAddress, array $parameters)
     {
-        if (!array_key_exists('email', $parameters)) {
-            throw new InvalidArgumentException("No email argument provided");
-        }
-        if (!array_key_exists('password', $parameters)) {
-            throw new InvalidArgumentException("No password argument provided");
-        }
+        $this->checkParameters([
+            'email',
+            'password',
+        ], $parameters);
 
         $email    = (string)$parameters['email'];
         $password = md5((string)$parameters['password']);
@@ -131,17 +128,13 @@ class LoginController extends BaseController
      */
     private function impersonate(array $parameters)
     {
-        if (!array_key_exists('user_id', $parameters)) {
-            throw new InvalidArgumentException("No argument provided");
-        }
-        if (!array_key_exists('impersonate_id', $parameters)) {
-            throw new InvalidArgumentException("No argument provided");
-        }
+        $this->checkParameters([
+            'user_id',
+            'impersonate_id',
+        ], $parameters);
 
-        $userId        = (int)$parameters['user_id'];
-        $impersonateId = (int)$parameters['impersonate_id'];
-        $user          = $this->userService->getUser($userId);
-        $impersonate   = $this->userService->getUser($impersonateId);
+        $user          = $this->userService->getUser((int)$parameters['user_id']);
+        $impersonate   = $this->userService->getUser((int)$parameters['impersonate_id']);
 
         if ((int)$user->getUserType()->getId() > self::USER_AGENT) {
             throw new NotAuthorizedException();

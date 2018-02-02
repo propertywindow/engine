@@ -75,13 +75,11 @@ class TypeController extends BaseController
      */
     private function getType(array $parameters)
     {
-        if (!array_key_exists('id', $parameters)) {
-            throw new InvalidArgumentException("No argument provided");
-        }
+        $this->checkParameters([
+            'id',
+        ], $parameters);
 
-        $id = (int)$parameters['id'];
-
-        return Mapper::fromType($this->typeService->getType($id));
+        return Mapper::fromType($this->typeService->getType((int)$parameters['id']));
     }
 
     /**
@@ -103,16 +101,14 @@ class TypeController extends BaseController
      */
     private function deleteType(array $parameters, int $userId)
     {
-        if (!array_key_exists('id', $parameters)) {
-            throw new InvalidArgumentException("No argument provided");
-        }
+        $this->checkParameters([
+            'id',
+        ], $parameters);
 
         $user = $this->userService->getUser($userId);
 
         $this->isAuthorized($user->getUserType()->getId(), self::USER_ADMIN);
 
-        $id = (int)$parameters['id'];
-
-        $this->typeService->deleteType($id);
+        $this->typeService->deleteType((int)$parameters['id']);
     }
 }

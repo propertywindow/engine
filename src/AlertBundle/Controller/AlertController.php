@@ -7,7 +7,6 @@ use AlertBundle\Service\Alert\Mapper;
 use AppBundle\Controller\BaseController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use AuthenticationBundle\Exceptions\UserNotFoundException;
-use InvalidArgumentException;
 use AlertBundle\Exceptions\AlertNotFoundException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Response;
@@ -74,9 +73,9 @@ class AlertController extends BaseController
      */
     private function getAlert(int $userId, array $parameters)
     {
-        if (!array_key_exists('id', $parameters)) {
-            throw new InvalidArgumentException("No argument provided");
-        }
+        $this->checkParameters([
+            'id',
+        ], $parameters);
 
         $id    = (int)$parameters['id'];
         $user  = $this->userService->getUser($userId);

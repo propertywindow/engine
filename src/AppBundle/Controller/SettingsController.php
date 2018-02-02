@@ -6,7 +6,6 @@ namespace AppBundle\Controller;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use AppBundle\Exceptions\SettingsNotFoundException;
 use AuthenticationBundle\Exceptions\UserNotFoundException;
-use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Response;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
@@ -88,22 +87,13 @@ class SettingsController extends BaseController
 
         $settings = $this->settingsService->getSettings();
 
-        if (!array_key_exists('application_name', $parameters)) {
-            throw new InvalidArgumentException("application_name parameter not provided");
-        }
+        $this->checkParameters([
+            'application_name',
+            'application_url',
+            'max_failed_login',
+        ], $parameters);
 
-        if (!array_key_exists('application_url', $parameters)) {
-            throw new InvalidArgumentException("application_url parameter not provided");
-        }
-
-        if (!array_key_exists('max_failed_login', $parameters)) {
-            throw new InvalidArgumentException("max_failed_login parameter not provided");
-        }
-
-        $settings->setApplicationName((string)$parameters['application_name']);
-        $settings->setApplicationURL((string)$parameters['application_url']);
-        $settings->setMaxFailedLogin((int)$parameters['max_failed_login']);
-
+        $this->convertParameters($settings, $parameters);
 
         return Mapper::fromSettings($this->settingsService->updateSettings($settings));
     }

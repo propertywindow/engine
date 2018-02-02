@@ -9,7 +9,7 @@ use AppBundle\Controller\BaseController;
 use AuthenticationBundle\Entity\User;
 use AuthenticationBundle\Exceptions\UserAlreadyExistException;
 use AuthenticationBundle\Exceptions\UserNotFoundException;
-use InvalidArgumentException;
+use AuthenticationBundle\Exceptions\UserTypeNotFoundException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Response;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
@@ -52,6 +52,7 @@ class ClientController extends BaseController
      * @throws InvalidJsonRpcMethodException
      * @throws UserAlreadyExistException
      * @throws UserNotFoundException
+     * @throws UserTypeNotFoundException
      */
     private function invoke(int $userId, string $method, array $parameters = [])
     {
@@ -75,13 +76,11 @@ class ClientController extends BaseController
      */
     private function getClient(array $parameters): array
     {
-        if (!array_key_exists('id', $parameters)) {
-            throw new InvalidArgumentException("No argument provided");
-        }
+        $this->checkParameters([
+            'id',
+        ], $parameters);
 
-        $id = (int)$parameters['id'];
-
-        return Mapper::fromClient($this->clientService->getClient($id));
+        return Mapper::fromClient($this->clientService->getClient((int)$parameters['id']));
     }
 
     /**
@@ -104,38 +103,22 @@ class ClientController extends BaseController
      * @return array $user
      * @throws UserAlreadyExistException
      * @throws UserNotFoundException
+     * @throws UserTypeNotFoundException
      */
     private function createClient(int $userId, array $parameters)
     {
         $user = $this->userService->getUser($userId);
 
-        if (!array_key_exists('email', $parameters) && $parameters['email'] !== null) {
-            throw new InvalidArgumentException("email parameter not provided");
-        }
-        if (!filter_var($parameters['email'], FILTER_VALIDATE_EMAIL)) {
-            throw new InvalidArgumentException("email parameter not valid");
-        }
-        if (!array_key_exists('first_name', $parameters) && $parameters['first_name'] !== null) {
-            throw new InvalidArgumentException("first_name parameter not provided");
-        }
-        if (!array_key_exists('last_name', $parameters) && $parameters['last_name'] !== null) {
-            throw new InvalidArgumentException("last_name parameter not provided");
-        }
-        if (!array_key_exists('street', $parameters) && $parameters['street'] !== null) {
-            throw new InvalidArgumentException("street parameter not provided");
-        }
-        if (!array_key_exists('house_number', $parameters) && $parameters['house_number'] !== null) {
-            throw new InvalidArgumentException("house_number parameter not provided");
-        }
-        if (!array_key_exists('postcode', $parameters) && $parameters['postcode'] !== null) {
-            throw new InvalidArgumentException("postcode parameter not provided");
-        }
-        if (!array_key_exists('city', $parameters) && $parameters['city'] !== null) {
-            throw new InvalidArgumentException("city parameter not provided");
-        }
-        if (!array_key_exists('country', $parameters) && $parameters['country'] !== null) {
-            throw new InvalidArgumentException("country parameter not provided");
-        }
+        $this->checkParameters([
+            'email',
+            'first_name',
+            'last_name',
+            'street',
+            'house_number',
+            'postcode',
+            'city',
+            'country',
+        ], $parameters);
 
         if ($this->userService->getUserByEmail($parameters['email'])) {
             throw new UserAlreadyExistException($parameters['email']);

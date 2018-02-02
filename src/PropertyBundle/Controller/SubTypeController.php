@@ -77,13 +77,11 @@ class SubTypeController extends BaseController
      */
     private function getSubType(array $parameters)
     {
-        if (!array_key_exists('id', $parameters)) {
-            throw new InvalidArgumentException("No argument provided");
-        }
+        $this->checkParameters([
+            'id',
+        ], $parameters);
 
-        $id = (int)$parameters['id'];
-
-        return Mapper::fromSubType($this->subTypeService->getSubType($id));
+        return Mapper::fromSubType($this->subTypeService->getSubType((int)$parameters['id']));
     }
 
     /**
@@ -94,9 +92,9 @@ class SubTypeController extends BaseController
      */
     private function getSubTypes(array $parameters)
     {
-        if (!array_key_exists('type_id', $parameters)) {
-            throw new InvalidArgumentException("No type_id argument provided");
-        }
+        $this->checkParameters([
+            'type_id',
+        ], $parameters);
 
         $type = $this->typeService->getType((int)$parameters['type_id']);
 
@@ -114,16 +112,14 @@ class SubTypeController extends BaseController
      */
     private function deleteSubType(array $parameters, int $userId)
     {
-        if (!array_key_exists('id', $parameters)) {
-            throw new InvalidArgumentException("No argument provided");
-        }
+        $this->checkParameters([
+            'id',
+        ], $parameters);
 
         $user = $this->userService->getUser($userId);
 
         $this->isAuthorized($user->getUserType()->getId(), self::USER_ADMIN);
 
-        $id = (int)$parameters['id'];
-
-        $this->subTypeService->deleteSubType($id);
+        $this->subTypeService->deleteSubType((int)$parameters['id']);
     }
 }

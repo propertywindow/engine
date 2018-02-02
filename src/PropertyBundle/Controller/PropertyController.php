@@ -101,9 +101,9 @@ class PropertyController extends BaseController
      */
     private function getProperty(int $userId, array $parameters)
     {
-        if (!array_key_exists('id', $parameters)) {
-            throw new InvalidArgumentException("No argument provided");
-        }
+        $this->checkParameters([
+            'id',
+        ], $parameters);
 
         $id   = (int)$parameters['id'];
         $user = $this->userService->getUser($userId);
@@ -344,9 +344,9 @@ class PropertyController extends BaseController
      */
     private function archiveProperty(int $userId, array $parameters)
     {
-        if (!array_key_exists('id', $parameters)) {
-            throw new InvalidArgumentException("No argument provided");
-        }
+        $this->checkParameters([
+            'id',
+        ], $parameters);
 
         $id       = (int)$parameters['id'];
         $user     = $this->userService->getUser($userId);
@@ -378,18 +378,17 @@ class PropertyController extends BaseController
      */
     private function deleteProperty(int $userId, array $parameters)
     {
-        if (!array_key_exists('id', $parameters)) {
-            throw new InvalidArgumentException("No argument provided");
-        }
+        $this->checkParameters([
+            'id',
+        ], $parameters);
 
-        $id   = (int)$parameters['id'];
         $user = $this->userService->getUser($userId);
 
         if ((int)$user->getUserType()->getId() > self::USER_AGENT) {
             throw new NotAuthorizedException();
         }
 
-        $this->propertyService->deleteProperty($id);
+        $this->propertyService->deleteProperty((int)$parameters['id']);
 
         // todo: delete info from not cascading tables too, including logBundle
         // todo: remove all photos from data folder and Gallery
@@ -406,13 +405,10 @@ class PropertyController extends BaseController
      */
     private function setPropertySold(int $userId, array $parameters)
     {
-        if (!array_key_exists('id', $parameters)) {
-            throw new InvalidArgumentException("No argument provided");
-        }
-
-        if (!array_key_exists('soldPrice', $parameters)) {
-            throw new InvalidArgumentException("No argument provided");
-        }
+        $this->checkParameters([
+            'id',
+            'soldPrice',
+        ], $parameters);
 
         $id        = (int)$parameters['id'];
         $soldPrice = (int)$parameters['soldPrice'];
@@ -444,13 +440,10 @@ class PropertyController extends BaseController
      */
     private function toggleOnline(int $userId, array $parameters)
     {
-        if (!array_key_exists('id', $parameters)) {
-            throw new InvalidArgumentException("No argument provided");
-        }
-
-        if (!array_key_exists('online', $parameters)) {
-            throw new InvalidArgumentException("No argument provided");
-        }
+        $this->checkParameters([
+            'id',
+            'online',
+        ], $parameters);
 
         $id       = (int)$parameters['id'];
         $online   = (bool)$parameters['online'];

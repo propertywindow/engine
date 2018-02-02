@@ -9,7 +9,6 @@ use AuthenticationBundle\Exceptions\BlacklistNotFoundException;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use AuthenticationBundle\Exceptions\UserNotFoundException;
 use AuthenticationBundle\Service\Blacklist\Mapper;
-use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Response;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
@@ -81,13 +80,12 @@ class BlacklistController extends BaseController
      */
     private function getBlacklist(int $userId, array $parameters)
     {
-        if (!array_key_exists('id', $parameters)) {
-            throw new InvalidArgumentException("No argument provided");
-        }
+        $this->checkParameters([
+            'id',
+        ], $parameters);
 
-        $id        = (int)$parameters['id'];
         $user      = $this->userService->getUser($userId);
-        $blacklist = $this->blacklistService->getBlacklist($id);
+        $blacklist = $this->blacklistService->getBlacklist((int)$parameters['id']);
 
         if ($user->getAgent()->getId() !== $blacklist->getAgent()->getId() ||
             (int)$user->getUserType()->getId() !== self::USER_ADMIN
@@ -128,12 +126,10 @@ class BlacklistController extends BaseController
      */
     private function createBlacklist(array $parameters)
     {
-        if (!array_key_exists('user_id', $parameters)) {
-            throw new InvalidArgumentException("No user_id argument provided");
-        }
-        if (!array_key_exists('ip', $parameters)) {
-            throw new InvalidArgumentException("No ip argument provided");
-        }
+        $this->checkParameters([
+            'user_id',
+            'ip',
+        ], $parameters);
 
         $user = $this->userService->getUser($parameters['user_id']);
 
@@ -156,9 +152,9 @@ class BlacklistController extends BaseController
             throw new NotAuthorizedException();
         }
 
-        if (!array_key_exists('id', $parameters)) {
-            throw new InvalidArgumentException("No id argument provided");
-        }
+        $this->checkParameters([
+            'id',
+        ], $parameters);
 
         if (array_key_exists('id', $parameters)) {
             $this->blacklistService->removeBlacklist($parameters['id']);

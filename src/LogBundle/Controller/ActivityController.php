@@ -7,7 +7,6 @@ use AgentBundle\Exceptions\AgentNotFoundException;
 use AppBundle\Controller\BaseController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use AuthenticationBundle\Exceptions\UserNotFoundException;
-use InvalidArgumentException;
 use LogBundle\Exceptions\ActivityNotFoundException;
 use LogBundle\Service\Activity\Mapper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -80,16 +79,15 @@ class ActivityController extends BaseController
      */
     private function getActivity(int $userId, array $parameters)
     {
-        if (!array_key_exists('id', $parameters)) {
-            throw new InvalidArgumentException("No argument provided");
-        }
+        $this->checkParameters([
+            'id',
+        ], $parameters);
 
         $user = $this->userService->getUser($userId);
-        $id   = (int)$parameters['id'];
 
         $this->isAuthorized($user->getUserType()->getId(), self::USER_ADMIN);
 
-        return Mapper::fromActivity($this->logActivityService->getActivity($id));
+        return Mapper::fromActivity($this->logActivityService->getActivity((int)$parameters['id']));
     }
 
     /**
@@ -132,9 +130,9 @@ class ActivityController extends BaseController
      */
     private function getPropertyChanges(int $userId, array $parameters)
     {
-        if (!array_key_exists('type', $parameters)) {
-            throw new InvalidArgumentException("No argument provided");
-        }
+        $this->checkParameters([
+            'type',
+        ], $parameters);
 
         if (array_key_exists('id', $parameters) && $parameters['id'] !== null) {
             $agent = $this->agentService->getAgent($parameters['id']);

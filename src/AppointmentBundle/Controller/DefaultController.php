@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace AppointmentBundle\Controller;
 
@@ -7,8 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class DefaultController
- * @package AppointmentBundle\Controller
+ * Default Controller
  */
 class DefaultController extends Controller
 {

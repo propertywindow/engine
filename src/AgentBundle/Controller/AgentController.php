@@ -90,13 +90,11 @@ class AgentController extends BaseController
      */
     private function getAgent(array $parameters)
     {
-        if (!array_key_exists('id', $parameters)) {
-            throw new InvalidArgumentException("No argument provided");
-        }
+        $this->checkParameters([
+            'id',
+        ], $parameters);
 
-        $id = (int)$parameters['id'];
-
-        return Mapper::fromAgent($this->agentService->getAgent($id));
+        return Mapper::fromAgent($this->agentService->getAgent((int)$parameters['id']));
     }
 
     /**
@@ -160,10 +158,6 @@ class AgentController extends BaseController
             }
         }
 
-        if (!filter_var($parameters['email'], FILTER_VALIDATE_EMAIL)) {
-            throw new InvalidArgumentException("email parameter not valid");
-        }
-
         if ($this->userService->getUserByEmail($parameters['email'])) {
             throw new UserAlreadyExistException($parameters['email']);
         }
@@ -224,13 +218,9 @@ class AgentController extends BaseController
      */
     private function updateAgent(int $userId, array $parameters)
     {
-        if (!array_key_exists('id', $parameters) || empty($parameters['id'])) {
-            throw new InvalidArgumentException("Identifier not provided");
-        }
-
-        if (!filter_var($parameters['email'], FILTER_VALIDATE_EMAIL)) {
-            throw new InvalidArgumentException("email parameter not valid");
-        }
+        $this->checkParameters([
+            'id',
+        ], $parameters);
 
         $id   = (int)$parameters['id'];
         $user = $this->userService->getUser($userId);
@@ -263,9 +253,9 @@ class AgentController extends BaseController
      */
     private function deleteAgent(int $userId, array $parameters)
     {
-        if (!array_key_exists('id', $parameters)) {
-            throw new InvalidArgumentException("No argument provided");
-        }
+        $this->checkParameters([
+            'id',
+        ], $parameters);
 
         $user = $this->userService->getUser($userId);
 

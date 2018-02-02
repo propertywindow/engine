@@ -7,7 +7,6 @@ use AppBundle\Controller\BaseController;
 use AuthenticationBundle\Exceptions\ServiceGroupNotFoundException;
 use AuthenticationBundle\Exceptions\UserNotFoundException;
 use AuthenticationBundle\Service\ServiceGroup\Mapper;
-use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Response;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
@@ -71,13 +70,12 @@ class ServiceGroupController extends BaseController
      */
     private function getServiceGroup(int $userId, array $parameters): array
     {
-        if (!array_key_exists('id', $parameters)) {
-            throw new InvalidArgumentException("No argument provided");
-        }
+        $this->checkParameters([
+            'id',
+        ], $parameters);
 
-        $id           = (int)$parameters['id'];
         $user         = $this->userService->getUser($userId);
-        $serviceGroup = $this->serviceGroupService->getServiceGroup($id);
+        $serviceGroup = $this->serviceGroupService->getServiceGroup((int)$parameters['id']);
 
         return Mapper::fromServiceGroup($user->getSettings()->getLanguage(), $serviceGroup);
     }
@@ -90,7 +88,7 @@ class ServiceGroupController extends BaseController
      */
     private function getServiceGroups(int $userId): array
     {
-        $user         = $this->userService->getUser($userId);
+        $user = $this->userService->getUser($userId);
 
         return Mapper::fromServiceGroups($user->getSettings()->getLanguage(), ...
             $this->serviceGroupService->getServiceGroups());

@@ -95,13 +95,11 @@ class NotificationController extends BaseController
      */
     private function getNotification(array $parameters)
     {
-        if (!array_key_exists('id', $parameters)) {
-            throw new InvalidArgumentException("No argument provided");
-        }
+        $this->checkParameters([
+            'id',
+        ], $parameters);
 
-        $id = (int)$parameters['id'];
-
-        return Mapper::fromNotification($this->notificationService->getNotification($id));
+        return Mapper::fromNotification($this->notificationService->getNotification((int)$parameters['id']));
     }
 
     /**
@@ -205,9 +203,10 @@ class NotificationController extends BaseController
     {
         // todo: check rights
 
-        if (!array_key_exists('id', $parameters) || empty($parameters['id'])) {
-            throw new InvalidArgumentException("Identifier not provided");
-        }
+        $this->checkParameters([
+            'id',
+        ], $parameters);
+
         $notification = $this->notificationService->getNotification((int)$parameters['id']);
 
         if (array_key_exists('content', $parameters) && $parameters['content'] !== null) {
@@ -271,9 +270,9 @@ class NotificationController extends BaseController
      */
     private function deleteNotification(int $userId, array $parameters)
     {
-        if (!array_key_exists('id', $parameters)) {
-            throw new InvalidArgumentException("No argument provided");
-        }
+        $this->checkParameters([
+            'id',
+        ], $parameters);
 
         $user = $this->userService->getUser($userId);
 

@@ -159,9 +159,8 @@ class ServiceTemplateController extends BaseController
             'id',
         ], $parameters);
 
-        $id               = (int)$parameters['id'];
         $user             = $this->userService->getUser($userId);
-        $templateUserType = $this->userTypeService->getUserType($id);
+        $templateUserType = $this->userTypeService->getUserType((int)$parameters['id']);
 
         $this->isAuthorized($user->getUserType()->getId(), self::USER_ADMIN);
 

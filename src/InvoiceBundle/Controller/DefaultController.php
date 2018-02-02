@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace InvoiceBundle\Controller;
 
@@ -7,8 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class DefaultController
- * @package InvoiceBundle\Controller
+ * DefaultController
  */
 class DefaultController extends Controller
 {

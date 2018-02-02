@@ -99,9 +99,9 @@ class UserController extends BaseController
      */
     private function getUserById(int $userId, array $parameters)
     {
-        if (!array_key_exists('id', $parameters)) {
-            throw new InvalidArgumentException("No argument provided");
-        }
+        $this->checkParameters([
+            'id',
+        ], $parameters);
 
         $id      = (int)$parameters['id'];
         $user    = $this->userService->getUser($id);
@@ -141,11 +141,11 @@ class UserController extends BaseController
      */
     private function getAgentUsers(int $userId, array $parameters)
     {
-        $user = $this->userService->getUser($userId);
+        $this->checkParameters([
+            'id',
+        ], $parameters);
 
-        if (!array_key_exists('id', $parameters)) {
-            throw new InvalidArgumentException("No argument provided");
-        }
+        $user = $this->userService->getUser($userId);
 
         $this->isAuthorized($user->getUserType()->getId(), self::USER_ADMIN);
 
@@ -268,13 +268,12 @@ class UserController extends BaseController
      */
     private function updateUser(int $userId, array $parameters)
     {
-        if (!array_key_exists('id', $parameters) || empty($parameters['id'])) {
-            throw new InvalidArgumentException("Identifier not provided");
-        }
+        $this->checkParameters([
+            'id',
+        ], $parameters);
 
-        $id         = (int)$parameters['id'];
         $user       = $this->userService->getUser($userId);
-        $updateUser = $this->userService->getUser($id);
+        $updateUser = $this->userService->getUser((int)$parameters['id']);
 
         $this->isAuthorized($updateUser->getAgent()->getId(), $user->getAgent()->getId());
         $this->convertParameters($updateUser, $parameters);
@@ -291,16 +290,13 @@ class UserController extends BaseController
      */
     private function setPassword(int $userId, array $parameters)
     {
-        if (!array_key_exists('id', $parameters)) {
-            throw new InvalidArgumentException("No argument provided");
-        }
-        if (!array_key_exists('password', $parameters) && $parameters['password'] !== null) {
-            throw new InvalidArgumentException("password parameter not provided");
-        }
+        $this->checkParameters([
+            'id',
+            'password',
+        ], $parameters);
 
-        $id         = (int)$parameters['id'];
         $user       = $this->userService->getUser($userId);
-        $updateUser = $this->userService->getUser($id);
+        $updateUser = $this->userService->getUser((int)$parameters['id']);
 
         $this->isAuthorized($updateUser->getId(), $user->getId());
 
@@ -319,13 +315,12 @@ class UserController extends BaseController
      */
     private function disableUser(int $userId, array $parameters)
     {
-        if (!array_key_exists('id', $parameters)) {
-            throw new InvalidArgumentException("No argument provided");
-        }
+        $this->checkParameters([
+            'id',
+        ], $parameters);
 
-        $id         = (int)$parameters['id'];
         $user       = $this->userService->getUser($userId);
-        $updateUser = $this->userService->getUser($id);
+        $updateUser = $this->userService->getUser((int)$parameters['id']);
 
         $this->isAuthorized($updateUser->getAgent()->getId(), $user->getAgent()->getId());
 
@@ -341,18 +336,17 @@ class UserController extends BaseController
      */
     private function deleteUser(int $userId, array $parameters)
     {
-        if (!array_key_exists('id', $parameters)) {
-            throw new InvalidArgumentException("No argument provided");
-        }
+        $this->checkParameters([
+            'id',
+        ], $parameters);
 
-        $id   = (int)$parameters['id'];
         $user = $this->userService->getUser($userId);
 
         if ((int)$user->getUserType()->getId() > self::USER_AGENT) {
             throw new NotAuthorizedException();
         }
 
-        $this->userService->deleteUser($id);
+        $this->userService->deleteUser((int)$parameters['id']);
     }
 
     /**

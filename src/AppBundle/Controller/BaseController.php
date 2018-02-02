@@ -486,10 +486,16 @@ class BaseController extends Controller
      */
     public function checkParameters(array $required, array $parameters)
     {
-        // todo: add which parameter is missing, maybe even email format etc
+        // todo: add which parameter is missing
 
         if (count(array_intersect_key(array_flip($required), $parameters)) !== count($required)) {
             throw new InvalidArgumentException("there is a required parameter missing");
+        }
+
+        if (array_key_exists('email', $required)) {
+            if (!filter_var($parameters['email'], FILTER_VALIDATE_EMAIL)) {
+                throw new InvalidArgumentException("email parameter not valid");
+            }
         }
     }
 

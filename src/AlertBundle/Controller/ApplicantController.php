@@ -5,12 +5,10 @@ namespace AlertBundle\Controller;
 
 use AlertBundle\Entity\Applicant;
 use AlertBundle\Exceptions\ApplicantAlreadyExistException;
-use AlertBundle\Exceptions\ApplicationNotFoundException;
 use AlertBundle\Service\Applicant\Mapper;
 use AppBundle\Controller\BaseController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use AuthenticationBundle\Exceptions\UserNotFoundException;
-use InvalidArgumentException;
 use AlertBundle\Exceptions\ApplicantNotFoundException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Response;
@@ -82,9 +80,9 @@ class ApplicantController extends BaseController
      */
     private function getApplicant(int $userId, array $parameters): array
     {
-        if (!array_key_exists('id', $parameters)) {
-            throw new InvalidArgumentException("No argument provided");
-        }
+        $this->checkParameters([
+            'id',
+        ], $parameters);
 
         $id        = (int)$parameters['id'];
         $user      = $this->userService->getUser($userId);
@@ -120,15 +118,10 @@ class ApplicantController extends BaseController
     {
         $user = $this->userService->getUser($userId);
 
-        if (!array_key_exists('name', $parameters) && $parameters['name'] !== null) {
-            throw new InvalidArgumentException("name parameter not provided");
-        }
-        if (!array_key_exists('email', $parameters) && $parameters['email'] !== null) {
-            throw new InvalidArgumentException("email parameter not provided");
-        }
-        if (!filter_var($parameters['email'], FILTER_VALIDATE_EMAIL)) {
-            throw new InvalidArgumentException("email parameter not valid");
-        }
+        $this->checkParameters([
+            'name',
+            'email',
+        ], $parameters);
 
         if ($this->applicantService->getApplicantByEmail($parameters['email'])) {
             throw new ApplicantAlreadyExistException($parameters['email']);
@@ -137,17 +130,9 @@ class ApplicantController extends BaseController
         $applicant = new Applicant();
 
         $applicant->setAgentGroup($user->getAgent()->getAgentGroup());
-        $applicant->setName($parameters['name']);
-        $applicant->setEmail($parameters['email']);
         $applicant->setCountry($user->getAgent()->getCountry());
 
-        if (array_key_exists('protection', $parameters) && $parameters['protection'] !== null) {
-            $applicant->setProtection($parameters['protection']);
-        }
-
-        if (array_key_exists('phone', $parameters) && $parameters['phone'] !== null) {
-            $applicant->setPhone($parameters['phone']);
-        }
+        $this->convertParameters($applicant, $parameters);
 
         return Mapper::fromApplicant($this->applicantService->createApplicant($applicant));
     }
@@ -162,13 +147,12 @@ class ApplicantController extends BaseController
      */
     private function deleteApplicant(int $userId, array $parameters)
     {
-        if (!array_key_exists('id', $parameters)) {
-            throw new InvalidArgumentException("No argument provided");
-        }
+        $this->checkParameters([
+            'id',
+        ], $parameters);
 
-        $id        = (int)$parameters['id'];
         $user      = $this->userService->getUser($userId);
-        $applicant = $this->applicantService->getApplicant($id);
+        $applicant = $this->applicantService->getApplicant((int)$parameters['id']);
 
         $this->isAuthorized($user->getAgent()->getAgentGroup()->getId(), $applicant->getAgentGroup()->getId());
 
