@@ -443,16 +443,22 @@ class BaseController extends Controller
     {
         switch (true) {
             case $throwable instanceof CouldNotParseJsonRequestException:
-                return Response::failure(new Error(self::PARSE_ERROR, $throwable->getMessage()));
+                $code = self::PARSE_ERROR;
+                break;
             case $throwable instanceof InvalidJsonRpcRequestException:
-                return Response::failure(new Error(self::INVALID_REQUEST, $throwable->getMessage()));
+                $code = self::INVALID_REQUEST;
+                break;
             case $throwable instanceof InvalidJsonRpcMethodException:
-                return Response::failure(new Error(self::METHOD_NOT_FOUND, $throwable->getMessage()));
+                $code = self::METHOD_NOT_FOUND;
+                break;
             case $throwable instanceof InvalidArgumentException:
-                return Response::failure(new Error(self::INVALID_PARAMS, $throwable->getMessage()));
+                $code = self::INVALID_PARAMS;
+                break;
             case $throwable instanceof CouldNotAuthenticateUserException:
-                return Response::failure(new Error(self::USER_NOT_AUTHENTICATED, $throwable->getMessage()));
+                $code = self::USER_NOT_AUTHENTICATED;
+                break;
             case $throwable instanceof Exception:
+                $code = self::EXCEPTION_ERROR;
                 list($method, $parameters) = self::prepareRequest($httpRequest);
 
                 $this->logErrorService->createError(
@@ -461,13 +467,14 @@ class BaseController extends Controller
                     $throwable->getMessage(),
                     $parameters
                 );
-
-                return Response::failure(new Error(self::EXCEPTION_ERROR, $throwable->getMessage()));
+                break;
+            default:
+                $code = self::INTERNAL_ERROR;
         }
 
         $this->slackService->critical($throwable->getMessage());
 
-        return Response::failure(new Error(self::INTERNAL_ERROR, $throwable->getMessage()));
+        return Response::failure(new Error($code, $throwable->getMessage()));
     }
 
     /**
@@ -485,7 +492,7 @@ class BaseController extends Controller
 
     /**
      * @param string[] $required
-     * @param array $parameters
+     * @param array    $parameters
      */
     public function checkParameters(array $required, array $parameters)
     {
