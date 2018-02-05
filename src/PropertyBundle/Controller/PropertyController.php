@@ -120,7 +120,7 @@ class PropertyController extends BaseController
             ], $parameters);
 
             $this->logTrafficService->createTraffic(
-                $id,
+                $property,
                 (string)$parameters['id'],
                 (string)$parameters['browser'],
                 (string)$parameters['location'],

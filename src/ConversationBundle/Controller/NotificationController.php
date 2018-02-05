@@ -8,8 +8,6 @@ use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use AuthenticationBundle\Exceptions\UserNotFoundException;
 use ConversationBundle\Entity\Notification;
 use ConversationBundle\Exceptions\NotificationNotFoundException;
-use DateTime;
-use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Response;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
@@ -137,47 +135,9 @@ class NotificationController extends BaseController
         $user = $this->userService->getUser($userId);
 
         $notification = new Notification();
-
         $notification->setUser($user);
 
-        if (array_key_exists('content', $parameters) && $parameters['content'] !== null) {
-            $notification->setContent((string)$parameters['content']);
-        }
-
-        if (array_key_exists('type', $parameters) && $parameters['type'] !== null) {
-            $notification->setType((string)$parameters['type']);
-        }
-
-        $start = DateTime::createFromFormat("Y-m-d H:i:s", $parameters['start']);
-        if ($start === false) {
-            throw new InvalidArgumentException("Start {$parameters['start']} couldn't be parsed");
-        } else {
-            $notification->setStart($start);
-        }
-
-        if (array_key_exists('end', $parameters) && $parameters['end'] !== null) {
-            $end = DateTime::createFromFormat("Y-m-d H:i:s", $parameters['end']);
-            if ($end === false) {
-                throw new InvalidArgumentException("End {$parameters['end']} couldn't be parsed");
-            }
-            $notification->setEnd($end);
-        }
-
-        if (array_key_exists('label', $parameters)) {
-            $notification->setLabel((string)$parameters['label']);
-        }
-
-        if (array_key_exists('visible', $parameters) && $parameters['visible'] !== null) {
-            $notification->setVisible((bool)$parameters['visible']);
-        }
-
-        if (array_key_exists('important', $parameters) && $parameters['important'] !== null) {
-            $notification->setImportant((bool)$parameters['important']);
-        }
-
-        if (array_key_exists('removable', $parameters) && $parameters['removable'] !== null) {
-            $notification->setRemovable((bool)$parameters['removable']);
-        }
+        $this->convertParameters($notification, $parameters);
 
         $userIdentifiers = [];
 
@@ -207,45 +167,7 @@ class NotificationController extends BaseController
 
         $notification = $this->notificationService->getNotification((int)$parameters['id']);
 
-        if (array_key_exists('content', $parameters) && $parameters['content'] !== null) {
-            $notification->setContent((string)$parameters['content']);
-        }
-
-        if (array_key_exists('type', $parameters) && $parameters['type'] !== null) {
-            $notification->setType((string)$parameters['type']);
-        }
-
-        if (array_key_exists('start', $parameters) && $parameters['start'] !== null) {
-            $start = DateTime::createFromFormat("Y-m-d H:i:s", $parameters['start']);
-            if ($start === false) {
-                throw new InvalidArgumentException("Start {$parameters['start']} couldn't be parsed");
-            }
-            $notification->setStart($start);
-        }
-
-        if (array_key_exists('end', $parameters) && $parameters['end'] !== null) {
-            $end = DateTime::createFromFormat("Y-m-d H:i:s", $parameters['end']);
-            if ($end === false) {
-                throw new InvalidArgumentException("End {$parameters['end']} couldn't be parsed");
-            }
-            $notification->setEnd($end);
-        }
-
-        if (array_key_exists('label', $parameters)) {
-            $notification->setLabel($parameters['label'] !== null ? (string)$parameters['label'] : null);
-        }
-
-        if (array_key_exists('visible', $parameters)) {
-            $notification->setVisible((bool)$parameters['visible']);
-        }
-
-        if (array_key_exists('important', $parameters)) {
-            $notification->setImportant((bool)$parameters['important']);
-        }
-
-        if (array_key_exists('removable', $parameters) && $parameters['removable'] !== null) {
-            $notification->setRemovable((bool)$parameters['removable']);
-        }
+        $this->convertParameters($notification, $parameters);
 
         $userIdentifiers = [];
 

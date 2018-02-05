@@ -126,7 +126,7 @@ class Error
      *
      * @return Error
      */
-    public function setParameters(?array $parameters): Error
+    public function setParameters(?array $parameters = null): Error
     {
         $this->parameters = $parameters;
 
@@ -134,9 +134,9 @@ class Error
     }
 
     /**
-     * @return array
+     * @return array|null
      */
-    public function getParameters(): array
+    public function getParameters(): ?array
     {
         return $this->parameters;
     }

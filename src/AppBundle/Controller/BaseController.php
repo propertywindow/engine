@@ -518,6 +518,10 @@ class BaseController extends Controller
                 $value = ucwords($value);
             }
 
+            if ($property === 'start' || $property === 'end') {
+                $value = \DateTime::createFromFormat("Y-m-d H:i:s", $value);
+            }
+
             $propertyPart = explode('_', $property);
             $property     = implode('', array_map('ucfirst', $propertyPart));
             $method       = sprintf('set%s', $property);

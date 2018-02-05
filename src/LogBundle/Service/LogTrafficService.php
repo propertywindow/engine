@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use LogBundle\Entity\Traffic;
 use LogBundle\Exceptions\TrafficNotFoundException;
 use LogBundle\Repository\TrafficRepository;
+use PropertyBundle\Entity\Property;
 
 /**
  * LogTraffic Service
@@ -51,7 +52,7 @@ class LogTrafficService
     }
 
     /**
-     * @param int         $propertyId
+     * @param Property    $property
      * @param string      $ip
      * @param string      $browser
      * @param string      $location
@@ -60,7 +61,7 @@ class LogTrafficService
      * @return Traffic
      */
     public function createTraffic(
-        int $propertyId,
+        Property $property,
         string $ip,
         string $browser,
         string $location,
@@ -68,7 +69,7 @@ class LogTrafficService
     ) {
         $traffic = new Traffic();
 
-        $traffic->setPropertyId($propertyId);
+        $traffic->setProperty($property);
         $traffic->setIp($ip);
         $traffic->setBrowser($browser);
         $traffic->setLocation($location);
