@@ -40,7 +40,7 @@ class Error
     private $message;
 
     /**
-     * @var array
+     * @var array|null
      * @ORM\Column(name="parameters", type="array", nullable=true)
      */
     private $parameters = [];

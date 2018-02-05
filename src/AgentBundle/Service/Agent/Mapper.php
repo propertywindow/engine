@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace AgentBundle\Service\Agent;
 
@@ -6,7 +7,6 @@ use AgentBundle\Entity\Agent;
 
 /**
  * Class Mapper
- * @package AgentBundle\Service\Agent
  */
 class Mapper
 {
@@ -32,7 +32,6 @@ class Mapper
         return [
             'id'             => $agent->getId(),
             'agent_group_id' => $agent->getAgentGroup()->getId(),
-//            'agent_group'    => $agent->getAgentGroup(),
             'name'           => $agent->getAgentGroup()->getName(),
             'office'         => $agent->getOffice(),
             'agent_user_id'  => $agent->getUserId(),

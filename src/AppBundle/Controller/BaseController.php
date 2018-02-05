@@ -439,27 +439,28 @@ class BaseController extends Controller
      */
     public function throwable(Throwable $throwable, Request $httpRequest)
     {
-        if ($throwable instanceof CouldNotParseJsonRequestException) {
-            return Response::failure(new Error(self::PARSE_ERROR, $throwable->getMessage()));
-        } elseif ($throwable instanceof InvalidJsonRpcRequestException) {
-            return Response::failure(new Error(self::INVALID_REQUEST, $throwable->getMessage()));
-        } elseif ($throwable instanceof InvalidJsonRpcMethodException) {
-            return Response::failure(new Error(self::METHOD_NOT_FOUND, $throwable->getMessage()));
-        } elseif ($throwable instanceof InvalidArgumentException) {
-            return Response::failure(new Error(self::INVALID_PARAMS, $throwable->getMessage()));
-        } elseif ($throwable instanceof CouldNotAuthenticateUserException) {
-            return Response::failure(new Error(self::USER_NOT_AUTHENTICATED, $throwable->getMessage()));
-        } elseif ($throwable instanceof Exception) {
-            list($userId, $method, $parameters) = self::prepareRequest($httpRequest);
+        switch (true) {
+            case $throwable instanceof CouldNotParseJsonRequestException:
+                return Response::failure(new Error(self::PARSE_ERROR, $throwable->getMessage()));
+            case $throwable instanceof InvalidJsonRpcRequestException:
+                return Response::failure(new Error(self::INVALID_REQUEST, $throwable->getMessage()));
+            case $throwable instanceof InvalidJsonRpcMethodException:
+                return Response::failure(new Error(self::METHOD_NOT_FOUND, $throwable->getMessage()));
+            case $throwable instanceof InvalidArgumentException:
+                return Response::failure(new Error(self::INVALID_PARAMS, $throwable->getMessage()));
+            case $throwable instanceof CouldNotAuthenticateUserException:
+                return Response::failure(new Error(self::USER_NOT_AUTHENTICATED, $throwable->getMessage()));
+            case $throwable instanceof Exception:
+                list($userId, $method, $parameters) = self::prepareRequest($httpRequest);
 
-            $this->logErrorService->createError(
-                $this->userService->getUser($userId),
-                $method,
-                $throwable->getMessage(),
-                $parameters
-            );
+                $this->logErrorService->createError(
+                    $this->userService->getUser($userId),
+                    $method,
+                    $throwable->getMessage(),
+                    $parameters
+                );
 
-            return Response::failure(new Error(self::EXCEPTION_ERROR, $throwable->getMessage()));
+                return Response::failure(new Error(self::EXCEPTION_ERROR, $throwable->getMessage()));
         }
 
         $this->slackService->critical($throwable->getMessage());
@@ -520,27 +521,33 @@ class BaseController extends Controller
 
     /**
      * @param string $property
-     * @param mixed  $value
+     * @param        $value
      *
      * @return mixed
      */
-    public function convertParameters(string $property, mixed $value)
+    public function convertParameters(string $property, $value)
     {
-        if ($property === 'office' || $property === 'name' || $property === 'first_name' || $property === 'last_name') {
-            $value = ucfirst($value);
-        }
-        if ($property === 'email') {
-            $value = strtolower($value);
-        }
-        if ($property === 'street' || $property === 'city') {
-            $value = ucwords($value);
-        }
-
-        if ($property === 'start' || $property === 'end') {
-            $value = \DateTime::createFromFormat("Y-m-d H:i:s", $value);
-            if ($value === false) {
-                throw new InvalidArgumentException("End {$value} couldn't be parsed");
-            }
+        switch ($property) {
+            case "office":
+            case "name":
+            case "first_name":
+            case "last_name":
+                $value = ucfirst($value);
+                break;
+            case "email":
+                $value = strtolower($value);
+                break;
+            case "street":
+            case "city":
+                $value = ucwords($value);
+                break;
+            case "start":
+            case "end":
+                $value = \DateTime::createFromFormat("Y-m-d H:i:s", $value);
+                if ($value === false) {
+                    throw new InvalidArgumentException("End {$value} couldn't be parsed");
+                }
+                break;
         }
 
         return $value;

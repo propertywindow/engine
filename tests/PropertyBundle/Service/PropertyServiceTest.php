@@ -12,6 +12,7 @@ use PropertyBundle\Entity\Property;
 use PHPUnit\Framework\TestCase;
 use PropertyBundle\Entity\SubType;
 use PropertyBundle\Entity\Terms;
+use PropertyBundle\Exceptions\PropertyNotFoundException;
 use PropertyBundle\Service\PropertyService;
 
 /**
@@ -70,7 +71,6 @@ class PropertyServiceTest extends TestCase
                       ->method('getRepository')
                       ->willReturn($propertyRepository);
 
-
         $propertyService = new PropertyService($entityManager);
 
         $propertyService->createProperty($this->property);
@@ -107,7 +107,6 @@ class PropertyServiceTest extends TestCase
                            ->method('find')
                            ->willReturn($this->property);
 
-
         $entityManager = $this->createMock(EntityManagerInterface::class);
 
         $entityManager->expects($this->any())
@@ -120,9 +119,9 @@ class PropertyServiceTest extends TestCase
 
         $this->property->setStreet('Parkside Street');
 
-        $propertyService->updateProperty($this->property);
+        $property = $propertyService->updateProperty($this->property);
 
-        $this->assertEquals('Parkside Street', $this->property->getStreet());
+        $this->assertEquals('Parkside Street', $property->getStreet());
     }
 
     public function testArchiveProperty()
@@ -146,8 +145,8 @@ class PropertyServiceTest extends TestCase
 
         $propertyService = new PropertyService($entityManager);
 
-        $propertyService->archiveProperty($this->property);
+        $property = $propertyService->archiveProperty($this->property);
 
-        $this->assertEquals(1, $this->property->getArchived());
+        $this->assertEquals(1, $property->getArchived());
     }
 }
