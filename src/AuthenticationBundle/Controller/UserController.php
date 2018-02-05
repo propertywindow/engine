@@ -216,26 +216,11 @@ class UserController extends BaseController
         }
 
         $newUser = new User();
-
-        $newUser->setEmail(strtolower($parameters['email']));
-        $newUser->setFirstName(ucfirst($parameters['first_name']));
-        $newUser->setLastName(ucfirst($parameters['last_name']));
-        $newUser->setStreet(ucwords($parameters['street']));
-        $newUser->setHouseNumber($parameters['house_number']);
-        $newUser->setPostcode($parameters['postcode']);
-        $newUser->setCity(ucwords($parameters['city']));
-        $newUser->setCountry($parameters['country']);
         $newUser->setAgent($user->getAgent());
         $newUser->setUserType($this->userTypeService->getUserType($parameters['user_type_id']));
         $newUser->setActive(false);
 
-        if (array_key_exists('phone', $parameters) && $parameters['phone'] !== null) {
-            $newUser->setPhone((string)$parameters['phone']);
-        }
-
-        if (array_key_exists('avatar', $parameters) && $parameters['avatar'] !== null) {
-            $newUser->setAvatar((string)$parameters['avatar']);
-        }
+        $this->prepareParameters($newUser, $parameters);
 
         $createdUser = $this->userService->createUser($newUser);
         $password    = $this->randomPassword();

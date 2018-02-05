@@ -170,19 +170,14 @@ class AgentController extends BaseController
         $this->prepareParameters($agent, $parameters);
 
         $this->agentService->createAgent($agent);
+
         $newUser = new User();
 
-        $newUser->setEmail(strtolower($parameters['email']));
-        $newUser->setFirstName(ucfirst($parameters['first_name']));
-        $newUser->setLastName(ucfirst($parameters['last_name']));
-        $newUser->setStreet(ucwords($parameters['street']));
-        $newUser->setHouseNumber($parameters['house_number']);
-        $newUser->setPostcode($parameters['postcode']);
-        $newUser->setCity(ucwords($parameters['city']));
-        $newUser->setCountry($parameters['country']);
         $newUser->setAgent($agent);
         $newUser->setUserType($this->userTypeService->getUserType(2));
         $newUser->setActive(false);
+
+        $this->prepareParameters($newUser, $parameters);
 
         $createdUser = $this->userService->createUser($newUser);
         $password    = $this->randomPassword();

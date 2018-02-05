@@ -97,6 +97,34 @@ class PropertyServiceTest extends TestCase
         $this->assertEquals(false, $this->property->getArchived());
     }
 
+    public function testUpdateProperty()
+    {
+        $this->testCreateProperty();
+
+        $propertyRepository = $this->createMock(ObjectRepository::class);
+
+        $propertyRepository->expects($this->any())
+                           ->method('find')
+                           ->willReturn($this->property);
+
+
+        $entityManager = $this->createMock(EntityManagerInterface::class);
+
+        $entityManager->expects($this->any())
+                      ->method('getRepository')
+                      ->willReturn($propertyRepository);
+
+        $this->assertEquals('Dalkeith Street', $this->property->getStreet());
+
+        $propertyService = new PropertyService($entityManager);
+
+        $this->property->setStreet('Parkside Street');
+
+        $propertyService->updateProperty($this->property);
+
+        $this->assertEquals('Parkside Street', $this->property->getStreet());
+    }
+
     public function testArchiveProperty()
     {
         $this->testCreateProperty();

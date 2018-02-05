@@ -526,7 +526,7 @@ class BaseController extends Controller
      */
     public function convertParameters(string $property, mixed $value)
     {
-        if ($property === 'office') {
+        if ($property === 'office' || $property === 'name' || $property === 'first_name' || $property === 'last_name') {
             $value = ucfirst($value);
         }
         if ($property === 'email') {

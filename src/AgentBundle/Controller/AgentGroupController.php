@@ -123,28 +123,11 @@ class AgentGroupController extends BaseController
 
         $agentGroup = new AgentGroup();
 
-        if (array_key_exists('name', $parameters) && $parameters['name'] !== null) {
-            $agentGroup->setName(ucfirst((string)$parameters['name']));
-        }
+        $this->prepareParameters($agentGroup, $parameters);
 
         $this->agentGroupService->createAgentGroup($agentGroup);
 
-        $folder = '../image_data/' . $agentGroup->getId();
-
-        if (!file_exists($folder)) {
-            $createFolders = [
-                $folder,
-                $folder . '/logo',
-                $folder . '/properties',
-                $folder . '/users',
-            ];
-
-            foreach ($createFolders as $createFolder) {
-                $oldMask = umask(0);
-                mkdir($createFolder, 0777);
-                umask($oldMask);
-            }
-        }
+        $this->createFolders($agentGroup->getId());
 
         return Mapper::fromAgentGroup($agentGroup);
     }
@@ -200,7 +183,31 @@ class AgentGroupController extends BaseController
         $id = (int)$parameters['id'];
 
         // todo: check for users and agents before deleting, just warning
+        // todo: delete folders
 
         $this->agentGroupService->deleteAgentGroup($id);
+    }
+
+    /**
+     * @param int $agentGroupId
+     */
+    private function createFolders(int $agentGroupId)
+    {
+        $folder = '../image_data/' . $agentGroupId;
+
+        if (!file_exists($folder)) {
+            $createFolders = [
+                $folder,
+                $folder . '/logo',
+                $folder . '/properties',
+                $folder . '/users',
+            ];
+
+            foreach ($createFolders as $createFolder) {
+                $oldMask = umask(0);
+                mkdir($createFolder, 0777);
+                umask($oldMask);
+            }
+        }
     }
 }

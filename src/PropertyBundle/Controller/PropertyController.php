@@ -261,11 +261,8 @@ class PropertyController extends BaseController
      */
     private function updateProperty(int $userId, array $parameters)
     {
-        if (!array_key_exists('id', $parameters) || empty($parameters['id'])) {
-            throw new InvalidArgumentException("Identifier not provided");
-        }
-
         $this->checkParameters([
+            'id',
             'street',
             'house_number',
             'postcode',
