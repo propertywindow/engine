@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace PropertyBundle\Service;
 
+use AgentBundle\Entity\Agent;
 use Doctrine\ORM\EntityManagerInterface;
 use PropertyBundle\Entity\Property;
 use PropertyBundle\Entity\Terms;
@@ -70,13 +71,13 @@ class PropertyService
     }
 
     /**
-     * @param  int $agentId
+     * @param  Agent $agent
      *
      * @return array|Property[] $properties
      */
-    public function listProperties(int $agentId): array
+    public function listProperties(Agent $agent): array
     {
-        return $this->repository->listProperties($agentId);
+        return $this->repository->listProperties($agent);
     }
 
     /**

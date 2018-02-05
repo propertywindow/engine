@@ -142,7 +142,7 @@ class PropertyController extends BaseController
         $user = $this->userService->getUser($userId);
 
         return Mapper::fromProperties($user->getSettings()->getLanguage(), ...
-            $this->propertyService->listProperties($user->getAgent()->getId()));
+            $this->propertyService->listProperties($user->getAgent()));
     }
 
     /**
@@ -316,7 +316,6 @@ class PropertyController extends BaseController
         }
 
         $this->convertParameters($property, $parameters);
-
 
         $updatedProperty = $this->propertyService->updateProperty($property);
 

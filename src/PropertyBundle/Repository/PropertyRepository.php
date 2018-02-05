@@ -2,6 +2,7 @@
 
 namespace PropertyBundle\Repository;
 
+use AgentBundle\Entity\Agent;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use PropertyBundle\Entity\Property;
@@ -33,18 +34,18 @@ class PropertyRepository extends EntityRepository
     }
 
     /**
-     * @param int $agentId
+     * @param Agent $agent
      *
      * @return Property[]
      */
-    public function listProperties(int $agentId): array
+    public function listProperties(Agent $agent): array
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
                    ->select('p')
                    ->from('PropertyBundle:Property', 'p')
-                   ->where('p.agent = :agentId')
+                   ->where('p.agent = :agent')
                    ->orderBy('p.id', 'DESC')
-                   ->setParameter('agentId', $agentId);
+                   ->setParameter('agent', $agent);
 
         $results = $qb->getQuery()->getResult();
 
