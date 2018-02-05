@@ -187,6 +187,7 @@ class PropertyController extends BaseController
     {
         $user = $this->userService->getUser($userId);
 
+        // todo: covert to minimumAuthLevel(self::USER::COLLEAGUE);
         if ($user->getUserType()->getId() === self::USER_CLIENT || $user->getUserType()->getId() === self::USER_API) {
             throw new NotAuthorizedException();
         }

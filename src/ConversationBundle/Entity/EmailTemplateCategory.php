@@ -1,12 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace ConversationBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * EmailTemplateCategory
- *
  * @ORM\Table(name="email_template_category")
  * @ORM\Entity(repositoryClass="ConversationBundle\Repository\EmailTemplateCategoryRepository")
  * @ORM\HasLifecycleCallbacks
@@ -15,7 +14,6 @@ class EmailTemplateCategory
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -24,57 +22,48 @@ class EmailTemplateCategory
 
     /**
      * @var string
-     *
      * @ORM\Column(name="en", type="string", length=255)
      */
     private $en;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="nl", type="string", length=255)
      */
     private $nl;
 
     /**
      * @var bool
-     *
      * @ORM\Column(name="active", type="boolean")
      */
-    private $active;
+    private $active = false;
 
     /**
      * @var \DateTime $created
-     *
      * @ORM\Column(type="datetime")
      */
     protected $created;
 
     /**
      * @var \DateTime $updated
-     *
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $updated;
 
     /**
-     * Get id
-     *
-     * @return int
+     * @return int|null
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
-     * Set en
-     *
      * @param string $en
      *
      * @return EmailTemplateCategory
      */
-    public function setEn($en)
+    public function setEn(string $en): EmailTemplateCategory
     {
         $this->en = $en;
 
@@ -82,23 +71,19 @@ class EmailTemplateCategory
     }
 
     /**
-     * Get en
-     *
      * @return string
      */
-    public function getEn()
+    public function getEn(): string
     {
         return $this->en;
     }
 
     /**
-     * Set nl
-     *
      * @param string $nl
      *
      * @return EmailTemplateCategory
      */
-    public function setNl($nl)
+    public function setNl(string $nl): EmailTemplateCategory
     {
         $this->nl = $nl;
 
@@ -106,23 +91,19 @@ class EmailTemplateCategory
     }
 
     /**
-     * Get nl
-     *
      * @return string
      */
-    public function getNl()
+    public function getNl(): string
     {
         return $this->nl;
     }
 
     /**
-     * Set active
-     *
      * @param boolean $active
      *
      * @return EmailTemplateCategory
      */
-    public function setActive($active)
+    public function setActive(bool $active): EmailTemplateCategory
     {
         $this->active = $active;
 
@@ -130,18 +111,55 @@ class EmailTemplateCategory
     }
 
     /**
-     * Get active
-     *
      * @return bool
      */
-    public function getActive()
+    public function getActive(): bool
     {
         return $this->active;
     }
 
     /**
-     * Gets triggered only on insert
+     * @param \DateTime|null $created
      *
+     * @return EmailTemplateCategory
+     */
+    public function setCreated(?\DateTime $created): EmailTemplateCategory
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreated(): \DateTime
+    {
+        return $this->created;
+    }
+
+    /**
+     * @param \DateTime|null $updated
+     *
+     * @return EmailTemplateCategory
+     */
+    public function setUpdated(?\DateTime $updated): EmailTemplateCategory
+    {
+        $this->updated = $updated;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getUpdated(): ?\DateTime
+    {
+        return $this->updated;
+    }
+
+    /**
+     * Gets triggered only on insert
      * @ORM\PrePersist
      */
     public function onPrePersist()
@@ -151,7 +169,6 @@ class EmailTemplateCategory
 
     /**
      * Gets triggered every time on update
-     *
      * @ORM\PreUpdate
      */
     public function onPreUpdate()

@@ -487,7 +487,6 @@ class BaseController extends Controller
     public function checkParameters(array $required, array $parameters)
     {
         // todo: add which parameter is missing
-
         if (count(array_intersect_key(array_flip($required), $parameters)) !== count($required)) {
             throw new InvalidArgumentException("there is a required parameter missing");
         }
@@ -506,11 +505,8 @@ class BaseController extends Controller
     public function prepareParameters($entity, array $parameters)
     {
         // todo: add array parameter for which parameters are allowed
-
         foreach ($parameters as $property => $value) {
-
-            $value = $this->convertParameters($property, $value);
-
+            $value        = $this->convertParameters($property, $value);
             $propertyPart = explode('_', $property);
             $property     = implode('', array_map('ucfirst', $propertyPart));
             $method       = sprintf('set%s', $property);
@@ -542,6 +538,9 @@ class BaseController extends Controller
 
         if ($property === 'start' || $property === 'end') {
             $value = \DateTime::createFromFormat("Y-m-d H:i:s", $value);
+            if ($value === false) {
+                throw new InvalidArgumentException("End {$value} couldn't be parsed");
+            }
         }
 
         return $value;

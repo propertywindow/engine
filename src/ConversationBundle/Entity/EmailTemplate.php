@@ -1,13 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace ConversationBundle\Entity;
 
 use AgentBundle\Entity\Agent;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bundle\FrameworkBundle\Tests\Fixtures\Validation\Category;
 
 /**
- * EmailTemplate
  * @ORM\Table(name="email_template")
  * @ORM\Entity(repositoryClass="ConversationBundle\Repository\EmailTemplateRepository")
  * @ORM\HasLifecycleCallbacks
@@ -63,7 +62,7 @@ class EmailTemplate
      * @var bool
      * @ORM\Column(name="active", type="boolean")
      */
-    private $active;
+    private $active = false;
 
     /**
      * @var \DateTime $created
@@ -78,9 +77,9 @@ class EmailTemplate
     protected $updated;
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -118,9 +117,9 @@ class EmailTemplate
     }
 
     /**
-     * @return Category
+     * @return EmailTemplateCategory
      */
-    public function getCategory(): Category
+    public function getCategory(): EmailTemplateCategory
     {
         return $this->category;
     }
@@ -170,7 +169,7 @@ class EmailTemplate
      *
      * @return EmailTemplate
      */
-    public function setBodyHTML($bodyHTML): EmailTemplate
+    public function setBodyHTML(string $bodyHTML): EmailTemplate
     {
         $this->bodyHTML = $bodyHTML;
 
@@ -180,7 +179,7 @@ class EmailTemplate
     /**
      * @return string
      */
-    public function getBodyHTML()
+    public function getBodyHTML(): string
     {
         return $this->bodyHTML;
     }
@@ -190,7 +189,7 @@ class EmailTemplate
      *
      * @return EmailTemplate
      */
-    public function setBodyTXT($bodyTXT): EmailTemplate
+    public function setBodyTXT(string $bodyTXT): EmailTemplate
     {
         $this->bodyTXT = $bodyTXT;
 
@@ -200,7 +199,7 @@ class EmailTemplate
     /**
      * @return string
      */
-    public function getBodyTXT()
+    public function getBodyTXT(): string
     {
         return $this->bodyTXT;
     }
@@ -210,7 +209,7 @@ class EmailTemplate
      *
      * @return EmailTemplate
      */
-    public function setActive($active): EmailTemplate
+    public function setActive(bool $active): EmailTemplate
     {
         $this->active = $active;
 
@@ -220,9 +219,49 @@ class EmailTemplate
     /**
      * @return bool
      */
-    public function getActive()
+    public function getActive(): bool
     {
         return $this->active;
+    }
+
+    /**
+     * @param \DateTime|null $created
+     *
+     * @return EmailTemplate
+     */
+    public function setCreated(?\DateTime $created): EmailTemplate
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreated(): \DateTime
+    {
+        return $this->created;
+    }
+
+    /**
+     * @param \DateTime|null $updated
+     *
+     * @return EmailTemplate
+     */
+    public function setUpdated(?\DateTime $updated): EmailTemplate
+    {
+        $this->updated = $updated;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getUpdated(): ?\DateTime
+    {
+        return $this->updated;
     }
 
     /**
