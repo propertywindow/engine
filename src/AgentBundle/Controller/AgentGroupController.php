@@ -7,7 +7,6 @@ use AgentBundle\Entity\AgentGroup;
 use AgentBundle\Exceptions\AgentGroupNotFoundException;
 use AppBundle\Controller\BaseController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
-use AuthenticationBundle\Exceptions\UserNotFoundException;
 use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Response;
@@ -32,8 +31,8 @@ class AgentGroupController extends BaseController
     public function requestHandler(Request $httpRequest)
     {
         try {
-            list($userId, $method, $parameters) = $this->prepareRequest($httpRequest);
-            $jsonRpcResponse = Response::success($this->invoke($userId, $method, $parameters));
+            list($method, $parameters) = $this->prepareRequest($httpRequest);
+            $jsonRpcResponse = Response::success($this->invoke($method, $parameters));
         } catch (Throwable $throwable) {
             $jsonRpcResponse = $this->throwable($throwable, $httpRequest);
         }
@@ -42,29 +41,16 @@ class AgentGroupController extends BaseController
     }
 
     /**
-     * @param int    $userId
      * @param string $method
      * @param array  $parameters
      *
      * @return array
-     * @throws AgentGroupNotFoundException
      * @throws InvalidJsonRpcMethodException
-     * @throws NotAuthorizedException
-     * @throws UserNotFoundException
      */
-    private function invoke(int $userId, string $method, array $parameters = [])
+    private function invoke(string $method, array $parameters = [])
     {
-        switch ($method) {
-            case "getAgentGroup":
-                return $this->getAgentGroup($parameters);
-            case "getAgentGroups":
-                return $this->getAgentGroups($userId);
-            case "createAgentGroup":
-                return $this->createAgentGroup($userId, $parameters);
-            case "updateAgentGroup":
-                return $this->updateAgentGroup($userId, $parameters);
-            case "deleteAgentGroup":
-                return $this->deleteAgentGroup($userId, $parameters);
+        if (is_callable([$this, $method])) {
+            return $this->$method($parameters);
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
@@ -86,34 +72,25 @@ class AgentGroupController extends BaseController
     }
 
     /**
-     * @param int $userId
-     *
      * @return array
      * @throws NotAuthorizedException
-     * @throws UserNotFoundException
      */
-    private function getAgentGroups(int $userId)
+    private function getAgentGroups()
     {
-        $user = $this->userService->getUser($userId);
-
-        $this->isAuthorized($user->getUserType()->getId(), self::USER_ADMIN);
+        $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
         return Mapper::fromAgentGroups(...$this->agentGroupService->getAgentGroups());
     }
 
     /**
-     * @param int   $userId
      * @param array $parameters
      *
      * @return array $user
      * @throws NotAuthorizedException
-     * @throws UserNotFoundException
      */
-    private function createAgentGroup(int $userId, array $parameters)
+    private function createAgentGroup(array $parameters)
     {
-        $user = $this->userService->getUser($userId);
-
-        $this->isAuthorized($user->getUserType()->getId(), self::USER_ADMIN);
+        $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
         if (!array_key_exists('name', $parameters)) {
             if (!array_key_exists('agent_group_id', $parameters) && $parameters['agent_group_id'] !== null) {
@@ -134,25 +111,21 @@ class AgentGroupController extends BaseController
 
 
     /**
-     * @param int   $userId
      * @param array $parameters
      *
      * @return array
      * @throws AgentGroupNotFoundException
      * @throws NotAuthorizedException
-     * @throws UserNotFoundException
      */
-    private function updateAgentGroup(int $userId, array $parameters)
+    private function updateAgentGroup(array $parameters)
     {
         $this->checkParameters([
             'id',
         ], $parameters);
 
-        $id          = (int)$parameters['id'];
-        $user        = $this->userService->getUser($userId);
-        $updateAgent = $this->agentGroupService->getAgentGroup($id);
+        $updateAgent = $this->agentGroupService->getAgentGroup((int)$parameters['id']);
 
-        $this->isAuthorized($user->getUserType()->getId(), self::USER_ADMIN);
+        $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
         if (array_key_exists('name', $parameters) && $parameters['name'] !== null) {
             $updateAgent->setName(ucfirst((string)$parameters['name']));
@@ -163,29 +136,23 @@ class AgentGroupController extends BaseController
 
 
     /**
-     * @param int   $userId
      * @param array $parameters
      *
      * @throws AgentGroupNotFoundException
      * @throws NotAuthorizedException
-     * @throws UserNotFoundException
      */
-    private function deleteAgentGroup(int $userId, array $parameters)
+    private function deleteAgentGroup(array $parameters)
     {
         $this->checkParameters([
             'id',
         ], $parameters);
 
-        $user = $this->userService->getUser($userId);
-
-        $this->isAuthorized($user->getUserType()->getId(), self::USER_ADMIN);
-
-        $id = (int)$parameters['id'];
+        $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
         // todo: check for users and agents before deleting, just warning
         // todo: delete folders
 
-        $this->agentGroupService->deleteAgentGroup($id);
+        $this->agentGroupService->deleteAgentGroup((int)$parameters['id']);
     }
 
     /**

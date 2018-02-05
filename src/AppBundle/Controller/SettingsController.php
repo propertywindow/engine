@@ -5,7 +5,6 @@ namespace AppBundle\Controller;
 
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use AppBundle\Exceptions\SettingsNotFoundException;
-use AuthenticationBundle\Exceptions\UserNotFoundException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Response;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
@@ -29,8 +28,8 @@ class SettingsController extends BaseController
     public function requestHandler(Request $httpRequest)
     {
         try {
-            list($userId, $method, $parameters) = $this->prepareRequest($httpRequest);
-            $jsonRpcResponse = Response::success($this->invoke($userId, $method, $parameters));
+            list($method, $parameters) = $this->prepareRequest($httpRequest);
+            $jsonRpcResponse = Response::success($this->invoke($method, $parameters));
         } catch (Throwable $throwable) {
             $jsonRpcResponse = $this->throwable($throwable, $httpRequest);
         }
@@ -39,23 +38,16 @@ class SettingsController extends BaseController
     }
 
     /**
-     * @param int    $userId
      * @param string $method
      * @param array  $parameters
      *
      * @return array
      * @throws InvalidJsonRpcMethodException
-     * @throws NotAuthorizedException
-     * @throws SettingsNotFoundException
-     * @throws UserNotFoundException
      */
-    private function invoke(int $userId, string $method, array $parameters = [])
+    private function invoke(string $method, array $parameters = [])
     {
-        switch ($method) {
-            case "getSettings":
-                return $this->getSettings();
-            case "updateSettings":
-                return $this->updateSettings($userId, $parameters);
+        if (is_callable([$this, $method])) {
+            return $this->$method($parameters);
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
@@ -71,19 +63,15 @@ class SettingsController extends BaseController
     }
 
     /**
-     * @param int   $userId
      * @param array $parameters
      *
      * @return array
      * @throws NotAuthorizedException
      * @throws SettingsNotFoundException
-     * @throws UserNotFoundException
      */
-    private function updateSettings(int $userId, array $parameters)
+    private function updateSettings(array $parameters)
     {
-        $user = $this->userService->getUser($userId);
-
-        $this->isAuthorized($user->getUserType()->getId(), self::USER_ADMIN);
+        $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
         $settings = $this->settingsService->getSettings();
 

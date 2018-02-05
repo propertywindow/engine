@@ -31,8 +31,8 @@ class BlacklistController extends BaseController
     public function requestHandler(Request $httpRequest)
     {
         try {
-            list($userId, $method, $parameters) = $this->prepareRequest($httpRequest);
-            $jsonRpcResponse = Response::success($this->invoke($userId, $method, $parameters));
+            list($method, $parameters) = $this->prepareRequest($httpRequest);
+            $jsonRpcResponse = Response::success($this->invoke($method, $parameters));
         } catch (Throwable $throwable) {
             $jsonRpcResponse = $this->throwable($throwable, $httpRequest);
         }
@@ -41,28 +41,16 @@ class BlacklistController extends BaseController
     }
 
     /**
-     * @param int    $userId
      * @param string $method
      * @param array  $parameters
      *
      * @return array
-     * @throws AgentNotFoundException
-     * @throws BlacklistNotFoundException
      * @throws InvalidJsonRpcMethodException
-     * @throws NotAuthorizedException
-     * @throws UserNotFoundException
      */
-    private function invoke(int $userId, string $method, array $parameters = [])
+    private function invoke(string $method, array $parameters = [])
     {
-        switch ($method) {
-            case "getBlacklist":
-                return $this->getBlacklist($userId, $parameters);
-            case "getBlacklists":
-                return $this->getBlacklists($userId);
-            case "createBlacklist":
-                return $this->createBlacklist($parameters);
-            case "removeBlacklist":
-                return $this->removeBlacklist($userId, $parameters);
+        if (is_callable([$this, $method])) {
+            return $this->$method($parameters);
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
@@ -70,25 +58,22 @@ class BlacklistController extends BaseController
 
 
     /**
-     * @param int   $userId
      * @param array $parameters
      *
      * @return array
-     * @throws NotAuthorizedException
      * @throws BlacklistNotFoundException
-     * @throws UserNotFoundException
+     * @throws NotAuthorizedException
      */
-    private function getBlacklist(int $userId, array $parameters)
+    private function getBlacklist(array $parameters)
     {
         $this->checkParameters([
             'id',
         ], $parameters);
 
-        $user      = $this->userService->getUser($userId);
         $blacklist = $this->blacklistService->getBlacklist((int)$parameters['id']);
 
-        if ($user->getAgent()->getId() !== $blacklist->getAgent()->getId() ||
-            (int)$user->getUserType()->getId() !== self::USER_ADMIN
+        if ($this->user->getAgent()->getId() !== $blacklist->getAgent()->getId() ||
+            $this->user->getUserType()->getId() !== self::USER_ADMIN
         ) {
             throw new NotAuthorizedException();
         }
@@ -97,22 +82,17 @@ class BlacklistController extends BaseController
     }
 
     /**
-     * @param int $userId
-     *
      * @return array
-     * @throws NotAuthorizedException
-     * @throws UserNotFoundException
      * @throws AgentNotFoundException
+     * @throws NotAuthorizedException
      */
-    private function getBlacklists(int $userId): array
+    private function getBlacklists(): array
     {
-        $user = $this->userService->getUser($userId);
-
-        if ((int)$user->getUserType()->getId() > self::USER_AGENT) {
+        if ($this->user->getUserType()->getId() > self::USER_AGENT) {
             throw new NotAuthorizedException();
         }
 
-        $agent     = $this->agentService->getAgent($user->getAgent()->getId());
+        $agent     = $this->agentService->getAgent($this->user->getAgent()->getId());
         $blacklist = $this->blacklistService->getBlacklists($agent);
 
         return Mapper::fromBlacklists(...$blacklist);
@@ -137,18 +117,14 @@ class BlacklistController extends BaseController
     }
 
     /**
-     * @param int   $userId
      * @param array $parameters
      *
      * @throws BlacklistNotFoundException
      * @throws NotAuthorizedException
-     * @throws UserNotFoundException
      */
-    private function removeBlacklist(int $userId, array $parameters)
+    private function removeBlacklist(array $parameters)
     {
-        $user = $this->userService->getUser($userId);
-
-        if ((int)$user->getUserType()->getId() > self::USER_AGENT) {
+        if ($this->user->getUserType()->getId() > self::USER_AGENT) {
             throw new NotAuthorizedException();
         }
 

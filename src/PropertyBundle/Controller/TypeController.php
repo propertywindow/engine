@@ -5,8 +5,6 @@ namespace PropertyBundle\Controller;
 
 use AppBundle\Controller\BaseController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
-use AuthenticationBundle\Exceptions\UserNotFoundException;
-use InvalidArgumentException;
 use PropertyBundle\Exceptions\TypeDeleteException;
 use PropertyBundle\Exceptions\TypeNotFoundException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -32,8 +30,8 @@ class TypeController extends BaseController
     public function requestHandler(Request $httpRequest)
     {
         try {
-            list($userId, $method, $parameters) = $this->prepareRequest($httpRequest);
-            $jsonRpcResponse = Response::success($this->invoke($userId, $method, $parameters));
+            list($method, $parameters) = $this->prepareRequest($httpRequest);
+            $jsonRpcResponse = Response::success($this->invoke($method, $parameters));
         } catch (Throwable $throwable) {
             $jsonRpcResponse = $this->throwable($throwable, $httpRequest);
         }
@@ -42,26 +40,16 @@ class TypeController extends BaseController
     }
 
     /**
-     * @param int    $userId
      * @param string $method
      * @param array  $parameters
      *
      * @return array
      * @throws InvalidJsonRpcMethodException
-     * @throws NotAuthorizedException
-     * @throws TypeDeleteException
-     * @throws TypeNotFoundException
-     * @throws UserNotFoundException
      */
-    private function invoke(int $userId, string $method, array $parameters = [])
+    private function invoke(string $method, array $parameters = [])
     {
-        switch ($method) {
-            case "getType":
-                return $this->getType($parameters);
-            case "getTypes":
-                return $this->getTypes();
-            case "deleteType":
-                return $this->deleteType($parameters, $userId);
+        if (is_callable([$this, $method])) {
+            return $this->$method($parameters);
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
@@ -92,22 +80,18 @@ class TypeController extends BaseController
 
     /**
      * @param array $parameters
-     * @param int   $userId
      *
      * @throws NotAuthorizedException
      * @throws TypeDeleteException
-     * @throws UserNotFoundException
      * @throws TypeNotFoundException
      */
-    private function deleteType(array $parameters, int $userId)
+    private function deleteType(array $parameters)
     {
         $this->checkParameters([
             'id',
         ], $parameters);
 
-        $user = $this->userService->getUser($userId);
-
-        $this->isAuthorized($user->getUserType()->getId(), self::USER_ADMIN);
+        $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
         $this->typeService->deleteType((int)$parameters['id']);
     }

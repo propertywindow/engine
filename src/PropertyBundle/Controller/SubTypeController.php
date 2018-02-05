@@ -5,8 +5,6 @@ namespace PropertyBundle\Controller;
 
 use AppBundle\Controller\BaseController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
-use AuthenticationBundle\Exceptions\UserNotFoundException;
-use InvalidArgumentException;
 use PropertyBundle\Exceptions\SubTypeDeleteException;
 use PropertyBundle\Exceptions\SubTypeNotFoundException;
 use PropertyBundle\Exceptions\TypeNotFoundException;
@@ -33,8 +31,8 @@ class SubTypeController extends BaseController
     public function requestHandler(Request $httpRequest)
     {
         try {
-            list($userId, $method, $parameters) = $this->prepareRequest($httpRequest);
-            $jsonRpcResponse = Response::success($this->invoke($userId, $method, $parameters));
+            list($method, $parameters) = $this->prepareRequest($httpRequest);
+            $jsonRpcResponse = Response::success($this->invoke($method, $parameters));
         } catch (Throwable $throwable) {
             $jsonRpcResponse = $this->throwable($throwable, $httpRequest);
         }
@@ -43,27 +41,16 @@ class SubTypeController extends BaseController
     }
 
     /**
-     * @param int    $userId
      * @param string $method
      * @param array  $parameters
      *
      * @return array
      * @throws InvalidJsonRpcMethodException
-     * @throws NotAuthorizedException
-     * @throws SubTypeDeleteException
-     * @throws SubTypeNotFoundException
-     * @throws TypeNotFoundException
-     * @throws UserNotFoundException
      */
-    private function invoke(int $userId, string $method, array $parameters = [])
+    private function invoke(string $method, array $parameters = [])
     {
-        switch ($method) {
-            case "getSubType":
-                return $this->getSubType($parameters);
-            case "getSubTypes":
-                return $this->getSubTypes($parameters);
-            case "deleteSubType":
-                return $this->deleteSubType($parameters, $userId);
+        if (is_callable([$this, $method])) {
+            return $this->$method($parameters);
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
@@ -103,22 +90,18 @@ class SubTypeController extends BaseController
 
     /**
      * @param array $parameters
-     * @param int   $userId
      *
      * @throws NotAuthorizedException
      * @throws SubTypeDeleteException
      * @throws SubTypeNotFoundException
-     * @throws UserNotFoundException
      */
-    private function deleteSubType(array $parameters, int $userId)
+    private function deleteSubType(array $parameters)
     {
         $this->checkParameters([
             'id',
         ], $parameters);
 
-        $user = $this->userService->getUser($userId);
-
-        $this->isAuthorized($user->getUserType()->getId(), self::USER_ADMIN);
+        $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
         $this->subTypeService->deleteSubType((int)$parameters['id']);
     }

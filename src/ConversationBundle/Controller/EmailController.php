@@ -5,11 +5,9 @@ namespace ConversationBundle\Controller;
 
 use AppBundle\Controller\BaseController;
 use AuthenticationBundle\Entity\UserSettings;
-use AuthenticationBundle\Exceptions\UserNotFoundException;
 use ConversationBundle\Entity\Email;
 use ConversationBundle\Entity\Mailbox;
 use ConversationBundle\Exceptions\EmailNotSetException;
-use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Response;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
@@ -33,8 +31,8 @@ class EmailController extends BaseController
     public function requestHandler(Request $httpRequest)
     {
         try {
-            list($userId, $method, $parameters) = $this->prepareRequest($httpRequest);
-            $jsonRpcResponse = Response::success($this->invoke($userId, $method, $parameters));
+            list($method, $parameters) = $this->prepareRequest($httpRequest);
+            $jsonRpcResponse = Response::success($this->invoke($method, $parameters));
         } catch (Throwable $throwable) {
             $jsonRpcResponse = $this->throwable($throwable, $httpRequest);
         }
@@ -43,43 +41,34 @@ class EmailController extends BaseController
     }
 
     /**
-     * @param int    $userId
      * @param string $method
      * @param array  $parameters
      *
      * @return array
-     * @throws EmailNotSetException
      * @throws InvalidJsonRpcMethodException
-     * @throws UserNotFoundException
      */
-    private function invoke(int $userId, string $method, array $parameters = [])
+    private function invoke(string $method, array $parameters = [])
     {
-        switch ($method) {
-            case "getMailbox":
-                return $this->getMailbox($userId, $parameters);
-            case "getMailboxes":
-                return $this->getMailboxes($userId);
+        if (is_callable([$this, $method])) {
+            return $this->$method($parameters);
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
     }
 
     /**
-     * @param int   $userId
      * @param array $parameters
      *
      * @return array
      * @throws EmailNotSetException
-     * @throws UserNotFoundException
      */
-    private function getMailbox(int $userId, array $parameters)
+    private function getMailbox(array $parameters)
     {
         $this->checkParameters([
             'mailbox',
         ], $parameters);
 
-        $user         = $this->userService->getUser($userId);
-        $userSettings = $user->getSettings();
+        $userSettings = $this->user->getSettings();
 
         $this->checkMailbox($userSettings);
 
@@ -115,16 +104,12 @@ class EmailController extends BaseController
     }
 
     /**
-     * @param int $userId
-     *
      * @return array
      * @throws EmailNotSetException
-     * @throws UserNotFoundException
      */
-    private function getMailboxes(int $userId)
+    private function getMailboxes()
     {
-        $user         = $this->userService->getUser($userId);
-        $userSettings = $user->getSettings();
+        $userSettings = $this->user->getSettings();
 
         $this->checkMailbox($userSettings);
 

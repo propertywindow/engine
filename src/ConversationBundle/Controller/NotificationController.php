@@ -5,7 +5,6 @@ namespace ConversationBundle\Controller;
 
 use AppBundle\Controller\BaseController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
-use AuthenticationBundle\Exceptions\UserNotFoundException;
 use ConversationBundle\Entity\Notification;
 use ConversationBundle\Exceptions\NotificationNotFoundException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -31,8 +30,8 @@ class NotificationController extends BaseController
     public function requestHandler(Request $httpRequest)
     {
         try {
-            list($userId, $method, $parameters) = $this->prepareRequest($httpRequest);
-            $jsonRpcResponse = Response::success($this->invoke($userId, $method, $parameters));
+            list($method, $parameters) = $this->prepareRequest($httpRequest);
+            $jsonRpcResponse = Response::success($this->invoke($method, $parameters));
         } catch (Throwable $throwable) {
             $jsonRpcResponse = $this->throwable($throwable, $httpRequest);
         }
@@ -41,48 +40,27 @@ class NotificationController extends BaseController
     }
 
     /**
-     * @param int    $userId
      * @param string $method
      * @param array  $parameters
      *
      * @return array
      * @throws InvalidJsonRpcMethodException
-     * @throws NotAuthorizedException
-     * @throws NotificationNotFoundException
-     * @throws UserNotFoundException
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
-    private function invoke(int $userId, string $method, array $parameters = [])
+    private function invoke(string $method, array $parameters = [])
     {
-        switch ($method) {
-            case "getNotifications":
-                return $this->getNotifications($userId);
-            case "getNotification":
-                return $this->getNotification($parameters);
-            case "listNotifications":
-                return $this->listNotifications($userId);
-            case "createNotification":
-                return $this->createNotification($userId, $parameters);
-            case "updateNotification":
-                return $this->updateNotification($parameters);
-            case "deleteNotification":
-                return $this->deleteNotification($userId, $parameters);
+        if (is_callable([$this, $method])) {
+            return $this->$method($parameters);
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
     }
 
     /**
-     * @param int $userId
-     *
      * @return array
-     * @throws UserNotFoundException
      */
-    private function getNotifications(int $userId)
+    private function getNotifications()
     {
-        $user = $this->userService->getUser($userId);
-
-        return Mapper::fromNotifications(...$this->notificationService->getNotifications($user));
+        return Mapper::fromNotifications(...$this->notificationService->getNotifications($this->user));
     }
 
     /**
@@ -101,28 +79,20 @@ class NotificationController extends BaseController
     }
 
     /**
-     * @param int $userId
-     *
      * @return array
-     * @throws UserNotFoundException
      */
-    private function listNotifications(int $userId)
+    private function listNotifications()
     {
-        $user          = $this->userService->getUser($userId);
-        $notifications = $this->notificationService->listNotifications($user);
-
-        return Mapper::fromNotifications(...$notifications);
+        return Mapper::fromNotifications(...$this->notificationService->listNotifications($this->user));
     }
 
     /**
-     * @param int   $userId
      * @param array $parameters
      *
      * @return array
-     * @throws UserNotFoundException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    private function createNotification(int $userId, array $parameters)
+    private function createNotification(array $parameters)
     {
         // todo: check rights
 
@@ -132,10 +102,8 @@ class NotificationController extends BaseController
             'start',
         ], $parameters);
 
-        $user = $this->userService->getUser($userId);
-
         $notification = new Notification();
-        $notification->setUser($user);
+        $notification->setUser($this->user);
 
         $this->prepareParameters($notification, $parameters);
 
@@ -181,26 +149,20 @@ class NotificationController extends BaseController
     }
 
     /**
-     * @param int   $userId
      * @param array $parameters
      *
      * @throws NotAuthorizedException
      * @throws NotificationNotFoundException
-     * @throws UserNotFoundException
      */
-    private function deleteNotification(int $userId, array $parameters)
+    private function deleteNotification(array $parameters)
     {
         $this->checkParameters([
             'id',
         ], $parameters);
 
-        $user = $this->userService->getUser($userId);
-
         // todo: check rights
-        $this->isAuthorized($user->getUserType()->getId(), self::USER_ADMIN);
+        $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
-        $id = (int)$parameters['id'];
-
-        $this->notificationService->deleteNotification($id);
+        $this->notificationService->deleteNotification((int)$parameters['id']);
     }
 }

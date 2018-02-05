@@ -6,7 +6,6 @@ namespace LogBundle\Controller;
 use AgentBundle\Exceptions\AgentNotFoundException;
 use AppBundle\Controller\BaseController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
-use AuthenticationBundle\Exceptions\UserNotFoundException;
 use LogBundle\Exceptions\ActivityNotFoundException;
 use LogBundle\Service\Activity\Mapper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -31,8 +30,8 @@ class ActivityController extends BaseController
     public function requestHandler(Request $httpRequest)
     {
         try {
-            list($userId, $method, $parameters) = $this->prepareRequest($httpRequest);
-            $jsonRpcResponse = Response::success($this->invoke($userId, $method, $parameters));
+            list($method, $parameters) = $this->prepareRequest($httpRequest);
+            $jsonRpcResponse = Response::success($this->invoke($method, $parameters));
         } catch (Throwable $throwable) {
             $jsonRpcResponse = $this->throwable($throwable, $httpRequest);
         }
@@ -41,94 +40,66 @@ class ActivityController extends BaseController
     }
 
     /**
-     * @param int    $userId
      * @param string $method
      * @param array  $parameters
      *
      * @return array
-     * @throws ActivityNotFoundException
-     * @throws AgentNotFoundException
      * @throws InvalidJsonRpcMethodException
-     * @throws NotAuthorizedException
-     * @throws UserNotFoundException
      */
-    private function invoke(int $userId, string $method, array $parameters = [])
+    private function invoke(string $method, array $parameters = [])
     {
-        switch ($method) {
-            case "getActivity":
-                return $this->getActivity($userId, $parameters);
-            case "getActivityFromUser":
-                return $this->getActivityFromUser($userId);
-            case "getActivities":
-                return $this->getActivities($userId);
-            case "getPropertyChanges":
-                return $this->getPropertyChanges($userId, $parameters);
+        if (is_callable([$this, $method])) {
+            return $this->$method($parameters);
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
     }
 
     /**
-     * @param int   $userId
      * @param array $parameters
      *
      * @return array
      * @throws ActivityNotFoundException
      * @throws NotAuthorizedException
-     * @throws UserNotFoundException
      */
-    private function getActivity(int $userId, array $parameters)
+    private function getActivity(array $parameters)
     {
         $this->checkParameters([
             'id',
         ], $parameters);
 
-        $user = $this->userService->getUser($userId);
-
-        $this->isAuthorized($user->getUserType()->getId(), self::USER_ADMIN);
+        $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
         return Mapper::fromActivity($this->logActivityService->getActivity((int)$parameters['id']));
     }
 
     /**
-     * @param int $userId
-     *
      * @return array
-     * @throws UserNotFoundException
      */
-    private function getActivityFromUser(int $userId)
+    private function getActivityFromUser()
     {
-        $user = $this->userService->getUser($userId);
-
-        return Mapper::fromActivities(...$this->logActivityService->getActivityFromUser($user));
+        return Mapper::fromActivities(...$this->logActivityService->getActivityFromUser($this->user));
     }
 
     /**
-     * @param int $userId
-     *
      * @return array
      * @throws NotAuthorizedException
-     * @throws UserNotFoundException
      */
-    private function getActivities(int $userId)
+    private function getActivities()
     {
-        $user = $this->userService->getUser($userId);
+        $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
-        $this->isAuthorized($user->getUserType()->getId(), self::USER_ADMIN);
-
-        return Mapper::fromActivities(...$this->logActivityService->getActivities($user->getAgent()));
+        return Mapper::fromActivities(...$this->logActivityService->getActivities($this->user->getAgent()));
     }
 
 
     /**
-     * @param int   $userId
      * @param array $parameters
      *
      * @return array
-     * @throws UserNotFoundException
      * @throws AgentNotFoundException
      */
-    private function getPropertyChanges(int $userId, array $parameters)
+    private function getPropertyChanges(array $parameters)
     {
         $this->checkParameters([
             'type',
@@ -137,8 +108,7 @@ class ActivityController extends BaseController
         if (array_key_exists('id', $parameters) && $parameters['id'] !== null) {
             $agent = $this->agentService->getAgent($parameters['id']);
         } else {
-            $user  = $this->userService->getUser($userId);
-            $agent = $user->getAgent();
+            $agent = $this->user->getAgent();
         }
 
         switch ($parameters['type']) {

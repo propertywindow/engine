@@ -4,8 +4,6 @@ declare(strict_types=1);
 namespace AuthenticationBundle\Controller;
 
 use AppBundle\Controller\BaseController;
-use AuthenticationBundle\Exceptions\UserNotFoundException;
-use AuthenticationBundle\Exceptions\UserSettingsNotFoundException;
 use AuthenticationBundle\Service\Menu\Mapper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Response;
@@ -29,8 +27,8 @@ class MenuController extends BaseController
     public function requestHandler(Request $httpRequest)
     {
         try {
-            list($userId, $method) = $this->prepareRequest($httpRequest);
-            $jsonRpcResponse = Response::success($this->invoke($userId, $method));
+            list($method) = $this->prepareRequest($httpRequest);
+            $jsonRpcResponse = Response::success($this->invoke($method));
         } catch (Throwable $throwable) {
             $jsonRpcResponse = $this->throwable($throwable, $httpRequest);
         }
@@ -39,37 +37,28 @@ class MenuController extends BaseController
     }
 
     /**
-     * @param int    $userId
      * @param string $method
      *
      * @return array
      * @throws InvalidJsonRpcMethodException
-     * @throws UserNotFoundException
-     * @throws UserSettingsNotFoundException
      */
-    private function invoke(int $userId, string $method)
+    private function invoke(string $method)
     {
         switch ($method) {
             case "getMenu":
-                return $this->getMenu($userId);
+                return $this->getMenu();
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
     }
 
     /**
-     * @param int $userId
-     *
      * @return array
-     * @throws UserNotFoundException
-     * @throws UserSettingsNotFoundException
      */
-    private function getMenu(int $userId)
+    private function getMenu()
     {
-        $user         = $this->userService->getUser($userId);
-        $userSettings = $this->userSettingsService->getSettings($user);
-        $services     = $this->serviceMapService->getAuthorizedServiceGroups($user);
+        $services     = $this->serviceMapService->getAuthorizedServiceGroups($this->user);
 
-        return Mapper::fromMenus($userSettings->getLanguage(), ...$services);
+        return Mapper::fromMenus($this->user->getSettings()->getLanguage(), ...$services);
     }
 }

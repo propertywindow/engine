@@ -36,8 +36,8 @@ class UserController extends BaseController
     public function requestHandler(Request $httpRequest)
     {
         try {
-            list($userId, $method, $parameters) = $this->prepareRequest($httpRequest);
-            $jsonRpcResponse = Response::success($this->invoke($userId, $method, $parameters));
+            list($method, $parameters) = $this->prepareRequest($httpRequest);
+            $jsonRpcResponse = Response::success($this->invoke($method, $parameters));
         } catch (Throwable $throwable) {
             $jsonRpcResponse = $this->throwable($throwable, $httpRequest);
         }
@@ -46,43 +46,16 @@ class UserController extends BaseController
     }
 
     /**
-     * @param int    $userId
      * @param string $method
      * @param array  $parameters
      *
      * @return array
      * @throws InvalidJsonRpcMethodException
-     * @throws NotAuthorizedException
-     * @throws Throwable
-     * @throws UserAlreadyExistException
-     * @throws \AgentBundle\Exceptions\AgentSettingsNotFoundException
-     * @throws \AuthenticationBundle\Exceptions\UserSettingsNotFoundException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Syntax
      */
-    private function invoke(int $userId, string $method, array $parameters = [])
+    private function invoke(string $method, array $parameters = [])
     {
-        switch ($method) {
-            case "getUser":
-                return $this->getUserById($userId, $parameters);
-            case "getUsers":
-                return $this->getUsers($userId);
-            case "getAgentUsers":
-                return $this->getAgentUsers($userId, $parameters);
-            case "getColleagues":
-                return $this->getColleagues($userId);
-            case "createUser":
-                return $this->createUser($userId, $parameters);
-            case "updateUser":
-                return $this->updateUser($userId, $parameters);
-            case "setPassword":
-                return $this->setPassword($userId, $parameters);
-            case "disableUser":
-                return $this->disableUser($userId, $parameters);
-            case "deleteUser":
-                return $this->deleteUser($userId, $parameters);
-            case "verify":
-                return $this->verify($userId);
+        if (is_callable([$this, $method])) {
+            return $this->$method($parameters);
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
@@ -90,64 +63,53 @@ class UserController extends BaseController
 
 
     /**
-     * @param int   $userId
      * @param array $parameters
      *
      * @return array
      * @throws NotAuthorizedException
      * @throws UserNotFoundException
      */
-    private function getUserById(int $userId, array $parameters)
+    private function getUserById(array $parameters)
     {
         $this->checkParameters([
             'id',
         ], $parameters);
 
-        $id      = (int)$parameters['id'];
-        $user    = $this->userService->getUser($id);
-        $getUser = $this->userService->getUser($userId);
+        $user = $this->userService->getUser((int)$parameters['id']);
 
-        $this->isAuthorized($getUser->getAgent()->getId(), $user->getAgent()->getId());
+        $this->isAuthorized($this->user->getAgent()->getId(), $user->getAgent()->getId());
 
-        return Mapper::fromUser($getUser);
+        return Mapper::fromUser($this->user);
     }
 
     /**
-     * @param int $userId
-     *
      * @return array
-     * @throws UserNotFoundException
      * @throws UserTypeNotFoundException
      */
-    private function getUsers(int $userId)
+    private function getUsers()
     {
-        $user          = $this->userService->getUser($userId);
         $adminType     = $this->userTypeService->getUserType(1);
         $colleagueType = $this->userTypeService->getUserType(3);
-        $users         = $this->userService->getUsers($user, $adminType, $colleagueType);
+        $users         = $this->userService->getUsers($this->user, $adminType, $colleagueType);
 
         return Mapper::fromUsers(...$users);
     }
 
     /**
-     * @param int   $userId
      * @param array $parameters
      *
      * @return array
      * @throws AgentNotFoundException
      * @throws NotAuthorizedException
-     * @throws UserNotFoundException
      * @throws UserTypeNotFoundException
      */
-    private function getAgentUsers(int $userId, array $parameters)
+    private function getAgentUsers(array $parameters)
     {
         $this->checkParameters([
             'id',
         ], $parameters);
 
-        $user = $this->userService->getUser($userId);
-
-        $this->isAuthorized($user->getUserType()->getId(), self::USER_ADMIN);
+        $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
         $agent         = $this->agentService->getAgent((int)$parameters['id']);
         $colleagueType = $this->userTypeService->getUserType(3);
@@ -157,40 +119,34 @@ class UserController extends BaseController
     }
 
     /**
-     * @param int $userId
-     *
      * @return array
-     * @throws UserNotFoundException
      * @throws UserTypeNotFoundException
      */
-    private function getColleagues(int $userId)
+    private function getColleagues()
     {
-        $user     = $this->userService->getUser($userId);
         $userType = $this->userTypeService->getUserType(3);
-        $agentIds = $this->agentService->getAgentIdsFromGroup($user->getAgent());
+        $agentIds = $this->agentService->getAgentIdsFromGroup($this->user->getAgent());
         $users    = $this->userService->getColleagues($agentIds, $userType);
 
         return Mapper::fromUsers(...$users);
     }
 
     /**
-     * @param int   $userId
      * @param array $parameters
      *
      * @return array $user
+     * @throws AgentSettingsNotFoundException
      * @throws NotAuthorizedException
      * @throws Throwable
      * @throws UserAlreadyExistException
-     * @throws AgentSettingsNotFoundException
      * @throws UserSettingsNotFoundException
+     * @throws UserTypeNotFoundException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Syntax
      */
-    private function createUser(int $userId, array $parameters)
+    private function createUser(array $parameters)
     {
-        $user = $this->userService->getUser($userId);
-
-        if ((int)$user->getUserType()->getId() > self::USER_AGENT) {
+        if ($this->user->getUserType()->getId() > self::USER_AGENT) {
             throw new NotAuthorizedException();
         }
 
@@ -216,7 +172,7 @@ class UserController extends BaseController
         }
 
         $newUser = new User();
-        $newUser->setAgent($user->getAgent());
+        $newUser->setAgent($this->user->getAgent());
         $newUser->setUserType($this->userTypeService->getUserType($parameters['user_type_id']));
         $newUser->setActive(false);
 
@@ -230,7 +186,7 @@ class UserController extends BaseController
             'password' => $password,
         ];
 
-        $this->mailerService->sendMail($user, $createdUser->getEmail(), 'user_invite_email', $mailParameters);
+        $this->mailerService->sendMail($this->user, $createdUser->getEmail(), 'user_invite_email', $mailParameters);
 
         // todo: move new User() from userService to here
 
@@ -244,46 +200,42 @@ class UserController extends BaseController
     }
 
     /**
-     * @param int   $userId
      * @param array $parameters
      *
      * @return array
      * @throws NotAuthorizedException
      * @throws UserNotFoundException
      */
-    private function updateUser(int $userId, array $parameters)
+    private function updateUser(array $parameters)
     {
         $this->checkParameters([
             'id',
         ], $parameters);
 
-        $user       = $this->userService->getUser($userId);
         $updateUser = $this->userService->getUser((int)$parameters['id']);
 
-        $this->isAuthorized($updateUser->getAgent()->getId(), $user->getAgent()->getId());
+        $this->isAuthorized($updateUser->getAgent()->getId(), $this->user->getAgent()->getId());
         $this->prepareParameters($updateUser, $parameters);
 
         return Mapper::fromUser($this->userService->updateUser($updateUser));
     }
 
     /**
-     * @param int   $userId
      * @param array $parameters
      *
      * @throws NotAuthorizedException
      * @throws UserNotFoundException
      */
-    private function setPassword(int $userId, array $parameters)
+    private function setPassword(array $parameters)
     {
         $this->checkParameters([
             'id',
             'password',
         ], $parameters);
 
-        $user       = $this->userService->getUser($userId);
         $updateUser = $this->userService->getUser((int)$parameters['id']);
 
-        $this->isAuthorized($updateUser->getId(), $user->getId());
+        $this->isAuthorized($updateUser->getId(), $this->user->getId());
 
         $updateUser->setPassword(md5((string)$parameters['password']));
         $updateUser->setActive(true);
@@ -292,42 +244,37 @@ class UserController extends BaseController
     }
 
     /**
-     * @param int   $userId
      * @param array $parameters
      *
      * @throws NotAuthorizedException
      * @throws UserNotFoundException
      */
-    private function disableUser(int $userId, array $parameters)
+    private function disableUser(array $parameters)
     {
         $this->checkParameters([
             'id',
         ], $parameters);
 
-        $user       = $this->userService->getUser($userId);
         $updateUser = $this->userService->getUser((int)$parameters['id']);
 
-        $this->isAuthorized($updateUser->getAgent()->getId(), $user->getAgent()->getId());
+        $this->isAuthorized($updateUser->getAgent()->getId(), $this->user->getAgent()->getId());
 
-        $this->userService->disableUser($user);
+        $this->userService->disableUser($this->user);
     }
 
     /**
-     * @param int   $userId
      * @param array $parameters
      *
      * @throws NotAuthorizedException
      * @throws UserNotFoundException
      */
-    private function deleteUser(int $userId, array $parameters)
+    private function deleteUser(array $parameters)
     {
         $this->checkParameters([
             'id',
         ], $parameters);
 
-        $user = $this->userService->getUser($userId);
-
-        if ((int)$user->getUserType()->getId() > self::USER_AGENT) {
+        if ($this->user->getUserType()->getId() > self::USER_AGENT) {
             throw new NotAuthorizedException();
         }
 
@@ -335,15 +282,10 @@ class UserController extends BaseController
     }
 
     /**
-     * @param int $userId
-     *
      * @return array
-     * @throws UserNotFoundException
      */
-    private function verify(int $userId): array
+    private function verify(): array
     {
-        $user = $this->userService->getUser($userId);
-
-        return Mapper::fromUser($user);
+        return Mapper::fromUser($this->user);
     }
 }

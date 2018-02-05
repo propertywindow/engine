@@ -5,7 +5,6 @@ namespace AuthenticationBundle\Controller;
 
 use AppBundle\Controller\BaseController;
 use AuthenticationBundle\Exceptions\ServiceGroupNotFoundException;
-use AuthenticationBundle\Exceptions\UserNotFoundException;
 use AuthenticationBundle\Service\ServiceGroup\Mapper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Response;
@@ -29,8 +28,8 @@ class ServiceGroupController extends BaseController
     public function requestHandler(Request $httpRequest)
     {
         try {
-            list($userId, $method, $parameters) = $this->prepareRequest($httpRequest);
-            $jsonRpcResponse = Response::success($this->invoke($userId, $method, $parameters));
+            list($method, $parameters) = $this->prepareRequest($httpRequest);
+            $jsonRpcResponse = Response::success($this->invoke($method, $parameters));
         } catch (Throwable $throwable) {
             $jsonRpcResponse = $this->throwable($throwable, $httpRequest);
         }
@@ -39,58 +38,44 @@ class ServiceGroupController extends BaseController
     }
 
     /**
-     * @param int    $userId
      * @param string $method
      * @param array  $parameters
      *
      * @return array
      * @throws InvalidJsonRpcMethodException
-     * @throws ServiceGroupNotFoundException
-     * @throws UserNotFoundException
      */
-    private function invoke(int $userId, string $method, array $parameters = [])
+    private function invoke(string $method, array $parameters = [])
     {
-        switch ($method) {
-            case "getServiceGroup":
-                return $this->getServiceGroup($userId, $parameters);
-            case "getServiceGroups":
-                return $this->getServiceGroups($userId);
+        if (is_callable([$this, $method])) {
+            return $this->$method($parameters);
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
     }
 
     /**
-     * @param int   $userId
      * @param array $parameters
      *
      * @return array
      * @throws ServiceGroupNotFoundException
-     * @throws UserNotFoundException
      */
-    private function getServiceGroup(int $userId, array $parameters): array
+    private function getServiceGroup(array $parameters): array
     {
         $this->checkParameters([
             'id',
         ], $parameters);
 
-        $user         = $this->userService->getUser($userId);
         $serviceGroup = $this->serviceGroupService->getServiceGroup((int)$parameters['id']);
 
-        return Mapper::fromServiceGroup($user->getSettings()->getLanguage(), $serviceGroup);
+        return Mapper::fromServiceGroup($this->user->getSettings()->getLanguage(), $serviceGroup);
     }
 
     /**
-     * @param int $userId
-     *
      * @return array
-     * @throws UserNotFoundException
      */
-    private function getServiceGroups(int $userId): array
+    private function getServiceGroups(): array
     {
-        $user = $this->userService->getUser($userId);
-
-        return Mapper::fromServiceGroups($user->getSettings()->getLanguage(), ...
+        return Mapper::fromServiceGroups($this->user->getSettings()->getLanguage(), ...
             $this->serviceGroupService->getServiceGroups());
     }
 }

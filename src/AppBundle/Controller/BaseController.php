@@ -378,8 +378,6 @@ class BaseController extends Controller
      */
     public function prepareRequest(Request $httpRequest, bool $authenticate = true, bool $impersonate = false)
     {
-        $userId = null;
-
         if ($authenticate) {
             $userId     = $this->authenticator->authenticate($httpRequest, $impersonate);
             $user       = $this->userService->getUser($userId);
@@ -486,7 +484,7 @@ class BaseController extends Controller
     }
 
     /**
-     * @param array $required
+     * @param string[] $required
      * @param array $parameters
      */
     public function checkParameters(array $required, array $parameters)

@@ -8,7 +8,6 @@ use AgentBundle\Exceptions\ClientNotFoundException;
 use AppBundle\Controller\BaseController;
 use AuthenticationBundle\Entity\User;
 use AuthenticationBundle\Exceptions\UserAlreadyExistException;
-use AuthenticationBundle\Exceptions\UserNotFoundException;
 use AuthenticationBundle\Exceptions\UserTypeNotFoundException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Response;
@@ -33,8 +32,8 @@ class ClientController extends BaseController
     public function requestHandler(Request $httpRequest)
     {
         try {
-            list($userId, $method, $parameters) = $this->prepareRequest($httpRequest);
-            $jsonRpcResponse = Response::success($this->invoke($userId, $method, $parameters));
+            list($method, $parameters) = $this->prepareRequest($httpRequest);
+            $jsonRpcResponse = Response::success($this->invoke($method, $parameters));
         } catch (Throwable $throwable) {
             $jsonRpcResponse = $this->throwable($throwable, $httpRequest);
         }
@@ -43,26 +42,16 @@ class ClientController extends BaseController
     }
 
     /**
-     * @param int    $userId
      * @param string $method
      * @param array  $parameters
      *
      * @return array
-     * @throws ClientNotFoundException
      * @throws InvalidJsonRpcMethodException
-     * @throws UserAlreadyExistException
-     * @throws UserNotFoundException
-     * @throws UserTypeNotFoundException
      */
-    private function invoke(int $userId, string $method, array $parameters = [])
+    private function invoke(string $method, array $parameters = [])
     {
-        switch ($method) {
-            case "getClient":
-                return $this->getClient($parameters);
-            case "getClients":
-                return $this->getClients($userId);
-            case "createClient":
-                return $this->createClient($userId, $parameters);
+        if (is_callable([$this, $method])) {
+            return $this->$method($parameters);
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
@@ -84,31 +73,22 @@ class ClientController extends BaseController
     }
 
     /**
-     * @param int $userId
-     *
      * @return array
-     * @throws UserNotFoundException
      */
-    private function getClients(int $userId): array
+    private function getClients(): array
     {
-        $user = $this->userService->getUser($userId);
-
-        return Mapper::fromClients(...$this->clientService->getClients($user->getAgent()));
+        return Mapper::fromClients(...$this->clientService->getClients($this->user->getAgent()));
     }
 
     /**
-     * @param int   $userId
      * @param array $parameters
      *
      * @return array $user
      * @throws UserAlreadyExistException
-     * @throws UserNotFoundException
      * @throws UserTypeNotFoundException
      */
-    private function createClient(int $userId, array $parameters)
+    private function createClient(array $parameters)
     {
-        $user = $this->userService->getUser($userId);
-
         $this->checkParameters([
             'email',
             'first_name',
@@ -134,7 +114,7 @@ class ClientController extends BaseController
         $newUser->setPostcode($parameters['postcode']);
         $newUser->setCity(ucwords($parameters['city']));
         $newUser->setCountry($parameters['country']);
-        $newUser->setAgent($user->getAgent());
+        $newUser->setAgent($this->user->getAgent());
         $newUser->setUserType($this->userTypeService->getUserType(4));
         $newUser->setActive(false);
 
@@ -142,7 +122,7 @@ class ClientController extends BaseController
 
         $client = new Client();
 
-        $client->setAgent($user->getAgent());
+        $client->setAgent($this->user->getAgent());
         $client->setUser($createdUser);
 
         if (array_key_exists('transparency', $parameters) && $parameters['transparency'] !== null) {

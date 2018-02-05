@@ -6,7 +6,6 @@ namespace AgentBundle\Controller;
 use AgentBundle\Exceptions\AgentSettingsNotFoundException;
 use AppBundle\Controller\BaseController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
-use AuthenticationBundle\Exceptions\UserNotFoundException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Response;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
@@ -30,8 +29,8 @@ class AgentSettingsController extends BaseController
     public function requestHandler(Request $httpRequest)
     {
         try {
-            list($userId, $method, $parameters) = $this->prepareRequest($httpRequest);
-            $jsonRpcResponse = Response::success($this->invoke($userId, $method, $parameters));
+            list($method, $parameters) = $this->prepareRequest($httpRequest);
+            $jsonRpcResponse = Response::success($this->invoke($method, $parameters));
         } catch (Throwable $throwable) {
             $jsonRpcResponse = $this->throwable($throwable, $httpRequest);
         }
@@ -40,68 +39,52 @@ class AgentSettingsController extends BaseController
     }
 
     /**
-     * @param int    $userId
      * @param string $method
      * @param array  $parameters
      *
      * @return array
-     * @throws AgentSettingsNotFoundException
      * @throws InvalidJsonRpcMethodException
-     * @throws NotAuthorizedException
-     * @throws UserNotFoundException
      */
-    private function invoke(int $userId, string $method, array $parameters = [])
+    private function invoke(string $method, array $parameters = [])
     {
-        switch ($method) {
-            case "getSettings":
-                return $this->getSettings($userId);
-            case "updateSettings":
-                return $this->updateSettings($userId, $parameters);
+        if (is_callable([$this, $method])) {
+            return $this->$method($parameters);
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
     }
 
     /**
-     * @param int $userId
-     *
      * @return array
      * @throws AgentSettingsNotFoundException
-     * @throws UserNotFoundException
      */
-    private function getSettings(int $userId)
+    private function getSettings()
     {
-        $user = $this->userService->getUser($userId);
-
-        return Mapper::fromAgentSettings($this->agentSettingsService->getSettings($user->getAgent()));
+        return Mapper::fromAgentSettings($this->agentSettingsService->getSettings($this->user->getAgent()));
     }
 
     /**
-     * @param int   $userId
      * @param array $parameters
      *
      * @return array
      * @throws NotAuthorizedException
      * @throws AgentSettingsNotFoundException
-     * @throws UserNotFoundException
      */
-    private function updateSettings(int $userId, array $parameters)
+    private function updateSettings(array $parameters)
     {
-        $user     = $this->userService->getUser($userId);
-        $settings = $this->agentSettingsService->getSettings($user->getAgent());
+        $settings = $this->agentSettingsService->getSettings($this->user->getAgent());
 
-        if ((int)$user->getUserType()->getId() > self::USER_AGENT) {
+        if ($this->user->getUserType()->getId() > self::USER_AGENT) {
             throw new NotAuthorizedException();
         }
 
-        if ($settings->getAgent()->getId() !== $user->getAgent()->getId()) {
-            if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
+        if ($settings->getAgent()->getId() !== $this->user->getAgent()->getId()) {
+            if ($this->user->getUserType()->getId() !== self::USER_ADMIN) {
                 throw new NotAuthorizedException();
             }
         }
 
         $this->prepareParameters($settings, $parameters);
-
 
         return Mapper::fromAgentSettings($this->agentSettingsService->updateSettings($settings));
     }
