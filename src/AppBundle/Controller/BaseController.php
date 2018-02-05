@@ -503,24 +503,13 @@ class BaseController extends Controller
      * @param       $entity
      * @param array $parameters
      */
-    public function convertParameters($entity, array $parameters)
+    public function prepareParameters($entity, array $parameters)
     {
         // todo: add array parameter for which parameters are allowed
 
         foreach ($parameters as $property => $value) {
-            if ($property === 'office') {
-                $value = ucfirst($value);
-            }
-            if ($property === 'email') {
-                $value = strtolower($value);
-            }
-            if ($property === 'street' || $property === 'city') {
-                $value = ucwords($value);
-            }
 
-            if ($property === 'start' || $property === 'end') {
-                $value = \DateTime::createFromFormat("Y-m-d H:i:s", $value);
-            }
+            $value = $this->convertParameters($property, $value);
 
             $propertyPart = explode('_', $property);
             $property     = implode('', array_map('ucfirst', $propertyPart));
@@ -530,6 +519,32 @@ class BaseController extends Controller
                 $entity->$method($value);
             }
         }
+    }
+
+
+    /**
+     * @param string $property
+     * @param mixed  $value
+     *
+     * @return mixed
+     */
+    public function convertParameters(string $property, mixed $value)
+    {
+        if ($property === 'office') {
+            $value = ucfirst($value);
+        }
+        if ($property === 'email') {
+            $value = strtolower($value);
+        }
+        if ($property === 'street' || $property === 'city') {
+            $value = ucwords($value);
+        }
+
+        if ($property === 'start' || $property === 'end') {
+            $value = \DateTime::createFromFormat("Y-m-d H:i:s", $value);
+        }
+
+        return $value;
     }
 
     /**

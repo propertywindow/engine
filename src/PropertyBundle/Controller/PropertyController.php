@@ -216,23 +216,8 @@ class PropertyController extends BaseController
         $property->setAgent($user->getAgent());
         $property->setClient($this->clientService->getClient($parameters['client_id']));
         $property->setSubType($this->subTypeService->getSubType($parameters['sub_type_id']));
-        $property->setStreet(ucwords($parameters['street']));
-        $property->setHouseNumber($parameters['house_number']);
-        $property->setPostcode($parameters['postcode']);
-        $property->setCity(ucwords($parameters['city']));
-        $property->setCountry($parameters['country']);
-        $property->setLat($parameters['lat']);
-        $property->setLng($parameters['lng']);
 
-        if (array_key_exists('online', $parameters) && $parameters['online'] !== null) {
-            $property->setOnline((bool)$parameters['online']);
-        }
-        if (array_key_exists('price', $parameters) && $parameters['price'] !== null) {
-            $property->setPrice((int)$parameters['price']);
-        }
-        if (array_key_exists('espc', $parameters) && $parameters['espc'] !== null) {
-            $property->setEspc((bool)$parameters['espc']);
-        }
+        $this->prepareParameters($property, $parameters);
 
         $this->propertyService->createProperty($property);
 
@@ -315,7 +300,7 @@ class PropertyController extends BaseController
             $property->setTerms($terms);
         }
 
-        $this->convertParameters($property, $parameters);
+        $this->prepareParameters($property, $parameters);
 
         $updatedProperty = $this->propertyService->updateProperty($property);
 

@@ -276,7 +276,7 @@ class UserController extends BaseController
         $updateUser = $this->userService->getUser((int)$parameters['id']);
 
         $this->isAuthorized($updateUser->getAgent()->getId(), $user->getAgent()->getId());
-        $this->convertParameters($updateUser, $parameters);
+        $this->prepareParameters($updateUser, $parameters);
 
         return Mapper::fromUser($this->userService->updateUser($updateUser));
     }

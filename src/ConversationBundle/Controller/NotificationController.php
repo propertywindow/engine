@@ -137,7 +137,7 @@ class NotificationController extends BaseController
         $notification = new Notification();
         $notification->setUser($user);
 
-        $this->convertParameters($notification, $parameters);
+        $this->prepareParameters($notification, $parameters);
 
         $userIdentifiers = [];
 
@@ -167,7 +167,7 @@ class NotificationController extends BaseController
 
         $notification = $this->notificationService->getNotification((int)$parameters['id']);
 
-        $this->convertParameters($notification, $parameters);
+        $this->prepareParameters($notification, $parameters);
 
         $userIdentifiers = [];
 

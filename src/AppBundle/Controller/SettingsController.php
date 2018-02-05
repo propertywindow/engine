@@ -93,7 +93,7 @@ class SettingsController extends BaseController
             'max_failed_login',
         ], $parameters);
 
-        $this->convertParameters($settings, $parameters);
+        $this->prepareParameters($settings, $parameters);
 
         return Mapper::fromSettings($this->settingsService->updateSettings($settings));
     }

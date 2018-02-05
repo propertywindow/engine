@@ -167,7 +167,7 @@ class AgentController extends BaseController
         $agent->setAgentGroup($this->agentGroupService->getAgentGroup($parameters['agent_group_id']));
         unset($parameters['agent_group_id']);
 
-        $this->convertParameters($agent, $parameters);
+        $this->prepareParameters($agent, $parameters);
 
         $this->agentService->createAgent($agent);
         $newUser = new User();
@@ -235,7 +235,7 @@ class AgentController extends BaseController
             $this->isAuthorized($user->getUserType()->getId(), self::USER_ADMIN);
         }
 
-        $this->convertParameters($agent, $parameters);
+        $this->prepareParameters($agent, $parameters);
 
         // todo: also update user with new address, only on address change
 

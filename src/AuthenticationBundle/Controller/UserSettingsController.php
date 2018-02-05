@@ -96,7 +96,7 @@ class UserSettingsController extends BaseController
             }
         }
 
-        $this->convertParameters($settings, $parameters);
+        $this->prepareParameters($settings, $parameters);
 
         return Mapper::fromUserSettings($this->userSettingsService->updateSettings($settings));
     }

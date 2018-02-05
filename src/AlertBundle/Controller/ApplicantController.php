@@ -132,7 +132,7 @@ class ApplicantController extends BaseController
         $applicant->setAgentGroup($user->getAgent()->getAgentGroup());
         $applicant->setCountry($user->getAgent()->getCountry());
 
-        $this->convertParameters($applicant, $parameters);
+        $this->prepareParameters($applicant, $parameters);
 
         return Mapper::fromApplicant($this->applicantService->createApplicant($applicant));
     }

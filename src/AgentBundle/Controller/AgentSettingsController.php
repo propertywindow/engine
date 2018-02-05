@@ -100,7 +100,7 @@ class AgentSettingsController extends BaseController
             }
         }
 
-        $this->convertParameters($settings, $parameters);
+        $this->prepareParameters($settings, $parameters);
 
 
         return Mapper::fromAgentSettings($this->agentSettingsService->updateSettings($settings));
