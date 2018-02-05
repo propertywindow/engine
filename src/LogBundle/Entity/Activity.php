@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace LogBundle\Entity;
 
@@ -7,8 +8,6 @@ use AuthenticationBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Activity
- *
  * @ORM\Table(name="log_activity")
  * @ORM\Entity(repositoryClass="LogBundle\Repository\ActivityRepository")
  * @ORM\HasLifecycleCallbacks
@@ -17,7 +16,6 @@ class Activity
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -32,71 +30,61 @@ class Activity
 
     /**
      * @ORM\ManyToOne(targetEntity="AgentBundle\Entity\Agent")
-     * @ORM\JoinColumn(name="agent_id", referencedColumnName="id", nullable=true)
+     * @ORM\JoinColumn(name="agent_id", referencedColumnName="id")
      */
     protected $agent;
 
     /**
      * @var int
-     *
      * @ORM\Column(name="action_id", type="integer", nullable=true)
      */
     private $actionId;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="action_category", type="string", length=255, nullable=true)
      */
     private $actionCategory;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="action_name", type="string", length=255, nullable=true)
      */
     private $actionName;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="old_value", type="json_array", nullable=true)
      */
     private $oldValue;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="new_value", type="json_array")
      */
     private $newValue;
 
     /**
      * @var \DateTime $created
-     *
      * @ORM\Column(type="datetime")
      */
     protected $created;
 
 
     /**
-     * Get id
-     *
-     * @return int
+     * @return int|null
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
-     * Set user
-     *
      * @param \AuthenticationBundle\Entity\User $user
      *
      * @return Activity
      */
-    public function setUser(User $user = null)
+    public function setUser(User $user): Activity
     {
         $this->user = $user;
 
@@ -104,23 +92,19 @@ class Activity
     }
 
     /**
-     * Get user
-     *
      * @return \AuthenticationBundle\Entity\User
      */
-    public function getUser()
+    public function getUser(): User
     {
         return $this->user;
     }
 
     /**
-     * Set agent
-     *
      * @param \AgentBundle\Entity\Agent $agent
      *
      * @return Activity
      */
-    public function setAgent(Agent $agent = null)
+    public function setAgent(Agent $agent): Activity
     {
         $this->agent = $agent;
 
@@ -128,23 +112,19 @@ class Activity
     }
 
     /**
-     * Get agent
-     *
      * @return \AgentBundle\Entity\Agent
      */
-    public function getAgent()
+    public function getAgent(): Agent
     {
         return $this->agent;
     }
 
     /**
-     * Set actionId
-     *
      * @param integer $actionId
      *
      * @return Activity
      */
-    public function setActionId($actionId)
+    public function setActionId(int $actionId): Activity
     {
         $this->actionId = $actionId;
 
@@ -152,23 +132,19 @@ class Activity
     }
 
     /**
-     * Get actionId
-     *
      * @return int
      */
-    public function getActionId()
+    public function getActionId(): int
     {
         return $this->actionId;
     }
 
     /**
-     * Set actionCategory
-     *
-     * @param string $actionCategory
+     * @param string|null $actionCategory
      *
      * @return Activity
      */
-    public function setActionCategory($actionCategory)
+    public function setActionCategory(?string $actionCategory): Activity
     {
         $this->actionCategory = $actionCategory;
 
@@ -176,23 +152,19 @@ class Activity
     }
 
     /**
-     * Get actionCategory
-     *
-     * @return string
+     * @return string|null
      */
-    public function getActionCategory()
+    public function getActionCategory(): ?string
     {
         return $this->actionCategory;
     }
 
     /**
-     * Set actionName
-     *
-     * @param string $actionName
+     * @param string|null $actionName
      *
      * @return Activity
      */
-    public function setActionName($actionName)
+    public function setActionName(?string $actionName): Activity
     {
         $this->actionName = $actionName;
 
@@ -200,23 +172,19 @@ class Activity
     }
 
     /**
-     * Get actionName
-     *
      * @return string
      */
-    public function getActionName()
+    public function getActionName(): ?string
     {
         return $this->actionName;
     }
 
     /**
-     * Set oldValue
-     *
-     * @param string $oldValue
+     * @param string|null $oldValue
      *
      * @return Activity
      */
-    public function setOldValue($oldValue)
+    public function setOldValue(?string $oldValue): Activity
     {
         $this->oldValue = $oldValue;
 
@@ -224,23 +192,19 @@ class Activity
     }
 
     /**
-     * Get oldValue
-     *
-     * @return string
+     * @return string|null
      */
-    public function getOldValue()
+    public function getOldValue(): ?string
     {
         return $this->oldValue;
     }
 
     /**
-     * Set newValue
-     *
-     * @param string $newValue
+     * @param string|null $newValue
      *
      * @return Activity
      */
-    public function setNewValue($newValue)
+    public function setNewValue(?string $newValue): Activity
     {
         $this->newValue = $newValue;
 
@@ -248,28 +212,35 @@ class Activity
     }
 
     /**
-     * Get newValue
-     *
-     * @return string
+     * @return string|null
      */
-    public function getNewValue()
+    public function getNewValue(): ?string
     {
         return $this->newValue;
     }
 
     /**
-     * Get created
+     * @param \DateTime|null $created
      *
+     * @return Activity
+     */
+    public function setCreated(?\DateTime $created): Activity
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    /**
      * @return \DateTime
      */
-    public function getCreated()
+    public function getCreated(): \DateTime
     {
         return $this->created;
     }
 
     /**
      * Gets triggered only on insert
-     *
      * @ORM\PrePersist
      */
     public function onPrePersist()

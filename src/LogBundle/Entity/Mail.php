@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace LogBundle\Entity;
 
@@ -7,8 +8,6 @@ use AuthenticationBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Mail
- *
  * @ORM\Table(name="log_mail")
  * @ORM\Entity(repositoryClass="LogBundle\Repository\MailRepository")
  * @ORM\HasLifecycleCallbacks
@@ -17,7 +16,6 @@ class Mail
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -38,43 +36,36 @@ class Mail
 
     /**
      * @var string
-     *
      * @ORM\Column(name="recipient", type="string", length=255)
      */
     private $recipient;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="subject", type="string", length=255)
      */
     private $subject;
 
     /**
      * @var \DateTime $created
-     *
      * @ORM\Column(type="datetime")
      */
     protected $created;
 
     /**
-     * Get id
-     *
-     * @return int
+     * @return int|null
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
-     * Set sender
-     *
      * @param \AuthenticationBundle\Entity\User $sender
      *
      * @return Mail
      */
-    public function setSender(User $sender = null)
+    public function setSender(User $sender): Mail
     {
         $this->sender = $sender;
 
@@ -82,23 +73,19 @@ class Mail
     }
 
     /**
-     * Get sender
-     *
      * @return \AuthenticationBundle\Entity\User
      */
-    public function getSender()
+    public function getSender(): User
     {
         return $this->sender;
     }
 
     /**
-     * Set agent
-     *
      * @param \AgentBundle\Entity\Agent $agent
      *
      * @return Mail
      */
-    public function setAgent(Agent $agent = null)
+    public function setAgent(Agent $agent): Mail
     {
         $this->agent = $agent;
 
@@ -106,23 +93,19 @@ class Mail
     }
 
     /**
-     * Get agent
-     *
      * @return \AgentBundle\Entity\Agent
      */
-    public function getAgent()
+    public function getAgent(): Agent
     {
         return $this->agent;
     }
 
     /**
-     * Set recipient
-     *
      * @param string $recipient
      *
      * @return Mail
      */
-    public function setRecipient($recipient)
+    public function setRecipient(string $recipient): Mail
     {
         $this->recipient = $recipient;
 
@@ -130,23 +113,19 @@ class Mail
     }
 
     /**
-     * Get recipient
-     *
      * @return string
      */
-    public function getRecipient()
+    public function getRecipient(): string
     {
         return $this->recipient;
     }
 
     /**
-     * Set subject
-     *
      * @param string $subject
      *
      * @return Mail
      */
-    public function setSubject($subject)
+    public function setSubject(string $subject): Mail
     {
         $this->subject = $subject;
 
@@ -154,18 +133,35 @@ class Mail
     }
 
     /**
-     * Get subject
-     *
      * @return string
      */
-    public function getSubject()
+    public function getSubject(): string
     {
         return $this->subject;
     }
 
     /**
-     * Gets triggered only on insert
+     * @param \DateTime|null $created
      *
+     * @return Mail
+     */
+    public function setCreated(?\DateTime $created): Mail
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreated(): \DateTime
+    {
+        return $this->created;
+    }
+
+    /**
+     * Gets triggered only on insert
      * @ORM\PrePersist
      */
     public function onPrePersist()

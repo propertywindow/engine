@@ -1,12 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace LogBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use PropertyBundle\Entity\Property;
 
 /**
- * Traffic
- *
  * @ORM\Table(name="log_traffic")
  * @ORM\Entity(repositoryClass="LogBundle\Repository\TrafficRepository")
  * @ORM\HasLifecycleCallbacks
@@ -15,7 +15,6 @@ class Traffic
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -23,90 +22,76 @@ class Traffic
     private $id;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="property_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="PropertyBundle\Entity\Property")
+     * @ORM\JoinColumn(name="property_id", referencedColumnName="id")
      */
-    private $propertyId;
+    protected $property;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="ip", type="string", length=255)
      */
     private $ip;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="browser", type="string", length=255)
      */
     private $browser;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="location", type="string", length=255)
      */
     private $location;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="referrer", type="string", length=255, nullable=true)
      */
     private $referrer;
 
     /**
      * @var \DateTime $created
-     *
      * @ORM\Column(type="datetime")
      */
     protected $created;
 
 
     /**
-     * Get id
-     *
-     * @return int
+     * @return int|null
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
-     * Set propertyId
-     *
-     * @param integer $propertyId
+     * @param \PropertyBundle\Entity\Property $property
      *
      * @return Traffic
      */
-    public function setPropertyId($propertyId)
+    public function setProperty(Property $property): Traffic
     {
-        $this->propertyId = $propertyId;
+        $this->property = $property;
 
         return $this;
     }
 
     /**
-     * Get propertyId
-     *
-     * @return int
+     * @return \PropertyBundle\Entity\Property
      */
-    public function getPropertyId()
+    public function getProperty(): Property
     {
-        return $this->propertyId;
+        return $this->property;
     }
 
     /**
-     * Set ip
-     *
      * @param string $ip
      *
      * @return Traffic
      */
-    public function setIp($ip)
+    public function setIp(string $ip): Traffic
     {
         $this->ip = $ip;
 
@@ -114,23 +99,19 @@ class Traffic
     }
 
     /**
-     * Get ip
-     *
      * @return string
      */
-    public function getIp()
+    public function getIp(): string
     {
         return $this->ip;
     }
 
     /**
-     * Set browser
-     *
      * @param string $browser
      *
      * @return Traffic
      */
-    public function setBrowser($browser)
+    public function setBrowser(string $browser)
     {
         $this->browser = $browser;
 
@@ -139,10 +120,9 @@ class Traffic
 
     /**
      * Get browser
-     *
      * @return string
      */
-    public function getBrowser()
+    public function getBrowser(): string
     {
         return $this->browser;
     }
@@ -154,7 +134,7 @@ class Traffic
      *
      * @return Traffic
      */
-    public function setLocation($location)
+    public function setLocation(string $location)
     {
         $this->location = $location;
 
@@ -163,22 +143,19 @@ class Traffic
 
     /**
      * Get location
-     *
      * @return string
      */
-    public function getLocation()
+    public function getLocation(): string
     {
         return $this->location;
     }
 
     /**
-     * Set referrer
-     *
-     * @param string $referrer
+     * @param string|null $referrer
      *
      * @return Traffic
      */
-    public function setReferrer($referrer)
+    public function setReferrer(?string $referrer)
     {
         $this->referrer = $referrer;
 
@@ -186,18 +163,35 @@ class Traffic
     }
 
     /**
-     * Get referrer
-     *
      * @return string
      */
-    public function getReferrer()
+    public function getReferrer(): ?string
     {
         return $this->referrer;
     }
 
     /**
-     * Gets triggered only on insert
+     * @param \DateTime|null $created
      *
+     * @return Traffic
+     */
+    public function setCreated(?\DateTime $created): Traffic
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreated(): \DateTime
+    {
+        return $this->created;
+    }
+
+    /**
+     * Gets triggered only on insert
      * @ORM\PrePersist
      */
     public function onPrePersist()

@@ -128,26 +128,24 @@ class NotificationController extends BaseController
     {
         // todo: check rights
 
+        $this->checkParameters([
+            'content',
+            'type',
+            'start',
+        ], $parameters);
+
         $user = $this->userService->getUser($userId);
 
         $notification = new Notification();
 
         $notification->setUser($user);
 
-        if (!array_key_exists('content', $parameters) && $parameters['content'] !== null) {
-            throw new InvalidArgumentException("Content parameter not provided");
-        } else {
+        if (array_key_exists('content', $parameters) && $parameters['content'] !== null) {
             $notification->setContent((string)$parameters['content']);
         }
 
-        if (!array_key_exists('type', $parameters) && $parameters['type'] !== null) {
-            throw new InvalidArgumentException("Type parameter not provided");
-        } else {
+        if (array_key_exists('type', $parameters) && $parameters['type'] !== null) {
             $notification->setType((string)$parameters['type']);
-        }
-
-        if (!array_key_exists('start', $parameters) && $parameters['start'] !== null) {
-            throw new InvalidArgumentException("Start parameter not provided");
         }
 
         $start = DateTime::createFromFormat("Y-m-d H:i:s", $parameters['start']);

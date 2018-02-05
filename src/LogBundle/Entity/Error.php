@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace LogBundle\Entity;
 
@@ -6,8 +7,6 @@ use AuthenticationBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Error
- *
  * @ORM\Table(name="log_error")
  * @ORM\Entity(repositoryClass="LogBundle\Repository\ErrorRepository")
  * @ORM\HasLifecycleCallbacks
@@ -16,7 +15,6 @@ class Error
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -31,21 +29,18 @@ class Error
 
     /**
      * @var string
-     *
      * @ORM\Column(name="method", type="string", length=255)
      */
     private $method;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="message", type="string", length=255)
      */
     private $message;
 
     /**
      * @var array
-     *
      * @ORM\Column(name="parameters", type="array", nullable=true)
      */
     private $parameters = [];
@@ -53,30 +48,25 @@ class Error
 
     /**
      * @var \DateTime $created
-     *
      * @ORM\Column(type="datetime")
      */
     protected $created;
 
 
     /**
-     * Get id
-     *
-     * @return int
+     * @return int|null
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
-     * Set user
-     *
      * @param \AuthenticationBundle\Entity\User $user
      *
      * @return Error
      */
-    public function setUser(User $user = null)
+    public function setUser(User $user = null): Error
     {
         $this->user = $user;
 
@@ -84,23 +74,19 @@ class Error
     }
 
     /**
-     * Get user
-     *
      * @return \AuthenticationBundle\Entity\User
      */
-    public function getUser()
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
     /**
-     * Set method
-     *
      * @param string $method
      *
      * @return Error
      */
-    public function setMethod($method)
+    public function setMethod(string $method): Error
     {
         $this->method = $method;
 
@@ -108,23 +94,19 @@ class Error
     }
 
     /**
-     * Get method
-     *
      * @return string
      */
-    public function getMethod()
+    public function getMethod(): string
     {
         return $this->method;
     }
 
     /**
-     * Set message
-     *
      * @param string $message
      *
      * @return Error
      */
-    public function setMessage($message)
+    public function setMessage(string $message): Error
     {
         $this->message = $message;
 
@@ -132,23 +114,19 @@ class Error
     }
 
     /**
-     * Get message
-     *
      * @return string
      */
-    public function getMessage()
+    public function getMessage(): string
     {
         return $this->message;
     }
 
     /**
-     * Set parameters
-     *
-     * @param array $parameters
+     * @param array|null $parameters
      *
      * @return Error
      */
-    public function setParameters($parameters)
+    public function setParameters(?array $parameters): Error
     {
         $this->parameters = $parameters;
 
@@ -156,19 +134,35 @@ class Error
     }
 
     /**
-     * Get parameters
-     *
      * @return array
      */
-    public function getParameters()
+    public function getParameters(): array
     {
         return $this->parameters;
     }
 
+    /**
+     * @param \DateTime|null $created
+     *
+     * @return Error
+     */
+    public function setCreated(?\DateTime $created): Error
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreated(): \DateTime
+    {
+        return $this->created;
+    }
 
     /**
      * Gets triggered only on insert
-     *
      * @ORM\PrePersist
      */
     public function onPrePersist()
