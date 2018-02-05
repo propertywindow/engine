@@ -6,8 +6,6 @@ namespace PropertyBundle\Controller;
 use AgentBundle\Exceptions\ClientNotFoundException;
 use AppBundle\Controller\BaseController;
 
-use AuthenticationBundle\Exceptions\UserNotFoundException;
-use InvalidArgumentException;
 use PropertyBundle\Entity\Property;
 use PropertyBundle\Exceptions\KindNotFoundException;
 use PropertyBundle\Exceptions\SubTypeNotFoundException;
@@ -38,8 +36,8 @@ class PropertyController extends BaseController
     public function requestHandler(Request $httpRequest)
     {
         try {
-            list($userId, $method, $parameters) = $this->prepareRequest($httpRequest);
-            $jsonRpcResponse = Response::success($this->invoke($userId, $method, $parameters));
+            list($method, $parameters) = $this->prepareRequest($httpRequest);
+            $jsonRpcResponse = Response::success($this->invoke($method, $parameters));
         } catch (Throwable $throwable) {
             $jsonRpcResponse = $this->throwable($throwable, $httpRequest);
         }
@@ -48,42 +46,16 @@ class PropertyController extends BaseController
     }
 
     /**
-     * @param int    $userId
      * @param string $method
      * @param array  $parameters
      *
      * @return array
-     * @throws ClientNotFoundException
      * @throws InvalidJsonRpcMethodException
-     * @throws KindNotFoundException
-     * @throws NotAuthorizedException
-     * @throws PropertyAlreadyExistsException
-     * @throws PropertyNotFoundException
-     * @throws SubTypeNotFoundException
-     * @throws TermsNotFoundException
-     * @throws UserNotFoundException
      */
-    public function invoke(int $userId, string $method, array $parameters = [])
+    public function invoke(string $method, array $parameters = [])
     {
-        switch ($method) {
-            case "getProperty":
-                return $this->getProperty($userId, $parameters);
-            case "getProperties":
-                return $this->getProperties($userId);
-            case "getAllProperties":
-                return $this->getAllProperties($userId, $parameters);
-            case "createProperty":
-                return $this->createProperty($userId, $parameters);
-            case "updateProperty":
-                return $this->updateProperty($userId, $parameters);
-            case "archiveProperty":
-                return $this->archiveProperty($userId, $parameters);
-            case "deleteProperty":
-                return $this->deleteProperty($userId, $parameters);
-            case "setPropertySold":
-                return $this->setPropertySold($userId, $parameters);
-            case "toggleOnline":
-                return $this->toggleOnline($userId, $parameters);
+        if (is_callable([$this, $method])) {
+            return $this->$method($parameters);
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
@@ -91,28 +63,23 @@ class PropertyController extends BaseController
 
 
     /**
-     * @param int   $userId
      * @param array $parameters
      *
      * @return array
      * @throws NotAuthorizedException
      * @throws PropertyNotFoundException
-     * @throws UserNotFoundException
      */
-    private function getProperty(int $userId, array $parameters)
+    private function getProperty(array $parameters)
     {
         $this->checkParameters([
             'id',
         ], $parameters);
 
-        $id   = (int)$parameters['id'];
-        $user = $this->userService->getUser($userId);
+        $property = $this->propertyService->getProperty((int)$parameters['id']);
 
-        $property = $this->propertyService->getProperty($id);
+        $this->isAuthorized($property->getAgent()->getId(), $this->user->getAgent()->getId());
 
-        $this->isAuthorized($property->getAgent()->getId(), $user->getAgent()->getId());
-
-        if ($user->getUserType()->getId() === self::USER_API) {
+        if ($this->user->getUserType()->getId() === self::USER_API) {
             $this->checkParameters([
                 'ip',
                 'browser',
@@ -128,67 +95,56 @@ class PropertyController extends BaseController
             );
         }
 
-        return Mapper::fromProperty($user->getSettings()->getLanguage(), $property);
+        return Mapper::fromProperty($this->user->getSettings()->getLanguage(), $property);
     }
 
     /**
-     * @param int $userId
-     *
      * @return array
-     * @throws UserNotFoundException
      */
-    private function getProperties(int $userId)
+    private function getProperties()
     {
-        $user = $this->userService->getUser($userId);
-
-        return Mapper::fromProperties($user->getSettings()->getLanguage(), ...
-            $this->propertyService->listProperties($user->getAgent()));
+        return Mapper::fromProperties($this->user->getSettings()->getLanguage(), ...
+            $this->propertyService->listProperties($this->user->getAgent()));
     }
 
     /**
-     * @param int   $userId
      * @param array $parameters
      *
      * @return array
-     * @throws UserNotFoundException
      */
-    private function getAllProperties(int $userId, array $parameters)
+    private function getAllProperties(array $parameters)
     {
         $limit  = array_key_exists('limit', $parameters) &&
                   $parameters['limit'] !== null ? (int)$parameters['limit'] : 50;
         $offset = array_key_exists('offset', $parameters) &&
                   $parameters['offset'] !== null ? (int)$parameters['offset'] : 0;
 
-        $user     = $this->userService->getUser($userId);
-        $agentIds = $this->agentService->getAgentIdsFromGroup($user->getAgent());
+        $agentIds = $this->agentService->getAgentIdsFromGroup($this->user->getAgent());
 
         list($properties, $count) = $this->propertyService->listAllProperties($agentIds, $limit, $offset);
 
         return [
-            'properties' => Mapper::fromProperties($user->getSettings()->getLanguage(), ...$properties),
+            'properties' => Mapper::fromProperties($this->user->getSettings()->getLanguage(), ...$properties),
             'count'      => $count,
         ];
     }
 
     /**
-     * @param int   $userId
      * @param array $parameters
      *
      * @return array $property
      * @throws NotAuthorizedException
      * @throws PropertyAlreadyExistsException
-     * @throws UserNotFoundException
      * @throws ClientNotFoundException
      * @throws KindNotFoundException
      * @throws SubTypeNotFoundException
      * @throws TermsNotFoundException
      */
-    private function createProperty(int $userId, array $parameters)
+    private function createProperty(array $parameters)
     {
-        $user = $this->userService->getUser($userId);
-
         // todo: covert to minimumAuthLevel(self::USER::COLLEAGUE);
-        if ($user->getUserType()->getId() === self::USER_CLIENT || $user->getUserType()->getId() === self::USER_API) {
+        if ($this->user->getUserType()->getId() === self::USER_CLIENT ||
+            $this->user->getUserType()->getId() === self::USER_API) {
             throw new NotAuthorizedException();
         }
 
@@ -214,7 +170,7 @@ class PropertyController extends BaseController
 
         $property->setKind($this->kindService->getKind($parameters['kind_id']));
         $property->setTerms($this->termsService->getTerm($parameters['terms_id']));
-        $property->setAgent($user->getAgent());
+        $property->setAgent($this->user->getAgent());
         $property->setClient($this->clientService->getClient($parameters['client_id']));
         $property->setSubType($this->subTypeService->getSubType($parameters['sub_type_id']));
 
@@ -225,7 +181,7 @@ class PropertyController extends BaseController
         $propertyId = (int)$property->getId();
 
         $this->logActivityService->createActivity(
-            $user,
+            $this->user,
             $propertyId,
             'property',
             'create',
@@ -234,20 +190,19 @@ class PropertyController extends BaseController
         );
 
         $this->slackService->info(
-            $user->getAgent()->getAgentGroup()->getName() .
-            ' (' . $user->getFirstName() .
-            ' ' . $user->getLastName() .
+            $this->user->getAgent()->getAgentGroup()->getName() .
+            ' (' . $this->user->getFirstName() .
+            ' ' . $this->user->getLastName() .
             ') added a new property: #' . $propertyId
         );
 
         // todo: also insert Details, Gallery, GeneralNotes
         // todo: create data folder
 
-        return Mapper::fromProperty($user->getSettings()->getLanguage(), $property);
+        return Mapper::fromProperty($this->user->getSettings()->getLanguage(), $property);
     }
 
     /**
-     * @param int   $userId
      * @param array $parameters
      *
      * @return array
@@ -257,9 +212,8 @@ class PropertyController extends BaseController
      * @throws PropertyNotFoundException
      * @throws SubTypeNotFoundException
      * @throws TermsNotFoundException
-     * @throws UserNotFoundException
      */
-    private function updateProperty(int $userId, array $parameters)
+    private function updateProperty(array $parameters)
     {
         $this->checkParameters([
             'id',
@@ -273,10 +227,9 @@ class PropertyController extends BaseController
         ], $parameters);
 
         $id       = (int)$parameters['id'];
-        $user     = $this->userService->getUser($userId);
         $property = $this->propertyService->getProperty($id);
 
-        $this->isAuthorized($property->getAgent()->getId(), $user->getAgent()->getId());
+        $this->isAuthorized($property->getAgent()->getId(), $this->user->getAgent()->getId());
 
         if (array_key_exists('client_id', $parameters) && $parameters['client_id'] !== null) {
             $client = $this->clientService->getClient($parameters['client_id']);
@@ -303,7 +256,7 @@ class PropertyController extends BaseController
         $updatedProperty = $this->propertyService->updateProperty($property);
 
         $this->logActivityService->createActivity(
-            $user,
+            $this->user,
             $id,
             'property',
             'update',
@@ -311,35 +264,32 @@ class PropertyController extends BaseController
             $this->get('jms_serializer')->serialize($updatedProperty, 'json')
         );
 
-        return Mapper::fromProperty($user->getSettings()->getLanguage(), $updatedProperty);
+        return Mapper::fromProperty($this->user->getSettings()->getLanguage(), $updatedProperty);
 
         // todo: also update Details, Gallery, GeneralNotes
     }
 
     /**
-     * @param int   $userId
      * @param array $parameters
      *
      * @throws NotAuthorizedException
      * @throws PropertyNotFoundException
-     * @throws UserNotFoundException
      */
-    private function archiveProperty(int $userId, array $parameters)
+    private function archiveProperty(array $parameters)
     {
         $this->checkParameters([
             'id',
         ], $parameters);
 
         $id       = (int)$parameters['id'];
-        $user     = $this->userService->getUser($userId);
         $property = $this->propertyService->getProperty($id);
 
-        $this->isAuthorized($property->getAgent()->getId(), $user->getAgent()->getId());
+        $this->isAuthorized($property->getAgent()->getId(), $this->user->getAgent()->getId());
 
         $this->propertyService->archiveProperty($property);
 
         $this->logActivityService->createActivity(
-            $user,
+            $this->user,
             $id,
             'property',
             'archive',
@@ -351,22 +301,18 @@ class PropertyController extends BaseController
     }
 
     /**
-     * @param int   $userId
      * @param array $parameters
      *
      * @throws NotAuthorizedException
      * @throws PropertyNotFoundException
-     * @throws UserNotFoundException
      */
-    private function deleteProperty(int $userId, array $parameters)
+    private function deleteProperty(array $parameters)
     {
         $this->checkParameters([
             'id',
         ], $parameters);
 
-        $user = $this->userService->getUser($userId);
-
-        if ((int)$user->getUserType()->getId() > self::USER_AGENT) {
+        if ($this->user->getUserType()->getId() > self::USER_AGENT) {
             throw new NotAuthorizedException();
         }
 
@@ -377,15 +323,13 @@ class PropertyController extends BaseController
     }
 
     /**
-     * @param int   $userId
      * @param array $parameters
      *
      * @throws NotAuthorizedException
      * @throws PropertyNotFoundException
-     * @throws UserNotFoundException
      * @throws TermsNotFoundException
      */
-    private function setPropertySold(int $userId, array $parameters)
+    private function setPropertySold(array $parameters)
     {
         $this->checkParameters([
             'id',
@@ -394,16 +338,15 @@ class PropertyController extends BaseController
 
         $id        = (int)$parameters['id'];
         $soldPrice = (int)$parameters['soldPrice'];
-        $user      = $this->userService->getUser($userId);
         $property  = $this->propertyService->getProperty($id);
 
-        $this->isAuthorized($property->getAgent()->getId(), $user->getAgent()->getId());
+        $this->isAuthorized($property->getAgent()->getId(), $this->user->getAgent()->getId());
 
         $term            = $this->termsService->getTerm(9);
         $updatedProperty = $this->propertyService->setPropertySold($id, $soldPrice, $term);
 
         $this->logActivityService->createActivity(
-            $user,
+            $this->user,
             $id,
             'property',
             'update',
@@ -413,14 +356,12 @@ class PropertyController extends BaseController
     }
 
     /**
-     * @param int   $userId
      * @param array $parameters
      *
      * @throws NotAuthorizedException
      * @throws PropertyNotFoundException
-     * @throws UserNotFoundException
      */
-    private function toggleOnline(int $userId, array $parameters)
+    private function toggleOnline(array $parameters)
     {
         $this->checkParameters([
             'id',
@@ -429,15 +370,14 @@ class PropertyController extends BaseController
 
         $id       = (int)$parameters['id'];
         $online   = (bool)$parameters['online'];
-        $user     = $this->userService->getUser($userId);
         $property = $this->propertyService->getProperty($id);
 
-        $this->isAuthorized($property->getAgent()->getId(), $user->getAgent()->getId());
+        $this->isAuthorized($property->getAgent()->getId(), $this->user->getAgent()->getId());
 
         $updatedProperty = $this->propertyService->toggleOnline($id, $online);
 
         $this->logActivityService->createActivity(
-            $user,
+            $this->user,
             $id,
             'property',
             'update',

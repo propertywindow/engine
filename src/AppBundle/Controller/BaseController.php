@@ -19,6 +19,7 @@ use AppBundle\Models\JsonRpc\Error;
 use AppBundle\Models\JsonRpc\Response;
 use AppBundle\Security\Authenticator;
 use AppBundle\Service\SettingsService;
+use AuthenticationBundle\Entity\User;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use AuthenticationBundle\Exceptions\UserNotFoundException;
 use AuthenticationBundle\Service\BlacklistService;
@@ -237,6 +238,11 @@ class BaseController extends Controller
     public $applicationService;
 
     /**
+     * @var User $user
+     */
+    public $user;
+
+    /**
      * @param Authenticator          $authenticator
      * @param SettingsService        $settingsService
      * @param AgentSettingsService   $agentSettingsService
@@ -375,7 +381,9 @@ class BaseController extends Controller
         $userId = null;
 
         if ($authenticate) {
-            $userId = $this->authenticator->authenticate($httpRequest, $impersonate);
+            $userId     = $this->authenticator->authenticate($httpRequest, $impersonate);
+            $user       = $this->userService->getUser($userId);
+            $this->user = $user;
         }
 
         $ipAddress = $httpRequest->getClientIp();
@@ -396,11 +404,7 @@ class BaseController extends Controller
             $parameters = $jsonArray['params'];
         }
 
-        if ($authenticate) {
-            return [$userId, $jsonArray['method'], $parameters];
-        } else {
-            return [$jsonArray['method'], $parameters];
-        }
+        return [$jsonArray['method'], $parameters];
     }
 
     /**
@@ -451,10 +455,10 @@ class BaseController extends Controller
             case $throwable instanceof CouldNotAuthenticateUserException:
                 return Response::failure(new Error(self::USER_NOT_AUTHENTICATED, $throwable->getMessage()));
             case $throwable instanceof Exception:
-                list($userId, $method, $parameters) = self::prepareRequest($httpRequest);
+                list($method, $parameters) = self::prepareRequest($httpRequest);
 
                 $this->logErrorService->createError(
-                    $this->userService->getUser($userId),
+                    $this->user,
                     $method,
                     $throwable->getMessage(),
                     $parameters

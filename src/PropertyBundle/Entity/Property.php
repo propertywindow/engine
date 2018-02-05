@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace PropertyBundle\Entity;
 
@@ -9,7 +10,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Property
  * @ORM\Table(name="property")
  * @ORM\Entity(repositoryClass="PropertyBundle\Repository\PropertyRepository")
  * @ORM\HasLifecycleCallbacks
