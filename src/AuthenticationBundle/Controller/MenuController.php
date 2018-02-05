@@ -57,7 +57,7 @@ class MenuController extends BaseController
      */
     private function getMenu()
     {
-        $services     = $this->serviceMapService->getAuthorizedServiceGroups($this->user);
+        $services = $this->serviceMapService->getAuthorizedServiceGroups($this->user);
 
         return Mapper::fromMenus($this->user->getSettings()->getLanguage(), ...$services);
     }

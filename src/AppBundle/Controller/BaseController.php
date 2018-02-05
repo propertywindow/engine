@@ -546,9 +546,6 @@ class BaseController extends Controller
             case "start":
             case "end":
                 $value = \DateTime::createFromFormat("Y-m-d H:i:s", $value);
-                if ($value === false) {
-                    throw new InvalidArgumentException("End {$value} couldn't be parsed");
-                }
                 break;
         }
 

@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace AuthenticationBundle\Service\User;
 
@@ -6,7 +7,6 @@ use AuthenticationBundle\Entity\User;
 
 /**
  * Class Mapper
- * @package AuthenticationBundle\Service\User
  */
 class Mapper
 {
@@ -19,20 +19,13 @@ class Mapper
     {
         switch ($user->getCountry()) {
             case "NL":
-                $address = $user->getStreet().' '.$user->getHouseNumber();
+                $address = $user->getStreet() . ' ' . $user->getHouseNumber();
                 break;
             case "GB":
-                $address = $user->getHouseNumber().' '.$user->getStreet();
+                $address = $user->getHouseNumber() . ' ' . $user->getStreet();
                 break;
             default:
-                $address = $user->getStreet().' '.$user->getHouseNumber();
-        }
-
-        $onlineNow = false;
-        if ($user->getLastOnline()) {
-            if ($user->getLastOnline()->getTimestamp() > strtotime('-5 min')) {
-                $onlineNow = true;
-            }
+                $address = $user->getStreet() . ' ' . $user->getHouseNumber();
         }
 
         return [
@@ -43,7 +36,7 @@ class Mapper
             'agent_name'   => $user->getAgent()->getAgentGroup()->getName(),
             'office'       => $user->getAgent()->getOffice(),
             'user_type_id' => $user->getUserType()->getId(),
-            'full_name'    => $user->getFirstName().' '.$user->getLastName(),
+            'full_name'    => $user->getFirstName() . ' ' . $user->getLastName(),
             'first_name'   => $user->getFirstName(),
             'last_name'    => $user->getLastName(),
             'address'      => $address,
@@ -57,7 +50,6 @@ class Mapper
             'last_login'   => $user->getLastLogin() ? $user->getLastLogin()->format('Y-m-d H:i:s') : null,
             'last_online'  => $user->getLastOnline() ? $user->getLastOnline()->format('Y-m-d H:i:s') : null,
             'first_login'  => $user->getLastLogin() ? false : true,
-            'online_now'   => $onlineNow,
         ];
     }
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace AppBundle\Security;
 
 use AppBundle\Exceptions\CouldNotAuthenticateUserException;
+use AuthenticationBundle\Entity\User;
 use AuthenticationBundle\Exceptions\UserNotFoundException;
 use AuthenticationBundle\Service\BlacklistService;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,6 +31,11 @@ class Authenticator
      * @var BlacklistService
      */
     private $blacklistService;
+
+    /**
+     * @var User $user
+     */
+    private $user;
 
     /**
      * @param string           $environment
@@ -86,48 +92,61 @@ class Authenticator
         $timestamp = $decoded['timestamp'];
         $signature = $decoded['signature'];
 
-        $user = $this->userService->getUser($userId);
 
-        if (empty($user)) {
+        $this->user = $this->userService->getUser($userId);
+
+        if (empty($this->user)) {
             throw new CouldNotAuthenticateUserException("No user found");
         }
 
-        if (!$user->getActive()) {
+        if (!$this->user->getActive()) {
             throw new CouldNotAuthenticateUserException("User is not activated");
         }
 
-        $secret = $user->getPassword();
+        $secret = $this->user->getPassword();
+        $hash   = hash_hmac('sha1', $timestamp . "-" . $userId, $secret);
 
-        if ($password !== $secret) {
+        if (!hash_equals($password, $secret)) {
             throw new CouldNotAuthenticateUserException("Password incorrect");
         }
 
 
-        if (hash_hmac('sha1', $timestamp . "-" . $userId, $secret) !== $signature) {
+        if (!hash_equals($hash, $signature)) {
             throw new CouldNotAuthenticateUserException("User not recognized");
         }
 
         if (!$impersonate) {
-            $user->setLastOnline(new \DateTime());
-            $this->userService->updateUser($user);
+            $this->user->setLastOnline(new \DateTime());
+            $this->userService->updateUser($this->user);
         }
 
         if (!$this->strict) {
             return $userId;
         }
 
+        $this->checkExpired($timestamp);
+
+        return $userId;
+    }
+
+
+    /**
+     * @param  $timestamp
+     *
+     * @throws CouldNotAuthenticateUserException
+     */
+    private function checkExpired($timestamp)
+    {
         $now                = time();
         $tenMinutesInPast   = $now - (10 * 60);
         $tenMinutesInFuture = $now + (10 * 60);
 
         if ($timestamp > $tenMinutesInFuture || $timestamp < $tenMinutesInPast) {
-            if ($user->getLastOnline()) {
-                if ($user->getLastOnline()->getTimestamp() < $tenMinutesInPast) {
+            if ($this->user->getLastOnline()) {
+                if ($this->user->getLastOnline()->getTimestamp() < $tenMinutesInPast) {
                     throw new CouldNotAuthenticateUserException("Token is expired");
                 }
             }
         }
-
-        return $userId;
     }
 }
