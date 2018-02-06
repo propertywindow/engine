@@ -87,33 +87,10 @@ class Authenticator
             throw new CouldNotAuthenticateUserException("Could not decode authorization header");
         }
 
-        $userId    = (int)$decoded['user'];
-        $password  = $decoded['password'];
-        $timestamp = $decoded['timestamp'];
-        $signature = $decoded['signature'];
-
-
+        $userId     = (int)$decoded['user'];
         $this->user = $this->userService->getUser($userId);
 
-        if (empty($this->user)) {
-            throw new CouldNotAuthenticateUserException("No user found");
-        }
-
-        if (!$this->user->getActive()) {
-            throw new CouldNotAuthenticateUserException("User is not activated");
-        }
-
-        $secret = $this->user->getPassword();
-        $hash   = hash_hmac('sha1', $timestamp . "-" . $userId, $secret);
-
-        if (!hash_equals($password, $secret)) {
-            throw new CouldNotAuthenticateUserException("Password incorrect");
-        }
-
-
-        if (!hash_equals($hash, $signature)) {
-            throw new CouldNotAuthenticateUserException("User not recognized");
-        }
+        $this->validateUser($decoded);
 
         if (!$impersonate) {
             $this->user->setLastOnline(new \DateTime());
@@ -124,7 +101,7 @@ class Authenticator
             return $userId;
         }
 
-        $this->checkExpired($timestamp);
+        $this->checkExpired($decoded['timestamp']);
 
         return $userId;
     }
@@ -147,6 +124,33 @@ class Authenticator
                     throw new CouldNotAuthenticateUserException("Token is expired");
                 }
             }
+        }
+    }
+
+    /**
+     * @param array $decoded
+     *
+     * @throws CouldNotAuthenticateUserException
+     */
+    private function validateUser(array $decoded)
+    {
+        if (empty($this->user)) {
+            throw new CouldNotAuthenticateUserException("No user found");
+        }
+
+        if (!$this->user->getActive()) {
+            throw new CouldNotAuthenticateUserException("User is not activated");
+        }
+
+        $secret = $this->user->getPassword();
+        $hash   = hash_hmac('sha1', $decoded['timestamp'] . "-" . (int)$decoded['user'], $secret);
+
+        if (!hash_equals($decoded['password'], $secret)) {
+            throw new CouldNotAuthenticateUserException("Password incorrect");
+        }
+
+        if (!hash_equals($hash, $decoded['signature'])) {
+            throw new CouldNotAuthenticateUserException("User not recognized");
         }
     }
 }
