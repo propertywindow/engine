@@ -68,9 +68,7 @@ class UserController extends BaseController
      */
     private function getUserById(): array
     {
-        $this->checkParameters([
-            'id',
-        ], $this->parameters);
+        $this->checkParameters(['id']);
 
         $user = $this->userService->getUser((int)$this->parameters['id']);
 
@@ -100,9 +98,7 @@ class UserController extends BaseController
      */
     private function getAgentUsers(): array
     {
-        $this->checkParameters([
-            'id',
-        ], $this->parameters);
+        $this->checkParameters(['id']);
 
         $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
@@ -154,11 +150,7 @@ class UserController extends BaseController
             'country',
             'agent_id',
             'user_type_id',
-        ], $this->parameters);
-
-        if (!filter_var($this->parameters['email'], FILTER_VALIDATE_EMAIL)) {
-            throw new InvalidArgumentException("email parameter not valid");
-        }
+        ]);
 
         if ($this->userService->getUserByEmail($this->parameters['email'])) {
             throw new UserAlreadyExistException($this->parameters['email']);
@@ -169,7 +161,7 @@ class UserController extends BaseController
         $newUser->setUserType($this->userTypeService->getUserType($this->parameters['user_type_id']));
         $newUser->setActive(false);
 
-        $this->prepareParameters($newUser, $this->parameters);
+        $this->prepareParameters($newUser);
 
         $createdUser = $this->userService->createUser($newUser);
         $password    = $this->randomPassword();
@@ -199,14 +191,12 @@ class UserController extends BaseController
      */
     private function updateUser()
     {
-        $this->checkParameters([
-            'id',
-        ], $this->parameters);
+        $this->checkParameters(['id']);
 
         $updateUser = $this->userService->getUser((int)$this->parameters['id']);
 
         $this->isAuthorized($updateUser->getAgent()->getId(), $this->user->getAgent()->getId());
-        $this->prepareParameters($updateUser, $this->parameters);
+        $this->prepareParameters($updateUser);
 
         return Mapper::fromUser($this->userService->updateUser($updateUser));
     }
@@ -220,7 +210,7 @@ class UserController extends BaseController
         $this->checkParameters([
             'id',
             'password',
-        ], $this->parameters);
+        ]);
 
         $updateUser = $this->userService->getUser((int)$this->parameters['id']);
 
@@ -238,9 +228,7 @@ class UserController extends BaseController
      */
     private function disableUser()
     {
-        $this->checkParameters([
-            'id',
-        ], $this->parameters);
+        $this->checkParameters(['id']);
 
         $updateUser = $this->userService->getUser((int)$this->parameters['id']);
 
@@ -255,9 +243,7 @@ class UserController extends BaseController
      */
     private function deleteUser()
     {
-        $this->checkParameters([
-            'id',
-        ], $this->parameters);
+        $this->checkParameters(['id']);
 
         if ($this->user->getUserType()->getId() > self::USER_AGENT) {
             throw new NotAuthorizedException();

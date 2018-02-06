@@ -64,9 +64,7 @@ class ConversationController extends BaseController
      */
     private function getConversation(): array
     {
-        $this->checkParameters([
-            'id',
-        ], $this->parameters);
+        $this->checkParameters(['id']);
 
         return Mapper::fromConversation($this->conversationService->getConversation((int)$this->parameters['id']));
     }
@@ -90,7 +88,7 @@ class ConversationController extends BaseController
         $this->checkParameters([
             'recipient_id',
             'message',
-        ], $this->parameters);
+        ]);
 
         $recipient = $this->userService->getUser((int)$this->parameters['recipient_id']);
         $userType  = $this->userTypeService->getUserType(3);
@@ -131,9 +129,7 @@ class ConversationController extends BaseController
      */
     private function getMessages(): array
     {
-        $this->checkParameters([
-            'id',
-        ], $this->parameters);
+        $this->checkParameters(['id']);
 
         $conversation = $this->conversationService->getConversation((int)$this->parameters['id']);
 
@@ -156,9 +152,7 @@ class ConversationController extends BaseController
      */
     private function getConversationByRecipient()
     {
-        $this->checkParameters([
-            'recipient_id',
-        ], $this->parameters);
+        $this->checkParameters(['recipient_id']);
 
         $recipient    = $this->userService->getUser((int)$this->parameters['recipient_id']);
         $conversation = $this->conversationService->findByUsers($this->user, $recipient);

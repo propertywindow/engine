@@ -61,9 +61,7 @@ class ActivityController extends BaseController
      */
     private function getActivity(): array
     {
-        $this->checkParameters([
-            'id',
-        ], $this->parameters);
+        $this->checkParameters(['id']);
 
         $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
@@ -96,9 +94,7 @@ class ActivityController extends BaseController
      */
     private function getPropertyChanges(): array
     {
-        $this->checkParameters([
-            'type',
-        ], $this->parameters);
+        $this->checkParameters(['type']);
 
         if (array_key_exists('id', $this->parameters) && $this->parameters['id'] !== null) {
             $agent = $this->agentService->getAgent($this->parameters['id']);

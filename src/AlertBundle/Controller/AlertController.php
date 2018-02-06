@@ -60,9 +60,7 @@ class AlertController extends BaseController
      */
     private function getAlert(): array
     {
-        $this->checkParameters([
-            'id',
-        ], $this->parameters);
+        $this->checkParameters(['id']);
 
         $alert = $this->alertService->getAlert((int)$this->parameters['id']);
 

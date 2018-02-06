@@ -59,11 +59,9 @@ class AgentGroupController extends BaseController
      * @return array
      * @throws AgentGroupNotFoundException
      */
-    private function getAgentGroup()
+    private function getAgentGroup(): array
     {
-        $this->checkParameters([
-            'id',
-        ], $this->parameters);
+        $this->checkParameters(['id']);
 
         return Mapper::fromAgentGroup($this->agentGroupService->getAgentGroup((int)$this->parameters['id']));
     }
@@ -72,7 +70,7 @@ class AgentGroupController extends BaseController
      * @return array
      * @throws NotAuthorizedException
      */
-    private function getAgentGroups()
+    private function getAgentGroups(): array
     {
         $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
@@ -80,24 +78,24 @@ class AgentGroupController extends BaseController
     }
 
     /**
-     * @param array $parameters
-     *
      * @return array $user
      * @throws NotAuthorizedException
      */
-    private function createAgentGroup(array $parameters)
+    private function createAgentGroup(): array
     {
         $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
-        if (!array_key_exists('name', $parameters)) {
-            if (!array_key_exists('agent_group_id', $parameters) && $parameters['agent_group_id'] !== null) {
+        if (!array_key_exists('name', $this->parameters)) {
+            if (!array_key_exists('agent_group_id', $this->parameters)
+                && $this->parameters['agent_group_id'] !== null
+            ) {
                 throw new InvalidArgumentException("name or agent_group_id parameter not provided");
             }
         }
 
         $agentGroup = new AgentGroup();
 
-        $this->prepareParameters($agentGroup, $parameters);
+        $this->prepareParameters($agentGroup);
 
         $this->agentGroupService->createAgentGroup($agentGroup);
 
@@ -112,11 +110,9 @@ class AgentGroupController extends BaseController
      * @throws AgentGroupNotFoundException
      * @throws NotAuthorizedException
      */
-    private function updateAgentGroup()
+    private function updateAgentGroup(): array
     {
-        $this->checkParameters([
-            'id',
-        ], $this->parameters);
+        $this->checkParameters(['id']);
 
         $updateAgent = $this->agentGroupService->getAgentGroup((int)$this->parameters['id']);
 
@@ -136,9 +132,7 @@ class AgentGroupController extends BaseController
      */
     private function deleteAgentGroup()
     {
-        $this->checkParameters([
-            'id',
-        ], $this->parameters);
+        $this->checkParameters(['id']);
 
         $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 

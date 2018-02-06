@@ -62,9 +62,7 @@ class ClientController extends BaseController
      */
     private function getClient(): array
     {
-        $this->checkParameters([
-            'id',
-        ], $this->parameters);
+        $this->checkParameters(['id']);
 
         return Mapper::fromClient($this->clientService->getClient((int)$this->parameters['id']));
     }
@@ -93,7 +91,7 @@ class ClientController extends BaseController
             'postcode',
             'city',
             'country',
-        ], $this->parameters);
+        ]);
 
         if ($this->userService->getUserByEmail($this->parameters['email'])) {
             throw new UserAlreadyExistException($this->parameters['email']);
@@ -101,7 +99,7 @@ class ClientController extends BaseController
 
         $newUser = new User();
 
-        $this->prepareParameters($newUser, $this->parameters);
+        $this->prepareParameters($newUser);
 
         $newUser->setAgent($this->user->getAgent());
         $newUser->setUserType($this->userTypeService->getUserType(4));
@@ -114,7 +112,7 @@ class ClientController extends BaseController
         $client->setAgent($this->user->getAgent());
         $client->setUser($createdUser);
 
-        $this->prepareParameters($client, $this->parameters);
+        $this->prepareParameters($client);
 
         $this->clientService->createClient($client);
 

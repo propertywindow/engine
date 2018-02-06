@@ -57,7 +57,7 @@ class AgentSettingsController extends BaseController
      * @return array
      * @throws AgentSettingsNotFoundException
      */
-    private function getSettings()
+    private function getSettings(): array
     {
         return Mapper::fromAgentSettings($this->agentSettingsService->getSettings($this->user->getAgent()));
     }
@@ -67,7 +67,7 @@ class AgentSettingsController extends BaseController
      * @throws NotAuthorizedException
      * @throws AgentSettingsNotFoundException
      */
-    private function updateSettings()
+    private function updateSettings(): array
     {
         $settings = $this->agentSettingsService->getSettings($this->user->getAgent());
 
@@ -81,7 +81,7 @@ class AgentSettingsController extends BaseController
             }
         }
 
-        $this->prepareParameters($settings, $this->parameters);
+        $this->prepareParameters($settings);
 
         return Mapper::fromAgentSettings($this->agentSettingsService->updateSettings($settings));
     }

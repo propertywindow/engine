@@ -66,9 +66,7 @@ class AgentController extends BaseController
      */
     private function getAgent()
     {
-        $this->checkParameters([
-            'id',
-        ], $this->parameters);
+        $this->checkParameters(['id']);
 
         return Mapper::fromAgent($this->agentService->getAgent((int)$this->parameters['id']));
     }
@@ -109,7 +107,7 @@ class AgentController extends BaseController
             'postcode',
             'city',
             'country',
-        ], $this->parameters);
+        ]);
 
         if (!array_key_exists('agent_group_id', $this->parameters)) {
             if (!array_key_exists('name', $this->parameters) && $this->parameters['name'] !== null) {
@@ -134,7 +132,7 @@ class AgentController extends BaseController
         $agent->setAgentGroup($this->agentGroupService->getAgentGroup($this->parameters['agent_group_id']));
         unset($this->parameters['agent_group_id']);
 
-        $this->prepareParameters($agent, $this->parameters);
+        $this->prepareParameters($agent);
 
         $this->agentService->createAgent($agent);
 
@@ -144,7 +142,7 @@ class AgentController extends BaseController
         $newUser->setUserType($this->userTypeService->getUserType(2));
         $newUser->setActive(false);
 
-        $this->prepareParameters($newUser, $this->parameters);
+        $this->prepareParameters($newUser);
 
         $createdUser = $this->userService->createUser($newUser);
         $password    = $this->randomPassword();
@@ -176,9 +174,7 @@ class AgentController extends BaseController
      */
     private function updateAgent()
     {
-        $this->checkParameters([
-            'id',
-        ], $this->parameters);
+        $this->checkParameters(['id']);
 
         $agent = $this->agentService->getAgent((int)$this->parameters['id']);
 
@@ -190,7 +186,7 @@ class AgentController extends BaseController
             $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
         }
 
-        $this->prepareParameters($agent, $this->parameters);
+        $this->prepareParameters($agent);
 
         // todo: also update user with new address, only on address change
 
@@ -204,9 +200,7 @@ class AgentController extends BaseController
      */
     private function deleteAgent()
     {
-        $this->checkParameters([
-            'id',
-        ], $this->parameters);
+        $this->checkParameters(['id']);
 
         $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 

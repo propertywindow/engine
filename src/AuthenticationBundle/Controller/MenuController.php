@@ -55,7 +55,7 @@ class MenuController extends BaseController
     /**
      * @return array
      */
-    private function getMenu()
+    private function getMenu(): array
     {
         $services = $this->serviceMapService->getAuthorizedServiceGroups($this->user);
 

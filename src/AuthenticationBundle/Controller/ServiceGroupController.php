@@ -58,9 +58,7 @@ class ServiceGroupController extends BaseController
      */
     private function getServiceGroup(): array
     {
-        $this->checkParameters([
-            'id',
-        ], $this->parameters);
+        $this->checkParameters(['id']);
 
         $serviceGroup = $this->serviceGroupService->getServiceGroup((int)$this->parameters['id']);
 

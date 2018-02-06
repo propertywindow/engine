@@ -56,7 +56,7 @@ class SettingsController extends BaseController
      * @return array
      * @throws SettingsNotFoundException
      */
-    private function getSettings()
+    private function getSettings(): array
     {
         return Mapper::fromSettings($this->settingsService->getSettings());
     }
@@ -66,7 +66,7 @@ class SettingsController extends BaseController
      * @throws NotAuthorizedException
      * @throws SettingsNotFoundException
      */
-    private function updateSettings()
+    private function updateSettings(): array
     {
         $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
@@ -76,9 +76,9 @@ class SettingsController extends BaseController
             'application_name',
             'application_url',
             'max_failed_login',
-        ], $this->parameters);
+        ]);
 
-        $this->prepareParameters($settings, $this->parameters);
+        $this->prepareParameters($settings);
 
         return Mapper::fromSettings($this->settingsService->updateSettings($settings));
     }

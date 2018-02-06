@@ -62,9 +62,7 @@ class ApplicantController extends BaseController
      */
     private function getApplicant(): array
     {
-        $this->checkParameters([
-            'id',
-        ], $this->parameters);
+        $this->checkParameters(['id']);
 
         $applicant = $this->applicantService->getApplicant((int)$this->parameters['id']);
 
@@ -86,12 +84,12 @@ class ApplicantController extends BaseController
      * @return array $user
      * @throws ApplicantAlreadyExistException
      */
-    private function createApplicant()
+    private function createApplicant(): array
     {
         $this->checkParameters([
             'name',
             'email',
-        ], $this->parameters);
+        ]);
 
         if ($this->applicantService->getApplicantByEmail($this->parameters['email'])) {
             throw new ApplicantAlreadyExistException($this->parameters['email']);
@@ -102,7 +100,7 @@ class ApplicantController extends BaseController
         $applicant->setAgentGroup($this->user->getAgent()->getAgentGroup());
         $applicant->setCountry($this->user->getAgent()->getCountry());
 
-        $this->prepareParameters($applicant, $this->parameters);
+        $this->prepareParameters($applicant);
 
         return Mapper::fromApplicant($this->applicantService->createApplicant($applicant));
     }
@@ -113,9 +111,7 @@ class ApplicantController extends BaseController
      */
     private function deleteApplicant()
     {
-        $this->checkParameters([
-            'id',
-        ], $this->parameters);
+        $this->checkParameters(['id']);
 
         $applicant = $this->applicantService->getApplicant((int)$this->parameters['id']);
 

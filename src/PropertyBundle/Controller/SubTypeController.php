@@ -61,9 +61,7 @@ class SubTypeController extends BaseController
      */
     private function getSubType()
     {
-        $this->checkParameters([
-            'id',
-        ], $this->parameters);
+        $this->checkParameters(['id']);
 
         return Mapper::fromSubType($this->subTypeService->getSubType((int)$this->parameters['id']));
     }
@@ -74,9 +72,7 @@ class SubTypeController extends BaseController
      */
     private function getSubTypes()
     {
-        $this->checkParameters([
-            'type_id',
-        ], $this->parameters);
+        $this->checkParameters(['type_id']);
 
         $type = $this->typeService->getType((int)$this->parameters['type_id']);
 
@@ -90,9 +86,7 @@ class SubTypeController extends BaseController
      */
     private function deleteSubType()
     {
-        $this->checkParameters([
-            'id',
-        ], $this->parameters);
+        $this->checkParameters(['id']);
 
         $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 

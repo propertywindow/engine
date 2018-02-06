@@ -68,9 +68,7 @@ class NotificationController extends BaseController
      */
     private function getNotification(): array
     {
-        $this->checkParameters([
-            'id',
-        ], $this->parameters);
+        $this->checkParameters(['id']);
 
         return Mapper::fromNotification($this->notificationService->getNotification((int)$this->parameters['id']));
     }
@@ -95,12 +93,12 @@ class NotificationController extends BaseController
             'content',
             'type',
             'start',
-        ], $this->parameters);
+        ]);
 
         $notification = new Notification();
         $notification->setUser($this->user);
 
-        $this->prepareParameters($notification, $this->parameters);
+        $this->prepareParameters($notification);
 
         $userIdentifiers = [];
 
@@ -122,13 +120,11 @@ class NotificationController extends BaseController
     {
         // todo: check rights
 
-        $this->checkParameters([
-            'id',
-        ], $this->parameters);
+        $this->checkParameters(['id']);
 
         $notification = $this->notificationService->getNotification((int)$this->parameters['id']);
 
-        $this->prepareParameters($notification, $this->parameters);
+        $this->prepareParameters($notification);
 
         $userIdentifiers = [];
 
@@ -147,9 +143,7 @@ class NotificationController extends BaseController
      */
     private function deleteNotification()
     {
-        $this->checkParameters([
-            'id',
-        ], $this->parameters);
+        $this->checkParameters(['id']);
 
         // todo: check rights
         $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);

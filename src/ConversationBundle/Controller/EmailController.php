@@ -61,9 +61,7 @@ class EmailController extends BaseController
      */
     private function getMailbox(): array
     {
-        $this->checkParameters([
-            'mailbox',
-        ], $this->parameters);
+        $this->checkParameters(['mailbox']);
 
         $userSettings = $this->user->getSettings();
 

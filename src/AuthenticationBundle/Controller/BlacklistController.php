@@ -63,9 +63,7 @@ class BlacklistController extends BaseController
      */
     private function getBlacklist(): array
     {
-        $this->checkParameters([
-            'id',
-        ], $this->parameters);
+        $this->checkParameters(['id']);
 
         $blacklist = $this->blacklistService->getBlacklist((int)$this->parameters['id']);
 
@@ -104,7 +102,7 @@ class BlacklistController extends BaseController
         $this->checkParameters([
             'user_id',
             'ip',
-        ], $this->parameters);
+        ]);
 
         $user = $this->userService->getUser($this->parameters['user_id']);
 
@@ -117,13 +115,11 @@ class BlacklistController extends BaseController
      */
     private function removeBlacklist()
     {
+        $this->checkParameters(['id']);
+
         if ($this->user->getUserType()->getId() > self::USER_AGENT) {
             throw new NotAuthorizedException();
         }
-
-        $this->checkParameters([
-            'id',
-        ], $this->parameters);
 
         if (array_key_exists('id', $this->parameters)) {
             $this->blacklistService->removeBlacklist($this->parameters['id']);

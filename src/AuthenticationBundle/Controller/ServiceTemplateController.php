@@ -97,9 +97,7 @@ class ServiceTemplateController extends BaseController
      */
     private function getServiceTemplate(): array
     {
-        $this->checkParameters([
-            'id',
-        ], $this->parameters);
+        $this->checkParameters(['id']);
 
         $templateUserType = $this->userTypeService->getUserType((int)$this->parameters['id']);
 
@@ -118,9 +116,7 @@ class ServiceTemplateController extends BaseController
      */
     private function getServiceGroupTemplate(): array
     {
-        $this->checkParameters([
-            'id',
-        ], $this->parameters);
+        $this->checkParameters(['id']);
 
         $templateUserType = $this->userTypeService->getUserType((int)$this->parameters['id']);
 
@@ -143,7 +139,7 @@ class ServiceTemplateController extends BaseController
         $this->checkParameters([
             'user_type_id',
             'service_id',
-        ], $this->parameters);
+        ]);
 
         $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
@@ -165,7 +161,7 @@ class ServiceTemplateController extends BaseController
         $this->checkParameters([
             'user_type_id',
             'service_group_id',
-        ], $this->parameters);
+        ]);
 
         $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
@@ -188,7 +184,7 @@ class ServiceTemplateController extends BaseController
         $this->checkParameters([
             'user_type_id',
             'service_id',
-        ], $this->parameters);
+        ]);
 
         $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
@@ -209,7 +205,7 @@ class ServiceTemplateController extends BaseController
         $this->checkParameters([
             'user_type_id',
             'service_group_id',
-        ], $this->parameters);
+        ]);
 
         $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 

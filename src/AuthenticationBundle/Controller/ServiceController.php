@@ -59,9 +59,7 @@ class ServiceController extends BaseController
      */
     private function getService(): array
     {
-        $this->checkParameters([
-            'id',
-        ], $this->parameters);
+        $this->checkParameters(['id']);
 
         $service = $this->serviceService->getService((int)$this->parameters['id']);
 
@@ -74,9 +72,7 @@ class ServiceController extends BaseController
      */
     private function getServices(): array
     {
-        $this->checkParameters([
-            'service_group_id',
-        ], $this->parameters);
+        $this->checkParameters(['service_group_id']);
 
         $serviceGroup = $this->serviceGroupService->getServiceGroup($this->parameters['service_group_id']);
 

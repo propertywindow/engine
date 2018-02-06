@@ -66,12 +66,12 @@ class LoginController extends BaseController
      * @return array
      * @throws BlacklistNotFoundException
      */
-    private function login(string $ipAddress)
+    private function login(string $ipAddress): array
     {
         $this->checkParameters([
             'email',
             'password',
-        ], $this->parameters);
+        ]);
 
         $email    = (string)$this->parameters['email'];
         $password = md5((string)$this->parameters['password']);
@@ -122,12 +122,12 @@ class LoginController extends BaseController
      * @throws NotAuthorizedException
      * @throws UserNotFoundException
      */
-    private function impersonate()
+    private function impersonate(): array
     {
         $this->checkParameters([
             'user_id',
             'impersonate_id',
-        ], $this->parameters);
+        ]);
 
         $user        = $this->userService->getUser((int)$this->parameters['user_id']);
         $impersonate = $this->userService->getUser((int)$this->parameters['impersonate_id']);

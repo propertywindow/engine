@@ -496,17 +496,16 @@ class BaseController extends Controller
 
     /**
      * @param string[] $required
-     * @param array    $parameters
      */
-    public function checkParameters(array $required, array $parameters)
+    public function checkParameters(array $required)
     {
         // todo: add which parameter is missing
-        if (count(array_intersect_key(array_flip($required), $parameters)) !== count($required)) {
+        if (count(array_intersect_key(array_flip($required), $this->parameters)) !== count($required)) {
             throw new InvalidArgumentException("there is a required parameter missing");
         }
 
         if (array_key_exists('email', $required)) {
-            if (!filter_var($parameters['email'], FILTER_VALIDATE_EMAIL)) {
+            if (!filter_var($this->parameters['email'], FILTER_VALIDATE_EMAIL)) {
                 throw new InvalidArgumentException("email parameter not valid");
             }
         }
@@ -514,12 +513,11 @@ class BaseController extends Controller
 
     /**
      * @param       $entity
-     * @param array $parameters
      */
-    public function prepareParameters($entity, array $parameters)
+    public function prepareParameters($entity)
     {
         // todo: add array parameter for which parameters are allowed
-        foreach ($parameters as $property => $value) {
+        foreach ($this->parameters as $property => $value) {
             $value        = $this->convertParameters($property, $value);
             $propertyPart = explode('_', $property);
             $property     = implode('', array_map('ucfirst', $propertyPart));

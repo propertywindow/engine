@@ -57,7 +57,7 @@ class UserSettingsController extends BaseController
      * @return array
      * @throws UserSettingsNotFoundException
      */
-    private function getSettings()
+    private function getSettings(): array
     {
         return Mapper::fromUserSettings($this->userSettingsService->getSettings($this->user));
     }
@@ -77,7 +77,7 @@ class UserSettingsController extends BaseController
             }
         }
 
-        $this->prepareParameters($settings, $this->parameters);
+        $this->prepareParameters($settings);
 
         return Mapper::fromUserSettings($this->userSettingsService->updateSettings($settings));
     }

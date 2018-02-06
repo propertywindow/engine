@@ -60,9 +60,7 @@ class TypeController extends BaseController
      */
     private function getType(): array
     {
-        $this->checkParameters([
-            'id',
-        ], $this->parameters);
+        $this->checkParameters(['id']);
 
         return Mapper::fromType($this->typeService->getType((int)$this->parameters['id']));
     }
@@ -82,9 +80,7 @@ class TypeController extends BaseController
      */
     private function deleteType()
     {
-        $this->checkParameters([
-            'id',
-        ], $this->parameters);
+        $this->checkParameters(['id']);
 
         $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 

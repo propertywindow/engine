@@ -68,29 +68,13 @@ class PropertyController extends BaseController
      */
     private function getProperty(): array
     {
-        $this->checkParameters([
-            'id',
-        ], $this->parameters);
+        $this->checkParameters(['id']);
 
         $property = $this->propertyService->getProperty((int)$this->parameters['id']);
 
         $this->isAuthorized($property->getAgent()->getId(), $this->user->getAgent()->getId());
 
-        if ($this->user->getUserType()->getId() === self::USER_API) {
-            $this->checkParameters([
-                'ip',
-                'browser',
-                'location',
-            ], $this->parameters);
-
-            $this->logTrafficService->createTraffic(
-                $property,
-                (string)$this->parameters['id'],
-                (string)$this->parameters['browser'],
-                (string)$this->parameters['location'],
-                (string)$this->parameters['referrer']
-            );
-        }
+        $this->logTraffic($property);
 
         return Mapper::fromProperty($this->user->getSettings()->getLanguage(), $property);
     }
@@ -153,7 +137,7 @@ class PropertyController extends BaseController
             'country',
             'lat',
             'lng',
-        ], $this->parameters);
+        ]);
 
         if ($this->propertyService->checkExistence($this->parameters)) {
             throw new PropertyAlreadyExistsException($this->parameters['client_id']);
@@ -167,7 +151,7 @@ class PropertyController extends BaseController
         $property->setClient($this->clientService->getClient($this->parameters['client_id']));
         $property->setSubType($this->subTypeService->getSubType($this->parameters['sub_type_id']));
 
-        $this->prepareParameters($property, $this->parameters);
+        $this->prepareParameters($property);
 
         $this->propertyService->createProperty($property);
 
@@ -215,7 +199,7 @@ class PropertyController extends BaseController
             'country',
             'lat',
             'lng',
-        ], $this->parameters);
+        ]);
 
         $id       = (int)$this->parameters['id'];
         $property = $this->propertyService->getProperty($id);
@@ -242,7 +226,7 @@ class PropertyController extends BaseController
             $property->setTerms($terms);
         }
 
-        $this->prepareParameters($property, $this->parameters);
+        $this->prepareParameters($property);
 
         $updatedProperty = $this->propertyService->updateProperty($property);
 
@@ -266,9 +250,7 @@ class PropertyController extends BaseController
      */
     private function archiveProperty()
     {
-        $this->checkParameters([
-            'id',
-        ], $this->parameters);
+        $this->checkParameters(['id']);
 
         $id       = (int)$this->parameters['id'];
         $property = $this->propertyService->getProperty($id);
@@ -295,9 +277,7 @@ class PropertyController extends BaseController
      */
     private function deleteProperty()
     {
-        $this->checkParameters([
-            'id',
-        ], $this->parameters);
+        $this->checkParameters(['id']);
 
         if ($this->user->getUserType()->getId() > self::USER_AGENT) {
             throw new NotAuthorizedException();
@@ -319,7 +299,7 @@ class PropertyController extends BaseController
         $this->checkParameters([
             'id',
             'soldPrice',
-        ], $this->parameters);
+        ]);
 
         $id        = (int)$this->parameters['id'];
         $soldPrice = (int)$this->parameters['soldPrice'];
@@ -349,7 +329,7 @@ class PropertyController extends BaseController
         $this->checkParameters([
             'id',
             'online',
-        ], $this->parameters);
+        ]);
 
         $id       = (int)$this->parameters['id'];
         $online   = (bool)$this->parameters['online'];
@@ -367,5 +347,27 @@ class PropertyController extends BaseController
             $this->get('jms_serializer')->serialize($property, 'json'),
             $this->get('jms_serializer')->serialize($updatedProperty, 'json')
         );
+    }
+
+    /**
+     * @param Property $property
+     */
+    private function logTraffic(Property $property)
+    {
+        if ($this->user->getUserType()->getId() === self::USER_API) {
+            $this->checkParameters([
+                'ip',
+                'browser',
+                'location',
+            ]);
+
+            $this->logTrafficService->createTraffic(
+                $property,
+                (string)$this->parameters['id'],
+                (string)$this->parameters['browser'],
+                (string)$this->parameters['location'],
+                (string)$this->parameters['referrer']
+            );
+        }
     }
 }
