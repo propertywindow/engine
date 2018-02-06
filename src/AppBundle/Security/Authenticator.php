@@ -64,6 +64,34 @@ class Authenticator
      */
     public function authenticate(Request $request, bool $impersonate): int
     {
+        $header     = $this->getHeader($request);
+        $decoded    = $this->decodeHeader($header);
+        $this->user = $this->userService->getUser((int)$decoded['user']);
+
+        $this->validateUser($decoded);
+
+        if (!$impersonate) {
+            $this->user->setLastOnline(new \DateTime());
+            $this->userService->updateUser($this->user);
+        }
+
+        if (!$this->strict) {
+            return $this->user->getId();
+        }
+
+        $this->checkExpired($decoded['timestamp']);
+
+        return $this->user->getId();
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return string|string[]
+     * @throws CouldNotAuthenticateUserException
+     */
+    private function getHeader(Request $request)
+    {
         $headers = $request->headers;
         if (!$headers->has('Authorization')) {
             throw new CouldNotAuthenticateUserException("No authorization header provided");
@@ -78,6 +106,17 @@ class Authenticator
             throw new CouldNotAuthenticateUserException("Authorization method not recognized");
         }
 
+        return $authorizationHeader;
+    }
+
+    /**
+     * @param string $authorizationHeader
+     *
+     * @return array
+     * @throws CouldNotAuthenticateUserException
+     */
+    private function decodeHeader(string $authorizationHeader): array
+    {
         $decoded = json_decode(
             base64_decode(substr($authorizationHeader, mb_strlen(self::AUTHORIZATION_HEADER_PREFIX))),
             true
@@ -87,25 +126,8 @@ class Authenticator
             throw new CouldNotAuthenticateUserException("Could not decode authorization header");
         }
 
-        $userId     = (int)$decoded['user'];
-        $this->user = $this->userService->getUser($userId);
-
-        $this->validateUser($decoded);
-
-        if (!$impersonate) {
-            $this->user->setLastOnline(new \DateTime());
-            $this->userService->updateUser($this->user);
-        }
-
-        if (!$this->strict) {
-            return $userId;
-        }
-
-        $this->checkExpired($decoded['timestamp']);
-
-        return $userId;
+        return $decoded;
     }
-
 
     /**
      * @param  $timestamp
@@ -134,23 +156,15 @@ class Authenticator
      */
     private function validateUser(array $decoded)
     {
-        if (empty($this->user)) {
-            throw new CouldNotAuthenticateUserException("No user found");
-        }
-
-        if (!$this->user->getActive()) {
-            throw new CouldNotAuthenticateUserException("User is not activated");
-        }
-
         $secret = $this->user->getPassword();
         $hash   = hash_hmac('sha1', $decoded['timestamp'] . "-" . (int)$decoded['user'], $secret);
 
-        if (!hash_equals($decoded['password'], $secret)) {
-            throw new CouldNotAuthenticateUserException("Password incorrect");
-        }
-
-        if (!hash_equals($hash, $decoded['signature'])) {
-            throw new CouldNotAuthenticateUserException("User not recognized");
+        if ((empty($this->user) ||
+             (!$this->user->getActive())) ||
+            (!hash_equals($decoded['password'], $secret)) ||
+            (!hash_equals($hash, $decoded['signature']))
+        ) {
+            throw new CouldNotAuthenticateUserException("Could Not Authenticate User");
         }
     }
 }
