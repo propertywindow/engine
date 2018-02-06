@@ -83,15 +83,9 @@ class AgentGroupController extends BaseController
      */
     private function createAgentGroup(): array
     {
-        $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
+        $this->checkParameters(['name']);
 
-        if (!array_key_exists('name', $this->parameters)) {
-            if (!array_key_exists('agent_group_id', $this->parameters)
-                && $this->parameters['agent_group_id'] !== null
-            ) {
-                throw new InvalidArgumentException("name or agent_group_id parameter not provided");
-            }
-        }
+        $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
         $agentGroup = new AgentGroup();
 
@@ -114,15 +108,13 @@ class AgentGroupController extends BaseController
     {
         $this->checkParameters(['id']);
 
-        $updateAgent = $this->agentGroupService->getAgentGroup((int)$this->parameters['id']);
+        $agentGroup = $this->agentGroupService->getAgentGroup((int)$this->parameters['id']);
 
         $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
-        if (array_key_exists('name', $this->parameters) && $this->parameters['name'] !== null) {
-            $updateAgent->setName(ucfirst((string)$this->parameters['name']));
-        }
+        $this->prepareParameters($agentGroup);
 
-        return Mapper::fromAgentGroup($this->agentGroupService->updateAgentGroup($updateAgent));
+        return Mapper::fromAgentGroup($this->agentGroupService->updateAgentGroup($agentGroup));
     }
 
 
