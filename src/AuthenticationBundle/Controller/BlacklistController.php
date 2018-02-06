@@ -31,8 +31,8 @@ class BlacklistController extends BaseController
     public function requestHandler(Request $httpRequest)
     {
         try {
-            list($method, $parameters) = $this->prepareRequest($httpRequest);
-            $jsonRpcResponse = Response::success($this->invoke($method, $parameters));
+            $method          = $this->prepareRequest($httpRequest);
+            $jsonRpcResponse = Response::success($this->invoke($method));
         } catch (Throwable $throwable) {
             $jsonRpcResponse = $this->throwable($throwable, $httpRequest);
         }
@@ -42,15 +42,14 @@ class BlacklistController extends BaseController
 
     /**
      * @param string $method
-     * @param array  $parameters
      *
      * @return array
      * @throws InvalidJsonRpcMethodException
      */
-    private function invoke(string $method, array $parameters = [])
+    private function invoke(string $method)
     {
         if (is_callable([$this, $method])) {
-            return $this->$method($parameters);
+            return $this->$method();
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
@@ -58,19 +57,17 @@ class BlacklistController extends BaseController
 
 
     /**
-     * @param array $parameters
-     *
      * @return array
      * @throws BlacklistNotFoundException
      * @throws NotAuthorizedException
      */
-    private function getBlacklist(array $parameters)
+    private function getBlacklist(): array
     {
         $this->checkParameters([
             'id',
-        ], $parameters);
+        ], $this->parameters);
 
-        $blacklist = $this->blacklistService->getBlacklist((int)$parameters['id']);
+        $blacklist = $this->blacklistService->getBlacklist((int)$this->parameters['id']);
 
         if ($this->user->getAgent()->getId() !== $blacklist->getAgent()->getId() ||
             $this->user->getUserType()->getId() !== self::USER_ADMIN
@@ -99,30 +96,26 @@ class BlacklistController extends BaseController
     }
 
     /**
-     * @param array $parameters
-     *
      * @return array
      * @throws UserNotFoundException
      */
-    private function createBlacklist(array $parameters)
+    private function createBlacklist(): array
     {
         $this->checkParameters([
             'user_id',
             'ip',
-        ], $parameters);
+        ], $this->parameters);
 
-        $user = $this->userService->getUser($parameters['user_id']);
+        $user = $this->userService->getUser($this->parameters['user_id']);
 
-        return Mapper::fromBlacklist($this->blacklistService->createBlacklist($parameters['ip'], $user));
+        return Mapper::fromBlacklist($this->blacklistService->createBlacklist($this->parameters['ip'], $user));
     }
 
     /**
-     * @param array $parameters
-     *
      * @throws BlacklistNotFoundException
      * @throws NotAuthorizedException
      */
-    private function removeBlacklist(array $parameters)
+    private function removeBlacklist()
     {
         if ($this->user->getUserType()->getId() > self::USER_AGENT) {
             throw new NotAuthorizedException();
@@ -130,10 +123,10 @@ class BlacklistController extends BaseController
 
         $this->checkParameters([
             'id',
-        ], $parameters);
+        ], $this->parameters);
 
-        if (array_key_exists('id', $parameters)) {
-            $this->blacklistService->removeBlacklist($parameters['id']);
+        if (array_key_exists('id', $this->parameters)) {
+            $this->blacklistService->removeBlacklist($this->parameters['id']);
         }
     }
 }

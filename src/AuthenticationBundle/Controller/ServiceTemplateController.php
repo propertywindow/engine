@@ -33,8 +33,8 @@ class ServiceTemplateController extends BaseController
     public function requestHandler(Request $httpRequest)
     {
         try {
-            list($method, $parameters) = $this->prepareRequest($httpRequest);
-            $jsonRpcResponse = Response::success($this->invoke($method, $parameters));
+            $method          = $this->prepareRequest($httpRequest);
+            $jsonRpcResponse = Response::success($this->invoke($method));
         } catch (Throwable $throwable) {
             $jsonRpcResponse = $this->throwable($throwable, $httpRequest);
         }
@@ -44,15 +44,14 @@ class ServiceTemplateController extends BaseController
 
     /**
      * @param string $method
-     * @param array  $parameters
      *
      * @return array
      * @throws InvalidJsonRpcMethodException
      */
-    private function invoke(string $method, array $parameters = [])
+    private function invoke(string $method)
     {
         if (is_callable([$this, $method])) {
-            return $this->$method($parameters);
+            return $this->$method();
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
@@ -62,7 +61,7 @@ class ServiceTemplateController extends BaseController
      * @return array
      * @throws NotAuthorizedException
      */
-    private function getServiceTemplates()
+    private function getServiceTemplates(): array
     {
         $template  = [];
         $userTypes = $this->userTypeService->getUserTypes(true);
@@ -91,20 +90,18 @@ class ServiceTemplateController extends BaseController
     }
 
     /**
-     * @param array $parameters
-     *
      * @return array
      * @throws NotAuthorizedException
      * @throws TemplateNotFoundException
      * @throws UserTypeNotFoundException
      */
-    private function getServiceTemplate(array $parameters)
+    private function getServiceTemplate(): array
     {
         $this->checkParameters([
             'id',
-        ], $parameters);
+        ], $this->parameters);
 
-        $templateUserType = $this->userTypeService->getUserType((int)$parameters['id']);
+        $templateUserType = $this->userTypeService->getUserType((int)$this->parameters['id']);
 
         $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
@@ -114,20 +111,18 @@ class ServiceTemplateController extends BaseController
     }
 
     /**
-     * @param array $parameters
-     *
      * @return array
      * @throws NotAuthorizedException
      * @throws TemplateNotFoundException
      * @throws UserTypeNotFoundException
      */
-    private function getServiceGroupTemplate(array $parameters)
+    private function getServiceGroupTemplate(): array
     {
         $this->checkParameters([
             'id',
-        ], $parameters);
+        ], $this->parameters);
 
-        $templateUserType = $this->userTypeService->getUserType((int)$parameters['id']);
+        $templateUserType = $this->userTypeService->getUserType((int)$this->parameters['id']);
 
         $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
@@ -137,49 +132,45 @@ class ServiceTemplateController extends BaseController
     }
 
     /**
-     * @param array $parameters
-     *
      * @return array
      * @throws NotAuthorizedException
      * @throws ServiceNotFoundException
      * @throws TemplateAlreadyHasServiceException
      * @throws UserTypeNotFoundException
      */
-    private function addToServiceTemplate(array $parameters)
+    private function addToServiceTemplate(): array
     {
         $this->checkParameters([
             'user_type_id',
             'service_id',
-        ], $parameters);
+        ], $this->parameters);
 
         $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
-        $userType = $this->userTypeService->getUserType((int)$parameters['user_type_id']);
-        $service  = $this->serviceService->getService((int)$parameters['service_id']);
+        $userType = $this->userTypeService->getUserType((int)$this->parameters['user_type_id']);
+        $service  = $this->serviceService->getService((int)$this->parameters['service_id']);
 
         return Mapper::fromServiceTemplate($this->serviceTemplateService->addToServiceTemplate($userType, $service));
     }
 
     /**
-     * @param array $parameters
-     *
      * @return array
      * @throws NotAuthorizedException
      * @throws ServiceGroupNotFoundException
      * @throws TemplateAlreadyHasServiceException
      * @throws UserTypeNotFoundException
      */
-    private function addToServiceGroupTemplate(array $parameters)
+    private function addToServiceGroupTemplate(): array
     {
         $this->checkParameters([
             'user_type_id',
             'service_group_id',
-        ], $parameters);
+        ], $this->parameters);
 
         $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
-        $userType     = $this->userTypeService->getUserType((int)$parameters['user_type_id']);
-        $serviceGroup = $this->serviceGroupService->getServiceGroup((int)$parameters['service_group_id']);
+        $userType     = $this->userTypeService->getUserType((int)$this->parameters['user_type_id']);
+        $serviceGroup = $this->serviceGroupService->getServiceGroup((int)$this->parameters['service_group_id']);
 
         return Mapper::fromServiceGroupTemplate(
             $this->serviceTemplateService->addToServiceGroupTemplate($userType, $serviceGroup)
@@ -187,47 +178,43 @@ class ServiceTemplateController extends BaseController
     }
 
     /**
-     * @param array $parameters
-     *
      * @throws NotAuthorizedException
      * @throws ServiceNotFoundException
      * @throws TemplateNotFoundException
      * @throws UserTypeNotFoundException
      */
-    private function removeFromServiceTemplate(array $parameters)
+    private function removeFromServiceTemplate()
     {
         $this->checkParameters([
             'user_type_id',
             'service_id',
-        ], $parameters);
+        ], $this->parameters);
 
         $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
-        $userType = $this->userTypeService->getUserType((int)$parameters['user_type_id']);
-        $service  = $this->serviceService->getService((int)$parameters['service_id']);
+        $userType = $this->userTypeService->getUserType((int)$this->parameters['user_type_id']);
+        $service  = $this->serviceService->getService((int)$this->parameters['service_id']);
 
         $this->serviceTemplateService->removeFromServiceTemplate($userType, $service);
     }
 
     /**
-     * @param array $parameters
-     *
      * @throws NotAuthorizedException
      * @throws ServiceGroupNotFoundException
      * @throws TemplateNotFoundException
      * @throws UserTypeNotFoundException
      */
-    private function removeFromServiceGroupTemplate(array $parameters)
+    private function removeFromServiceGroupTemplate()
     {
         $this->checkParameters([
             'user_type_id',
             'service_group_id',
-        ], $parameters);
+        ], $this->parameters);
 
         $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
-        $userType     = $this->userTypeService->getUserType((int)$parameters['user_type_id']);
-        $serviceGroup = $this->serviceGroupService->getServiceGroup((int)$parameters['service_group_id']);
+        $userType     = $this->userTypeService->getUserType((int)$this->parameters['user_type_id']);
+        $serviceGroup = $this->serviceGroupService->getServiceGroup((int)$this->parameters['service_group_id']);
 
         $this->serviceTemplateService->removeFromServiceGroupTemplate($userType, $serviceGroup);
     }

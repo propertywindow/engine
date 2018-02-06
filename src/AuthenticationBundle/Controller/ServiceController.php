@@ -29,8 +29,8 @@ class ServiceController extends BaseController
     public function requestHandler(Request $httpRequest)
     {
         try {
-            list($method, $parameters) = $this->prepareRequest($httpRequest);
-            $jsonRpcResponse = Response::success($this->invoke($method, $parameters));
+            $method          = $this->prepareRequest($httpRequest);
+            $jsonRpcResponse = Response::success($this->invoke($method));
         } catch (Throwable $throwable) {
             $jsonRpcResponse = $this->throwable($throwable, $httpRequest);
         }
@@ -40,50 +40,45 @@ class ServiceController extends BaseController
 
     /**
      * @param string $method
-     * @param array  $parameters
      *
      * @return array
      * @throws InvalidJsonRpcMethodException
      */
-    private function invoke(string $method, array $parameters = [])
+    private function invoke(string $method)
     {
         if (is_callable([$this, $method])) {
-            return $this->$method($parameters);
+            return $this->$method();
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
     }
 
     /**
-     * @param array $parameters
-     *
      * @return array
      * @throws ServiceNotFoundException
      */
-    private function getService(array $parameters)
+    private function getService(): array
     {
         $this->checkParameters([
             'id',
-        ], $parameters);
+        ], $this->parameters);
 
-        $service = $this->serviceService->getService((int)$parameters['id']);
+        $service = $this->serviceService->getService((int)$this->parameters['id']);
 
         return Mapper::fromService($this->user->getSettings()->getLanguage(), $service);
     }
 
     /**
-     * @param array $parameters
-     *
      * @return array
      * @throws ServiceGroupNotFoundException
      */
-    private function getServices(array $parameters)
+    private function getServices(): array
     {
         $this->checkParameters([
             'service_group_id',
-        ], $parameters);
+        ], $this->parameters);
 
-        $serviceGroup = $this->serviceGroupService->getServiceGroup($parameters['service_group_id']);
+        $serviceGroup = $this->serviceGroupService->getServiceGroup($this->parameters['service_group_id']);
 
         return Mapper::fromServices($this->user->getSettings()->getLanguage(), ...
             $this->serviceService->getServices($serviceGroup));

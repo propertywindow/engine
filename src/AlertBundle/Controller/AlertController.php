@@ -29,8 +29,8 @@ class AlertController extends BaseController
     public function requestHandler(Request $httpRequest)
     {
         try {
-            list($method, $parameters) = $this->prepareRequest($httpRequest);
-            $jsonRpcResponse = Response::success($this->invoke($method, $parameters));
+            $method          = $this->prepareRequest($httpRequest);
+            $jsonRpcResponse = Response::success($this->invoke($method));
         } catch (Throwable $throwable) {
             $jsonRpcResponse = $this->throwable($throwable, $httpRequest);
         }
@@ -40,34 +40,31 @@ class AlertController extends BaseController
 
     /**
      * @param string $method
-     * @param array  $parameters
      *
      * @return array
      * @throws InvalidJsonRpcMethodException
      */
-    private function invoke(string $method, array $parameters = [])
+    private function invoke(string $method)
     {
         if (is_callable([$this, $method])) {
-            return $this->$method($parameters);
+            return $this->$method();
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
     }
 
     /**
-     * @param array $parameters
-     *
      * @return array
      * @throws AlertNotFoundException
      * @throws NotAuthorizedException
      */
-    private function getAlert(array $parameters)
+    private function getAlert(): array
     {
         $this->checkParameters([
             'id',
-        ], $parameters);
+        ], $this->parameters);
 
-        $alert = $this->alertService->getAlert((int)$parameters['id']);
+        $alert = $this->alertService->getAlert((int)$this->parameters['id']);
 
         $this->isAuthorized(
             $this->user->getAgent()->getAgentGroup()->getId(),
@@ -80,7 +77,7 @@ class AlertController extends BaseController
     /**
      * @return array
      */
-    private function getAlerts()
+    private function getAlerts(): array
     {
         return Mapper::fromAlerts(...$this->alertService->getAlerts($this->user->getAgent()->getAgentGroup()));
     }

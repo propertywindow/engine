@@ -36,8 +36,8 @@ class AgentController extends BaseController
     public function requestHandler(Request $httpRequest)
     {
         try {
-            list($method, $parameters) = $this->prepareRequest($httpRequest);
-            $jsonRpcResponse = Response::success($this->invoke($method, $parameters));
+            $method          = $this->prepareRequest($httpRequest);
+            $jsonRpcResponse = Response::success($this->invoke($method));
         } catch (Throwable $throwable) {
             $jsonRpcResponse = $this->throwable($throwable, $httpRequest);
         }
@@ -47,33 +47,30 @@ class AgentController extends BaseController
 
     /**
      * @param string $method
-     * @param array  $parameters
      *
      * @return array
      * @throws InvalidJsonRpcMethodException
      */
-    private function invoke(string $method, array $parameters = [])
+    private function invoke(string $method)
     {
         if (is_callable([$this, $method])) {
-            return $this->$method($parameters);
+            return $this->$method();
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
     }
 
     /**
-     * @param array $parameters
-     *
      * @return array
      * @throws AgentNotFoundException
      */
-    private function getAgent(array $parameters)
+    private function getAgent()
     {
         $this->checkParameters([
             'id',
-        ], $parameters);
+        ], $this->parameters);
 
-        return Mapper::fromAgent($this->agentService->getAgent((int)$parameters['id']));
+        return Mapper::fromAgent($this->agentService->getAgent((int)$this->parameters['id']));
     }
 
     /**
@@ -88,8 +85,6 @@ class AgentController extends BaseController
     }
 
     /**
-     * @param array $parameters
-     *
      * @return array $user
      * @throws AgentGroupNotFoundException
      * @throws NotAuthorizedException
@@ -100,7 +95,7 @@ class AgentController extends BaseController
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Syntax
      */
-    private function createAgent(array $parameters)
+    private function createAgent()
     {
         $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
@@ -114,30 +109,32 @@ class AgentController extends BaseController
             'postcode',
             'city',
             'country',
-        ], $parameters);
+        ], $this->parameters);
 
-        if (!array_key_exists('agent_group_id', $parameters)) {
-            if (!array_key_exists('name', $parameters) && $parameters['name'] !== null) {
+        if (!array_key_exists('agent_group_id', $this->parameters)) {
+            if (!array_key_exists('name', $this->parameters) && $this->parameters['name'] !== null) {
                 throw new InvalidArgumentException("name or agent_group_id parameter not provided");
             }
         }
 
-        if (!array_key_exists('name', $parameters)) {
-            if (!array_key_exists('agent_group_id', $parameters) && $parameters['agent_group_id'] !== null) {
+        if (!array_key_exists('name', $this->parameters)) {
+            if (!array_key_exists('agent_group_id', $this->parameters) &&
+                $this->parameters['agent_group_id'] !== null
+            ) {
                 throw new InvalidArgumentException("name or agent_group_id parameter not provided");
             }
         }
 
-        if ($this->userService->getUserByEmail($parameters['email'])) {
-            throw new UserAlreadyExistException($parameters['email']);
+        if ($this->userService->getUserByEmail($this->parameters['email'])) {
+            throw new UserAlreadyExistException($this->parameters['email']);
         }
 
         $agent = new Agent();
 
-        $agent->setAgentGroup($this->agentGroupService->getAgentGroup($parameters['agent_group_id']));
-        unset($parameters['agent_group_id']);
+        $agent->setAgentGroup($this->agentGroupService->getAgentGroup($this->parameters['agent_group_id']));
+        unset($this->parameters['agent_group_id']);
 
-        $this->prepareParameters($agent, $parameters);
+        $this->prepareParameters($agent, $this->parameters);
 
         $this->agentService->createAgent($agent);
 
@@ -147,13 +144,13 @@ class AgentController extends BaseController
         $newUser->setUserType($this->userTypeService->getUserType(2));
         $newUser->setActive(false);
 
-        $this->prepareParameters($newUser, $parameters);
+        $this->prepareParameters($newUser, $this->parameters);
 
         $createdUser = $this->userService->createUser($newUser);
         $password    = $this->randomPassword();
 
         $mailParameters = [
-            'name'     => $parameters['first_name'],
+            'name'     => $this->parameters['first_name'],
             'password' => $password,
         ];
 
@@ -173,19 +170,17 @@ class AgentController extends BaseController
 
 
     /**
-     * @param array $parameters
-     *
      * @return array
      * @throws AgentNotFoundException
      * @throws NotAuthorizedException
      */
-    private function updateAgent(array $parameters)
+    private function updateAgent()
     {
         $this->checkParameters([
             'id',
-        ], $parameters);
+        ], $this->parameters);
 
-        $agent = $this->agentService->getAgent((int)$parameters['id']);
+        $agent = $this->agentService->getAgent((int)$this->parameters['id']);
 
         if ((int)$this->user->getUserType()->getId() > self::USER_AGENT) {
             throw new NotAuthorizedException();
@@ -195,7 +190,7 @@ class AgentController extends BaseController
             $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
         }
 
-        $this->prepareParameters($agent, $parameters);
+        $this->prepareParameters($agent, $this->parameters);
 
         // todo: also update user with new address, only on address change
 
@@ -204,21 +199,19 @@ class AgentController extends BaseController
 
 
     /**
-     * @param array $parameters
-     *
      * @throws NotAuthorizedException
      * @throws AgentNotFoundException
      */
-    private function deleteAgent(array $parameters)
+    private function deleteAgent()
     {
         $this->checkParameters([
             'id',
-        ], $parameters);
+        ], $this->parameters);
 
         $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
         // todo: check for users (colleagues) and properties before deleting, just warning
 
-        $this->agentService->deleteAgent((int)$parameters['id']);
+        $this->agentService->deleteAgent((int)$this->parameters['id']);
     }
 }

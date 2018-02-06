@@ -29,8 +29,8 @@ class AgentSettingsController extends BaseController
     public function requestHandler(Request $httpRequest)
     {
         try {
-            list($method, $parameters) = $this->prepareRequest($httpRequest);
-            $jsonRpcResponse = Response::success($this->invoke($method, $parameters));
+            $method          = $this->prepareRequest($httpRequest);
+            $jsonRpcResponse = Response::success($this->invoke($method));
         } catch (Throwable $throwable) {
             $jsonRpcResponse = $this->throwable($throwable, $httpRequest);
         }
@@ -40,15 +40,14 @@ class AgentSettingsController extends BaseController
 
     /**
      * @param string $method
-     * @param array  $parameters
      *
      * @return array
      * @throws InvalidJsonRpcMethodException
      */
-    private function invoke(string $method, array $parameters = [])
+    private function invoke(string $method)
     {
         if (is_callable([$this, $method])) {
-            return $this->$method($parameters);
+            return $this->$method();
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
@@ -64,13 +63,11 @@ class AgentSettingsController extends BaseController
     }
 
     /**
-     * @param array $parameters
-     *
      * @return array
      * @throws NotAuthorizedException
      * @throws AgentSettingsNotFoundException
      */
-    private function updateSettings(array $parameters)
+    private function updateSettings()
     {
         $settings = $this->agentSettingsService->getSettings($this->user->getAgent());
 
@@ -84,7 +81,7 @@ class AgentSettingsController extends BaseController
             }
         }
 
-        $this->prepareParameters($settings, $parameters);
+        $this->prepareParameters($settings, $this->parameters);
 
         return Mapper::fromAgentSettings($this->agentSettingsService->updateSettings($settings));
     }

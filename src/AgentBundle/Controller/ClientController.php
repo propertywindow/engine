@@ -32,8 +32,8 @@ class ClientController extends BaseController
     public function requestHandler(Request $httpRequest)
     {
         try {
-            list($method, $parameters) = $this->prepareRequest($httpRequest);
-            $jsonRpcResponse = Response::success($this->invoke($method, $parameters));
+            $method          = $this->prepareRequest($httpRequest);
+            $jsonRpcResponse = Response::success($this->invoke($method));
         } catch (Throwable $throwable) {
             $jsonRpcResponse = $this->throwable($throwable, $httpRequest);
         }
@@ -43,33 +43,30 @@ class ClientController extends BaseController
 
     /**
      * @param string $method
-     * @param array  $parameters
      *
      * @return array
      * @throws InvalidJsonRpcMethodException
      */
-    private function invoke(string $method, array $parameters = [])
+    private function invoke(string $method)
     {
         if (is_callable([$this, $method])) {
-            return $this->$method($parameters);
+            return $this->$method();
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
     }
 
     /**
-     * @param array $parameters
-     *
      * @return array
      * @throws ClientNotFoundException
      */
-    private function getClient(array $parameters): array
+    private function getClient(): array
     {
         $this->checkParameters([
             'id',
-        ], $parameters);
+        ], $this->parameters);
 
-        return Mapper::fromClient($this->clientService->getClient((int)$parameters['id']));
+        return Mapper::fromClient($this->clientService->getClient((int)$this->parameters['id']));
     }
 
     /**
@@ -81,13 +78,11 @@ class ClientController extends BaseController
     }
 
     /**
-     * @param array $parameters
-     *
      * @return array $user
      * @throws UserAlreadyExistException
      * @throws UserTypeNotFoundException
      */
-    private function createClient(array $parameters)
+    private function createClient(): array
     {
         $this->checkParameters([
             'email',
@@ -98,22 +93,16 @@ class ClientController extends BaseController
             'postcode',
             'city',
             'country',
-        ], $parameters);
+        ], $this->parameters);
 
-        if ($this->userService->getUserByEmail($parameters['email'])) {
-            throw new UserAlreadyExistException($parameters['email']);
+        if ($this->userService->getUserByEmail($this->parameters['email'])) {
+            throw new UserAlreadyExistException($this->parameters['email']);
         }
 
         $newUser = new User();
 
-        $newUser->setEmail(strtolower($parameters['email']));
-        $newUser->setFirstName(ucfirst($parameters['first_name']));
-        $newUser->setLastName(ucfirst($parameters['last_name']));
-        $newUser->setStreet(ucwords($parameters['street']));
-        $newUser->setHouseNumber($parameters['house_number']);
-        $newUser->setPostcode($parameters['postcode']);
-        $newUser->setCity(ucwords($parameters['city']));
-        $newUser->setCountry($parameters['country']);
+        $this->prepareParameters($newUser, $this->parameters);
+
         $newUser->setAgent($this->user->getAgent());
         $newUser->setUserType($this->userTypeService->getUserType(4));
         $newUser->setActive(false);
@@ -125,9 +114,7 @@ class ClientController extends BaseController
         $client->setAgent($this->user->getAgent());
         $client->setUser($createdUser);
 
-        if (array_key_exists('transparency', $parameters) && $parameters['transparency'] !== null) {
-            $client->setTransparency($parameters['transparency']);
-        }
+        $this->prepareParameters($client, $this->parameters);
 
         $this->clientService->createClient($client);
 

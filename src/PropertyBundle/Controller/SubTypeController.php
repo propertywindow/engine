@@ -31,8 +31,8 @@ class SubTypeController extends BaseController
     public function requestHandler(Request $httpRequest)
     {
         try {
-            list($method, $parameters) = $this->prepareRequest($httpRequest);
-            $jsonRpcResponse = Response::success($this->invoke($method, $parameters));
+            $method          = $this->prepareRequest($httpRequest);
+            $jsonRpcResponse = Response::success($this->invoke($method));
         } catch (Throwable $throwable) {
             $jsonRpcResponse = $this->throwable($throwable, $httpRequest);
         }
@@ -42,67 +42,60 @@ class SubTypeController extends BaseController
 
     /**
      * @param string $method
-     * @param array  $parameters
      *
      * @return array
      * @throws InvalidJsonRpcMethodException
      */
-    private function invoke(string $method, array $parameters = [])
+    private function invoke(string $method)
     {
         if (is_callable([$this, $method])) {
-            return $this->$method($parameters);
+            return $this->$method();
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
     }
 
     /**
-     * @param array $parameters
-     *
      * @return array
      * @throws SubTypeNotFoundException
      */
-    private function getSubType(array $parameters)
+    private function getSubType()
     {
         $this->checkParameters([
             'id',
-        ], $parameters);
+        ], $this->parameters);
 
-        return Mapper::fromSubType($this->subTypeService->getSubType((int)$parameters['id']));
+        return Mapper::fromSubType($this->subTypeService->getSubType((int)$this->parameters['id']));
     }
 
     /**
-     * @param array $parameters
-     *
      * @return array
      * @throws TypeNotFoundException
      */
-    private function getSubTypes(array $parameters)
+    private function getSubTypes()
     {
         $this->checkParameters([
             'type_id',
-        ], $parameters);
+        ], $this->parameters);
 
-        $type = $this->typeService->getType((int)$parameters['type_id']);
+        $type = $this->typeService->getType((int)$this->parameters['type_id']);
 
         return Mapper::fromSubTypes(...$this->subTypeService->getSubTypes($type));
     }
 
     /**
-     * @param array $parameters
-     *
      * @throws NotAuthorizedException
      * @throws SubTypeDeleteException
      * @throws SubTypeNotFoundException
      */
-    private function deleteSubType(array $parameters)
+    private function deleteSubType()
     {
         $this->checkParameters([
             'id',
-        ], $parameters);
+        ], $this->parameters);
 
         $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
-        $this->subTypeService->deleteSubType((int)$parameters['id']);
+        $this->subTypeService->deleteSubType((int)$this->parameters['id']);
     }
 }

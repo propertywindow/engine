@@ -29,8 +29,8 @@ class LoginController extends BaseController
     public function requestHandler(Request $httpRequest)
     {
         try {
-            list($method, $parameters) = $this->prepareRequest($httpRequest, false);
-            $jsonRpcResponse = Response::success($this->invoke($method, $httpRequest->getClientIp(), $parameters));
+            $method          = $this->prepareRequest($httpRequest, false);
+            $jsonRpcResponse = Response::success($this->invoke($method, $httpRequest->getClientIp()));
         } catch (Throwable $throwable) {
             $jsonRpcResponse = $this->throwable($throwable, $httpRequest);
         }
@@ -41,7 +41,6 @@ class LoginController extends BaseController
     /**
      * @param string $method
      * @param string $ipAddress
-     * @param array  $parameters
      *
      * @return array
      * @throws BlacklistNotFoundException
@@ -49,13 +48,13 @@ class LoginController extends BaseController
      * @throws NotAuthorizedException
      * @throws UserNotFoundException
      */
-    private function invoke(string $method, string $ipAddress, array $parameters = [])
+    private function invoke(string $method, string $ipAddress)
     {
         switch ($method) {
             case "login":
-                return $this->login($ipAddress, $parameters);
+                return $this->login($ipAddress);
             case "impersonate":
-                return $this->impersonate($parameters);
+                return $this->impersonate();
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
@@ -63,20 +62,19 @@ class LoginController extends BaseController
 
     /**
      * @param string $ipAddress
-     * @param array  $parameters
      *
      * @return array
      * @throws BlacklistNotFoundException
      */
-    private function login(string $ipAddress, array $parameters)
+    private function login(string $ipAddress)
     {
         $this->checkParameters([
             'email',
             'password',
-        ], $parameters);
+        ], $this->parameters);
 
-        $email    = (string)$parameters['email'];
-        $password = md5((string)$parameters['password']);
+        $email    = (string)$this->parameters['email'];
+        $password = md5((string)$this->parameters['password']);
         $user     = $this->userService->login($email, $password);
 
         if ($user === null) {
@@ -120,21 +118,19 @@ class LoginController extends BaseController
 
 
     /**
-     * @param array $parameters
-     *
      * @return array
      * @throws NotAuthorizedException
      * @throws UserNotFoundException
      */
-    private function impersonate(array $parameters)
+    private function impersonate()
     {
         $this->checkParameters([
             'user_id',
             'impersonate_id',
-        ], $parameters);
+        ], $this->parameters);
 
-        $user          = $this->userService->getUser((int)$parameters['user_id']);
-        $impersonate   = $this->userService->getUser((int)$parameters['impersonate_id']);
+        $user        = $this->userService->getUser((int)$this->parameters['user_id']);
+        $impersonate = $this->userService->getUser((int)$this->parameters['impersonate_id']);
 
         if ((int)$user->getUserType()->getId() > self::USER_AGENT) {
             throw new NotAuthorizedException();

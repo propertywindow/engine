@@ -27,7 +27,7 @@ class MenuController extends BaseController
     public function requestHandler(Request $httpRequest)
     {
         try {
-            list($method) = $this->prepareRequest($httpRequest);
+            $method          = $this->prepareRequest($httpRequest);
             $jsonRpcResponse = Response::success($this->invoke($method));
         } catch (Throwable $throwable) {
             $jsonRpcResponse = $this->throwable($throwable, $httpRequest);

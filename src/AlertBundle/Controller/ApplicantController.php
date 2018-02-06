@@ -31,8 +31,8 @@ class ApplicantController extends BaseController
     public function requestHandler(Request $httpRequest)
     {
         try {
-            list($method, $parameters) = $this->prepareRequest($httpRequest);
-            $jsonRpcResponse = Response::success($this->invoke($method, $parameters));
+            $method          = $this->prepareRequest($httpRequest);
+            $jsonRpcResponse = Response::success($this->invoke($method));
         } catch (Throwable $throwable) {
             $jsonRpcResponse = $this->throwable($throwable, $httpRequest);
         }
@@ -42,34 +42,31 @@ class ApplicantController extends BaseController
 
     /**
      * @param string $method
-     * @param array  $parameters
      *
      * @return array
      * @throws InvalidJsonRpcMethodException
      */
-    private function invoke(string $method, array $parameters = [])
+    private function invoke(string $method)
     {
         if (is_callable([$this, $method])) {
-            return $this->$method($parameters);
+            return $this->$method();
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
     }
 
     /**
-     * @param array $parameters
-     *
      * @return array
      * @throws ApplicantNotFoundException
      * @throws NotAuthorizedException
      */
-    private function getApplicant(array $parameters): array
+    private function getApplicant(): array
     {
         $this->checkParameters([
             'id',
-        ], $parameters);
+        ], $this->parameters);
 
-        $applicant = $this->applicantService->getApplicant((int)$parameters['id']);
+        $applicant = $this->applicantService->getApplicant((int)$this->parameters['id']);
 
         $this->isAuthorized($this->user->getAgent()->getAgentGroup()->getId(), $applicant->getAgentGroup()->getId());
 
@@ -86,20 +83,18 @@ class ApplicantController extends BaseController
     }
 
     /**
-     * @param array $parameters
-     *
      * @return array $user
      * @throws ApplicantAlreadyExistException
      */
-    private function createApplicant(array $parameters)
+    private function createApplicant()
     {
         $this->checkParameters([
             'name',
             'email',
-        ], $parameters);
+        ], $this->parameters);
 
-        if ($this->applicantService->getApplicantByEmail($parameters['email'])) {
-            throw new ApplicantAlreadyExistException($parameters['email']);
+        if ($this->applicantService->getApplicantByEmail($this->parameters['email'])) {
+            throw new ApplicantAlreadyExistException($this->parameters['email']);
         }
 
         $applicant = new Applicant();
@@ -107,24 +102,22 @@ class ApplicantController extends BaseController
         $applicant->setAgentGroup($this->user->getAgent()->getAgentGroup());
         $applicant->setCountry($this->user->getAgent()->getCountry());
 
-        $this->prepareParameters($applicant, $parameters);
+        $this->prepareParameters($applicant, $this->parameters);
 
         return Mapper::fromApplicant($this->applicantService->createApplicant($applicant));
     }
 
     /**
-     * @param array $parameters
-     *
      * @throws ApplicantNotFoundException
      * @throws NotAuthorizedException
      */
-    private function deleteApplicant(array $parameters)
+    private function deleteApplicant()
     {
         $this->checkParameters([
             'id',
-        ], $parameters);
+        ], $this->parameters);
 
-        $applicant = $this->applicantService->getApplicant((int)$parameters['id']);
+        $applicant = $this->applicantService->getApplicant((int)$this->parameters['id']);
 
         $this->isAuthorized($this->user->getAgent()->getAgentGroup()->getId(), $applicant->getAgentGroup()->getId());
 

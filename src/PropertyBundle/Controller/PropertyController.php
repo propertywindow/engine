@@ -36,8 +36,8 @@ class PropertyController extends BaseController
     public function requestHandler(Request $httpRequest)
     {
         try {
-            list($method, $parameters) = $this->prepareRequest($httpRequest);
-            $jsonRpcResponse = Response::success($this->invoke($method, $parameters));
+            $method          = $this->prepareRequest($httpRequest);
+            $jsonRpcResponse = Response::success($this->invoke($method));
         } catch (Throwable $throwable) {
             $jsonRpcResponse = $this->throwable($throwable, $httpRequest);
         }
@@ -47,15 +47,14 @@ class PropertyController extends BaseController
 
     /**
      * @param string $method
-     * @param array  $parameters
      *
      * @return array
      * @throws InvalidJsonRpcMethodException
      */
-    public function invoke(string $method, array $parameters = [])
+    public function invoke(string $method)
     {
         if (is_callable([$this, $method])) {
-            return $this->$method($parameters);
+            return $this->$method();
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
@@ -63,19 +62,17 @@ class PropertyController extends BaseController
 
 
     /**
-     * @param array $parameters
-     *
      * @return array
      * @throws NotAuthorizedException
      * @throws PropertyNotFoundException
      */
-    private function getProperty(array $parameters)
+    private function getProperty(): array
     {
         $this->checkParameters([
             'id',
-        ], $parameters);
+        ], $this->parameters);
 
-        $property = $this->propertyService->getProperty((int)$parameters['id']);
+        $property = $this->propertyService->getProperty((int)$this->parameters['id']);
 
         $this->isAuthorized($property->getAgent()->getId(), $this->user->getAgent()->getId());
 
@@ -84,14 +81,14 @@ class PropertyController extends BaseController
                 'ip',
                 'browser',
                 'location',
-            ], $parameters);
+            ], $this->parameters);
 
             $this->logTrafficService->createTraffic(
                 $property,
-                (string)$parameters['id'],
-                (string)$parameters['browser'],
-                (string)$parameters['location'],
-                (string)$parameters['referrer']
+                (string)$this->parameters['id'],
+                (string)$this->parameters['browser'],
+                (string)$this->parameters['location'],
+                (string)$this->parameters['referrer']
             );
         }
 
@@ -101,23 +98,21 @@ class PropertyController extends BaseController
     /**
      * @return array
      */
-    private function getProperties()
+    private function getProperties(): array
     {
         return Mapper::fromProperties($this->user->getSettings()->getLanguage(), ...
             $this->propertyService->listProperties($this->user->getAgent()));
     }
 
     /**
-     * @param array $parameters
-     *
      * @return array
      */
-    private function getAllProperties(array $parameters)
+    private function getAllProperties(): array
     {
-        $limit  = array_key_exists('limit', $parameters) &&
-                  $parameters['limit'] !== null ? (int)$parameters['limit'] : 50;
-        $offset = array_key_exists('offset', $parameters) &&
-                  $parameters['offset'] !== null ? (int)$parameters['offset'] : 0;
+        $limit  = array_key_exists('limit', $this->parameters) &&
+                  $this->parameters['limit'] !== null ? (int)$this->parameters['limit'] : 50;
+        $offset = array_key_exists('offset', $this->parameters) &&
+                  $this->parameters['offset'] !== null ? (int)$this->parameters['offset'] : 0;
 
         $agentIds = $this->agentService->getAgentIdsFromGroup($this->user->getAgent());
 
@@ -130,8 +125,6 @@ class PropertyController extends BaseController
     }
 
     /**
-     * @param array $parameters
-     *
      * @return array $property
      * @throws NotAuthorizedException
      * @throws PropertyAlreadyExistsException
@@ -140,7 +133,7 @@ class PropertyController extends BaseController
      * @throws SubTypeNotFoundException
      * @throws TermsNotFoundException
      */
-    private function createProperty(array $parameters)
+    private function createProperty(): array
     {
         // todo: covert to minimumAuthLevel(self::USER::COLLEAGUE);
         if ($this->user->getUserType()->getId() === self::USER_CLIENT ||
@@ -160,21 +153,21 @@ class PropertyController extends BaseController
             'country',
             'lat',
             'lng',
-        ], $parameters);
+        ], $this->parameters);
 
-        if ($this->propertyService->checkExistence($parameters)) {
-            throw new PropertyAlreadyExistsException($parameters['client_id']);
+        if ($this->propertyService->checkExistence($this->parameters)) {
+            throw new PropertyAlreadyExistsException($this->parameters['client_id']);
         }
 
         $property = new Property();
 
-        $property->setKind($this->kindService->getKind($parameters['kind_id']));
-        $property->setTerms($this->termsService->getTerm($parameters['terms_id']));
+        $property->setKind($this->kindService->getKind($this->parameters['kind_id']));
+        $property->setTerms($this->termsService->getTerm($this->parameters['terms_id']));
         $property->setAgent($this->user->getAgent());
-        $property->setClient($this->clientService->getClient($parameters['client_id']));
-        $property->setSubType($this->subTypeService->getSubType($parameters['sub_type_id']));
+        $property->setClient($this->clientService->getClient($this->parameters['client_id']));
+        $property->setSubType($this->subTypeService->getSubType($this->parameters['sub_type_id']));
 
-        $this->prepareParameters($property, $parameters);
+        $this->prepareParameters($property, $this->parameters);
 
         $this->propertyService->createProperty($property);
 
@@ -203,8 +196,6 @@ class PropertyController extends BaseController
     }
 
     /**
-     * @param array $parameters
-     *
      * @return array
      * @throws ClientNotFoundException
      * @throws KindNotFoundException
@@ -213,7 +204,7 @@ class PropertyController extends BaseController
      * @throws SubTypeNotFoundException
      * @throws TermsNotFoundException
      */
-    private function updateProperty(array $parameters)
+    private function updateProperty(): array
     {
         $this->checkParameters([
             'id',
@@ -224,34 +215,34 @@ class PropertyController extends BaseController
             'country',
             'lat',
             'lng',
-        ], $parameters);
+        ], $this->parameters);
 
-        $id       = (int)$parameters['id'];
+        $id       = (int)$this->parameters['id'];
         $property = $this->propertyService->getProperty($id);
 
         $this->isAuthorized($property->getAgent()->getId(), $this->user->getAgent()->getId());
 
-        if (array_key_exists('client_id', $parameters) && $parameters['client_id'] !== null) {
-            $client = $this->clientService->getClient($parameters['client_id']);
+        if (array_key_exists('client_id', $this->parameters) && $this->parameters['client_id'] !== null) {
+            $client = $this->clientService->getClient($this->parameters['client_id']);
             $property->setClient($client);
         }
 
-        if (array_key_exists('kind_id', $parameters) && $parameters['kind_id'] !== null) {
-            $kind = $this->kindService->getKind($parameters['kind_id']);
+        if (array_key_exists('kind_id', $this->parameters) && $this->parameters['kind_id'] !== null) {
+            $kind = $this->kindService->getKind($this->parameters['kind_id']);
             $property->setKind($kind);
         }
 
-        if (array_key_exists('sub_type_id', $parameters) && $parameters['sub_type_id'] !== null) {
-            $subType = $this->subTypeService->getSubType($parameters['sub_type_id']);
+        if (array_key_exists('sub_type_id', $this->parameters) && $this->parameters['sub_type_id'] !== null) {
+            $subType = $this->subTypeService->getSubType($this->parameters['sub_type_id']);
             $property->setSubType($subType);
         }
 
-        if (array_key_exists('terms_id', $parameters) && $parameters['terms_id'] !== null) {
-            $terms = $this->termsService->getTerm($parameters['terms_id']);
+        if (array_key_exists('terms_id', $this->parameters) && $this->parameters['terms_id'] !== null) {
+            $terms = $this->termsService->getTerm($this->parameters['terms_id']);
             $property->setTerms($terms);
         }
 
-        $this->prepareParameters($property, $parameters);
+        $this->prepareParameters($property, $this->parameters);
 
         $updatedProperty = $this->propertyService->updateProperty($property);
 
@@ -270,18 +261,16 @@ class PropertyController extends BaseController
     }
 
     /**
-     * @param array $parameters
-     *
      * @throws NotAuthorizedException
      * @throws PropertyNotFoundException
      */
-    private function archiveProperty(array $parameters)
+    private function archiveProperty()
     {
         $this->checkParameters([
             'id',
-        ], $parameters);
+        ], $this->parameters);
 
-        $id       = (int)$parameters['id'];
+        $id       = (int)$this->parameters['id'];
         $property = $this->propertyService->getProperty($id);
 
         $this->isAuthorized($property->getAgent()->getId(), $this->user->getAgent()->getId());
@@ -301,43 +290,39 @@ class PropertyController extends BaseController
     }
 
     /**
-     * @param array $parameters
-     *
      * @throws NotAuthorizedException
      * @throws PropertyNotFoundException
      */
-    private function deleteProperty(array $parameters)
+    private function deleteProperty()
     {
         $this->checkParameters([
             'id',
-        ], $parameters);
+        ], $this->parameters);
 
         if ($this->user->getUserType()->getId() > self::USER_AGENT) {
             throw new NotAuthorizedException();
         }
 
-        $this->propertyService->deleteProperty((int)$parameters['id']);
+        $this->propertyService->deleteProperty((int)$this->parameters['id']);
 
         // todo: delete info from not cascading tables too, including logBundle
         // todo: remove all photos from data folder and Gallery
     }
 
     /**
-     * @param array $parameters
-     *
      * @throws NotAuthorizedException
      * @throws PropertyNotFoundException
      * @throws TermsNotFoundException
      */
-    private function setPropertySold(array $parameters)
+    private function setPropertySold()
     {
         $this->checkParameters([
             'id',
             'soldPrice',
-        ], $parameters);
+        ], $this->parameters);
 
-        $id        = (int)$parameters['id'];
-        $soldPrice = (int)$parameters['soldPrice'];
+        $id        = (int)$this->parameters['id'];
+        $soldPrice = (int)$this->parameters['soldPrice'];
         $property  = $this->propertyService->getProperty($id);
 
         $this->isAuthorized($property->getAgent()->getId(), $this->user->getAgent()->getId());
@@ -356,20 +341,18 @@ class PropertyController extends BaseController
     }
 
     /**
-     * @param array $parameters
-     *
      * @throws NotAuthorizedException
      * @throws PropertyNotFoundException
      */
-    private function toggleOnline(array $parameters)
+    private function toggleOnline()
     {
         $this->checkParameters([
             'id',
             'online',
-        ], $parameters);
+        ], $this->parameters);
 
-        $id       = (int)$parameters['id'];
-        $online   = (bool)$parameters['online'];
+        $id       = (int)$this->parameters['id'];
+        $online   = (bool)$this->parameters['online'];
         $property = $this->propertyService->getProperty($id);
 
         $this->isAuthorized($property->getAgent()->getId(), $this->user->getAgent()->getId());

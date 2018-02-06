@@ -31,8 +31,8 @@ class EmailController extends BaseController
     public function requestHandler(Request $httpRequest)
     {
         try {
-            list($method, $parameters) = $this->prepareRequest($httpRequest);
-            $jsonRpcResponse = Response::success($this->invoke($method, $parameters));
+            $method          = $this->prepareRequest($httpRequest);
+            $jsonRpcResponse = Response::success($this->invoke($method));
         } catch (Throwable $throwable) {
             $jsonRpcResponse = $this->throwable($throwable, $httpRequest);
         }
@@ -42,31 +42,28 @@ class EmailController extends BaseController
 
     /**
      * @param string $method
-     * @param array  $parameters
      *
      * @return array
      * @throws InvalidJsonRpcMethodException
      */
-    private function invoke(string $method, array $parameters = [])
+    private function invoke(string $method)
     {
         if (is_callable([$this, $method])) {
-            return $this->$method($parameters);
+            return $this->$method();
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
     }
 
     /**
-     * @param array $parameters
-     *
      * @return array
      * @throws EmailNotSetException
      */
-    private function getMailbox(array $parameters)
+    private function getMailbox(): array
     {
         $this->checkParameters([
             'mailbox',
-        ], $parameters);
+        ], $this->parameters);
 
         $userSettings = $this->user->getSettings();
 
@@ -74,7 +71,7 @@ class EmailController extends BaseController
 
         $mailbox    = [];
         $connection = imap_open(
-            $parameters['mailbox'],
+            $this->parameters['mailbox'],
             $userSettings->getIMAPUsername(),
             $userSettings->getIMAPPassword()
         );
@@ -107,7 +104,7 @@ class EmailController extends BaseController
      * @return array
      * @throws EmailNotSetException
      */
-    private function getMailboxes()
+    private function getMailboxes(): array
     {
         $userSettings = $this->user->getSettings();
 

@@ -30,8 +30,8 @@ class NotificationController extends BaseController
     public function requestHandler(Request $httpRequest)
     {
         try {
-            list($method, $parameters) = $this->prepareRequest($httpRequest);
-            $jsonRpcResponse = Response::success($this->invoke($method, $parameters));
+            $method          = $this->prepareRequest($httpRequest);
+            $jsonRpcResponse = Response::success($this->invoke($method));
         } catch (Throwable $throwable) {
             $jsonRpcResponse = $this->throwable($throwable, $httpRequest);
         }
@@ -41,15 +41,14 @@ class NotificationController extends BaseController
 
     /**
      * @param string $method
-     * @param array  $parameters
      *
      * @return array
      * @throws InvalidJsonRpcMethodException
      */
-    private function invoke(string $method, array $parameters = [])
+    private function invoke(string $method)
     {
         if (is_callable([$this, $method])) {
-            return $this->$method($parameters);
+            return $this->$method();
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
@@ -58,41 +57,37 @@ class NotificationController extends BaseController
     /**
      * @return array
      */
-    private function getNotifications()
+    private function getNotifications(): array
     {
         return Mapper::fromNotifications(...$this->notificationService->getNotifications($this->user));
     }
 
     /**
-     * @param array $parameters
-     *
      * @return array
      * @throws NotificationNotFoundException
      */
-    private function getNotification(array $parameters)
+    private function getNotification(): array
     {
         $this->checkParameters([
             'id',
-        ], $parameters);
+        ], $this->parameters);
 
-        return Mapper::fromNotification($this->notificationService->getNotification((int)$parameters['id']));
+        return Mapper::fromNotification($this->notificationService->getNotification((int)$this->parameters['id']));
     }
 
     /**
      * @return array
      */
-    private function listNotifications()
+    private function listNotifications(): array
     {
         return Mapper::fromNotifications(...$this->notificationService->listNotifications($this->user));
     }
 
     /**
-     * @param array $parameters
-     *
      * @return array
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    private function createNotification(array $parameters)
+    private function createNotification(): array
     {
         // todo: check rights
 
@@ -100,17 +95,17 @@ class NotificationController extends BaseController
             'content',
             'type',
             'start',
-        ], $parameters);
+        ], $this->parameters);
 
         $notification = new Notification();
         $notification->setUser($this->user);
 
-        $this->prepareParameters($notification, $parameters);
+        $this->prepareParameters($notification, $this->parameters);
 
         $userIdentifiers = [];
 
-        if (array_key_exists('userIdentifiers', $parameters) && is_array($parameters['userIdentifiers'])) {
-            $userIdentifiers = array_map('intval', $parameters['userIdentifiers']);
+        if (array_key_exists('userIdentifiers', $this->parameters) && is_array($this->parameters['userIdentifiers'])) {
+            $userIdentifiers = array_map('intval', $this->parameters['userIdentifiers']);
         }
 
         return Mapper::fromNotification(
@@ -119,28 +114,26 @@ class NotificationController extends BaseController
     }
 
     /**
-     * @param array $parameters
-     *
      * @return array
      * @throws NotificationNotFoundException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    private function updateNotification(array $parameters)
+    private function updateNotification(): array
     {
         // todo: check rights
 
         $this->checkParameters([
             'id',
-        ], $parameters);
+        ], $this->parameters);
 
-        $notification = $this->notificationService->getNotification((int)$parameters['id']);
+        $notification = $this->notificationService->getNotification((int)$this->parameters['id']);
 
-        $this->prepareParameters($notification, $parameters);
+        $this->prepareParameters($notification, $this->parameters);
 
         $userIdentifiers = [];
 
-        if (array_key_exists('userIdentifiers', $parameters) && is_array($parameters['userIdentifiers'])) {
-            $userIdentifiers = array_map('intval', $parameters['userIdentifiers']);
+        if (array_key_exists('userIdentifiers', $this->parameters) && is_array($this->parameters['userIdentifiers'])) {
+            $userIdentifiers = array_map('intval', $this->parameters['userIdentifiers']);
         }
 
         return Mapper::fromNotification(
@@ -149,20 +142,18 @@ class NotificationController extends BaseController
     }
 
     /**
-     * @param array $parameters
-     *
      * @throws NotAuthorizedException
      * @throws NotificationNotFoundException
      */
-    private function deleteNotification(array $parameters)
+    private function deleteNotification()
     {
         $this->checkParameters([
             'id',
-        ], $parameters);
+        ], $this->parameters);
 
         // todo: check rights
         $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
-        $this->notificationService->deleteNotification((int)$parameters['id']);
+        $this->notificationService->deleteNotification((int)$this->parameters['id']);
     }
 }

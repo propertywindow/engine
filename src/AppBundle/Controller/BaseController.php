@@ -243,6 +243,11 @@ class BaseController extends Controller
     public $user;
 
     /**
+     * @var array $parameters
+     */
+    public $parameters = [];
+
+    /**
      * @param Authenticator          $authenticator
      * @param SettingsService        $settingsService
      * @param AgentSettingsService   $agentSettingsService
@@ -368,7 +373,7 @@ class BaseController extends Controller
      * @param bool    $authenticate
      * @param bool    $impersonate
      *
-     * @return array
+     * @return string
      * @throws CouldNotAuthenticateUserException
      * @throws CouldNotParseJsonRequestException
      * @throws InvalidJsonRpcMethodException
@@ -397,12 +402,11 @@ class BaseController extends Controller
 
         $this->checkJsonArray($jsonArray);
 
-        $parameters = [];
         if (array_key_exists('params', $jsonArray)) {
-            $parameters = $jsonArray['params'];
+            $this->parameters = $jsonArray['params'];
         }
 
-        return [$jsonArray['method'], $parameters];
+        return $jsonArray['method'];
     }
 
     /**

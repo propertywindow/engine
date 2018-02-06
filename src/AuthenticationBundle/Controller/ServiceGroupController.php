@@ -28,8 +28,8 @@ class ServiceGroupController extends BaseController
     public function requestHandler(Request $httpRequest)
     {
         try {
-            list($method, $parameters) = $this->prepareRequest($httpRequest);
-            $jsonRpcResponse = Response::success($this->invoke($method, $parameters));
+            $method          = $this->prepareRequest($httpRequest);
+            $jsonRpcResponse = Response::success($this->invoke($method));
         } catch (Throwable $throwable) {
             $jsonRpcResponse = $this->throwable($throwable, $httpRequest);
         }
@@ -39,33 +39,30 @@ class ServiceGroupController extends BaseController
 
     /**
      * @param string $method
-     * @param array  $parameters
      *
      * @return array
      * @throws InvalidJsonRpcMethodException
      */
-    private function invoke(string $method, array $parameters = [])
+    private function invoke(string $method)
     {
         if (is_callable([$this, $method])) {
-            return $this->$method($parameters);
+            return $this->$method();
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
     }
 
     /**
-     * @param array $parameters
-     *
      * @return array
      * @throws ServiceGroupNotFoundException
      */
-    private function getServiceGroup(array $parameters): array
+    private function getServiceGroup(): array
     {
         $this->checkParameters([
             'id',
-        ], $parameters);
+        ], $this->parameters);
 
-        $serviceGroup = $this->serviceGroupService->getServiceGroup((int)$parameters['id']);
+        $serviceGroup = $this->serviceGroupService->getServiceGroup((int)$this->parameters['id']);
 
         return Mapper::fromServiceGroup($this->user->getSettings()->getLanguage(), $serviceGroup);
     }

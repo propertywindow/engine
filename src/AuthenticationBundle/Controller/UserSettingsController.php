@@ -29,8 +29,8 @@ class UserSettingsController extends BaseController
     public function requestHandler(Request $httpRequest)
     {
         try {
-            list($method, $parameters) = $this->prepareRequest($httpRequest);
-            $jsonRpcResponse = Response::success($this->invoke($method, $parameters));
+            $method          = $this->prepareRequest($httpRequest);
+            $jsonRpcResponse = Response::success($this->invoke($method));
         } catch (Throwable $throwable) {
             $jsonRpcResponse = $this->throwable($throwable, $httpRequest);
         }
@@ -40,15 +40,14 @@ class UserSettingsController extends BaseController
 
     /**
      * @param string $method
-     * @param array  $parameters
      *
      * @return array
      * @throws InvalidJsonRpcMethodException
      */
-    private function invoke(string $method, array $parameters = [])
+    private function invoke(string $method)
     {
         if (is_callable([$this, $method])) {
-            return $this->$method($parameters);
+            return $this->$method();
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
@@ -64,13 +63,11 @@ class UserSettingsController extends BaseController
     }
 
     /**
-     * @param array $parameters
-     *
      * @return array
      * @throws NotAuthorizedException
      * @throws UserSettingsNotFoundException
      */
-    private function updateSettings(array $parameters)
+    private function updateSettings(): array
     {
         $settings = $this->userSettingsService->getSettings($this->user);
 
@@ -80,7 +77,7 @@ class UserSettingsController extends BaseController
             }
         }
 
-        $this->prepareParameters($settings, $parameters);
+        $this->prepareParameters($settings, $this->parameters);
 
         return Mapper::fromUserSettings($this->userSettingsService->updateSettings($settings));
     }

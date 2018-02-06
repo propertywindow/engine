@@ -28,8 +28,8 @@ class SettingsController extends BaseController
     public function requestHandler(Request $httpRequest)
     {
         try {
-            list($method, $parameters) = $this->prepareRequest($httpRequest);
-            $jsonRpcResponse = Response::success($this->invoke($method, $parameters));
+            $method          = $this->prepareRequest($httpRequest);
+            $jsonRpcResponse = Response::success($this->invoke($method));
         } catch (Throwable $throwable) {
             $jsonRpcResponse = $this->throwable($throwable, $httpRequest);
         }
@@ -39,15 +39,14 @@ class SettingsController extends BaseController
 
     /**
      * @param string $method
-     * @param array  $parameters
      *
      * @return array
      * @throws InvalidJsonRpcMethodException
      */
-    private function invoke(string $method, array $parameters = [])
+    private function invoke(string $method)
     {
         if (is_callable([$this, $method])) {
-            return $this->$method($parameters);
+            return $this->$method();
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
@@ -63,13 +62,11 @@ class SettingsController extends BaseController
     }
 
     /**
-     * @param array $parameters
-     *
      * @return array
      * @throws NotAuthorizedException
      * @throws SettingsNotFoundException
      */
-    private function updateSettings(array $parameters)
+    private function updateSettings()
     {
         $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
@@ -79,9 +76,9 @@ class SettingsController extends BaseController
             'application_name',
             'application_url',
             'max_failed_login',
-        ], $parameters);
+        ], $this->parameters);
 
-        $this->prepareParameters($settings, $parameters);
+        $this->prepareParameters($settings, $this->parameters);
 
         return Mapper::fromSettings($this->settingsService->updateSettings($settings));
     }

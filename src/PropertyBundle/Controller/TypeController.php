@@ -30,8 +30,8 @@ class TypeController extends BaseController
     public function requestHandler(Request $httpRequest)
     {
         try {
-            list($method, $parameters) = $this->prepareRequest($httpRequest);
-            $jsonRpcResponse = Response::success($this->invoke($method, $parameters));
+            $method          = $this->prepareRequest($httpRequest);
+            $jsonRpcResponse = Response::success($this->invoke($method));
         } catch (Throwable $throwable) {
             $jsonRpcResponse = $this->throwable($throwable, $httpRequest);
         }
@@ -41,58 +41,53 @@ class TypeController extends BaseController
 
     /**
      * @param string $method
-     * @param array  $parameters
      *
      * @return array
      * @throws InvalidJsonRpcMethodException
      */
-    private function invoke(string $method, array $parameters = [])
+    private function invoke(string $method)
     {
         if (is_callable([$this, $method])) {
-            return $this->$method($parameters);
+            return $this->$method();
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
     }
 
     /**
-     * @param array $parameters
-     *
      * @return array
      * @throws TypeNotFoundException
      */
-    private function getType(array $parameters)
+    private function getType(): array
     {
         $this->checkParameters([
             'id',
-        ], $parameters);
+        ], $this->parameters);
 
-        return Mapper::fromType($this->typeService->getType((int)$parameters['id']));
+        return Mapper::fromType($this->typeService->getType((int)$this->parameters['id']));
     }
 
     /**
      * @return array
      */
-    private function getTypes()
+    private function getTypes(): array
     {
         return Mapper::fromTypes(...$this->typeService->getTypes());
     }
 
     /**
-     * @param array $parameters
-     *
      * @throws NotAuthorizedException
      * @throws TypeDeleteException
      * @throws TypeNotFoundException
      */
-    private function deleteType(array $parameters)
+    private function deleteType()
     {
         $this->checkParameters([
             'id',
-        ], $parameters);
+        ], $this->parameters);
 
         $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
-        $this->typeService->deleteType((int)$parameters['id']);
+        $this->typeService->deleteType((int)$this->parameters['id']);
     }
 }

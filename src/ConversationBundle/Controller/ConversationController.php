@@ -34,8 +34,8 @@ class ConversationController extends BaseController
     public function requestHandler(Request $httpRequest)
     {
         try {
-            list($method, $parameters) = $this->prepareRequest($httpRequest);
-            $jsonRpcResponse = Response::success($this->invoke($method, $parameters));
+            $method          = $this->prepareRequest($httpRequest);
+            $jsonRpcResponse = Response::success($this->invoke($method));
         } catch (Throwable $throwable) {
             $jsonRpcResponse = $this->throwable($throwable, $httpRequest);
         }
@@ -45,64 +45,59 @@ class ConversationController extends BaseController
 
     /**
      * @param string $method
-     * @param array  $parameters
      *
      * @return array
      * @throws InvalidJsonRpcMethodException
      */
-    private function invoke(string $method, array $parameters = [])
+    private function invoke(string $method)
     {
         if (is_callable([$this, $method])) {
-            return $this->$method($parameters);
+            return $this->$method();
         }
 
         throw new InvalidJsonRpcMethodException("Method $method does not exist");
     }
 
     /**
-     * @param array $parameters
-     *
      * @return array
      * @throws ConversationNotFoundException
      */
-    private function getConversation(array $parameters)
+    private function getConversation(): array
     {
         $this->checkParameters([
             'id',
-        ], $parameters);
+        ], $this->parameters);
 
-        return Mapper::fromConversation($this->conversationService->getConversation((int)$parameters['id']));
+        return Mapper::fromConversation($this->conversationService->getConversation((int)$this->parameters['id']));
     }
 
     /**
      * @return array
      */
-    private function getConversations()
+    private function getConversations(): array
     {
         return Mapper::fromConversations(...$this->conversationService->getConversations($this->user));
     }
 
     /**
-     * @param array $parameters
-     *
      * @return array $conversation
      * @throws NoColleagueException
      * @throws UserNotFoundException
      * @throws UserTypeNotFoundException
      */
-    private function createConversation(array $parameters)
+    private function createConversation(): array
     {
         $this->checkParameters([
             'recipient_id',
             'message',
-        ], $parameters);
+        ], $this->parameters);
 
-        $recipient = $this->userService->getUser((int)$parameters['recipient_id']);
+        $recipient = $this->userService->getUser((int)$this->parameters['recipient_id']);
         $userType  = $this->userTypeService->getUserType(3);
         $agentIds  = $this->agentService->getAgentIdsFromGroup($this->user->getAgent());
 
         if (!$this->userService->isColleague($recipient->getId(), $agentIds, $userType)) {
-            throw new NoColleagueException((int)$parameters['recipient_id']);
+            throw new NoColleagueException((int)$this->parameters['recipient_id']);
         }
 
         $conversation = $this->conversationService->findByUsers($this->user, $recipient);
@@ -120,9 +115,9 @@ class ConversationController extends BaseController
         $message->setConversation($conversation);
         $message->setAuthor($this->user);
         $message->setRecipient($recipient);
-        $message->setMessage($parameters['message']);
-        if (array_key_exists('type', $parameters) && $parameters['type'] !== null) {
-            $message->setType($parameters['type']);
+        $message->setMessage($this->parameters['message']);
+        if (array_key_exists('type', $this->parameters) && $this->parameters['type'] !== null) {
+            $message->setType($this->parameters['type']);
         }
 
         $this->messageService->createMessage($message);
@@ -131,18 +126,16 @@ class ConversationController extends BaseController
     }
 
     /**
-     * @param array $parameters
-     *
      * @return array
      * @throws ConversationNotFoundException
      */
-    private function getMessages(array $parameters)
+    private function getMessages(): array
     {
         $this->checkParameters([
             'id',
-        ], $parameters);
+        ], $this->parameters);
 
-        $conversation = $this->conversationService->getConversation((int)$parameters['id']);
+        $conversation = $this->conversationService->getConversation((int)$this->parameters['id']);
 
         $messages = $this->messageService->getMessages($conversation);
 
@@ -157,19 +150,17 @@ class ConversationController extends BaseController
 
 
     /**
-     * @param array $parameters
-     *
      * @return array
      * @throws ConversationForRecipientNotFoundException
      * @throws UserNotFoundException
      */
-    private function getConversationByRecipient(array $parameters)
+    private function getConversationByRecipient()
     {
         $this->checkParameters([
             'recipient_id',
-        ], $parameters);
+        ], $this->parameters);
 
-        $recipient    = $this->userService->getUser((int)$parameters['recipient_id']);
+        $recipient    = $this->userService->getUser((int)$this->parameters['recipient_id']);
         $conversation = $this->conversationService->findByUsers($this->user, $recipient);
 
         if ($conversation === null) {
@@ -190,7 +181,7 @@ class ConversationController extends BaseController
     /**
      * @return array $messages
      */
-    private function getUnread()
+    private function getUnread(): array
     {
         return Mapper::fromMessages(...$this->messageService->getUnread($this->user));
     }
