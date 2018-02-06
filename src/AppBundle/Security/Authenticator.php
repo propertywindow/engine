@@ -87,7 +87,7 @@ class Authenticator
     /**
      * @param Request $request
      *
-     * @return string|string[]
+     * @return string
      * @throws CouldNotAuthenticateUserException
      */
     private function getHeader(Request $request)
