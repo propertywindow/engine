@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace ConversationBundle\Controller;
 
-use AppBundle\Controller\BaseController;
+use AppBundle\Controller\JsonController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use ConversationBundle\Entity\Notification;
 use ConversationBundle\Exceptions\NotificationNotFoundException;
@@ -18,7 +18,7 @@ use Throwable;
 /**
  * @Route(service="ConversationBundle\Controller\NotificationController")
  */
-class NotificationController extends BaseController
+class NotificationController extends JsonController
 {
     /**
      * @Route("/notification" , name="notification")

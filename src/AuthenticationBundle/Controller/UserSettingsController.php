@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace AuthenticationBundle\Controller;
 
-use AppBundle\Controller\BaseController;
+use AppBundle\Controller\JsonController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use AuthenticationBundle\Exceptions\UserSettingsNotFoundException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -17,7 +17,7 @@ use Throwable;
 /**
  * @Route(service="AuthenticationBundle\Controller\UserSettingsController")
  */
-class UserSettingsController extends BaseController
+class UserSettingsController extends JsonController
 {
     /**
      * @Route("/user_settings" , name="user_settings")

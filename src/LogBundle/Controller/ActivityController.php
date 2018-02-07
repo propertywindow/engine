@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace LogBundle\Controller;
 
 use AgentBundle\Exceptions\AgentNotFoundException;
-use AppBundle\Controller\BaseController;
+use AppBundle\Controller\JsonController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use LogBundle\Exceptions\ActivityNotFoundException;
 use LogBundle\Service\Activity\Mapper;
@@ -18,7 +18,7 @@ use Throwable;
 /**
  * @Route(service="LogBundle\Controller\ActivityController")
  */
-class ActivityController extends BaseController
+class ActivityController extends JsonController
 {
     /**
      * @Route("/log/activity" , name="activity_log")

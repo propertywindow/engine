@@ -6,7 +6,7 @@ namespace AlertBundle\Controller;
 use AlertBundle\Entity\Applicant;
 use AlertBundle\Exceptions\ApplicantAlreadyExistException;
 use AlertBundle\Service\Applicant\Mapper;
-use AppBundle\Controller\BaseController;
+use AppBundle\Controller\JsonController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use AlertBundle\Exceptions\ApplicantNotFoundException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -19,7 +19,7 @@ use Throwable;
 /**
  * @Route(service="AlertBundle\Controller\ApplicantController")
  */
-class ApplicantController extends BaseController
+class ApplicantController extends JsonController
 {
     /**
      * @Route("/applicant" , name="applicant")

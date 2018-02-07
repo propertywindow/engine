@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace AuthenticationBundle\Controller;
 
-use AppBundle\Controller\BaseController;
+use AppBundle\Controller\JsonController;
 use AuthenticationBundle\Exceptions\ServiceGroupNotFoundException;
 use AuthenticationBundle\Exceptions\ServiceNotFoundException;
 use AuthenticationBundle\Service\Service\Mapper;
@@ -17,7 +17,7 @@ use Throwable;
 /**
  * @Route(service="AuthenticationBundle\Controller\ServiceController")
  */
-class ServiceController extends BaseController
+class ServiceController extends JsonController
 {
     /**
      * @Route("/services/service" , name="service")

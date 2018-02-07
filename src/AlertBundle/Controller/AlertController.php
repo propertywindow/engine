@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace AlertBundle\Controller;
 
 use AlertBundle\Service\Alert\Mapper;
-use AppBundle\Controller\BaseController;
+use AppBundle\Controller\JsonController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use AlertBundle\Exceptions\AlertNotFoundException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -17,7 +17,7 @@ use Throwable;
 /**
  * @Route(service="AlertBundle\Controller\AlertController")
  */
-class AlertController extends BaseController
+class AlertController extends JsonController
 {
     /**
      * @Route("/alert" , name="alert")

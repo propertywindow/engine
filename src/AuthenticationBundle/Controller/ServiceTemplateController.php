@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace AuthenticationBundle\Controller;
 
-use AppBundle\Controller\BaseController;
+use AppBundle\Controller\JsonController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use AuthenticationBundle\Exceptions\ServiceGroupNotFoundException;
 use AuthenticationBundle\Exceptions\ServiceNotFoundException;
@@ -21,7 +21,7 @@ use Throwable;
 /**
  * @Route(service="AuthenticationBundle\Controller\ServiceTemplateController")
  */
-class ServiceTemplateController extends BaseController
+class ServiceTemplateController extends JsonController
 {
     /**
      * @Route("/services/template" , name="service_template")

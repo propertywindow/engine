@@ -5,5 +5,7 @@ services:
           arguments: ["@doctrine.orm.entity_manager"]
     AppBundle\Controller\BaseController:
           autowire: true
+    AppBundle\Controller\JsonController:
+          autowire: true
     AppBundle\Controller\SettingsController:
           autowire: true

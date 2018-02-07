@@ -5,7 +5,7 @@ namespace AgentBundle\Controller;
 
 use AgentBundle\Entity\Client;
 use AgentBundle\Exceptions\ClientNotFoundException;
-use AppBundle\Controller\BaseController;
+use AppBundle\Controller\JsonController;
 use AuthenticationBundle\Entity\User;
 use AuthenticationBundle\Exceptions\UserAlreadyExistException;
 use AuthenticationBundle\Exceptions\UserTypeNotFoundException;
@@ -20,7 +20,7 @@ use Throwable;
 /**
  * @Route(service="AgentBundle\Controller\ClientController")
  */
-class ClientController extends BaseController
+class ClientController extends JsonController
 {
     /**
      * @Route("/contacts/client" , name="client")

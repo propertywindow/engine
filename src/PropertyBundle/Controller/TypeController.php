@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace PropertyBundle\Controller;
 
-use AppBundle\Controller\BaseController;
+use AppBundle\Controller\JsonController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use PropertyBundle\Exceptions\TypeDeleteException;
 use PropertyBundle\Exceptions\TypeNotFoundException;
@@ -18,7 +18,7 @@ use Throwable;
 /**
  * @Route(service="PropertyBundle\Controller\TypeController")
  */
-class TypeController extends BaseController
+class TypeController extends JsonController
 {
     /**
      * @Route("/property/type" , name="type")

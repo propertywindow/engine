@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace ConversationBundle\Controller;
 
-use AppBundle\Controller\BaseController;
+use AppBundle\Controller\JsonController;
 use AuthenticationBundle\Exceptions\UserNotFoundException;
 use AuthenticationBundle\Exceptions\UserTypeNotFoundException;
 use ConversationBundle\Entity\Conversation;
@@ -22,7 +22,7 @@ use Throwable;
 /**
  * @Route(service="ConversationBundle\Controller\ConversationController")
  */
-class ConversationController extends BaseController
+class ConversationController extends JsonController
 {
     /**
      * @Route("/conversation" , name="conversation")

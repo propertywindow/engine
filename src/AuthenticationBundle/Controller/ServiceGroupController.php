@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace AuthenticationBundle\Controller;
 
-use AppBundle\Controller\BaseController;
+use AppBundle\Controller\JsonController;
 use AuthenticationBundle\Exceptions\ServiceGroupNotFoundException;
 use AuthenticationBundle\Service\ServiceGroup\Mapper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -16,7 +16,7 @@ use Throwable;
 /**
  * @Route(service="AuthenticationBundle\Controller\ServiceGroupController")
  */
-class ServiceGroupController extends BaseController
+class ServiceGroupController extends JsonController
 {
     /**
      * @Route("/services/service_group" , name="service_group")

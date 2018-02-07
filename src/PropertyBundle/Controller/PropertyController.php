@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace PropertyBundle\Controller;
 
 use AgentBundle\Exceptions\ClientNotFoundException;
-use AppBundle\Controller\BaseController;
+use AppBundle\Controller\JsonController;
 
 use PropertyBundle\Entity\Property;
 use PropertyBundle\Exceptions\KindNotFoundException;
@@ -24,7 +24,7 @@ use Throwable;
 /**
  * @Route(service="PropertyBundle\Controller\PropertyController")
  */
-class PropertyController extends BaseController
+class PropertyController extends JsonController
 {
     /**
      * @Route("/property" , name="property")

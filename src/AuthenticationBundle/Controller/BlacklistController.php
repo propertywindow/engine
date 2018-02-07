@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace AuthenticationBundle\Controller;
 
 use AgentBundle\Exceptions\AgentNotFoundException;
-use AppBundle\Controller\BaseController;
+use AppBundle\Controller\JsonController;
 use AuthenticationBundle\Exceptions\BlacklistNotFoundException;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use AuthenticationBundle\Exceptions\UserNotFoundException;
@@ -19,7 +19,7 @@ use Throwable;
 /**
  * @Route(service="AuthenticationBundle\Controller\BlacklistController")
  */
-class BlacklistController extends BaseController
+class BlacklistController extends JsonController
 {
     /**
      * @Route("/authentication/blacklist" , name="blacklist")

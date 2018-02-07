@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace ConversationBundle\Controller;
 
-use AppBundle\Controller\BaseController;
+use AppBundle\Controller\JsonController;
 use AuthenticationBundle\Entity\UserSettings;
 use ConversationBundle\Entity\Email;
 use ConversationBundle\Entity\Mailbox;
@@ -19,7 +19,7 @@ use Throwable;
 /**
  * @Route(service="ConversationBundle\Controller\EmailController")
  */
-class EmailController extends BaseController
+class EmailController extends JsonController
 {
     /**
      * @Route("/email" , name="email")

@@ -7,7 +7,7 @@ use AgentBundle\Entity\Agent;
 use AgentBundle\Exceptions\AgentGroupNotFoundException;
 use AgentBundle\Exceptions\AgentNotFoundException;
 use AgentBundle\Exceptions\AgentSettingsNotFoundException;
-use AppBundle\Controller\BaseController;
+use AppBundle\Controller\JsonController;
 use AuthenticationBundle\Entity\User;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use AuthenticationBundle\Exceptions\UserAlreadyExistException;
@@ -24,7 +24,7 @@ use Throwable;
 /**
  * @Route(service="AgentBundle\Controller\AgentController")
  */
-class AgentController extends BaseController
+class AgentController extends JsonController
 {
     /**
      * @Route("/agent" , name="agent")

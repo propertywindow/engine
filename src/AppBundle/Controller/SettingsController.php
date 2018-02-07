@@ -16,7 +16,7 @@ use Throwable;
 /**
  * @Route(service="AppBundle\Controller\SettingsController")
  */
-class SettingsController extends BaseController
+class SettingsController extends JsonController
 {
     /**
      * @Route("/settings" , name="settings")

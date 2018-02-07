@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace AuthenticationBundle\Controller;
 
-use AppBundle\Controller\BaseController;
+use AppBundle\Controller\JsonController;
 use AuthenticationBundle\Exceptions\BlacklistNotFoundException;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use AuthenticationBundle\Exceptions\UserNotFoundException;
@@ -17,7 +17,7 @@ use Throwable;
 /**
  * @Route(service="AuthenticationBundle\Controller\LoginController")
  */
-class LoginController extends BaseController
+class LoginController extends JsonController
 {
     /**
      * @Route("/authentication/login" , name="login")

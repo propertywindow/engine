@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace AgentBundle\Controller;
 
 use AgentBundle\Exceptions\AgentSettingsNotFoundException;
-use AppBundle\Controller\BaseController;
+use AppBundle\Controller\JsonController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Response;
@@ -17,7 +17,7 @@ use Throwable;
 /**
  * @Route(service="AgentBundle\Controller\AgentSettingsController")
  */
-class AgentSettingsController extends BaseController
+class AgentSettingsController extends JsonController
 {
     /**
      * @Route("/agent_settings" , name="agent_settings")

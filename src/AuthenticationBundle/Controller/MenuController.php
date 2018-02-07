@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace AuthenticationBundle\Controller;
 
-use AppBundle\Controller\BaseController;
+use AppBundle\Controller\JsonController;
 use AuthenticationBundle\Service\Menu\Mapper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Response;
@@ -15,7 +15,7 @@ use Throwable;
 /**
  * @Route(service="AuthenticationBundle\Controller\MenuController")
  */
-class MenuController extends BaseController
+class MenuController extends JsonController
 {
     /**
      * @Route("/services/menu" , name="menu")

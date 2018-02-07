@@ -5,9 +5,8 @@ namespace AgentBundle\Controller;
 
 use AgentBundle\Entity\AgentGroup;
 use AgentBundle\Exceptions\AgentGroupNotFoundException;
-use AppBundle\Controller\BaseController;
+use AppBundle\Controller\JsonController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
-use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Response;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
@@ -19,7 +18,7 @@ use Throwable;
 /**
  * @Route(service="AgentBundle\Controller\AgentGroupController")
  */
-class AgentGroupController extends BaseController
+class AgentGroupController extends JsonController
 {
     /**
      * @Route("/agent_group" , name="agent_group")

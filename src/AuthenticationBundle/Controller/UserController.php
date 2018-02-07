@@ -5,7 +5,7 @@ namespace AuthenticationBundle\Controller;
 
 use AgentBundle\Exceptions\AgentNotFoundException;
 use AgentBundle\Exceptions\AgentSettingsNotFoundException;
-use AppBundle\Controller\BaseController;
+use AppBundle\Controller\JsonController;
 use AuthenticationBundle\Entity\User;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use AuthenticationBundle\Exceptions\UserAlreadyExistException;
@@ -13,7 +13,6 @@ use AuthenticationBundle\Exceptions\UserNotFoundException;
 use AuthenticationBundle\Exceptions\UserSettingsNotFoundException;
 use AuthenticationBundle\Exceptions\UserTypeNotFoundException;
 use AuthenticationBundle\Service\User\Mapper;
-use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Response;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
@@ -24,7 +23,7 @@ use Throwable;
 /**
  * @Route(service="AuthenticationBundle\Controller\UserController")
  */
-class UserController extends BaseController
+class UserController extends JsonController
 {
     /**
      * @Route("/authentication/user" , name="user")

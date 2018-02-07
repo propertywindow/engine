@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace PropertyBundle\Controller;
 
-use AppBundle\Controller\BaseController;
+use AppBundle\Controller\JsonController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use PropertyBundle\Exceptions\SubTypeDeleteException;
 use PropertyBundle\Exceptions\SubTypeNotFoundException;
@@ -19,7 +19,7 @@ use Throwable;
 /**
  * @Route(service="PropertyBundle\Controller\SubTypeController")
  */
-class SubTypeController extends BaseController
+class SubTypeController extends JsonController
 {
     /**
      * @Route("/property/subtype" , name="subtype")
