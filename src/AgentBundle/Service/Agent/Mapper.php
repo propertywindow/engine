@@ -34,7 +34,7 @@ class Mapper
             'agent_group_id' => $agent->getAgentGroup()->getId(),
             'name'           => $agent->getAgentGroup()->getName(),
             'office'         => $agent->getOffice(),
-            'agent_user_id'  => $agent->getUserId(),
+            'agent_user_id'  => $agent->getUser()->getId(),
             'address'        => $address,
             'street'         => $agent->getStreet(),
             'house_number'   => $agent->getHouseNumber(),
