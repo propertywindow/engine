@@ -157,7 +157,7 @@ class AgentController extends JsonController
         $createdUser->setPassword(md5($password));
         $this->userService->updateUser($createdUser);
 
-        $agent->setUserId($createdUser->getId());
+        $agent->setUser($createdUser);
         $this->agentService->updateAgent($agent);
 
         // todo: also set serviceGroupMap and serviceMap, do this in serviceMapService -> wizard saves during each step

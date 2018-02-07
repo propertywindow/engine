@@ -32,7 +32,6 @@ class LoadAgentData extends AbstractFixture implements OrderedFixtureInterface
         $agent->setPropertyLimit(200);
         $agent->setEspc(false);
         $agent->setArchived(false);
-        $agent->setUserId(3);
         $this->addReference('agent_propertywindow_1', $agent);
         $manager->persist($agent);
 
@@ -50,7 +49,6 @@ class LoadAgentData extends AbstractFixture implements OrderedFixtureInterface
         $agent->setPropertyLimit(100);
         $agent->setEspc(true);
         $agent->setArchived(false);
-        $agent->setUserId(4);
         $this->addReference('agent_annan_1', $agent);
         $manager->persist($agent);
 
@@ -68,7 +66,6 @@ class LoadAgentData extends AbstractFixture implements OrderedFixtureInterface
         $agent->setPropertyLimit(100);
         $agent->setEspc(true);
         $agent->setArchived(false);
-        $agent->setUserId(5);
         $this->addReference('agent_annan_2', $agent);
         $manager->persist($agent);
 
@@ -85,7 +82,6 @@ class LoadAgentData extends AbstractFixture implements OrderedFixtureInterface
         $agent->setPropertyLimit(500);
         $agent->setEspc(false);
         $agent->setArchived(false);
-        $agent->setUserId(6);
         $this->addReference('agent_oliver_1', $agent);
         $manager->persist($agent);
 
@@ -102,7 +98,6 @@ class LoadAgentData extends AbstractFixture implements OrderedFixtureInterface
         $agent->setPropertyLimit(100);
         $agent->setEspc(true);
         $agent->setArchived(false);
-        $agent->setUserId(7);
         $this->addReference('agent_deans_1', $agent);
         $manager->persist($agent);
 
@@ -119,7 +114,6 @@ class LoadAgentData extends AbstractFixture implements OrderedFixtureInterface
         $agent->setPropertyLimit(100);
         $agent->setEspc(true);
         $agent->setArchived(false);
-        $agent->setUserId(8);
         $this->addReference('agent_deans_2', $agent);
         $manager->persist($agent);
 
@@ -136,7 +130,6 @@ class LoadAgentData extends AbstractFixture implements OrderedFixtureInterface
         $agent->setPropertyLimit(100);
         $agent->setEspc(true);
         $agent->setArchived(false);
-        $agent->setUserId(9);
         $this->addReference('agent_deans_3', $agent);
         $manager->persist($agent);
 

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace AgentBundle\Entity;
 
+use AuthenticationBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -27,10 +28,10 @@ class Agent
     private $agentGroup;
 
     /**
-     * @var int
-     * @ORM\Column(name="user_id", type="integer", nullable=true)
+     * @ORM\OneToOne(targetEntity="AuthenticationBundle\Entity\User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true)
      */
-    private $userId;
+    private $user;
 
     /**
      * @var string
@@ -163,23 +164,23 @@ class Agent
     }
 
     /**
-     * @param int $userId
+     * @param \AuthenticationBundle\Entity\User $user
      *
      * @return Agent
      */
-    public function setUserId(int $userId): Agent
+    public function setUser(User $user = null): Agent
     {
-        $this->userId = $userId;
+        $this->user = $user;
 
         return $this;
     }
 
     /**
-     * @return int
+     * @return \AuthenticationBundle\Entity\User|null
      */
-    public function getUserId(): int
+    public function getUser(): ?User
     {
-        return $this->userId;
+        return $this->user;
     }
 
     /**

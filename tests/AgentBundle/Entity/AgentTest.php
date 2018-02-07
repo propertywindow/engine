@@ -5,6 +5,7 @@ namespace Tests\AgentBundle\Entity;
 
 use AgentBundle\Entity\Agent;
 use AgentBundle\Entity\AgentGroup;
+use AuthenticationBundle\Entity\User;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -79,8 +80,10 @@ class AgentTest extends TestCase
         $this->agent->setArchived(false);
         $this->assertFalse($this->agent->getArchived());
 
-        $this->agent->setUserId(3);
-        $this->assertEquals(3, $this->agent->getUserId());
+        $user = new User();
+
+        $this->agent->setUser($user);
+        $this->assertEquals($user, $this->agent->getUser());
 
         $created = new \DateTime();
 
