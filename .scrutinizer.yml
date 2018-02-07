@@ -1,7 +1,6 @@
 filter:
-    paths: ["src/*", "test/*"]
-    excluded_paths:
-        - "src/*Bundle/DataFixtures/"
+  excluded_paths:
+    - "src/*Bundle/DataFixtures/ORM/"
 
 before_commands:
     - "composer install"
