@@ -208,7 +208,7 @@ class JsonController extends BaseController
     }
 
     /**
-     * @param       $entity
+     * @param $entity
      */
     public function prepareParameters($entity)
     {
