@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace ConversationBundle\Entity;
 
@@ -10,8 +11,6 @@ use Doctrine\ORM\Mapping as ORM;
 use InvalidArgumentException;
 
 /**
- * Notification
- *
  * @ORM\Table(name="notification")
  * @ORM\Entity(repositoryClass="ConversationBundle\Repository\NotificationRepository")
  * @ORM\HasLifecycleCallbacks
@@ -20,7 +19,6 @@ class Notification
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -35,7 +33,6 @@ class Notification
 
     /**
      * @var Collection
-     *
      * @ORM\ManyToMany(targetEntity="AuthenticationBundle\Entity\User", inversedBy="notifications")
      * @ORM\JoinTable(
      *          name="notification_user_maps",
@@ -47,77 +44,66 @@ class Notification
 
     /**
      * @var string
-     *
      * @ORM\Column(name="content", type="text")
      */
     private $content;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="label", nullable=true, type="text")
+     * @ORM\Column(name="label", type="string")
      */
     private $label;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="type", type="text")
+     * @ORM\Column(name="type", type="string")
      */
     private $type;
 
     /**
      * @var DateTime
-     *
      * @ORM\Column(name="start", type="datetime")
      */
     private $start;
 
     /**
      * @var DateTime|null
-     *
      * @ORM\Column(name="end", type="datetime", nullable=true)
      */
     private $end;
 
     /**
      * @var bool
-     *
      * @ORM\Column(name="removable", type="boolean", options={"default": false})
      */
     private $removable;
 
     /**
      * @var bool
-     *
      * @ORM\Column(name="visible", type="boolean", options={"default": true})
      */
     private $visible;
 
     /**
      * @var bool
-     *
      * @ORM\Column(name="important", type="boolean", options={"default": false})
      */
     private $important;
 
     /**
      * @var bool
-     *
      * @ORM\Column(name="for_everyone", type="boolean", options={"default": false})
      */
     private $forEveryone;
 
     /**
      * @var DateTime $created
-     *
      * @ORM\Column(type="datetime")
      */
     protected $created;
 
     /**
      * @var DateTime $updated
-     *
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $updated;
@@ -127,7 +113,7 @@ class Notification
      */
     public function __construct()
     {
-        $this->users       = new ArrayCollection();
+        $this->users = new ArrayCollection();
 
         $this->removable   = false;
         $this->visible     = true;
@@ -136,13 +122,11 @@ class Notification
     }
 
     /**
-     * id
-     *
      * @param int $id
      *
      * @return Notification
      */
-    public function setId(int $id)
+    public function setId(int $id): Notification
     {
         $this->id = $id;
 
@@ -150,9 +134,9 @@ class Notification
     }
 
     /**
-     * @return int|null
+     * @return int
      */
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
@@ -162,7 +146,7 @@ class Notification
      *
      * @return Notification
      */
-    public function setUser(User $user = null)
+    public function setUser(User $user = null): Notification
     {
         $this->user = $user;
 
@@ -172,7 +156,7 @@ class Notification
     /**
      * @return \AuthenticationBundle\Entity\User
      */
-    public function getUser()
+    public function getUser(): User
     {
         return $this->user;
     }
@@ -225,8 +209,6 @@ class Notification
     }
 
     /**
-     * content
-     *
      * @param string $content
      *
      * @return Notification
@@ -239,8 +221,6 @@ class Notification
     }
 
     /**
-     * content
-     *
      * @return string
      */
     public function getContent(): string
@@ -249,33 +229,27 @@ class Notification
     }
 
     /**
-     * label
-     *
      * @param string $label
      *
-     * @return Notification
+     * @return void
      */
-    public function setLabel(?string $label)
+    public function setLabel(string $label)
     {
         $this->label = $label;
     }
 
     /**
-     * label
-     *
      * @return string
      */
-    public function getLabel(): ?string
+    public function getLabel(): string
     {
         return $this->label;
     }
 
     /**
-     * type
-     *
      * @param string $type
      *
-     * @return Notification
+     * @return void
      */
     public function setType(string $type)
     {
@@ -283,8 +257,6 @@ class Notification
     }
 
     /**
-     * type
-     *
      * @return string $type
      */
     public function getType(): string
@@ -293,13 +265,11 @@ class Notification
     }
 
     /**
-     * start
-     *
      * @param DateTime $start
      *
      * @return Notification
      */
-    public function setStart(DateTime $start)
+    public function setStart(DateTime $start): Notification
     {
         $this->start = $start;
 
@@ -307,8 +277,6 @@ class Notification
     }
 
     /**
-     * start
-     *
      * @return DateTime
      */
     public function getStart(): DateTime
@@ -317,8 +285,6 @@ class Notification
     }
 
     /**
-     * end
-     *
      * @param DateTime|null $end
      *
      * @return Notification
@@ -341,23 +307,19 @@ class Notification
     }
 
     /**
-     * end
-     *
      * @return DateTime|null
      */
-    public function getEnd():?DateTime
+    public function getEnd(): ?DateTime
     {
         return $this->end;
     }
 
     /**
-     * removable
-     *
      * @param bool $removable
      *
      * @return Notification
      */
-    public function setRemovable(bool $removable)
+    public function setRemovable(bool $removable): Notification
     {
         $this->removable = $removable;
 
@@ -365,8 +327,6 @@ class Notification
     }
 
     /**
-     * removable
-     *
      * @return bool
      */
     public function isRemovable(): bool
@@ -375,13 +335,11 @@ class Notification
     }
 
     /**
-     * visible
-     *
      * @param boolean $visible
      *
      * @return Notification
      */
-    public function setVisible(bool $visible)
+    public function setVisible(bool $visible): Notification
     {
         $this->visible = $visible;
 
@@ -389,8 +347,6 @@ class Notification
     }
 
     /**
-     * visible
-     *
      * @return bool
      */
     public function isVisible(): bool
@@ -399,13 +355,11 @@ class Notification
     }
 
     /**
-     * important
-     *
      * @param boolean $important
      *
      * @return Notification
      */
-    public function setImportant(bool $important)
+    public function setImportant(bool $important): Notification
     {
         $this->important = $important;
 
@@ -413,8 +367,6 @@ class Notification
     }
 
     /**
-     * important
-     *
      * @return bool
      */
     public function isImportant(): bool
@@ -441,7 +393,6 @@ class Notification
 
     /**
      * Gets triggered only on insert
-     *
      * @ORM\PrePersist
      */
     public function onPrePersist()
@@ -451,7 +402,6 @@ class Notification
 
     /**
      * Gets triggered every time on update
-     *
      * @ORM\PreUpdate
      */
     public function onPreUpdate()

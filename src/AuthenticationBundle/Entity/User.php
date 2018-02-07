@@ -185,7 +185,7 @@ class User
      *
      * @return User
      */
-    public function setPassword($password): User
+    public function setPassword(string $password): User
     {
         $this->password = $password;
 
@@ -195,7 +195,7 @@ class User
     /**
      * @return string
      */
-    public function getPassword()
+    public function getPassword(): string
     {
         return $this->password;
     }
@@ -341,11 +341,11 @@ class User
     }
 
     /**
-     * @param string $phone
+     * @param string|null $phone
      *
      * @return User
      */
-    public function setPhone($phone): User
+    public function setPhone(?string $phone): User
     {
         $this->phone = $phone;
 
@@ -353,9 +353,9 @@ class User
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getPhone()
+    public function getPhone(): ?string
     {
         return $this->phone;
     }
@@ -401,11 +401,11 @@ class User
     }
 
     /**
-     * @param string $avatar
+     * @param string|null $avatar
      *
      * @return User
      */
-    public function setAvatar($avatar): User
+    public function setAvatar(?string $avatar): User
     {
         $this->avatar = $avatar;
 
@@ -415,17 +415,17 @@ class User
     /**
      * @return string
      */
-    public function getAvatar()
+    public function getAvatar(): ?string
     {
         return $this->avatar;
     }
 
     /**
-     * @param \datetime $lastLogin
+     * @param \DateTime|null $lastLogin
      *
      * @return User
      */
-    public function setLastLogin($lastLogin): User
+    public function setLastLogin(?\DateTime $lastLogin): User
     {
         $this->lastLogin = $lastLogin;
 
@@ -433,19 +433,19 @@ class User
     }
 
     /**
-     * @return \datetime
+     * @return \DateTime|null
      */
-    public function getLastLogin()
+    public function getLastLogin(): ?\DateTime
     {
         return $this->lastLogin;
     }
 
     /**
-     * @param \datetime $lastOnline
+     * @param \DateTime|null $lastOnline
      *
      * @return User
      */
-    public function setLastOnline($lastOnline): User
+    public function setLastOnline(?\DateTime $lastOnline): User
     {
         $this->lastOnline = $lastOnline;
 
@@ -453,9 +453,9 @@ class User
     }
 
     /**
-     * @return \datetime
+     * @return \DateTime|null
      */
-    public function getLastOnline()
+    public function getLastOnline(): ?\DateTime
     {
         return $this->lastOnline;
     }

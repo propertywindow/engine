@@ -28,7 +28,7 @@ class Agent
 
     /**
      * @var int
-     * @ORM\Column(name="agent_user_id", type="integer", nullable=true)
+     * @ORM\Column(name="user_id", type="integer", nullable=true)
      */
     private $userId;
 
@@ -187,7 +187,7 @@ class Agent
      *
      * @return Agent
      */
-    public function setOffice($office): Agent
+    public function setOffice(string $office): Agent
     {
         $this->office = $office;
 
@@ -197,17 +197,17 @@ class Agent
     /**
      * @return string
      */
-    public function getOffice()
+    public function getOffice(): string
     {
         return $this->office;
     }
 
     /**
-     * @param string $phone
+     * @param string|null $phone
      *
      * @return Agent
      */
-    public function setPhone($phone): Agent
+    public function setPhone(?string $phone): Agent
     {
         $this->phone = $phone;
 
@@ -215,19 +215,19 @@ class Agent
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getPhone()
+    public function getPhone(): ?string
     {
         return $this->phone;
     }
 
     /**
-     * @param string $fax
+     * @param string|null $fax
      *
      * @return Agent
      */
-    public function setFax($fax): Agent
+    public function setFax(?string $fax): Agent
     {
         $this->fax = $fax;
 
@@ -235,9 +235,9 @@ class Agent
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getFax()
+    public function getFax(): ?string
     {
         return $this->fax;
     }
@@ -263,11 +263,11 @@ class Agent
     }
 
     /**
-     * @param string $website
+     * @param string|null $website
      *
      * @return Agent
      */
-    public function setWebsite($website): Agent
+    public function setWebsite(?string $website): Agent
     {
         $this->website = $website;
 
@@ -275,19 +275,19 @@ class Agent
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getWebsite()
+    public function getWebsite(): ?string
     {
         return $this->website;
     }
 
     /**
-     * @param string $logo
+     * @param string|null $logo
      *
      * @return Agent
      */
-    public function setLogo($logo): Agent
+    public function setLogo(?string $logo): Agent
     {
         $this->logo = $logo;
 
@@ -295,9 +295,9 @@ class Agent
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getLogo()
+    public function getLogo(): ?string
     {
         return $this->logo;
     }
@@ -307,7 +307,7 @@ class Agent
      *
      * @return Agent
      */
-    public function setStreet($street): Agent
+    public function setStreet(string $street): Agent
     {
         $this->street = $street;
 
@@ -317,7 +317,7 @@ class Agent
     /**
      * @return string
      */
-    public function getStreet()
+    public function getStreet(): string
     {
         return $this->street;
     }
@@ -327,7 +327,7 @@ class Agent
      *
      * @return Agent
      */
-    public function setHouseNumber($houseNumber): Agent
+    public function setHouseNumber(string $houseNumber): Agent
     {
         $this->houseNumber = $houseNumber;
 
@@ -337,7 +337,7 @@ class Agent
     /**
      * @return string
      */
-    public function getHouseNumber()
+    public function getHouseNumber(): string
     {
         return $this->houseNumber;
     }
@@ -347,7 +347,7 @@ class Agent
      *
      * @return Agent
      */
-    public function setPostcode($postcode): Agent
+    public function setPostcode(string $postcode): Agent
     {
         $this->postcode = $postcode;
 
@@ -357,7 +357,7 @@ class Agent
     /**
      * @return string
      */
-    public function getPostcode()
+    public function getPostcode(): string
     {
         return $this->postcode;
     }
@@ -367,7 +367,7 @@ class Agent
      *
      * @return Agent
      */
-    public function setCity($city): Agent
+    public function setCity(string $city): Agent
     {
         $this->city = $city;
 
@@ -377,7 +377,7 @@ class Agent
     /**
      * @return string
      */
-    public function getCity()
+    public function getCity(): string
     {
         return $this->city;
     }
@@ -387,7 +387,7 @@ class Agent
      *
      * @return Agent
      */
-    public function setCountry($country): Agent
+    public function setCountry(string $country): Agent
     {
         $this->country = $country;
 
@@ -397,7 +397,7 @@ class Agent
     /**
      * @return string
      */
-    public function getCountry()
+    public function getCountry(): string
     {
         return $this->country;
     }

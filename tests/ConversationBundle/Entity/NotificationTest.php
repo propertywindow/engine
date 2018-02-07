@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Tests\ConversationBundle\Entity;
 
+use AuthenticationBundle\Entity\User;
 use ConversationBundle\Entity\Notification;
 use PHPUnit\Framework\TestCase;
 
@@ -26,16 +27,22 @@ class NotificationTest extends TestCase
 
     public function testGetterAndSetter()
     {
-        $this->assertNull($this->notification->getId());
+        $this->notification->setId(1);
+        $this->assertEquals(1, $this->notification->getId());
 
-        $this->notification->setType('info');
-        $this->assertEquals('info', $this->notification->getType());
+        $user = new User();
+
+        $this->notification->setUser($user);
+        $this->assertEquals($user, $this->notification->getUser());
+
+        $this->notification->setContent('Test notification');
+        $this->assertEquals('Test notification', $this->notification->getContent());
 
         $this->notification->setLabel('label');
         $this->assertEquals('label', $this->notification->getLabel());
 
-        $this->notification->setContent('Test notification');
-        $this->assertEquals('Test notification', $this->notification->getContent());
+        $this->notification->setType('info');
+        $this->assertEquals('info', $this->notification->getType());
 
         $start = new \DateTime();
 
@@ -53,5 +60,8 @@ class NotificationTest extends TestCase
 
         $this->notification->setVisible(true);
         $this->assertTrue($this->notification->isVisible());
+
+        $this->notification->markForEveryone();
+        $this->assertTrue($this->notification->isForEveryone());
     }
 }

@@ -119,13 +119,13 @@ class Property
     private $espc = false;
 
     /**
-     * @var string
+     * @var float
      * @ORM\Column(name="lat", type="string", length=20)
      */
     private $lat;
 
     /**
-     * @var string
+     * @var float
      * @ORM\Column(name="lng", type="string", length=20)
      */
     private $lng;
@@ -187,7 +187,7 @@ class Property
     /**
      * @return Collection
      */
-    public function getImages()
+    public function getImages(): Collection
     {
         return $this->images;
     }
@@ -197,7 +197,7 @@ class Property
      *
      * @return Property
      */
-    public function setAgent(Agent $agent = null): Property
+    public function setAgent(Agent $agent): Property
     {
         $this->agent = $agent;
 
@@ -218,7 +218,7 @@ class Property
      *
      * @return Property
      */
-    public function setClient(Client $client = null): Property
+    public function setClient(Client $client): Property
     {
         $this->client = $client;
 
@@ -234,13 +234,11 @@ class Property
     }
 
     /**
-     * Set kind
-     *
      * @param Kind $kind
      *
      * @return Property
      */
-    public function setKind(Kind $kind = null)
+    public function setKind(Kind $kind): Property
     {
         $this->kind = $kind;
 
@@ -260,7 +258,7 @@ class Property
      *
      * @return Property
      */
-    public function setTerms(Terms $terms = null)
+    public function setTerms(Terms $terms): Property
     {
         $this->terms = $terms;
 
@@ -270,7 +268,7 @@ class Property
     /**
      * @return Terms
      */
-    public function getTerms()
+    public function getTerms(): Terms
     {
         return $this->terms;
     }
@@ -280,7 +278,7 @@ class Property
      *
      * @return Property
      */
-    public function setSubType(SubType $subType = null)
+    public function setSubType(SubType $subType): Property
     {
         $this->subType = $subType;
 
@@ -290,7 +288,7 @@ class Property
     /**
      * @return SubType
      */
-    public function getSubType()
+    public function getSubType(): SubType
     {
         return $this->subType;
     }
@@ -300,7 +298,7 @@ class Property
      *
      * @return Property
      */
-    public function setDetails(Details $details = null)
+    public function setDetails(Details $details = null): Property
     {
         $this->details = $details;
 
@@ -308,9 +306,9 @@ class Property
     }
 
     /**
-     * @return Details
+     * @return Details|null
      */
-    public function getDetails()
+    public function getDetails(): ?Details
     {
         return $this->details;
     }
@@ -320,7 +318,7 @@ class Property
      *
      * @return Property
      */
-    public function setOnline($online)
+    public function setOnline(bool $online): Property
     {
         $this->online = $online;
 
@@ -330,7 +328,7 @@ class Property
     /**
      * @return bool
      */
-    public function getOnline()
+    public function getOnline(): bool
     {
         return $this->online;
     }
@@ -340,7 +338,7 @@ class Property
      *
      * @return Property
      */
-    public function setStreet($street)
+    public function setStreet(string $street): Property
     {
         $this->street = $street;
 
@@ -350,7 +348,7 @@ class Property
     /**
      * @return string
      */
-    public function getStreet()
+    public function getStreet(): string
     {
         return $this->street;
     }
@@ -360,7 +358,7 @@ class Property
      *
      * @return Property
      */
-    public function setHouseNumber($houseNumber)
+    public function setHouseNumber(string $houseNumber): Property
     {
         $this->houseNumber = $houseNumber;
 
@@ -370,7 +368,7 @@ class Property
     /**
      * @return string
      */
-    public function getHouseNumber()
+    public function getHouseNumber(): string
     {
         return $this->houseNumber;
     }
@@ -380,7 +378,7 @@ class Property
      *
      * @return Property
      */
-    public function setPostcode($postcode)
+    public function setPostcode(string $postcode): Property
     {
         $this->postcode = $postcode;
 
@@ -390,7 +388,7 @@ class Property
     /**
      * @return string
      */
-    public function getPostcode()
+    public function getPostcode(): string
     {
         return $this->postcode;
     }
@@ -400,7 +398,7 @@ class Property
      *
      * @return Property
      */
-    public function setCity($city)
+    public function setCity(string $city): Property
     {
         $this->city = $city;
 
@@ -410,7 +408,7 @@ class Property
     /**
      * @return string
      */
-    public function getCity()
+    public function getCity(): string
     {
         return $this->city;
     }
@@ -420,7 +418,7 @@ class Property
      *
      * @return Property
      */
-    public function setCountry($country)
+    public function setCountry(string $country): Property
     {
         $this->country = $country;
 
@@ -430,7 +428,7 @@ class Property
     /**
      * @return string
      */
-    public function getCountry()
+    public function getCountry(): string
     {
         return $this->country;
     }
@@ -440,7 +438,7 @@ class Property
      *
      * @return Property
      */
-    public function setPrice($price)
+    public function setPrice(int $price): Property
     {
         $this->price = $price;
 
@@ -450,17 +448,17 @@ class Property
     /**
      * @return int
      */
-    public function getPrice()
+    public function getPrice(): int
     {
         return $this->price;
     }
 
     /**
-     * @param integer $soldPrice
+     * @param int|null $soldPrice
      *
      * @return Property
      */
-    public function setSoldPrice($soldPrice)
+    public function setSoldPrice(?int $soldPrice): Property
     {
         $this->soldPrice = $soldPrice;
 
@@ -468,9 +466,9 @@ class Property
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getSoldPrice()
+    public function getSoldPrice(): ?int
     {
         return $this->soldPrice;
     }
@@ -480,7 +478,7 @@ class Property
      *
      * @return Property
      */
-    public function setEspc(bool $espc)
+    public function setEspc(bool $espc): Property
     {
         $this->espc = $espc;
 
@@ -496,11 +494,11 @@ class Property
     }
 
     /**
-     * @param string $lat
+     * @param float $lat
      *
      * @return Property
      */
-    public function setLat($lat)
+    public function setLat(float $lat): Property
     {
         $this->lat = $lat;
 
@@ -508,19 +506,19 @@ class Property
     }
 
     /**
-     * @return string
+     * @return float
      */
-    public function getLat()
+    public function getLat(): float
     {
         return $this->lat;
     }
 
     /**
-     * @param string $lng
+     * @param float $lng
      *
      * @return Property
      */
-    public function setLng($lng)
+    public function setLng(float $lng): Property
     {
         $this->lng = $lng;
 
@@ -528,9 +526,9 @@ class Property
     }
 
     /**
-     * @return string
+     * @return float
      */
-    public function getLng()
+    public function getLng(): float
     {
         return $this->lng;
     }
@@ -540,7 +538,7 @@ class Property
      *
      * @return Property
      */
-    public function setArchived($archived)
+    public function setArchived(bool $archived): Property
     {
         $this->archived = $archived;
 
@@ -550,7 +548,7 @@ class Property
     /**
      * @return bool
      */
-    public function getArchived()
+    public function getArchived(): bool
     {
         return $this->archived;
     }
