@@ -22,11 +22,13 @@ class Mapper
             case "nl":
                 return [
                     'id'      => $subtype->getId(),
+                    'type_id' => $subtype->getType()->getId(),
                     'subtype' => $subtype->getNl(),
                 ];
             default:
                 return [
                     'id'      => $subtype->getId(),
+                    'type_id' => $subtype->getType()->getId(),
                     'subtype' => $subtype->getEn(),
                 ];
         }
