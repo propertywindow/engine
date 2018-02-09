@@ -120,13 +120,13 @@ class Property
 
     /**
      * @var float
-     * @ORM\Column(name="lat", type="string", length=20)
+     * @ORM\Column(name="lat", type="float", length=20)
      */
     private $lat;
 
     /**
      * @var float
-     * @ORM\Column(name="lng", type="string", length=20)
+     * @ORM\Column(name="lng", type="float", length=20)
      */
     private $lng;
 
