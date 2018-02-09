@@ -36,7 +36,7 @@ class SubTypeRepository extends EntityRepository
      *
      * @return SubType[]
      */
-    public function listAll(Type $type): array
+    public function listAllForType(Type $type): array
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
                    ->select('s')

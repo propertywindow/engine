@@ -48,13 +48,21 @@ class SubTypeService
     }
 
     /**
+     * @return SubType[]
+     */
+    public function getSubTypes(): array
+    {
+        return $this->repository->findAll();
+    }
+
+    /**
      * @param Type $type
      *
      * @return SubType[]
      */
-    public function getSubTypes(Type $type): array
+    public function getSubTypesForType(Type $type): array
     {
-        return $this->repository->listAll($type);
+        return $this->repository->listAllForType($type);
     }
 
     /**

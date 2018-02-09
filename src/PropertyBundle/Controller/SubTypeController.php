@@ -71,9 +71,20 @@ class SubTypeController extends JsonController
 
     /**
      * @return array
-     * @throws TypeNotFoundException
      */
     private function getSubTypes()
+    {
+        return Mapper::fromSubTypes(
+            $this->user->getSettings()->getLanguage(),
+            ...$this->subTypeService->getSubTypes()
+        );
+    }
+
+    /**
+     * @return array
+     * @throws TypeNotFoundException
+     */
+    private function getSubTypesForType()
     {
         $this->checkParameters(['type_id']);
 
@@ -81,7 +92,7 @@ class SubTypeController extends JsonController
 
         return Mapper::fromSubTypes(
             $this->user->getSettings()->getLanguage(),
-            ...$this->subTypeService->getSubTypes($type)
+            ...$this->subTypeService->getSubTypesForType($type)
         );
     }
 
