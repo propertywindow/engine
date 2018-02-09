@@ -11,15 +11,14 @@ use PropertyBundle\Entity\Type;
 class Mapper
 {
     /**
+     * @param string  $language
      * @param Type $type
      *
      * @return array
      */
-    public static function fromType(Type $type): array
+    public static function fromType(string $language, Type $type): array
     {
-        $lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
-
-        switch ($lang) {
+        switch ($language) {
             case "nl":
                 return [
                     'id'   => $type->getId(),
@@ -34,15 +33,16 @@ class Mapper
     }
 
     /**
+     * @param string  $language
      * @param Type[] ...$types
      *
      * @return array
      */
-    public static function fromTypes(Type ...$types): array
+    public static function fromTypes(string $language, Type ...$types): array
     {
         return array_map(
-            function (Type $type) {
-                return self::fromType($type);
+            function (Type $type) use ($language) {
+                return self::fromType($language, $type);
             },
             $types
         );

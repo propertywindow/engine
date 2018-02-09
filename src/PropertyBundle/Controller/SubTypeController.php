@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace PropertyBundle\Controller;
 
@@ -63,7 +63,10 @@ class SubTypeController extends JsonController
     {
         $this->checkParameters(['id']);
 
-        return Mapper::fromSubType($this->subTypeService->getSubType((int)$this->parameters['id']));
+        return Mapper::fromSubType(
+            $this->user->getSettings()->getLanguage(),
+            $this->subTypeService->getSubType((int)$this->parameters['id'])
+        );
     }
 
     /**
@@ -76,7 +79,10 @@ class SubTypeController extends JsonController
 
         $type = $this->typeService->getType((int)$this->parameters['type_id']);
 
-        return Mapper::fromSubTypes(...$this->subTypeService->getSubTypes($type));
+        return Mapper::fromSubTypes(
+            $this->user->getSettings()->getLanguage(),
+            ...$this->subTypeService->getSubTypes($type)
+        );
     }
 
     /**

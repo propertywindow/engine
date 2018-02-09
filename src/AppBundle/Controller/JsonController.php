@@ -159,13 +159,13 @@ class JsonController extends BaseController
                 break;
             case $throwable instanceof Exception:
                 $code = self::EXCEPTION_ERROR;
-                list($method, $parameters) = self::prepareRequest($httpRequest);
+                $method = self::prepareRequest($httpRequest);
 
                 $this->logErrorService->createError(
                     $this->user,
                     $method,
                     $throwable->getMessage(),
-                    $parameters
+                    $this->parameters
                 );
                 break;
             default:

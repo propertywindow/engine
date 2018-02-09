@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace PropertyBundle\Controller;
 
@@ -62,7 +62,10 @@ class TypeController extends JsonController
     {
         $this->checkParameters(['id']);
 
-        return Mapper::fromType($this->typeService->getType((int)$this->parameters['id']));
+        return Mapper::fromType(
+            $this->user->getSettings()->getLanguage(),
+            $this->typeService->getType((int)$this->parameters['id'])
+        );
     }
 
     /**
@@ -70,7 +73,10 @@ class TypeController extends JsonController
      */
     private function getTypes(): array
     {
-        return Mapper::fromTypes(...$this->typeService->getTypes());
+        return Mapper::fromTypes(
+            $this->user->getSettings()->getLanguage(),
+            ...$this->typeService->getTypes()
+        );
     }
 
     /**

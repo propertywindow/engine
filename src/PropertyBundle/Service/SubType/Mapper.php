@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace PropertyBundle\Service\SubType;
 
@@ -11,15 +11,14 @@ use PropertyBundle\Entity\SubType;
 class Mapper
 {
     /**
+     * @param string  $language
      * @param SubType $subtype
      *
      * @return array
      */
-    public static function fromSubType(SubType $subtype): array
+    public static function fromSubType(string $language, SubType $subtype): array
     {
-        $lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
-
-        switch ($lang) {
+        switch ($language) {
             case "nl":
                 return [
                     'id'      => $subtype->getId(),
@@ -34,15 +33,16 @@ class Mapper
     }
 
     /**
+     * @param string    $language
      * @param SubType[] ...$subtypes
      *
      * @return array
      */
-    public static function fromSubTypes(SubType ...$subtypes): array
+    public static function fromSubTypes(string $language, SubType ...$subtypes): array
     {
         return array_map(
-            function (SubType $subtype) {
-                return self::fromSubType($subtype);
+            function (SubType $subtype) use ($language) {
+                return self::fromSubType($language, $subtype);
             },
             $subtypes
         );
