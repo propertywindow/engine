@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace PropertyBundle\Service;
 
@@ -87,11 +87,11 @@ class TypeService
      */
     public function deleteType(int $id)
     {
-        $type           = $this->repository->findById($id);
+        $type = $this->repository->findById($id);
 
         /** @var SubTypeRepository $subTypeRepository */
         $subTypeRepository = $this->entityManager->getRepository(SubType::class);
-        $subTypes          = $subTypeRepository->listAll($type);
+        $subTypes          = $subTypeRepository->listAllForType($type);
 
         if (!empty($subTypes)) {
             throw new TypeDeleteException($id);
