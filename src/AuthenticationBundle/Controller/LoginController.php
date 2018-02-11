@@ -82,9 +82,12 @@ class LoginController extends JsonController
 
             $this->blacklistService->createBlacklist($ipAddress, $attemptedUser);
 
-            return [
-                'user_id' => null,
-            ];
+            return json_encode([
+                'error' => [
+                    'message' => 'Could not authenticate user.',
+                    'code' => self::USER_NOT_AUTHENTICATED,
+                ],
+            ]);
         }
 
         $blacklist = $this->blacklistService->checkBlacklist($ipAddress);
