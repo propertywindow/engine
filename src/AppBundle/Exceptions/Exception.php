@@ -8,6 +8,6 @@ use Exception as BaseException;
 /**
  * Class Exception
  */
-class Exception extends BaseException implements UserInputException
+class Exception extends BaseException implements PublishedMessageException, UserInputException
 {
 }
