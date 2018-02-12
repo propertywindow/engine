@@ -172,7 +172,7 @@ class JsonController extends BaseController
                 $code = self::INTERNAL_ERROR;
         }
 
-        $this->slackService->critical($throwable->getMessage());
+//        $this->slackService->critical($throwable->getMessage());
 
         return Response::failure(new Error($code, $throwable->getMessage()));
     }
