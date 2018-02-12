@@ -17,3 +17,5 @@ services:
           autowire: true
     PropertyBundle\Controller\SubTypeController:
           autowire: true
+    PropertyBundle\Controller\TermsController:
+          autowire: true
