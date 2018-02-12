@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace AppBundle\Exceptions;
 
@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Throwable;
 
 /**
- * @package AppBundle\Exceptions
+ * Class Exception
  */
 class Exception extends BaseException
 {
