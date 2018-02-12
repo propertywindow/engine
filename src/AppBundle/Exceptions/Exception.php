@@ -24,6 +24,5 @@ class Exception extends BaseException
             $message,
             $code
         );
-
     }
 }
