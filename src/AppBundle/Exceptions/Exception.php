@@ -18,11 +18,13 @@ class Exception extends BaseException
      */
     public function __construct(string $message = "", int $code = 400, Throwable $previous = null)
     {
-        parent::__construct($message, $code, $previous);
+        //        parent::__construct($message, $code, $previous);
 
-        return new JsonResponse(
-            $message,
-            $code
-        );
+        return [
+            'error' => [
+                'code'    => $code,
+                'message' => $message ? : 'API Exception',
+            ],
+        ];
     }
 }
