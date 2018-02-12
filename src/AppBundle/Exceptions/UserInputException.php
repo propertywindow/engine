@@ -8,4 +8,5 @@ namespace AppBundle\Exceptions;
  */
 interface UserInputException
 {
+    public function getMessage();
 }
