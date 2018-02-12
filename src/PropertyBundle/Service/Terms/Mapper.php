@@ -24,13 +24,13 @@ class Mapper
                 return [
                     'id'         => $term->getId(),
                     'term'       => $term->getNl(),
-                    'show_price' => $term->getShowPrice(),
+                    'show_price' => $term->isShowPrice(),
                 ];
             default:
                 return [
                     'id'         => $term->getId(),
                     'term'       => $term->getEn(),
-                    'show_price' => $term->getShowPrice(),
+                    'show_price' => $term->isShowPrice(),
                 ];
         }
     }

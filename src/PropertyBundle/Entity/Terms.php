@@ -112,7 +112,7 @@ class Terms
     /**
      * @return bool
      */
-    public function getShowPrice(): bool
+    public function isShowPrice(): bool
     {
         return $this->showPrice;
     }

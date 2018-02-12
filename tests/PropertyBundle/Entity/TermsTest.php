@@ -35,6 +35,6 @@ class TermsTest extends TestCase
         $this->assertEquals('Nieuw', $this->terms->getNl());
 
         $this->terms->setShowPrice(true);
-        $this->assertTrue($this->terms->getShowPrice());
+        $this->assertTrue($this->terms->isShowPrice());
     }
 }
