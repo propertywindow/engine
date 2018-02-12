@@ -3,15 +3,13 @@ declare(strict_types = 1);
 
 namespace AppBundle\EventListener;
 
-use AppBundle\Exceptions\PublishedMessageException;
-use AppBundle\Exceptions\UserInputException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 
 /**
- * Class PublishedMessageExceptionListener
+ * Class ExceptionListener
  */
-class PublishedMessageExceptionListener
+class ExceptionListener
 {
     /**
      * @param GetResponseForExceptionEvent $event
@@ -20,19 +18,13 @@ class PublishedMessageExceptionListener
     {
         $exception = $event->getException();
 
-//        if (!$exception instanceof PublishedMessageException) {
-//            return;
-//        }
-//        $code = $exception instanceof UserInputException ? 400 : 500;
-        $code = 400;
-
         $responseData = [
             'error' => [
-                'code'    => $code,
+                'code'    => $exception->getCode(),
                 'message' => $exception->getMessage(),
             ],
         ];
 
-        $event->setResponse(new JsonResponse($responseData, $code));
+        $event->setResponse(new JsonResponse($responseData, 400));
     }
 }
