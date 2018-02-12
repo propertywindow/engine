@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace AuthenticationBundle\Controller;
 
 use AppBundle\Controller\JsonController;
+use AppBundle\Exceptions\CouldNotAuthenticateUserException;
 use AuthenticationBundle\Exceptions\BlacklistNotFoundException;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use AuthenticationBundle\Exceptions\UserNotFoundException;
@@ -65,6 +66,7 @@ class LoginController extends JsonController
      *
      * @return array
      * @throws BlacklistNotFoundException
+     * @throws CouldNotAuthenticateUserException
      */
     private function login(string $ipAddress): array
     {
@@ -82,12 +84,7 @@ class LoginController extends JsonController
 
             $this->blacklistService->createBlacklist($ipAddress, $attemptedUser);
 
-            return json_encode([
-                'error' => [
-                    'message' => 'Could not authenticate user.',
-                    'code' => self::USER_NOT_AUTHENTICATED,
-                ],
-            ]);
+            throw new CouldNotAuthenticateUserException('Could not authenticate user');
         }
 
         $blacklist = $this->blacklistService->checkBlacklist($ipAddress);
