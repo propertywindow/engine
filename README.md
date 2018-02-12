@@ -1,4 +1,4 @@
-Property Window Engine [![by](https://img.shields.io/badge/by-%40marcgeurts-ff69b4.svg?style=flat-square)](https://github.com/marcgeurts)
+Property Window Engine [![by](https://img.shields.io/badge/by-%40marcgeurts-blue.svg?style=flat-square)](https://github.com/marcgeurts)
 ========================
 
 This is the propertywindow engine repository that runs on [Docker](https://www.docker.com/). The main tools used are Symfony 3, Docker and Docker Compose. Other things included are:
