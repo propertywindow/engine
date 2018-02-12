@@ -22,13 +22,15 @@ class Mapper
         switch ($language) {
             case "nl":
                 return [
-                    'id'   => $term->getId(),
-                    'term' => $term->getNl(),
+                    'id'         => $term->getId(),
+                    'term'       => $term->getNl(),
+                    'show_price' => $term->getShowPrice(),
                 ];
             default:
                 return [
-                    'id'   => $term->getId(),
-                    'term' => $term->getEn(),
+                    'id'         => $term->getId(),
+                    'term'       => $term->getEn(),
+                    'show_price' => $term->getShowPrice(),
                 ];
         }
     }
