@@ -9,3 +9,6 @@ services:
           autowire: true
     AppBundle\Controller\SettingsController:
           autowire: true
+    AppBundle\EventListener\PublishedMessageExceptionListener:
+          tags:
+              - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }

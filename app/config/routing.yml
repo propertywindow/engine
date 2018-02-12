@@ -5,6 +5,7 @@ app:
 property:
     resource: "@PropertyBundle/Controller/"
     type:     annotation
+    requirements: { _format: json }
 
 agent:
     resource: "@AgentBundle/Controller/"
