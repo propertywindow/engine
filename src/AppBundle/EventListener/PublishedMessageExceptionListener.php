@@ -20,18 +20,18 @@ class PublishedMessageExceptionListener
     {
         $exception = $event->getException();
 
-//        if (!$exception instanceof PublishedMessageException) {
-//            return;
-//        }
-//        $code = $exception instanceof UserInputException ? 400 : 500;
+        if (!$exception instanceof PublishedMessageException) {
+            return;
+        }
+        $code = $exception instanceof UserInputException ? 400 : 500;
 
         $responseData = [
             'error' => [
-                'code'    => 400,
+                'code'    => $code,
                 'message' => $exception->getMessage(),
             ],
         ];
 
-        $event->setResponse(new JsonResponse($responseData, 400));
+        $event->setResponse(new JsonResponse($responseData, $code));
     }
 }
