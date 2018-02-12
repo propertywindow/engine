@@ -47,7 +47,7 @@ class Mapper
             'website'        => $agent->getWebsite(),
             'logo'           => $agent->getLogo(),
             'webprint'       => $agent->getWebprint(),
-            'espc'           => $agent->getEspc(),
+            'espc'           => $agent->isEspc(),
         ];
     }
 

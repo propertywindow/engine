@@ -119,14 +119,14 @@ class Property
     private $espc = false;
 
     /**
-     * @var float
-     * @ORM\Column(name="lat", type="float", length=20)
+     * @var string
+     * @ORM\Column(name="lat", type="string", length=20)
      */
     private $lat;
 
     /**
-     * @var float
-     * @ORM\Column(name="lng", type="float", length=20)
+     * @var string
+     * @ORM\Column(name="lng", type="string", length=20)
      */
     private $lng;
 
@@ -488,17 +488,17 @@ class Property
     /**
      * @return bool
      */
-    public function getEspc(): bool
+    public function isEspc(): bool
     {
         return $this->espc;
     }
 
     /**
-     * @param float $lat
+     * @param string $lat
      *
      * @return Property
      */
-    public function setLat(float $lat): Property
+    public function setLat(string $lat): Property
     {
         $this->lat = $lat;
 
@@ -506,19 +506,19 @@ class Property
     }
 
     /**
-     * @return float
+     * @return string
      */
-    public function getLat(): float
+    public function getLat(): string
     {
         return $this->lat;
     }
 
     /**
-     * @param float $lng
+     * @param string $lng
      *
      * @return Property
      */
-    public function setLng(float $lng): Property
+    public function setLng(string $lng): Property
     {
         $this->lng = $lng;
 
@@ -526,9 +526,9 @@ class Property
     }
 
     /**
-     * @return float
+     * @return string
      */
-    public function getLng(): float
+    public function getLng(): string
     {
         return $this->lng;
     }
@@ -548,7 +548,7 @@ class Property
     /**
      * @return bool
      */
-    public function getArchived(): bool
+    public function isArchived(): bool
     {
         return $this->archived;
     }

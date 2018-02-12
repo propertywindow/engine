@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace AgentBundle\Entity;
 
@@ -458,7 +458,7 @@ class Agent
     /**
      * @return bool
      */
-    public function getEspc(): bool
+    public function isEspc(): bool
     {
         return $this->espc;
     }
@@ -478,7 +478,7 @@ class Agent
     /**
      * @return bool
      */
-    public function getArchived(): bool
+    public function isArchived(): bool
     {
         return $this->archived;
     }

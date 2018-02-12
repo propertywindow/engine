@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Tests\PropertyBundle\Service;
 
@@ -53,8 +53,8 @@ class PropertyServiceTest extends TestCase
         $this->property->setCity('Edinburgh');
         $this->property->setCountry('GB');
         $this->property->setPrice(725000);
-        $this->property->setLat(55.948368);
-        $this->property->setLng(-3.101990);
+        $this->property->setLat('55.948368');
+        $this->property->setLng('-3.101990');
         $this->property->setEspc(false);
         $this->property->setArchived(false);
 
@@ -80,8 +80,7 @@ class PropertyServiceTest extends TestCase
         $this->assertEquals($client, $this->property->getClient());
         $this->assertEquals($terms, $this->property->getTerms());
         $this->assertEquals($subtype, $this->property->getSubType());
-        $this->assertInternalType('bool', $this->property->getOnline());
-        $this->assertEquals(true, $this->property->getOnline());
+        $this->assertTrue($this->property->getOnline());
         $this->assertEquals('Dalkeith Street', $this->property->getStreet());
         $this->assertEquals('3', $this->property->getHouseNumber());
         $this->assertEquals('EH15 2HP', $this->property->getPostcode());
@@ -89,12 +88,10 @@ class PropertyServiceTest extends TestCase
         $this->assertEquals('GB', $this->property->getCountry());
         $this->assertInternalType('int', $this->property->getPrice());
         $this->assertEquals(725000, $this->property->getPrice());
-        $this->assertEquals(55.948368, $this->property->getLat());
-        $this->assertEquals(-3.101990, $this->property->getLng());
-        $this->assertInternalType('bool', $this->property->getEspc());
-        $this->assertEquals(false, $this->property->getEspc());
-        $this->assertInternalType('bool', $this->property->getArchived());
-        $this->assertEquals(false, $this->property->getArchived());
+        $this->assertEquals('55.948368', $this->property->getLat());
+        $this->assertEquals('-3.101990', $this->property->getLng());
+        $this->assertFalse($this->property->isEspc());
+        $this->assertFalse($this->property->isArchived());
     }
 
     public function testUpdateProperty()
@@ -141,12 +138,12 @@ class PropertyServiceTest extends TestCase
                       ->method('getRepository')
                       ->willReturn($propertyRepository);
 
-        $this->assertEquals(0, $this->property->getArchived());
+        $this->assertEquals(0, $this->property->isArchived());
 
         $propertyService = new PropertyService($entityManager);
 
         $property = $propertyService->archiveProperty($this->property);
 
-        $this->assertEquals(1, $property->getArchived());
+        $this->assertEquals(1, $property->isArchived());
     }
 }

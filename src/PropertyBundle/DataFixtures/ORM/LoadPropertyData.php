@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace PropertyBundle\DataFixtures\ORM;
 
@@ -33,8 +33,8 @@ class LoadPropertyData extends AbstractFixture implements OrderedFixtureInterfac
         $property->setCity('Edinburgh');
         $property->setCountry('GB');
         $property->setPrice(725000);
-        $property->setLat(55.948368);
-        $property->setLng(-3.101990);
+        $property->setLat('55.948368');
+        $property->setLng('-3.101990');
         $property->setEspc(false);
         $property->setArchived(false);
         $this->addReference('property_annan_1', $property);
@@ -53,8 +53,8 @@ class LoadPropertyData extends AbstractFixture implements OrderedFixtureInterfac
         $property->setCity('Edinburgh');
         $property->setCountry('GB');
         $property->setPrice(600000);
-        $property->setLat(55.950950);
-        $property->setLng(-3.102555);
+        $property->setLat('55.950950');
+        $property->setLng('-3.102555');
         $property->setEspc(false);
         $property->setArchived(false);
         $this->addReference('property_annan_2', $property);
@@ -73,8 +73,8 @@ class LoadPropertyData extends AbstractFixture implements OrderedFixtureInterfac
         $property->setCity('Edinburgh');
         $property->setCountry('GB');
         $property->setPrice(575000);
-        $property->setLat(55.950046);
-        $property->setLng(-3.108808);
+        $property->setLat('55.950046');
+        $property->setLng('-3.108808');
         $property->setEspc(false);
         $property->setArchived(false);
         $this->addReference('property_annan_3', $property);
@@ -93,8 +93,8 @@ class LoadPropertyData extends AbstractFixture implements OrderedFixtureInterfac
         $property->setCity('Prestonpans');
         $property->setCountry('GB');
         $property->setPrice(125000);
-        $property->setLat(55.959119);
-        $property->setLng(-2.985161);
+        $property->setLat('55.959119');
+        $property->setLng('-2.985161');
         $property->setEspc(false);
         $property->setArchived(false);
         $this->addReference('property_annan_4', $property);
@@ -113,8 +113,8 @@ class LoadPropertyData extends AbstractFixture implements OrderedFixtureInterfac
         $property->setCity('East Linton');
         $property->setCountry('GB');
         $property->setPrice(160000);
-        $property->setLat(55.988061);
-        $property->setLng(-2.659492);
+        $property->setLat('55.988061');
+        $property->setLng('-2.659492');
         $property->setEspc(false);
         $property->setArchived(false);
         $this->addReference('property_annan_5', $property);
@@ -133,8 +133,8 @@ class LoadPropertyData extends AbstractFixture implements OrderedFixtureInterfac
         $property->setCity('Haddington');
         $property->setCountry('GB');
         $property->setPrice(127500);
-        $property->setLat(55.955799);
-        $property->setLng(-2.779028);
+        $property->setLat('55.955799');
+        $property->setLng('-2.779028');
         $property->setEspc(false);
         $property->setArchived(false);
         $this->addReference('property_annan_6', $property);
@@ -153,8 +153,8 @@ class LoadPropertyData extends AbstractFixture implements OrderedFixtureInterfac
         $property->setCity('Musselburgh');
         $property->setCountry('GB');
         $property->setPrice(95000);
-        $property->setLat(55.940750);
-        $property->setLng(-3.055988);
+        $property->setLat('55.940750');
+        $property->setLng('-3.055988');
         $property->setEspc(false);
         $property->setArchived(false);
         $this->addReference('property_annan_7', $property);
@@ -173,8 +173,8 @@ class LoadPropertyData extends AbstractFixture implements OrderedFixtureInterfac
         $property->setCity('Port Seton');
         $property->setCountry('GB');
         $property->setPrice(325000);
-        $property->setLat(55.968600);
-        $property->setLng(-2.946050);
+        $property->setLat('55.968600');
+        $property->setLng('-2.946050');
         $property->setEspc(false);
         $property->setArchived(false);
         $this->addReference('property_annan_8', $property);
@@ -193,8 +193,8 @@ class LoadPropertyData extends AbstractFixture implements OrderedFixtureInterfac
         $property->setCity('Portobello');
         $property->setCountry('GB');
         $property->setPrice(460000);
-        $property->setLat(55.951748);
-        $property->setLng(-3.114003);
+        $property->setLat('55.951748');
+        $property->setLng('-3.114003');
         $property->setEspc(false);
         $property->setArchived(false);
         $this->addReference('property_annan_9', $property);
@@ -213,8 +213,8 @@ class LoadPropertyData extends AbstractFixture implements OrderedFixtureInterfac
         $property->setCity('Brunstane');
         $property->setCountry('GB');
         $property->setPrice(365000);
-        $property->setLat(55.942381);
-        $property->setLng(-3.095684);
+        $property->setLat('55.942381');
+        $property->setLng('-3.095684');
         $property->setEspc(false);
         $property->setArchived(false);
         $this->addReference('property_annan_10', $property);
@@ -233,8 +233,8 @@ class LoadPropertyData extends AbstractFixture implements OrderedFixtureInterfac
         $property->setCity('Granton');
         $property->setCountry('GB');
         $property->setPrice(135000);
-        $property->setLat(55.981014);
-        $property->setLng(-3.224955);
+        $property->setLat('55.981014');
+        $property->setLng('-3.224955');
         $property->setEspc(false);
         $property->setArchived(false);
         $this->addReference('property_annan_11', $property);
@@ -253,8 +253,8 @@ class LoadPropertyData extends AbstractFixture implements OrderedFixtureInterfac
         $property->setCity('Joppa');
         $property->setCountry('GB');
         $property->setPrice(290000);
-        $property->setLat(55.952027);
-        $property->setLng(-3.106079);
+        $property->setLat('55.952027');
+        $property->setLng('-3.106079');
         $property->setEspc(false);
         $property->setArchived(false);
         $this->addReference('property_annan_12', $property);
@@ -273,8 +273,8 @@ class LoadPropertyData extends AbstractFixture implements OrderedFixtureInterfac
         $property->setCity('Duddingston');
         $property->setCountry('GB');
         $property->setPrice(375000);
-        $property->setLat(55.943367);
-        $property->setLng(-3.120353);
+        $property->setLat('55.943367');
+        $property->setLng('-3.120353');
         $property->setEspc(false);
         $property->setArchived(false);
         $this->addReference('property_annan_13', $property);
@@ -293,8 +293,8 @@ class LoadPropertyData extends AbstractFixture implements OrderedFixtureInterfac
         $property->setCity('Gilmerton');
         $property->setCountry('GB');
         $property->setPrice(125000);
-        $property->setLat(55.903633);
-        $property->setLng(-3.142633);
+        $property->setLat('55.903633');
+        $property->setLng('-3.142633');
         $property->setEspc(false);
         $property->setArchived(false);
         $this->addReference('property_annan_14', $property);
@@ -313,8 +313,8 @@ class LoadPropertyData extends AbstractFixture implements OrderedFixtureInterfac
         $property->setCity('Morningside');
         $property->setCountry('GB');
         $property->setPrice(450000);
-        $property->setLat(55.924676);
-        $property->setLng(-3.199477);
+        $property->setLat('55.924676');
+        $property->setLng('-3.199477');
         $property->setEspc(false);
         $property->setArchived(false);
         $this->addReference('property_annan_15', $property);

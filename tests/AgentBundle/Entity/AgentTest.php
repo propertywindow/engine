@@ -72,13 +72,13 @@ class AgentTest extends TestCase
         $this->assertEquals(200, $this->agent->getPropertyLimit());
 
         $this->agent->setEspc(true);
-        $this->assertTrue($this->agent->getEspc());
+        $this->assertTrue($this->agent->isEspc());
 
         $this->agent->setWebprint(false);
         $this->assertFalse($this->agent->getWebprint());
 
         $this->agent->setArchived(false);
-        $this->assertFalse($this->agent->getArchived());
+        $this->assertFalse($this->agent->isArchived());
 
         $user = new User();
 
