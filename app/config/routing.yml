@@ -1,37 +1,46 @@
 app:
     resource: '@AppBundle/Controller/'
     type:     annotation
+    _format: json
 
 property:
     resource: "@PropertyBundle/Controller/"
     type:     annotation
+    _format: json
 
 agent:
     resource: "@AgentBundle/Controller/"
     type:     annotation
+    _format: json
 
 authentication:
     resource: "@AuthenticationBundle/Controller/"
     type:     annotation
+    _format: json
 
 log:
     resource: "@LogBundle/Controller/"
     type:     annotation
+    _format: json
 
 conversation:
     resource: "@ConversationBundle/Controller/"
     type:     annotation
+    _format: json
 
 alert:
     resource: "@AlertBundle/Controller/"
     type:     annotation
+    _format: json
 
 appointment:
     resource: "@AppointmentBundle/Controller/"
     type:     annotation
     prefix:   /appointment
+    _format: json
 
 invoice:
     resource: "@InvoiceBundle/Controller/"
     type:     annotation
     prefix:   /invoice
+    _format: json
