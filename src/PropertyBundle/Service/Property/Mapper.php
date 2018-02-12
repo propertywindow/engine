@@ -77,7 +77,7 @@ class Mapper
             'sold_price'   => $property->getSoldPrice(),
             'espc'         => $property->isEspc(),
             'archived'     => $property->isArchived(),
-            'online'       => $property->getOnline(),
+            'online'       => $property->isOnline(),
             'lat'          => $property->getLat(),
             'lng'          => $property->getLng(),
             'photo'        => $photo,

@@ -328,7 +328,7 @@ class Property
     /**
      * @return bool
      */
-    public function getOnline(): bool
+    public function isOnline(): bool
     {
         return $this->online;
     }

@@ -80,7 +80,7 @@ class PropertyServiceTest extends TestCase
         $this->assertEquals($client, $this->property->getClient());
         $this->assertEquals($terms, $this->property->getTerms());
         $this->assertEquals($subtype, $this->property->getSubType());
-        $this->assertTrue($this->property->getOnline());
+        $this->assertTrue($this->property->isOnline());
         $this->assertEquals('Dalkeith Street', $this->property->getStreet());
         $this->assertEquals('3', $this->property->getHouseNumber());
         $this->assertEquals('EH15 2HP', $this->property->getPostcode());
