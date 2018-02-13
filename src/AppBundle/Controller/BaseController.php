@@ -6,7 +6,7 @@ namespace AppBundle\Controller;
 use AgentBundle\Service\AgentService;
 use AgentBundle\Service\AgentGroupService;
 use AgentBundle\Service\AgentSettingsService;
-use AgentBundle\Service\ClientService;
+use ClientBundle\Service\ClientService;
 use AlertBundle\Service\AlertService;
 use AlertBundle\Service\ApplicantService;
 use AlertBundle\Service\ApplicationService;

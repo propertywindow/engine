@@ -11,6 +11,7 @@ imports:
     - { resource: "@ConversationBundle/Resources/config/services.yml" }
     - { resource: "@AuthenticationBundle/Resources/config/services.yml" }
     - { resource: "@AgentBundle/Resources/config/services.yml" }
+    - { resource: "@ClientBundle/Resources/config/services.yml" }
 
 parameters:
     locale: en

@@ -1,16 +1,17 @@
 <?php
 declare(strict_types=1);
 
-namespace AgentBundle\Entity;
+namespace ClientBundle\Entity;
 
+use AgentBundle\Entity\Solicitor;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="surveyor")
- * @ORM\Entity(repositoryClass="AgentBundle\Repository\SurveyorRepository")
+ * @ORM\Table(name="buyer")
+ * @ORM\Entity(repositoryClass="ClientBundle\Repository\BuyerRepository")
  * @ORM\HasLifecycleCallbacks
  */
-class Surveyor
+class Buyer
 {
     /**
      * @var int
@@ -21,34 +22,22 @@ class Surveyor
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Agent")
-     * @ORM\JoinColumn(name="agent_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="AgentBundle\Entity\Solicitor")
+     * @ORM\JoinColumn(name="solicitor_id", referencedColumnName="id")
      */
-    private $agent;
+    private $solicitor;
 
     /**
      * @var string
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="first_name", type="string", length=255)
      */
-    private $name;
+    private $firstName;
 
     /**
      * @var string
-     * @ORM\Column(name="phone", type="string", length=255, nullable=true)
+     * @ORM\Column(name="last_name", type="string", length=255)
      */
-    private $phone;
-
-    /**
-     * @var string
-     * @ORM\Column(name="fax", type="string", length=255, nullable=true)
-     */
-    private $fax;
-
-    /**
-     * @var string
-     * @ORM\Column(name="email", type="string", length=255, nullable=true)
-     */
-    private $email;
+    private $lastName;
 
     /**
      * @var string
@@ -81,6 +70,18 @@ class Surveyor
     private $country;
 
     /**
+     * @var string
+     * @ORM\Column(name="email", type="string", length=255, nullable=true)
+     */
+    private $email;
+
+    /**
+     * @var string
+     * @ORM\Column(name="phone", type="string", length=255, nullable=true)
+     */
+    private $phone;
+
+    /**
      * @var \DateTime $created
      * @ORM\Column(type="datetime")
      */
@@ -101,53 +102,33 @@ class Surveyor
     }
 
     /**
-     * @param Agent $agent
+     * @param \AgentBundle\Entity\Solicitor $solicitor
      *
-     * @return Surveyor
+     * @return Buyer
      */
-    public function setAgent(Agent $agent): Surveyor
+    public function setSolicitor(Solicitor $solicitor)
     {
-        $this->agent = $agent;
+        $this->solicitor = $solicitor;
 
         return $this;
     }
 
     /**
-     * @return Agent
+     * @return \AgentBundle\Entity\Solicitor
      */
-    public function getAgent(): Agent
+    public function getSolicitor(): Solicitor
     {
-        return $this->agent;
+        return $this->solicitor;
     }
 
     /**
-     * @param string $name
+     * @param string $firstName
      *
-     * @return Surveyor
+     * @return Buyer
      */
-    public function setName(string $name): Surveyor
+    public function setFirstName($firstName)
     {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param string|null $phone
-     *
-     * @return Surveyor
-     */
-    public function setPhone(?string $phone): Surveyor
-    {
-        $this->phone = $phone;
+        $this->firstName = $firstName;
 
         return $this;
     }
@@ -155,19 +136,19 @@ class Surveyor
     /**
      * @return string
      */
-    public function getPhone(): ?string
+    public function getFirstName()
     {
-        return $this->phone;
+        return $this->firstName;
     }
 
     /**
-     * @param string|null $fax
+     * @param string $lastName
      *
-     * @return Surveyor
+     * @return Buyer
      */
-    public function setFax(?string $fax): Surveyor
+    public function setLastName($lastName)
     {
-        $this->fax = $fax;
+        $this->lastName = $lastName;
 
         return $this;
     }
@@ -175,37 +156,17 @@ class Surveyor
     /**
      * @return string
      */
-    public function getFax(): ?string
+    public function getLastName()
     {
-        return $this->fax;
-    }
-
-    /**
-     * @param string|null $email
-     *
-     * @return Surveyor
-     */
-    public function setEmail(?string $email): Surveyor
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getEmail(): ?string
-    {
-        return $this->email;
+        return $this->lastName;
     }
 
     /**
      * @param string $street
      *
-     * @return Surveyor
+     * @return Buyer
      */
-    public function setStreet(string $street): Surveyor
+    public function setStreet($street)
     {
         $this->street = $street;
 
@@ -215,7 +176,7 @@ class Surveyor
     /**
      * @return string
      */
-    public function getStreet(): string
+    public function getStreet()
     {
         return $this->street;
     }
@@ -223,9 +184,9 @@ class Surveyor
     /**
      * @param string $houseNumber
      *
-     * @return Surveyor
+     * @return Buyer
      */
-    public function setHouseNumber(string $houseNumber): Surveyor
+    public function setHouseNumber($houseNumber)
     {
         $this->houseNumber = $houseNumber;
 
@@ -235,7 +196,7 @@ class Surveyor
     /**
      * @return string
      */
-    public function getHouseNumber(): string
+    public function getHouseNumber()
     {
         return $this->houseNumber;
     }
@@ -243,9 +204,9 @@ class Surveyor
     /**
      * @param string $postcode
      *
-     * @return Surveyor
+     * @return Buyer
      */
-    public function setPostcode(string $postcode): Surveyor
+    public function setPostcode($postcode)
     {
         $this->postcode = $postcode;
 
@@ -255,7 +216,7 @@ class Surveyor
     /**
      * @return string
      */
-    public function getPostcode(): string
+    public function getPostcode()
     {
         return $this->postcode;
     }
@@ -263,9 +224,9 @@ class Surveyor
     /**
      * @param string $city
      *
-     * @return Surveyor
+     * @return Buyer
      */
-    public function setCity(string $city): Surveyor
+    public function setCity($city)
     {
         $this->city = $city;
 
@@ -275,7 +236,7 @@ class Surveyor
     /**
      * @return string
      */
-    public function getCity(): string
+    public function getCity()
     {
         return $this->city;
     }
@@ -283,9 +244,9 @@ class Surveyor
     /**
      * @param string $country
      *
-     * @return Surveyor
+     * @return Buyer
      */
-    public function setCountry(string $country): Surveyor
+    public function setCountry($country)
     {
         $this->country = $country;
 
@@ -295,17 +256,57 @@ class Surveyor
     /**
      * @return string
      */
-    public function getCountry(): string
+    public function getCountry()
     {
         return $this->country;
     }
 
     /**
+     * @param string $email
+     *
+     * @return Buyer
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * @param string $phone
+     *
+     * @return Buyer
+     */
+    public function setPhone($phone)
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPhone()
+    {
+        return $this->phone;
+    }
+
+    /**
      * @param \DateTime|null $created
      *
-     * @return Surveyor
+     * @return Buyer
      */
-    public function setCreated(?\DateTime $created): Surveyor
+    public function setCreated(?\DateTime $created): Buyer
     {
         $this->created = $created;
 
@@ -323,9 +324,9 @@ class Surveyor
     /**
      * @param \DateTime|null $updated
      *
-     * @return Surveyor
+     * @return Buyer
      */
-    public function setUpdated(?\DateTime $updated): Surveyor
+    public function setUpdated(?\DateTime $updated): Buyer
     {
         $this->updated = $updated;
 

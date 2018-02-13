@@ -1,0 +1,5 @@
+services:
+    ClientBundle\Service\ClientService:
+          arguments: ["@doctrine.orm.entity_manager"]
+    ClientBundle\Controller\ClientController:
+          autowire: true

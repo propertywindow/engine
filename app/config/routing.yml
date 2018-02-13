@@ -11,6 +11,10 @@ agent:
     resource: "@AgentBundle/Controller/"
     type:     annotation
 
+client:
+    resource: "@ClientBundle/Controller/"
+    type:     annotation
+
 authentication:
     resource: "@AuthenticationBundle/Controller/"
     type:     annotation

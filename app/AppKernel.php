@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -31,6 +32,7 @@ class AppKernel extends Kernel
             new InvoiceBundle\InvoiceBundle(),
             new LogBundle\LogBundle(),
             new ConversationBundle\ConversationBundle(),
+            new ClientBundle\ClientBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

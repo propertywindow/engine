@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace PropertyBundle\Entity;
 
 use AgentBundle\Entity\Agent;
-use AgentBundle\Entity\Client;
+use ClientBundle\Entity\Client;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -36,7 +36,7 @@ class Property
     private $agent;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AgentBundle\Entity\Client")
+     * @ORM\ManyToOne(targetEntity="ClientBundle\Entity\Client")
      * @ORM\JoinColumn(name="client_id", referencedColumnName="id")
      */
     private $client;
@@ -157,9 +157,9 @@ class Property
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -214,7 +214,7 @@ class Property
 
 
     /**
-     * @param \AgentBundle\Entity\Client $client
+     * @param \ClientBundle\Entity\Client $client
      *
      * @return Property
      */
@@ -226,7 +226,7 @@ class Property
     }
 
     /**
-     * @return \AgentBundle\Entity\Client
+     * @return \ClientBundle\Entity\Client
      */
     public function getClient(): Client
     {
