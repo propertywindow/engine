@@ -212,7 +212,7 @@ class BaseController extends Controller
     public $applicationService;
 
     /**
-     * @var ApplicationService
+     * @var SolicitorService
      */
     public $solicitorService;
 

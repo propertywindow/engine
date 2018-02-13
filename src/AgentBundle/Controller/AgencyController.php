@@ -3,26 +3,25 @@ declare(strict_types = 1);
 
 namespace AgentBundle\Controller;
 
-use AgentBundle\Entity\Solicitor;
+use AgentBundle\Entity\Agency;
 use AgentBundle\Exceptions\AgencyNotFoundException;
-use AgentBundle\Exceptions\SolicitorNotFoundException;
 use AppBundle\Controller\JsonController;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Models\JsonRpc\Response;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
-use AgentBundle\Service\Solicitor\Mapper;
+use AgentBundle\Service\Agency\Mapper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Throwable;
 
 /**
- * @Route(service="AgentBundle\Controller\SolicitorController")
+ * @Route(service="AgentBundle\Controller\AgencyController")
  */
-class SolicitorController extends JsonController
+class AgencyController extends JsonController
 {
     /**
-     * @Route("/solicitor" , name="solicitor")
+     * @Route("/agency" , name="agency")
      * @param Request $httpRequest
      *
      * @return HttpResponse
@@ -57,44 +56,42 @@ class SolicitorController extends JsonController
 
     /**
      * @return array
+     * @throws AgencyNotFoundException
      * @throws NotAuthorizedException
-     * @throws SolicitorNotFoundException
      */
-    private function getSolicitor()
+    private function getAgency()
     {
         $this->hasAccessLevel(self::USER_COLLEAGUE);
 
         $this->checkParameters(['id']);
 
-        $solicitor = $this->solicitorService->getSolicitor((int)$this->parameters['id']);
+        $agency = $this->agencyService->getAgency((int)$this->parameters['id']);
 
-        $this->isAuthorized($this->user->getAgent()->getId(), $solicitor->getAgent()->getId());
+        $this->isAuthorized($this->user->getAgent()->getId(), $agency->getAgent()->getId());
 
-        return Mapper::fromSolicitor($solicitor);
+        return Mapper::fromAgency($agency);
     }
 
     /**
      * @return array
      * @throws NotAuthorizedException
      */
-    private function getSolicitors()
+    private function getAgencies()
     {
         $this->hasAccessLevel(self::USER_COLLEAGUE);
 
-        return Mapper::fromSolicitors(...$this->solicitorService->getSolicitors($this->user->getAgent()));
+        return Mapper::fromAgencies(...$this->agencyService->getAgencies($this->user->getAgent()));
     }
 
     /**
      * @return array
      * @throws NotAuthorizedException
-     * @throws AgencyNotFoundException
      */
-    private function createSolicitor(): array
+    private function createAgency(): array
     {
         $this->hasAccessLevel(self::USER_COLLEAGUE);
 
         $this->checkParameters([
-            'agency_id',
             'name',
             'email',
             'street',
@@ -104,53 +101,51 @@ class SolicitorController extends JsonController
             'country',
         ]);
 
-        $solicitor = new Solicitor();
-        $agency    = $this->agencyService->getAgency((int)$this->parameters['agency_id']);
+        $agency = new Agency();
 
-        $solicitor->setAgent($this->user->getAgent());
-        $solicitor->setAgency($agency);
+        $agency->setAgent($this->user->getAgent());
 
-        $this->prepareParameters($solicitor);
+        $this->prepareParameters($agency);
 
-        $solicitor = $this->solicitorService->createSolicitor($solicitor);
+        $agency = $this->agencyService->createAgency($agency);
 
-        return Mapper::fromSolicitor($solicitor);
+        return Mapper::fromAgency($agency);
     }
 
     /**
      * @return array
+     * @throws AgencyNotFoundException
      * @throws NotAuthorizedException
-     * @throws SolicitorNotFoundException
      */
-    private function updateSolicitor()
+    private function updateAgency()
     {
         $this->hasAccessLevel(self::USER_COLLEAGUE);
 
         $this->checkParameters(['id']);
 
-        $solicitor = $this->solicitorService->getSolicitor((int)$this->parameters['id']);
+        $agency = $this->agencyService->getAgency((int)$this->parameters['id']);
 
-        $this->isAuthorized($this->user->getAgent()->getId(), $solicitor->getAgent()->getId());
+        $this->isAuthorized($this->user->getAgent()->getId(), $agency->getAgent()->getId());
 
-        $this->prepareParameters($solicitor);
+        $this->prepareParameters($agency);
 
-        return Mapper::fromSolicitor($this->solicitorService->updateSolicitor($solicitor));
+        return Mapper::fromAgency($this->agencyService->updateAgency($agency));
     }
 
     /**
+     * @throws AgencyNotFoundException
      * @throws NotAuthorizedException
-     * @throws SolicitorNotFoundException
      */
-    private function deleteSolicitor()
+    private function deleteAgency()
     {
         $this->hasAccessLevel(self::USER_COLLEAGUE);
 
         $this->checkParameters(['id']);
 
-        $solicitor = $this->solicitorService->getSolicitor((int)$this->parameters['id']);
+        $agency = $this->agencyService->getAgency((int)$this->parameters['id']);
 
-        $this->isAuthorized($this->user->getAgent()->getId(), $solicitor->getAgent()->getId());
+        $this->isAuthorized($this->user->getAgent()->getId(), $agency->getAgent()->getId());
 
-        $this->solicitorService->deleteSolicitor($solicitor);
+        $this->agencyService->deleteAgency($agency);
     }
 }

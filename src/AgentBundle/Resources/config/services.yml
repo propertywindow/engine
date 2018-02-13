@@ -17,3 +17,5 @@ services:
           autowire: true
     AgentBundle\Controller\SolicitorController:
           autowire: true
+    AgentBundle\Controller\AgencyController:
+          autowire: true

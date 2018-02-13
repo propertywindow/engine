@@ -166,7 +166,6 @@ class AgentController extends JsonController
         return Mapper::fromAgent($agent);
     }
 
-
     /**
      * @return array
      * @throws AgentNotFoundException
@@ -192,7 +191,6 @@ class AgentController extends JsonController
 
         return Mapper::fromAgent($this->agentService->updateAgent($agent));
     }
-
 
     /**
      * @throws NotAuthorizedException
