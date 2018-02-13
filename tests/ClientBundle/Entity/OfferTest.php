@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Tests\ClientBundle\Entity;
 
+use AppBundle\Entity\Acceptance;
 use ClientBundle\Entity\Buyer;
 use ClientBundle\Entity\Offer;
 use PHPUnit\Framework\TestCase;
@@ -39,6 +40,11 @@ class OfferTest extends TestCase
 
         $this->offer->setProperty($property);
         $this->assertEquals($property, $this->offer->getProperty());
+
+        $acceptance = new Acceptance();
+
+        $this->offer->setAcceptance($acceptance);
+        $this->assertEquals($acceptance, $this->offer->getAcceptance());
 
         $this->offer->setAmount(250000);
         $this->assertEquals(250000, $this->offer->getAmount());

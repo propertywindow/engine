@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace ClientBundle\Entity;
 
+use AppBundle\Entity\Acceptance;
 use Doctrine\ORM\Mapping as ORM;
 use PropertyBundle\Entity\Property;
 
@@ -32,6 +33,12 @@ class Offer
      * @ORM\JoinColumn(name="property_id", referencedColumnName="id")
      */
     protected $property;
+
+    /**
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Acceptance")
+     * @ORM\JoinColumn(name="acceptance_id", referencedColumnName="id")
+     */
+    protected $acceptance;
 
     /**
      * @var int
@@ -103,6 +110,26 @@ class Offer
     public function getProperty(): Property
     {
         return $this->property;
+    }
+
+    /**
+     * @param \AppBundle\Entity\Acceptance $acceptance
+     *
+     * @return Offer
+     */
+    public function setAcceptance(Acceptance $acceptance): Offer
+    {
+        $this->acceptance = $acceptance;
+
+        return $this;
+    }
+
+    /**
+     * @return \AppBundle\Entity\Acceptance
+     */
+    public function getAcceptance(): Acceptance
+    {
+        return $this->acceptance;
     }
 
     /**

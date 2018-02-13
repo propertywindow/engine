@@ -1,12 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Settings
- *
  * @ORM\Table(name="settings")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\SettingsRepository")
  */
@@ -64,8 +63,6 @@ class Settings
     private $slackUsername;
 
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -74,8 +71,6 @@ class Settings
     }
 
     /**
-     * Set applicationName
-     *
      * @param string $applicationName
      *
      * @return Settings
@@ -88,8 +83,6 @@ class Settings
     }
 
     /**
-     * Get applicationName
-     *
      * @return string
      */
     public function getApplicationName()
@@ -98,8 +91,6 @@ class Settings
     }
 
     /**
-     * Set applicationURL
-     *
      * @param string $applicationURL
      *
      * @return Settings
@@ -112,8 +103,6 @@ class Settings
     }
 
     /**
-     * Get applicationURL
-     *
      * @return string
      */
     public function getApplicationURL()
@@ -122,8 +111,6 @@ class Settings
     }
 
     /**
-     * Set maxFailedLogin
-     *
      * @param integer $maxFailedLogin
      *
      * @return Settings
@@ -136,8 +123,6 @@ class Settings
     }
 
     /**
-     * Get maxFailedLogin
-     *
      * @return int
      */
     public function getMaxFailedLogin()
@@ -146,8 +131,6 @@ class Settings
     }
 
     /**
-     * Set slackEnabled
-     *
      * @param boolean $slackEnabled
      *
      * @return Settings
@@ -160,8 +143,6 @@ class Settings
     }
 
     /**
-     * Get slackEnabled
-     *
      * @return bool
      */
     public function getSlackEnabled()
@@ -170,8 +151,6 @@ class Settings
     }
 
     /**
-     * Set slackURL
-     *
      * @param string $slackURL
      *
      * @return Settings
@@ -184,8 +163,6 @@ class Settings
     }
 
     /**
-     * Get slackURL
-     *
      * @return string
      */
     public function getSlackURL()
@@ -194,8 +171,6 @@ class Settings
     }
 
     /**
-     * Set slackUsername
-     *
      * @param string $slackUsername
      *
      * @return Settings
@@ -208,8 +183,6 @@ class Settings
     }
 
     /**
-     * Get slackUsername
-     *
      * @return string
      */
     public function getSlackUsername()

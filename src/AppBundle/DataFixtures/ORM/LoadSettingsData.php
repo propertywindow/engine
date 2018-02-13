@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace AppBundle\DataFixtures\ORM;
 
@@ -9,7 +10,6 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
 /**
  * Class LoadSettingsData
- * @package AppBundle\DataFixtures\ORM
  */
 class LoadSettingsData extends AbstractFixture implements OrderedFixtureInterface
 {
