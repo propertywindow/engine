@@ -9,7 +9,7 @@ use AgentBundle\Exceptions\AgentNotFoundException;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * AgentRepository
+ * Agent Repository
  */
 class AgentRepository extends EntityRepository
 {

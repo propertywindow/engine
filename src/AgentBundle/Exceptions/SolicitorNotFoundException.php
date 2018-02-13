@@ -6,9 +6,9 @@ namespace AgentBundle\Exceptions;
 use AppBundle\Exceptions\Exception;
 
 /**
- * AgentNotFound Exception
+ * SolicitorNotFound Exception
  */
-class AgentNotFoundException extends Exception
+class SolicitorNotFoundException extends Exception
 {
     /**
      * @var int
@@ -22,6 +22,6 @@ class AgentNotFoundException extends Exception
     {
         $this->id = $id;
 
-        parent::__construct(sprintf("Could not find agent with id: %d", $id));
+        parent::__construct(sprintf("Could not find solicitor with id: %d", $id));
     }
 }
