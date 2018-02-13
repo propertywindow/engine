@@ -64,7 +64,7 @@ class AgentController extends JsonController
      * @return array
      * @throws AgentNotFoundException
      */
-    private function getAgent()
+    private function getAgent(): array
     {
         $this->checkParameters(['id']);
 
@@ -75,7 +75,7 @@ class AgentController extends JsonController
      * @return array
      * @throws NotAuthorizedException
      */
-    private function getAgents()
+    private function getAgents(): array
     {
         $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
@@ -83,7 +83,7 @@ class AgentController extends JsonController
     }
 
     /**
-     * @return array $user
+     * @return array
      * @throws AgentGroupNotFoundException
      * @throws NotAuthorizedException
      * @throws Throwable
@@ -93,7 +93,7 @@ class AgentController extends JsonController
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Syntax
      */
-    private function createAgent()
+    private function createAgent(): array
     {
         $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
@@ -172,7 +172,7 @@ class AgentController extends JsonController
      * @throws AgentNotFoundException
      * @throws NotAuthorizedException
      */
-    private function updateAgent()
+    private function updateAgent(): array
     {
         $this->checkParameters(['id']);
 

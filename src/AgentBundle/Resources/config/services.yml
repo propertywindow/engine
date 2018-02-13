@@ -5,9 +5,15 @@ services:
           arguments: ["@doctrine.orm.entity_manager"]
     AgentBundle\Service\AgentSettingsService:
           arguments: ["@doctrine.orm.entity_manager"]
+    AgentBundle\Service\SolicitorService:
+          arguments: ["@doctrine.orm.entity_manager"]
+    AgentBundle\Service\AgencyService:
+          arguments: ["@doctrine.orm.entity_manager"]
     AgentBundle\Controller\AgentGroupController:
           autowire: true
     AgentBundle\Controller\AgentController:
           autowire: true
     AgentBundle\Controller\AgentSettingsController:
+          autowire: true
+    AgentBundle\Controller\SolicitorController:
           autowire: true

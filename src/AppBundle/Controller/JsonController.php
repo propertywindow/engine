@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace AppBundle\Controller;
 
@@ -158,7 +158,7 @@ class JsonController extends BaseController
                 $code = self::USER_NOT_AUTHENTICATED;
                 break;
             case $throwable instanceof Exception:
-                $code = self::EXCEPTION_ERROR;
+                $code   = self::EXCEPTION_ERROR;
                 $method = self::prepareRequest($httpRequest);
 
                 $this->logErrorService->createError(
@@ -186,6 +186,18 @@ class JsonController extends BaseController
     public function isAuthorized(int $userRight, int $userCheck)
     {
         if ($userRight !== $userCheck) {
+            throw new NotAuthorizedException();
+        }
+    }
+
+    /**
+     * @param int $userType
+     *
+     * @throws NotAuthorizedException
+     */
+    public function hasAccessLevel(int $userType)
+    {
+        if ($this->user->getUserType()->getId() < $userType) {
             throw new NotAuthorizedException();
         }
     }

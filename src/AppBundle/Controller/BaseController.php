@@ -1,11 +1,13 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace AppBundle\Controller;
 
+use AgentBundle\Service\AgencyService;
 use AgentBundle\Service\AgentService;
 use AgentBundle\Service\AgentGroupService;
 use AgentBundle\Service\AgentSettingsService;
+use AgentBundle\Service\SolicitorService;
 use ClientBundle\Service\ClientService;
 use AlertBundle\Service\AlertService;
 use AlertBundle\Service\ApplicantService;
@@ -210,6 +212,16 @@ class BaseController extends Controller
     public $applicationService;
 
     /**
+     * @var ApplicationService
+     */
+    public $solicitorService;
+
+    /**
+     * @var AgencyService
+     */
+    public $agencyService;
+
+    /**
      * @param Authenticator          $authenticator
      * @param SettingsService        $settingsService
      * @param AgentSettingsService   $agentSettingsService
@@ -243,6 +255,8 @@ class BaseController extends Controller
      * @param AlertService           $alertService
      * @param ApplicantService       $applicantService
      * @param ApplicationService     $applicationService
+     * @param SolicitorService       $solicitorService
+     * @param AgencyService          $agencyService
      */
     public function __construct(
         Authenticator $authenticator,
@@ -277,7 +291,9 @@ class BaseController extends Controller
         SlackService $slackService,
         AlertService $alertService,
         ApplicantService $applicantService,
-        ApplicationService $applicationService
+        ApplicationService $applicationService,
+        SolicitorService $solicitorService,
+        AgencyService $agencyService
     ) {
         $this->authenticator          = $authenticator;
         $this->settingsService        = $settingsService;
@@ -312,5 +328,7 @@ class BaseController extends Controller
         $this->alertService           = $alertService;
         $this->applicantService       = $applicantService;
         $this->applicationService     = $applicationService;
+        $this->solicitorService       = $solicitorService;
+        $this->agencyService          = $agencyService;
     }
 }
