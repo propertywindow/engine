@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace AuthenticationBundle\Service;
 
@@ -33,7 +33,6 @@ class ServiceMapService
      * @param User $user
      *
      * @return ServiceMap $serviceMap
-     *
      * @throws ServiceMapNotFoundException
      */
     public function getServiceMap(User $user)
@@ -57,7 +56,6 @@ class ServiceMapService
      * @param User $user
      *
      * @return ServiceGroupMap $serviceGroupMap
-     *
      * @throws ServiceMapNotFoundException
      */
     public function getServiceGroupMap(User $user)
@@ -102,7 +100,6 @@ class ServiceMapService
      * @param Service $service
      *
      * @return ServiceMap $serviceMap
-     *
      * @throws ServiceMapAlreadyExistsException
      */
     public function addToServiceMap(User $user, Service $service)
@@ -136,7 +133,6 @@ class ServiceMapService
      * @param ServiceGroup $serviceGroup
      *
      * @return ServiceGroupMap $serviceGroupMap
-     *
      * @throws ServiceMapAlreadyExistsException
      */
     public function addToServiceGroupMap(User $user, ServiceGroup $serviceGroup)
@@ -144,7 +140,7 @@ class ServiceMapService
         $repository      = $this->entityManager->getRepository('AuthenticationBundle:ServiceGroupMap');
         $serviceGroupMap = $repository->findOneBy(
             [
-                'user'        => $user,
+                'user'         => $user,
                 'serviceGroup' => $serviceGroup,
             ]
         );
@@ -201,7 +197,7 @@ class ServiceMapService
         $repository      = $this->entityManager->getRepository('AuthenticationBundle:ServiceGroupMap');
         $serviceGroupMap = $repository->findOneBy(
             [
-                'user'        => $user,
+                'user'         => $user,
                 'serviceGroup' => $serviceGroup,
             ]
         );

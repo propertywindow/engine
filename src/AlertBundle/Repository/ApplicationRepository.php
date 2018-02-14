@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace AlertBundle\Repository;
 
@@ -16,7 +16,6 @@ class ApplicationRepository extends EntityRepository
      * @param int $id
      *
      * @return Application
-     *
      * @throws ApplicationNotFoundException
      */
     public function findById(int $id): Application

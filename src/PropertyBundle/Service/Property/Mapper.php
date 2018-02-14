@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace PropertyBundle\Service\Property;
 
@@ -24,13 +24,13 @@ class Mapper
 
         switch ($property->getCountry()) {
             case "NL":
-                $address = $property->getStreet().' '.$property->getHouseNumber();
+                $address = $property->getStreet() . ' ' . $property->getHouseNumber();
                 break;
             case "GB":
-                $address = $property->getHouseNumber().' '.$property->getStreet();
+                $address = $property->getHouseNumber() . ' ' . $property->getStreet();
                 break;
             default:
-                $address = $property->getStreet().' '.$property->getHouseNumber();
+                $address = $property->getStreet() . ' ' . $property->getHouseNumber();
         }
 
         switch ($language) {

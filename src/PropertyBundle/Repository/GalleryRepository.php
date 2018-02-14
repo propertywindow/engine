@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace PropertyBundle\Repository;
 
@@ -8,7 +8,6 @@ use PropertyBundle\Exceptions\GalleryNotFoundException;
 
 /**
  * GalleryRepository
- *
  */
 class GalleryRepository extends EntityRepository
 {
@@ -16,7 +15,6 @@ class GalleryRepository extends EntityRepository
      * @param int $id
      *
      * @return Gallery
-     *
      * @throws GalleryNotFoundException
      */
     public function findById(int $id): Gallery

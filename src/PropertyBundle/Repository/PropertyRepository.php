@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace PropertyBundle\Repository;
 
@@ -10,7 +10,6 @@ use PropertyBundle\Exceptions\PropertyNotFoundException;
 
 /**
  * PropertyRepository
- *
  */
 class PropertyRepository extends EntityRepository
 {
@@ -18,7 +17,6 @@ class PropertyRepository extends EntityRepository
      * @param int $id
      *
      * @return Property
-     *
      * @throws PropertyNotFoundException
      */
     public function findById(int $id): Property

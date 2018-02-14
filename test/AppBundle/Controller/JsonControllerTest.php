@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Test\AppBundle\Controller;
 
@@ -20,7 +20,7 @@ class JsonControllerTest extends WebTestCase
 
         $result = $controller->convertParameters('office', 'lowercase');
 
-//        $this->assertEquals('Lowercase', $result);
+        //        $this->assertEquals('Lowercase', $result);
 
         $this->assertNull($result);
 

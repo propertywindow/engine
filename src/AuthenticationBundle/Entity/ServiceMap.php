@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace AuthenticationBundle\Entity;
 
@@ -6,7 +6,6 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * ServiceMap
- *
  * @ORM\Table(name="service_map")
  * @ORM\Entity(repositoryClass="AuthenticationBundle\Repository\ServiceMapRepository")
  * @ORM\HasLifecycleCallbacks
@@ -15,7 +14,6 @@ class ServiceMap
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -36,21 +34,18 @@ class ServiceMap
 
     /**
      * @var \DateTime $created
-     *
      * @ORM\Column(type="datetime")
      */
     protected $created;
 
     /**
      * @var \DateTime $updated
-     *
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $updated;
 
     /**
      * Get id
-     *
      * @return int
      */
     public function getId()
@@ -74,7 +69,6 @@ class ServiceMap
 
     /**
      * Get user
-     *
      * @return User
      */
     public function getUser()
@@ -98,7 +92,6 @@ class ServiceMap
 
     /**
      * Get service
-     *
      * @return Service
      */
     public function getService()
@@ -108,7 +101,6 @@ class ServiceMap
 
     /**
      * Gets triggered only on insert
-
      * @ORM\PrePersist
      */
     public function onPrePersist()
@@ -118,7 +110,6 @@ class ServiceMap
 
     /**
      * Gets triggered every time on update
-
      * @ORM\PreUpdate
      */
     public function onPreUpdate()

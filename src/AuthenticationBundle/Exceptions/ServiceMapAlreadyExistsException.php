@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace AuthenticationBundle\Exceptions;
 
@@ -15,13 +15,13 @@ class ServiceMapAlreadyExistsException extends Exception
     private $service;
 
     /**
-     * @param int    $service
+     * @param int $service
      *
      * @internal param string $id
      */
     public function __construct(int $service)
     {
-        $this->service  = $service;
+        $this->service = $service;
 
         parent::__construct(sprintf("service map already has service with id: %d", $service));
     }

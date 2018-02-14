@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace LogBundle\Service\Message;
 
@@ -42,7 +42,7 @@ class Field
         return [
             'title' => $this->title,
             'value' => $this->value,
-            'short' => $this->short
+            'short' => $this->short,
         ];
     }
 }

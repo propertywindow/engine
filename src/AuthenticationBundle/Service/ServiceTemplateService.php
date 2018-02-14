@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace AuthenticationBundle\Service;
 
@@ -33,7 +33,6 @@ class ServiceTemplateService
      * @param UserType $userType
      *
      * @return ServiceTemplate $serviceTemplate
-     *
      * @throws TemplateNotFoundException
      */
     public function getServiceTemplate(UserType $userType)
@@ -57,7 +56,6 @@ class ServiceTemplateService
      * @param UserType $userType
      *
      * @return ServiceGroupTemplate $serviceGroupTemplate
-     *
      * @throws TemplateNotFoundException
      */
     public function getServiceGroupTemplate(UserType $userType)
@@ -82,7 +80,6 @@ class ServiceTemplateService
      * @param Service  $service
      *
      * @return ServiceTemplate $serviceTemplate
-     *
      * @throws TemplateAlreadyHasServiceException
      */
     public function addToServiceTemplate(UserType $userType, Service $service)
@@ -116,7 +113,6 @@ class ServiceTemplateService
      * @param ServiceGroup $serviceGroup
      *
      * @return ServiceGroupTemplate $serviceGroupTemplate
-     *
      * @throws TemplateAlreadyHasServiceException
      */
     public function addToServiceGroupTemplate(UserType $userType, ServiceGroup $serviceGroup)

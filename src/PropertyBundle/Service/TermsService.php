@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace PropertyBundle\Service;
 
@@ -83,7 +83,7 @@ class TermsService
      */
     public function deleteTerm(int $id)
     {
-        $term       = $this->repository->findById($id);
+        $term = $this->repository->findById($id);
 
         $this->entityManager->remove($term);
         $this->entityManager->flush();

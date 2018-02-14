@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace PropertyBundle\Service\Type;
 
@@ -12,8 +12,8 @@ use PropertyBundle\Entity\Type;
 class Mapper
 {
     /**
-     * @param string  $language
-     * @param Type $type
+     * @param string $language
+     * @param Type   $type
      *
      * @return array
      */
@@ -34,7 +34,7 @@ class Mapper
     }
 
     /**
-     * @param string  $language
+     * @param string $language
      * @param Type[] ...$types
      *
      * @return array

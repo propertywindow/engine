@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace AgentBundle\Service\Agent;
 
@@ -21,10 +21,10 @@ class Mapper
 
         switch ($country) {
             case "NL":
-                $address = $agent->getStreet().' '.$agent->getHouseNumber();
+                $address = $agent->getStreet() . ' ' . $agent->getHouseNumber();
                 break;
             default:
-                $address = $agent->getHouseNumber().' '.$agent->getStreet();
+                $address = $agent->getHouseNumber() . ' ' . $agent->getStreet();
                 break;
         }
 

@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace LogBundle\Service\Message;
 
@@ -39,6 +39,7 @@ class Author
     public function link($link)
     {
         $this->data['author_link'] = $link;
+
         return $this;
     }
 
@@ -50,6 +51,7 @@ class Author
     public function icon($icon)
     {
         $this->data['author_icon'] = $icon;
+
         return $this;
     }
 

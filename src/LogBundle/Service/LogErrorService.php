@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace LogBundle\Service;
 
@@ -66,7 +66,7 @@ class LogErrorService
      * @param User   $user
      * @param string $method
      * @param string $message
-     * @param array $parameters
+     * @param array  $parameters
      *
      * @return Error
      */

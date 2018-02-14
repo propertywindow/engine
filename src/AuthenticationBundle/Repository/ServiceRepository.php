@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace AuthenticationBundle\Repository;
 
@@ -9,7 +9,6 @@ use Doctrine\ORM\EntityRepository;
 
 /**
  * ServiceRepository
- *
  */
 class ServiceRepository extends EntityRepository
 {
@@ -17,7 +16,6 @@ class ServiceRepository extends EntityRepository
      * @param int $id
      *
      * @return Service
-     *
      * @throws ServiceNotFoundException
      */
     public function findById(int $id): Service

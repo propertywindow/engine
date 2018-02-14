@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace AuthenticationBundle\Service\ServiceTemplate;
 
@@ -19,7 +19,7 @@ class Mapper
     public static function fromServiceTemplate(ServiceTemplate $serviceTemplate): array
     {
         return [
-            'service_id'   => $serviceTemplate->getService()->getId(),
+            'service_id' => $serviceTemplate->getService()->getId(),
         ];
     }
 
@@ -46,7 +46,7 @@ class Mapper
     public static function fromServiceGroupTemplate(ServiceGroupTemplate $serviceGroupTemplate): array
     {
         return [
-            'service_group_id'   => $serviceGroupTemplate->getServiceGroup()->getId(),
+            'service_group_id' => $serviceGroupTemplate->getServiceGroup()->getId(),
         ];
     }
 

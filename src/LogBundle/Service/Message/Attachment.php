@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace LogBundle\Service\Message;
 
@@ -42,6 +42,7 @@ class Attachment
     public function fallback($fallback)
     {
         $this->data['fallback'] = $fallback;
+
         return $this;
     }
 
@@ -53,6 +54,7 @@ class Attachment
     public function color($color)
     {
         $this->data['color'] = $color;
+
         return $this;
     }
 
@@ -64,6 +66,7 @@ class Attachment
     public function title($title)
     {
         $this->data['title'] = $title;
+
         return $this;
     }
 
@@ -75,6 +78,7 @@ class Attachment
     public function pretext($pretext)
     {
         $this->data['pretext'] = $pretext;
+
         return $this;
     }
 
@@ -86,6 +90,7 @@ class Attachment
     public function footer($footer)
     {
         $this->data['footer'] = $footer;
+
         return $this;
     }
 
@@ -110,6 +115,7 @@ class Attachment
     public function link($link)
     {
         $this->data['title_link'] = $link;
+
         return $this;
     }
 
@@ -121,6 +127,7 @@ class Attachment
     public function image($imageUrl)
     {
         $this->data['image_url'] = $imageUrl;
+
         return $this;
     }
 
@@ -132,6 +139,7 @@ class Attachment
     public function thumbnail($thumbnailUrl)
     {
         $this->data['thumb_url'] = $thumbnailUrl;
+
         return $this;
     }
 
@@ -143,6 +151,7 @@ class Attachment
     public function ts($timestamp = null)
     {
         $this->data['ts'] = $timestamp !== null ? $timestamp : time();
+
         return $this;
     }
 
@@ -154,6 +163,7 @@ class Attachment
     public function author(Author $author)
     {
         $this->data = array_merge($this->data, $author->toArray());
+
         return $this;
     }
 
@@ -165,6 +175,7 @@ class Attachment
     public function addField(Field $field)
     {
         $this->fields[] = $field;
+
         return $this;
     }
 
@@ -179,7 +190,7 @@ class Attachment
                     return $field->toArray();
                 },
                 $this->fields
-            )
+            ),
         ]);
     }
 }

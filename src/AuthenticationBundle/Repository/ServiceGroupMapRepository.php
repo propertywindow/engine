@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace AuthenticationBundle\Repository;
 
@@ -9,7 +9,6 @@ use Doctrine\ORM\EntityRepository;
 
 /**
  * ServiceGroupMapRepository
- *
  */
 class ServiceGroupMapRepository extends EntityRepository
 {
@@ -17,7 +16,6 @@ class ServiceGroupMapRepository extends EntityRepository
      * @param int $id
      *
      * @return ServiceGroupMap
-     *
      * @throws ServiceMapNotFoundException
      */
     public function findById(int $id): ServiceGroupMap

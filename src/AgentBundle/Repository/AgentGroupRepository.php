@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace AgentBundle\Repository;
 
@@ -16,7 +16,6 @@ class AgentGroupRepository extends EntityRepository
      * @param int $id
      *
      * @return AgentGroup
-     *
      * @throws AgentGroupNotFoundException
      */
     public function findById(int $id): AgentGroup

@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace LogBundle\Service\Message;
 
@@ -41,6 +41,7 @@ class Message
     public function text($text)
     {
         $this->text = $text;
+
         return $this;
     }
 
@@ -52,6 +53,7 @@ class Message
     public function attach(Attachment $attachment)
     {
         $this->attachments[] = $attachment;
+
         return $this;
     }
 

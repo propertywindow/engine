@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace AuthenticationBundle\Repository;
 
@@ -9,7 +9,6 @@ use Doctrine\ORM\EntityRepository;
 
 /**
  * UserSettingsRepository
- *
  */
 class UserSettingsRepository extends EntityRepository
 {
@@ -17,7 +16,6 @@ class UserSettingsRepository extends EntityRepository
      * @param int $userId
      *
      * @return UserSettings
-     *
      * @throws UserSettingsNotFoundException
      */
     public function findByUserId(int $userId): UserSettings
@@ -36,7 +34,6 @@ class UserSettingsRepository extends EntityRepository
      * @param User $user
      *
      * @return UserSettings
-     *
      * @throws UserSettingsNotFoundException
      */
     public function findByUser(User $user): UserSettings

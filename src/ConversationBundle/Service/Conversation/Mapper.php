@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace ConversationBundle\Service\Conversation;
 
@@ -52,13 +52,13 @@ class Mapper
         return array_map(
             function (Message $message) {
                 return [
-                    'id'                => $message->getId(),
-                    'author_id'         => $message->getAuthor()->getId(),
-                    'recipient_id'      => $message->getRecipient()->getId(),
-                    'message'           => $message->getMessage(),
-                    'seen'              => $message->getSeen(),
-                    'read'              => $message->getUpdated(),
-                    'date'              => $message->getCreated(),
+                    'id'           => $message->getId(),
+                    'author_id'    => $message->getAuthor()->getId(),
+                    'recipient_id' => $message->getRecipient()->getId(),
+                    'message'      => $message->getMessage(),
+                    'seen'         => $message->getSeen(),
+                    'read'         => $message->getUpdated(),
+                    'date'         => $message->getCreated(),
                 ];
             },
             $messages

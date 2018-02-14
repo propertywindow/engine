@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace AlertBundle\Repository;
 
@@ -9,7 +9,6 @@ use AlertBundle\Exceptions\ApplicantNotFoundException;
 
 /**
  * ApplicantRepository
- *
  */
 class ApplicantRepository extends EntityRepository
 {
@@ -17,7 +16,6 @@ class ApplicantRepository extends EntityRepository
      * @param int $id
      *
      * @return Applicant
-     *
      * @throws ApplicantNotFoundException
      */
     public function findById(int $id): Applicant

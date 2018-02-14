@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace PropertyBundle\Repository;
 
@@ -8,7 +8,6 @@ use PropertyBundle\Exceptions\TermsNotFoundException;
 
 /**
  * TermsRepository
- *
  */
 class TermsRepository extends EntityRepository
 {
@@ -16,7 +15,6 @@ class TermsRepository extends EntityRepository
      * @param int $id
      *
      * @return Terms
-     *
      * @throws TermsNotFoundException
      */
     public function findById(int $id): Terms

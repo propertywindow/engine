@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace LogBundle\Service\Activity;
 
@@ -21,7 +21,7 @@ class Mapper
         return [
             'id'              => $activity->getId(),
             'user_id'         => $activity->getUser()->getId(),
-            'user_name'       => $activity->getUser()->getFirstName().' '.$activity->getUser()->getLastName(),
+            'user_name'       => $activity->getUser()->getFirstName() . ' ' . $activity->getUser()->getLastName(),
             'action_category' => $activity->getActionCategory(),
             'action_name'     => $activity->getActionName(),
             'action_id'       => $activity->getActionId(),

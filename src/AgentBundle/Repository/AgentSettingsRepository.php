@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace AgentBundle\Repository;
 
@@ -9,7 +9,6 @@ use Doctrine\ORM\EntityRepository;
 
 /**
  * AgentSettingsRepository
- *
  */
 class AgentSettingsRepository extends EntityRepository
 {
@@ -17,7 +16,6 @@ class AgentSettingsRepository extends EntityRepository
      * @param int $agentId
      *
      * @return AgentSettings
-     *
      * @throws AgentSettingsNotFoundException
      */
     public function findByAgentId(int $agentId): AgentSettings
@@ -36,13 +34,12 @@ class AgentSettingsRepository extends EntityRepository
      * @param Agent $agent
      *
      * @return AgentSettings
-     *
      * @throws AgentSettingsNotFoundException
      */
     public function findByAgent(Agent $agent): AgentSettings
     {
         $result = $this->findOneBy([
-            'agent' => $agent
+            'agent' => $agent,
         ]);
 
         if ($result === null) {

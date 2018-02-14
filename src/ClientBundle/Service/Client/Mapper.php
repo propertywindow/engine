@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace ClientBundle\Service\Client;
 
@@ -22,17 +22,17 @@ class Mapper
 
         switch ($country) {
             case "NL":
-                $address = $user->getStreet().' '.$user->getHouseNumber();
+                $address = $user->getStreet() . ' ' . $user->getHouseNumber();
                 break;
             default:
-                $address = $user->getHouseNumber().' '.$user->getStreet();
+                $address = $user->getHouseNumber() . ' ' . $user->getStreet();
                 break;
         }
 
         return [
             'id'           => $client->getId(),
             'user_id'      => $user->getId(),
-            'full_name'    => $user->getFirstName().' '.$user->getLastName(),
+            'full_name'    => $user->getFirstName() . ' ' . $user->getLastName(),
             'first_name'   => $user->getFirstName(),
             'last_name'    => $user->getLastName(),
             'address'      => $address,

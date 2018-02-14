@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace AppBundle\Entity;
 
@@ -13,7 +13,6 @@ class Settings
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -22,42 +21,36 @@ class Settings
 
     /**
      * @var string
-     *
      * @ORM\Column(name="application_name", type="string", length=255)
      */
     private $applicationName;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="application_URL", type="string", length=255)
      */
     private $applicationURL;
 
     /**
      * @var int
-     *
      * @ORM\Column(name="max_failed_login", type="integer")
      */
     private $maxFailedLogin;
 
     /**
      * @var bool
-     *
      * @ORM\Column(name="slack_enabled", type="boolean", options={"default": true})
      */
     private $slackEnabled = true;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="slack_url", type="string", length=255)
      */
     private $slackURL;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="slack_username", type="string", length=255)
      */
     private $slackUsername;

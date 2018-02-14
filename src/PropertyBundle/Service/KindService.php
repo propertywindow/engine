@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace PropertyBundle\Service;
 
@@ -83,7 +83,7 @@ class KindService
      */
     public function deleteKind(int $id)
     {
-        $kind       = $this->repository->findById($id);
+        $kind = $this->repository->findById($id);
 
         $this->entityManager->remove($kind);
         $this->entityManager->flush();

@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace PropertyBundle\Repository;
 
@@ -9,7 +9,6 @@ use PropertyBundle\Exceptions\SubTypeNotFoundException;
 
 /**
  * SubTypeRepository
- *
  */
 class SubTypeRepository extends EntityRepository
 {

@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace AlertBundle\Service;
 
@@ -36,7 +36,6 @@ class ApplicationService
      * @param int $id
      *
      * @return Application
-     *
      * @throws ApplicationNotFoundException
      */
     public function getApplication(int $id): Application

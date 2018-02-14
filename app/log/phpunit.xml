@@ -1,24 +1,2 @@
 <phpunit bootstrap="../../vendor/autoload.php" backupGlobals="false" colors="true">
-    <php>
-        <ini name="error_reporting" value="-1" />
-        <ini name="memory_limit" value="4G" />
-        <server name="KERNEL_CLASS" value="AppKernel" />
-    </php>
-
-    <testsuites>
-        <testsuite name="Property Window Test Suite">
-            <directory>test/*</directory>
-        </testsuite>
-    </testsuites>
-
-    <filter>
-        <whitelist addUncoveredFilesFromWhitelist="true" processUncoveredFilesFromWhitelist="false">
-            <directory suffix=".php">src/*</directory>
-            <exclude>
-                <directory>src/*Bundle/Resources</directory>
-                <directory>src/*Bundle/DataFixtures</directory>
-                <directory>src/*Bundle/Exceptions</directory>
-            </exclude>
-        </whitelist>
-    </filter>
 </phpunit>
