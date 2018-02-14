@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 use Symfony\Component\Debug\Debug;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 //    exit('You are not allowed to access this file. Check '.basename(__FILE__).' for more information.');
 //}
 
-require __DIR__.'/../vendor/autoload.php';
+require __DIR__ . '/../vendor/autoload.php';
 Debug::enable();
 
 $kernel   = new AppKernel('dev', true);
