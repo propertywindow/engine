@@ -132,9 +132,7 @@ class LoginController extends JsonController
         $user        = $this->userService->getUser((int)$this->parameters['user_id']);
         $impersonate = $this->userService->getUser((int)$this->parameters['impersonate_id']);
 
-        if ((int)$user->getUserType()->getId() > self::USER_AGENT) {
-            throw new NotAuthorizedException();
-        }
+        $this->hasAccessLevel(self::USER_AGENT);
 
         if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
             if ($user->getAgent() !== $impersonate->getAgent()) {

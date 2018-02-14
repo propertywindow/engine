@@ -63,10 +63,10 @@ class ServiceTemplateController extends JsonController
      */
     private function getServiceTemplates(): array
     {
+        $this->hasAccessLevel(self::USER_ADMIN);
+
         $template  = [];
         $userTypes = $this->userTypeService->getUserTypes(true);
-
-        $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
         foreach ($userTypes as $userType) {
             switch ($this->user->getSettings()->getLanguage()) {
@@ -97,11 +97,11 @@ class ServiceTemplateController extends JsonController
      */
     private function getServiceTemplate(): array
     {
+        $this->hasAccessLevel(self::USER_ADMIN);
+
         $this->checkParameters(['id']);
 
         $templateUserType = $this->userTypeService->getUserType((int)$this->parameters['id']);
-
-        $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
         $template = $this->serviceTemplateService->getServiceTemplate($templateUserType);
 
@@ -116,11 +116,11 @@ class ServiceTemplateController extends JsonController
      */
     private function getServiceGroupTemplate(): array
     {
+        $this->hasAccessLevel(self::USER_ADMIN);
+
         $this->checkParameters(['id']);
 
         $templateUserType = $this->userTypeService->getUserType((int)$this->parameters['id']);
-
-        $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
         $templateGroup = $this->serviceTemplateService->getServiceGroupTemplate($templateUserType);
 
@@ -136,12 +136,12 @@ class ServiceTemplateController extends JsonController
      */
     private function addToServiceTemplate(): array
     {
+        $this->hasAccessLevel(self::USER_ADMIN);
+
         $this->checkParameters([
             'user_type_id',
             'service_id',
         ]);
-
-        $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
         $userType = $this->userTypeService->getUserType((int)$this->parameters['user_type_id']);
         $service  = $this->serviceService->getService((int)$this->parameters['service_id']);
@@ -158,12 +158,12 @@ class ServiceTemplateController extends JsonController
      */
     private function addToServiceGroupTemplate(): array
     {
+        $this->hasAccessLevel(self::USER_ADMIN);
+
         $this->checkParameters([
             'user_type_id',
             'service_group_id',
         ]);
-
-        $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
         $userType     = $this->userTypeService->getUserType((int)$this->parameters['user_type_id']);
         $serviceGroup = $this->serviceGroupService->getServiceGroup((int)$this->parameters['service_group_id']);
@@ -181,12 +181,12 @@ class ServiceTemplateController extends JsonController
      */
     private function removeFromServiceTemplate()
     {
+        $this->hasAccessLevel(self::USER_ADMIN);
+
         $this->checkParameters([
             'user_type_id',
             'service_id',
         ]);
-
-        $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
         $userType = $this->userTypeService->getUserType((int)$this->parameters['user_type_id']);
         $service  = $this->serviceService->getService((int)$this->parameters['service_id']);
@@ -202,12 +202,12 @@ class ServiceTemplateController extends JsonController
      */
     private function removeFromServiceGroupTemplate()
     {
+        $this->hasAccessLevel(self::USER_ADMIN);
+
         $this->checkParameters([
             'user_type_id',
             'service_group_id',
         ]);
-
-        $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
         $userType     = $this->userTypeService->getUserType((int)$this->parameters['user_type_id']);
         $serviceGroup = $this->serviceGroupService->getServiceGroup((int)$this->parameters['service_group_id']);

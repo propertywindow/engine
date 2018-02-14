@@ -103,9 +103,9 @@ class SubTypeController extends JsonController
      */
     private function deleteSubType()
     {
-        $this->checkParameters(['id']);
+        $this->hasAccessLevel(self::USER_ADMIN);
 
-        $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
+        $this->checkParameters(['id']);
 
         $this->subTypeService->deleteSubType((int)$this->parameters['id']);
     }

@@ -118,11 +118,7 @@ class PropertyController extends JsonController
      */
     private function createProperty(): array
     {
-        // todo: covert to minimumAuthLevel(self::USER::COLLEAGUE);
-        if ($this->user->getUserType()->getId() === self::USER_CLIENT ||
-            $this->user->getUserType()->getId() === self::USER_API) {
-            throw new NotAuthorizedException();
-        }
+        $this->hasAccessLevel(self::USER_COLLEAGUE);
 
         $this->checkParameters([
             'client_id',
@@ -278,9 +274,7 @@ class PropertyController extends JsonController
     {
         $this->checkParameters(['id']);
 
-        if ($this->user->getUserType()->getId() > self::USER_AGENT) {
-            throw new NotAuthorizedException();
-        }
+        $this->hasAccessLevel(self::USER_AGENT);
 
         $this->propertyService->deleteProperty((int)$this->parameters['id']);
 

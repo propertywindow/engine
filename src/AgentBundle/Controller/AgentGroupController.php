@@ -71,7 +71,7 @@ class AgentGroupController extends JsonController
      */
     private function getAgentGroups(): array
     {
-        $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
+        $this->hasAccessLevel(self::USER_ADMIN);
 
         return Mapper::fromAgentGroups(...$this->agentGroupService->getAgentGroups());
     }
@@ -82,9 +82,9 @@ class AgentGroupController extends JsonController
      */
     private function createAgentGroup(): array
     {
-        $this->checkParameters(['name']);
+        $this->hasAccessLevel(self::USER_ADMIN);
 
-        $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
+        $this->checkParameters(['name']);
 
         $agentGroup = new AgentGroup();
 
@@ -105,11 +105,11 @@ class AgentGroupController extends JsonController
      */
     private function updateAgentGroup(): array
     {
+        $this->hasAccessLevel(self::USER_ADMIN);
+
         $this->checkParameters(['id']);
 
         $agentGroup = $this->agentGroupService->getAgentGroup((int)$this->parameters['id']);
-
-        $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
         $this->prepareParameters($agentGroup);
 
@@ -123,9 +123,9 @@ class AgentGroupController extends JsonController
      */
     private function deleteAgentGroup()
     {
-        $this->checkParameters(['id']);
+        $this->hasAccessLevel(self::USER_ADMIN);
 
-        $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
+        $this->checkParameters(['id']);
 
         // todo: check for users and agents before deleting, just warning
         // todo: delete folders

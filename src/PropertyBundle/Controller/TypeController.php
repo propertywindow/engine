@@ -86,9 +86,9 @@ class TypeController extends JsonController
      */
     private function deleteType()
     {
-        $this->checkParameters(['id']);
+        $this->hasAccessLevel(self::USER_ADMIN);
 
-        $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
+        $this->checkParameters(['id']);
 
         $this->typeService->deleteType((int)$this->parameters['id']);
     }

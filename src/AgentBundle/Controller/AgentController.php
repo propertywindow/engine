@@ -77,7 +77,7 @@ class AgentController extends JsonController
      */
     private function getAgents(): array
     {
-        $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
+        $this->hasAccessLevel(self::USER_ADMIN);
 
         return Mapper::fromAgents(...$this->agentService->getAgents());
     }
@@ -95,7 +95,7 @@ class AgentController extends JsonController
      */
     private function createAgent(): array
     {
-        $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
+        $this->hasAccessLevel(self::USER_ADMIN);
 
         $this->checkParameters([
             'office',
@@ -177,12 +177,10 @@ class AgentController extends JsonController
 
         $agent = $this->agentService->getAgent((int)$this->parameters['id']);
 
-        if ((int)$this->user->getUserType()->getId() > self::USER_AGENT) {
-            throw new NotAuthorizedException();
-        }
+        $this->hasAccessLevel(self::USER_AGENT);
 
         if ($agent->getId() !== $this->user->getAgent()->getId()) {
-            $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
+            $this->hasAccessLevel(self::USER_ADMIN);
         }
 
         $this->prepareParameters($agent);
@@ -200,7 +198,7 @@ class AgentController extends JsonController
     {
         $this->checkParameters(['id']);
 
-        $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
+        $this->hasAccessLevel(self::USER_ADMIN);
 
         // todo: check for users (colleagues) and properties before deleting, just warning
 

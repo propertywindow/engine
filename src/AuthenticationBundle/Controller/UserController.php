@@ -97,9 +97,9 @@ class UserController extends JsonController
      */
     private function getAgentUsers(): array
     {
-        $this->checkParameters(['id']);
+        $this->hasAccessLevel(self::USER_ADMIN);
 
-        $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
+        $this->checkParameters(['id']);
 
         $agent         = $this->agentService->getAgent((int)$this->parameters['id']);
         $colleagueType = $this->userTypeService->getUserType(3);
@@ -134,9 +134,7 @@ class UserController extends JsonController
      */
     private function createUser()
     {
-        if ($this->user->getUserType()->getId() > self::USER_AGENT) {
-            throw new NotAuthorizedException();
-        }
+        $this->hasAccessLevel(self::USER_AGENT);
 
         $this->checkParameters([
             'email',
@@ -244,9 +242,7 @@ class UserController extends JsonController
     {
         $this->checkParameters(['id']);
 
-        if ($this->user->getUserType()->getId() > self::USER_AGENT) {
-            throw new NotAuthorizedException();
-        }
+        $this->hasAccessLevel(self::USER_AGENT);
 
         $this->userService->deleteUser((int)$this->parameters['id']);
     }

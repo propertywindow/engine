@@ -83,9 +83,7 @@ class BlacklistController extends JsonController
      */
     private function getBlacklists(): array
     {
-        if ($this->user->getUserType()->getId() > self::USER_AGENT) {
-            throw new NotAuthorizedException();
-        }
+        $this->hasAccessLevel(self::USER_AGENT);
 
         $agent     = $this->agentService->getAgent($this->user->getAgent()->getId());
         $blacklist = $this->blacklistService->getBlacklists($agent);
@@ -117,9 +115,7 @@ class BlacklistController extends JsonController
     {
         $this->checkParameters(['id']);
 
-        if ($this->user->getUserType()->getId() > self::USER_AGENT) {
-            throw new NotAuthorizedException();
-        }
+        $this->hasAccessLevel(self::USER_AGENT);
 
         if (array_key_exists('id', $this->parameters)) {
             $this->blacklistService->removeBlacklist($this->parameters['id']);

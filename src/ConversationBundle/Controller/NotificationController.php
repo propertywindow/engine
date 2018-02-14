@@ -83,11 +83,12 @@ class NotificationController extends JsonController
 
     /**
      * @return array
+     * @throws NotAuthorizedException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
     private function createNotification(): array
     {
-        // todo: check rights
+        $this->hasAccessLevel(self::USER_ADMIN);
 
         $this->checkParameters([
             'content',
@@ -113,12 +114,13 @@ class NotificationController extends JsonController
 
     /**
      * @return array
+     * @throws NotAuthorizedException
      * @throws NotificationNotFoundException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
     private function updateNotification(): array
     {
-        // todo: check rights
+        $this->hasAccessLevel(self::USER_ADMIN);
 
         $this->checkParameters(['id']);
 
@@ -145,8 +147,7 @@ class NotificationController extends JsonController
     {
         $this->checkParameters(['id']);
 
-        // todo: check rights
-        $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
+        $this->hasAccessLevel(self::USER_ADMIN);
 
         $this->notificationService->deleteNotification((int)$this->parameters['id']);
     }

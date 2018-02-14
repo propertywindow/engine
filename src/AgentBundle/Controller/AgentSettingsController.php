@@ -71,9 +71,7 @@ class AgentSettingsController extends JsonController
     {
         $settings = $this->agentSettingsService->getSettings($this->user->getAgent());
 
-        if ($this->user->getUserType()->getId() > self::USER_AGENT) {
-            throw new NotAuthorizedException();
-        }
+        $this->hasAccessLevel(self::USER_AGENT);
 
         if ($settings->getAgent()->getId() !== $this->user->getAgent()->getId()) {
             if ($this->user->getUserType()->getId() !== self::USER_ADMIN) {

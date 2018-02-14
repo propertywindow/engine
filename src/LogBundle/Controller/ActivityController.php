@@ -63,7 +63,7 @@ class ActivityController extends JsonController
     {
         $this->checkParameters(['id']);
 
-        $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
+        $this->hasAccessLevel(self::USER_ADMIN);
 
         return Mapper::fromActivity($this->logActivityService->getActivity((int)$this->parameters['id']));
     }
@@ -82,7 +82,7 @@ class ActivityController extends JsonController
      */
     private function getActivities(): array
     {
-        $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
+        $this->hasAccessLevel(self::USER_ADMIN);
 
         return Mapper::fromActivities(...$this->logActivityService->getActivities($this->user->getAgent()));
     }

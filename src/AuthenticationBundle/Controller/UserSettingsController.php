@@ -72,9 +72,7 @@ class UserSettingsController extends JsonController
         $settings = $this->userSettingsService->getSettings($this->user);
 
         if ($settings->getId() !== $this->user->getId()) {
-            if ($this->user->getUserType()->getId() !== self::USER_ADMIN) {
-                throw new NotAuthorizedException();
-            }
+            $this->hasAccessLevel(self::USER_ADMIN);
         }
 
         $this->prepareParameters($settings);

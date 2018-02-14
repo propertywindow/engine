@@ -68,7 +68,7 @@ class SettingsController extends JsonController
      */
     private function updateSettings(): array
     {
-        $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
+        $this->hasAccessLevel(self::USER_ADMIN);
 
         $settings = $this->settingsService->getSettings();
 
