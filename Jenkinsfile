@@ -26,7 +26,7 @@ pipeline {
         stage('Deploying: Deploy') {
             steps {
                 echo 'Deploying...'
-                sh 'rm -rf ./phpunit.xml.dist'
+                sh 'rm -rf ./phpunit.xml'
                 sh 'rm -rf ./README.md'
                 sh 'rm -rf ./docker-compose.yml'
                 sh 'rm -rf ./.gitignore'
