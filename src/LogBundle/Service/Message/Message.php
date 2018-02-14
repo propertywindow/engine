@@ -64,7 +64,7 @@ class Message
     {
         $message = [];
 
-        if ($this->text !== null) {
+        if (!$this->text) {
             $message['text'] = $this->text;
         }
 

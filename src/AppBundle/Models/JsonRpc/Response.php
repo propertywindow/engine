@@ -23,7 +23,7 @@ class Response implements JsonSerializable
     /**
      * @return Error|null
      */
-    public function getError(): ?self
+    public function getError(): ?Response
     {
         return $this->error;
     }
@@ -31,7 +31,7 @@ class Response implements JsonSerializable
     /**
      * @return mixed|null
      */
-    public function getResult(): ?mixed
+    public function getResult()
     {
         return $this->result;
     }

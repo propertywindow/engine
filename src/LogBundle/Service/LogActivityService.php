@@ -11,7 +11,7 @@ use LogBundle\Exceptions\ActivityNotFoundException;
 use LogBundle\Repository\ActivityRepository;
 
 /**
- * @package LogBundle\Service
+ * LogActivity Service
  */
 class LogActivityService
 {
@@ -69,9 +69,9 @@ class LogActivityService
     /**
      * @param User $user
      *
-     * @return Activity
+     * @return Activity|null
      */
-    public function getActivityFromUser(User $user): Activity
+    public function getActivityFromUser(User $user): ?Activity
     {
         return $this->repository->findByUser($user);
     }

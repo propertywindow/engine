@@ -120,11 +120,11 @@ class Activity
     }
 
     /**
-     * @param integer $actionId
+     * @param integer|null $actionId
      *
      * @return Activity
      */
-    public function setActionId(int $actionId): Activity
+    public function setActionId(?int $actionId): Activity
     {
         $this->actionId = $actionId;
 
@@ -132,9 +132,9 @@ class Activity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getActionId(): int
+    public function getActionId(): ?int
     {
         return $this->actionId;
     }

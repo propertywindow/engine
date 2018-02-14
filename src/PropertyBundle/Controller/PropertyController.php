@@ -3,9 +3,8 @@ declare(strict_types = 1);
 
 namespace PropertyBundle\Controller;
 
-use AgentBundle\Exceptions\ClientNotFoundException;
 use AppBundle\Controller\JsonController;
-
+use ClientBundle\Exceptions\ClientNotFoundException;
 use PropertyBundle\Entity\Property;
 use PropertyBundle\Exceptions\KindNotFoundException;
 use PropertyBundle\Exceptions\SubTypeNotFoundException;
@@ -110,12 +109,12 @@ class PropertyController extends JsonController
 
     /**
      * @return array $property
+     * @throws KindNotFoundException
      * @throws NotAuthorizedException
      * @throws PropertyAlreadyExistsException
-     * @throws ClientNotFoundException
-     * @throws KindNotFoundException
      * @throws SubTypeNotFoundException
      * @throws TermsNotFoundException
+     * @throws ClientNotFoundException
      */
     private function createProperty(): array
     {
