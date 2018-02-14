@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Tests\InvoiceBundle\Entity;
 
@@ -38,9 +38,6 @@ class InvoiceTest extends TestCase
 
         $this->invoice->setDatetime($datetime);
         $this->assertEquals($datetime, $this->invoice->getDatetime());
-
-        $this->invoice->setAmount(2);
-        $this->assertEquals(2, $this->invoice->getAmount());
 
         $this->invoice->setPrice(1000);
         $this->assertEquals(1000, $this->invoice->getPrice());

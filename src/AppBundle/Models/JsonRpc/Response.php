@@ -1,11 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types = 1);
 
 namespace AppBundle\Models\JsonRpc;
 
 use JsonSerializable;
 
 /**
- * @package AppBundle\Models\JsonRpc
+ * Response Class
  */
 class Response implements JsonSerializable
 {
@@ -22,7 +23,7 @@ class Response implements JsonSerializable
     /**
      * @return Error|null
      */
-    public function getError(): ?Error
+    public function getError(): ?self
     {
         return $this->error;
     }
@@ -30,7 +31,7 @@ class Response implements JsonSerializable
     /**
      * @return mixed|null
      */
-    public function getResult()
+    public function getResult(): ?mixed
     {
         return $this->result;
     }
@@ -38,7 +39,7 @@ class Response implements JsonSerializable
     /**
      * @return array
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         $jsonArray = [
             'jsonrpc' => '2.0',
@@ -56,7 +57,7 @@ class Response implements JsonSerializable
     }
 
     /**
-     * @param mixed           $result
+     * @param mixed $result
      *
      * @return Response
      */
@@ -69,7 +70,7 @@ class Response implements JsonSerializable
     }
 
     /**
-     * @param Error           $error
+     * @param Error $error
      *
      * @return Response
      */

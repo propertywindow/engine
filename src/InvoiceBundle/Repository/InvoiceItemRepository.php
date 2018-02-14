@@ -6,8 +6,8 @@ namespace InvoiceBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * Invoice Repository
+ * InvoiceItem Repository
  */
-class InvoiceRepository extends EntityRepository
+class InvoiceItemRepository extends EntityRepository
 {
 }

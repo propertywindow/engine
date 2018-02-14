@@ -29,12 +29,6 @@ class Invoice
     private $agent;
 
     /**
-     * @var int
-     * @ORM\Column(name="amount", type="integer")
-     */
-    private $amount;
-
-    /**
      * @var string
      * @ORM\Column(name="description", type="string", length=255)
      */
@@ -90,26 +84,6 @@ class Invoice
     public function getAgent(): Agent
     {
         return $this->agent;
-    }
-
-    /**
-     * @param integer $amount
-     *
-     * @return Invoice
-     */
-    public function setAmount(int $amount): Invoice
-    {
-        $this->amount = $amount;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getAmount(): int
-    {
-        return $this->amount;
     }
 
     /**

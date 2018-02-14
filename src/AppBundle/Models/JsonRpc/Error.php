@@ -1,11 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types = 1);
 
 namespace AppBundle\Models\JsonRpc;
 
 use JsonSerializable;
 
 /**
- * @package AppBundle\Models\JsonRpc
+ * Error Class
  */
 class Error implements JsonSerializable
 {
@@ -63,7 +64,7 @@ class Error implements JsonSerializable
     /**
      * @return array
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             "code"    => $this->code,
