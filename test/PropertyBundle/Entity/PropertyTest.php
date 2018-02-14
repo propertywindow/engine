@@ -6,6 +6,7 @@ namespace Tests\PropertyBundle\Entity;
 use AgentBundle\Entity\Agent;
 use ClientBundle\Entity\Client;
 use PHPUnit\Framework\TestCase;
+use PropertyBundle\Entity\Details;
 use PropertyBundle\Entity\Kind;
 use PropertyBundle\Entity\Property;
 use PropertyBundle\Entity\SubType;
@@ -58,6 +59,11 @@ class PropertyTest extends TestCase
         $this->property->setSubType($subType);
         $this->assertEquals($subType, $this->property->getSubType());
 
+        $details = new Details();
+
+        $this->property->setDetails($details);
+        $this->assertEquals($details, $this->property->getDetails());
+
         $this->property->setOnline(true);
         $this->assertTrue($this->property->isOnline());
 
@@ -78,6 +84,9 @@ class PropertyTest extends TestCase
 
         $this->property->setPrice(725000);
         $this->assertEquals(725000, $this->property->getPrice());
+
+        $this->property->setSoldPrice(725000);
+        $this->assertEquals(725000, $this->property->getSoldPrice());
 
         $this->property->setLat('55.948368');
         $this->assertEquals('55.948368', $this->property->getLat());
