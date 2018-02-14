@@ -53,7 +53,7 @@ class Mapper
     public static function fromClients(Client ...$clients): array
     {
         return array_map(
-            function (Client $client) {
+            function(Client $client) {
                 return self::fromClient($client);
             },
             $clients

@@ -44,7 +44,7 @@ class Mapper
     public static function fromSubTypes(string $language, SubType ...$subtypes): array
     {
         return array_map(
-            function (SubType $subtype) use ($language) {
+            function(SubType $subtype) use ($language) {
                 return self::fromSubType($language, $subtype);
             },
             $subtypes

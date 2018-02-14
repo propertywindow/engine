@@ -94,7 +94,7 @@ class Mapper
     public static function fromProperties(string $language, Property ...$properties): array
     {
         return array_map(
-            function (Property $property) use ($language) {
+            function(Property $property) use ($language) {
                 return self::fromProperty($language, $property);
             },
             $properties

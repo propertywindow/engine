@@ -42,7 +42,7 @@ class Mapper
     public static function fromTypes(string $language, Type ...$types): array
     {
         return array_map(
-            function (Type $type) use ($language) {
+            function(Type $type) use ($language) {
                 return self::fromType($language, $type);
             },
             $types

@@ -69,7 +69,7 @@ class UserController extends JsonController
     {
         $this->checkParameters(['id']);
 
-        $user = $this->userService->getUser((int)$this->parameters['id']);
+        $user = $this->userService->getUser((int) $this->parameters['id']);
 
         $this->isAuthorized($this->user->getAgent()->getId(), $user->getAgent()->getId());
 
@@ -101,7 +101,7 @@ class UserController extends JsonController
 
         $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
-        $agent         = $this->agentService->getAgent((int)$this->parameters['id']);
+        $agent         = $this->agentService->getAgent((int) $this->parameters['id']);
         $colleagueType = $this->userTypeService->getUserType(3);
         $users         = $this->userService->getAgentUsers($agent, $colleagueType);
 
@@ -192,7 +192,7 @@ class UserController extends JsonController
     {
         $this->checkParameters(['id']);
 
-        $updateUser = $this->userService->getUser((int)$this->parameters['id']);
+        $updateUser = $this->userService->getUser((int) $this->parameters['id']);
 
         $this->isAuthorized($updateUser->getAgent()->getId(), $this->user->getAgent()->getId());
         $this->prepareParameters($updateUser);
@@ -211,11 +211,11 @@ class UserController extends JsonController
             'password',
         ]);
 
-        $updateUser = $this->userService->getUser((int)$this->parameters['id']);
+        $updateUser = $this->userService->getUser((int) $this->parameters['id']);
 
         $this->isAuthorized($updateUser->getId(), $this->user->getId());
 
-        $updateUser->setPassword(md5((string)$this->parameters['password']));
+        $updateUser->setPassword(md5((string) $this->parameters['password']));
         $updateUser->setActive(true);
 
         $this->userService->updateUser($updateUser);
@@ -229,7 +229,7 @@ class UserController extends JsonController
     {
         $this->checkParameters(['id']);
 
-        $updateUser = $this->userService->getUser((int)$this->parameters['id']);
+        $updateUser = $this->userService->getUser((int) $this->parameters['id']);
 
         $this->isAuthorized($updateUser->getAgent()->getId(), $this->user->getAgent()->getId());
 
@@ -248,7 +248,7 @@ class UserController extends JsonController
             throw new NotAuthorizedException();
         }
 
-        $this->userService->deleteUser((int)$this->parameters['id']);
+        $this->userService->deleteUser((int) $this->parameters['id']);
     }
 
     /**

@@ -66,7 +66,7 @@ class ConversationController extends JsonController
     {
         $this->checkParameters(['id']);
 
-        return Mapper::fromConversation($this->conversationService->getConversation((int)$this->parameters['id']));
+        return Mapper::fromConversation($this->conversationService->getConversation((int) $this->parameters['id']));
     }
 
     /**
@@ -90,12 +90,12 @@ class ConversationController extends JsonController
             'message',
         ]);
 
-        $recipient = $this->userService->getUser((int)$this->parameters['recipient_id']);
+        $recipient = $this->userService->getUser((int) $this->parameters['recipient_id']);
         $userType  = $this->userTypeService->getUserType(3);
         $agentIds  = $this->agentService->getAgentIdsFromGroup($this->user->getAgent());
 
         if (!$this->userService->isColleague($recipient->getId(), $agentIds, $userType)) {
-            throw new NoColleagueException((int)$this->parameters['recipient_id']);
+            throw new NoColleagueException((int) $this->parameters['recipient_id']);
         }
 
         $conversation = $this->conversationService->findByUsers($this->user, $recipient);
@@ -131,7 +131,7 @@ class ConversationController extends JsonController
     {
         $this->checkParameters(['id']);
 
-        $conversation = $this->conversationService->getConversation((int)$this->parameters['id']);
+        $conversation = $this->conversationService->getConversation((int) $this->parameters['id']);
 
         $messages = $this->messageService->getMessages($conversation);
 
@@ -154,7 +154,7 @@ class ConversationController extends JsonController
     {
         $this->checkParameters(['recipient_id']);
 
-        $recipient    = $this->userService->getUser((int)$this->parameters['recipient_id']);
+        $recipient    = $this->userService->getUser((int) $this->parameters['recipient_id']);
         $conversation = $this->conversationService->findByUsers($this->user, $recipient);
 
         if ($conversation === null) {

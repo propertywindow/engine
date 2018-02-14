@@ -39,7 +39,7 @@ class Mapper
     public static function fromActivities(Activity ...$activities): array
     {
         return array_map(
-            function (Activity $activity) {
+            function(Activity $activity) {
                 return self::fromActivity($activity);
             },
             $activities

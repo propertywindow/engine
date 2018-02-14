@@ -59,7 +59,7 @@ class Mapper
     public static function fromAgents(Agent ...$agents): array
     {
         return array_map(
-            function (Agent $agent) {
+            function(Agent $agent) {
                 return self::fromAgent($agent);
             },
             $agents

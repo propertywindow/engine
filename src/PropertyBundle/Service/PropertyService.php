@@ -56,7 +56,7 @@ class PropertyService
     {
         $property = $this->repository->findOneBy(
             [
-                'client'      => (int)$parameters['client_id'],
+                'client'      => (int) $parameters['client_id'],
                 'postcode'    => $parameters['postcode'],
                 'houseNumber' => $parameters['house_number'],
                 'archived'    => false,

@@ -66,7 +66,7 @@ class SolicitorController extends JsonController
 
         $this->checkParameters(['id']);
 
-        $solicitor = $this->solicitorService->getSolicitor((int)$this->parameters['id']);
+        $solicitor = $this->solicitorService->getSolicitor((int) $this->parameters['id']);
 
         $this->isAuthorized($this->user->getAgent()->getId(), $solicitor->getAgent()->getId());
 
@@ -105,7 +105,7 @@ class SolicitorController extends JsonController
         ]);
 
         $solicitor = new Solicitor();
-        $agency    = $this->agencyService->getAgency((int)$this->parameters['agency_id']);
+        $agency    = $this->agencyService->getAgency((int) $this->parameters['agency_id']);
 
         $solicitor->setAgent($this->user->getAgent());
         $solicitor->setAgency($agency);
@@ -128,7 +128,7 @@ class SolicitorController extends JsonController
 
         $this->checkParameters(['id']);
 
-        $solicitor = $this->solicitorService->getSolicitor((int)$this->parameters['id']);
+        $solicitor = $this->solicitorService->getSolicitor((int) $this->parameters['id']);
 
         $this->isAuthorized($this->user->getAgent()->getId(), $solicitor->getAgent()->getId());
 
@@ -147,7 +147,7 @@ class SolicitorController extends JsonController
 
         $this->checkParameters(['id']);
 
-        $solicitor = $this->solicitorService->getSolicitor((int)$this->parameters['id']);
+        $solicitor = $this->solicitorService->getSolicitor((int) $this->parameters['id']);
 
         $this->isAuthorized($this->user->getAgent()->getId(), $solicitor->getAgent()->getId());
 

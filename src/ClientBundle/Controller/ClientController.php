@@ -64,7 +64,7 @@ class ClientController extends JsonController
     {
         $this->checkParameters(['id']);
 
-        return Mapper::fromClient($this->clientService->getClient((int)$this->parameters['id']));
+        return Mapper::fromClient($this->clientService->getClient((int) $this->parameters['id']));
     }
 
     /**

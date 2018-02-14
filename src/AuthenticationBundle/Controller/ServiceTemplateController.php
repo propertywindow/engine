@@ -99,7 +99,7 @@ class ServiceTemplateController extends JsonController
     {
         $this->checkParameters(['id']);
 
-        $templateUserType = $this->userTypeService->getUserType((int)$this->parameters['id']);
+        $templateUserType = $this->userTypeService->getUserType((int) $this->parameters['id']);
 
         $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
@@ -118,7 +118,7 @@ class ServiceTemplateController extends JsonController
     {
         $this->checkParameters(['id']);
 
-        $templateUserType = $this->userTypeService->getUserType((int)$this->parameters['id']);
+        $templateUserType = $this->userTypeService->getUserType((int) $this->parameters['id']);
 
         $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
@@ -143,8 +143,8 @@ class ServiceTemplateController extends JsonController
 
         $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
-        $userType = $this->userTypeService->getUserType((int)$this->parameters['user_type_id']);
-        $service  = $this->serviceService->getService((int)$this->parameters['service_id']);
+        $userType = $this->userTypeService->getUserType((int) $this->parameters['user_type_id']);
+        $service  = $this->serviceService->getService((int) $this->parameters['service_id']);
 
         return Mapper::fromServiceTemplate($this->serviceTemplateService->addToServiceTemplate($userType, $service));
     }
@@ -165,8 +165,8 @@ class ServiceTemplateController extends JsonController
 
         $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
-        $userType     = $this->userTypeService->getUserType((int)$this->parameters['user_type_id']);
-        $serviceGroup = $this->serviceGroupService->getServiceGroup((int)$this->parameters['service_group_id']);
+        $userType     = $this->userTypeService->getUserType((int) $this->parameters['user_type_id']);
+        $serviceGroup = $this->serviceGroupService->getServiceGroup((int) $this->parameters['service_group_id']);
 
         return Mapper::fromServiceGroupTemplate(
             $this->serviceTemplateService->addToServiceGroupTemplate($userType, $serviceGroup)
@@ -188,8 +188,8 @@ class ServiceTemplateController extends JsonController
 
         $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
-        $userType = $this->userTypeService->getUserType((int)$this->parameters['user_type_id']);
-        $service  = $this->serviceService->getService((int)$this->parameters['service_id']);
+        $userType = $this->userTypeService->getUserType((int) $this->parameters['user_type_id']);
+        $service  = $this->serviceService->getService((int) $this->parameters['service_id']);
 
         $this->serviceTemplateService->removeFromServiceTemplate($userType, $service);
     }
@@ -209,8 +209,8 @@ class ServiceTemplateController extends JsonController
 
         $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
-        $userType     = $this->userTypeService->getUserType((int)$this->parameters['user_type_id']);
-        $serviceGroup = $this->serviceGroupService->getServiceGroup((int)$this->parameters['service_group_id']);
+        $userType     = $this->userTypeService->getUserType((int) $this->parameters['user_type_id']);
+        $serviceGroup = $this->serviceGroupService->getServiceGroup((int) $this->parameters['service_group_id']);
 
         $this->serviceTemplateService->removeFromServiceGroupTemplate($userType, $serviceGroup);
     }

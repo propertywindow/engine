@@ -61,7 +61,7 @@ class Mapper
     public static function fromUsers(User ...$users): array
     {
         return array_map(
-            function (User $user) {
+            function(User $user) {
                 return self::fromUser($user);
             },
             $users

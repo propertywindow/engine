@@ -45,7 +45,7 @@ class Mapper
     public static function fromNotifications(Notification ...$notifications): array
     {
         return array_map(
-            function (Notification $notification) {
+            function(Notification $notification) {
                 return self::fromNotification($notification);
             },
             $notifications

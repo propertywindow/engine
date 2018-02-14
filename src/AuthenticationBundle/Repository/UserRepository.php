@@ -45,7 +45,7 @@ class UserRepository extends EntityRepository
         $users = $this->findBy(['id' => $identifiers]);
 
         $userIdentifiersFound = array_map(
-            function (User $user) {
+            function(User $user) {
                 return $user->getId();
             },
             $users
@@ -161,7 +161,7 @@ class UserRepository extends EntityRepository
             throw new UserNotFoundException($id);
         }
 
-        $userType = (int)$result->getTypeId();
+        $userType = (int) $result->getTypeId();
 
         return $userType;
     }

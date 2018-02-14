@@ -65,7 +65,7 @@ class ActivityController extends JsonController
 
         $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
-        return Mapper::fromActivity($this->logActivityService->getActivity((int)$this->parameters['id']));
+        return Mapper::fromActivity($this->logActivityService->getActivity((int) $this->parameters['id']));
     }
 
     /**

@@ -82,9 +82,9 @@ class ApplicantService
     /**
      * @param string $email
      *
-     * @return Applicant
+     * @return Applicant|null
      */
-    public function getApplicantByEmail(string $email): Applicant
+    public function getApplicantByEmail(string $email): ?Applicant
     {
         return $this->repository->findOneBy(['email' => $email]);
     }

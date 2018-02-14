@@ -49,7 +49,7 @@ class Mapper
     public static function fromSolicitors(Solicitor ...$solicitors): array
     {
         return array_map(
-            function (Solicitor $solicitor) {
+            function(Solicitor $solicitor) {
                 return self::fromSolicitor($solicitor);
             },
             $solicitors

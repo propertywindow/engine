@@ -65,7 +65,7 @@ class BlacklistController extends JsonController
     {
         $this->checkParameters(['id']);
 
-        $blacklist = $this->blacklistService->getBlacklist((int)$this->parameters['id']);
+        $blacklist = $this->blacklistService->getBlacklist((int) $this->parameters['id']);
 
         if ($this->user->getAgent()->getId() !== $blacklist->getAgent()->getId() ||
             $this->user->getUserType()->getId() !== self::USER_ADMIN

@@ -86,7 +86,7 @@ class BlacklistService
 
             $this->entityManager->persist($blacklist);
         } else {
-            $amount = (int)$blacklist->getAmount() + 1;
+            $amount = (int) $blacklist->getAmount() + 1;
             $blacklist->setAmount($amount);
         }
 

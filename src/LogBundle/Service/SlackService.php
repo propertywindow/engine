@@ -123,7 +123,7 @@ class SlackService extends AbstractLogger
                 $replacePairs['{' . $name . '}'] = $value;
             } elseif (is_object($value)) {
                 if (method_exists($value, '__toString')) {
-                    $replacePairs['{' . $name . '}'] = (string)$value;
+                    $replacePairs['{' . $name . '}'] = (string) $value;
                 }
             }
         }

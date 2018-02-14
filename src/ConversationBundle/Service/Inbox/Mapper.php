@@ -34,7 +34,7 @@ class Mapper
     public static function fromMailbox(Email ...$emails): array
     {
         return array_map(
-            function (Email $email) {
+            function(Email $email) {
                 return self::fromEmail($email);
             },
             $emails
@@ -49,7 +49,7 @@ class Mapper
     public static function fromMailboxes(Mailbox ...$mailboxes): array
     {
         return array_map(
-            function (Mailbox $mailbox) {
+            function(Mailbox $mailbox) {
                 return [
                     'id'      => $mailbox->getId(),
                     'name'    => $mailbox->getName(),

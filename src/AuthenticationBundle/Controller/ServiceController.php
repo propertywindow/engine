@@ -61,7 +61,7 @@ class ServiceController extends JsonController
     {
         $this->checkParameters(['id']);
 
-        $service = $this->serviceService->getService((int)$this->parameters['id']);
+        $service = $this->serviceService->getService((int) $this->parameters['id']);
 
         return Mapper::fromService($this->user->getSettings()->getLanguage(), $service);
     }

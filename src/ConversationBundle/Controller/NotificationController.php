@@ -70,7 +70,7 @@ class NotificationController extends JsonController
     {
         $this->checkParameters(['id']);
 
-        return Mapper::fromNotification($this->notificationService->getNotification((int)$this->parameters['id']));
+        return Mapper::fromNotification($this->notificationService->getNotification((int) $this->parameters['id']));
     }
 
     /**
@@ -122,7 +122,7 @@ class NotificationController extends JsonController
 
         $this->checkParameters(['id']);
 
-        $notification = $this->notificationService->getNotification((int)$this->parameters['id']);
+        $notification = $this->notificationService->getNotification((int) $this->parameters['id']);
 
         $this->prepareParameters($notification);
 
@@ -148,6 +148,6 @@ class NotificationController extends JsonController
         // todo: check rights
         $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
-        $this->notificationService->deleteNotification((int)$this->parameters['id']);
+        $this->notificationService->deleteNotification((int) $this->parameters['id']);
     }
 }

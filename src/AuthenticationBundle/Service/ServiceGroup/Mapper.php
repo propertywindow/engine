@@ -43,7 +43,7 @@ class Mapper
     public static function fromServiceGroups(string $language, ServiceGroup ...$serviceGroups): array
     {
         return array_map(
-            function (ServiceGroup $serviceGroup) use ($language) {
+            function(ServiceGroup $serviceGroup) use ($language) {
                 return self::fromServiceGroup($language, $serviceGroup);
             },
             $serviceGroups

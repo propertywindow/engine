@@ -70,7 +70,7 @@ class PropertyController extends JsonController
     {
         $this->checkParameters(['id']);
 
-        $property = $this->propertyService->getProperty((int)$this->parameters['id']);
+        $property = $this->propertyService->getProperty((int) $this->parameters['id']);
 
         $this->isAuthorized($property->getAgent()->getId(), $this->user->getAgent()->getId());
 
@@ -94,9 +94,9 @@ class PropertyController extends JsonController
     private function getAllProperties(): array
     {
         $limit  = array_key_exists('limit', $this->parameters) &&
-                  $this->parameters['limit'] !== null ? (int)$this->parameters['limit'] : 50;
+                  $this->parameters['limit'] !== null ? (int) $this->parameters['limit'] : 50;
         $offset = array_key_exists('offset', $this->parameters) &&
-                  $this->parameters['offset'] !== null ? (int)$this->parameters['offset'] : 0;
+                  $this->parameters['offset'] !== null ? (int) $this->parameters['offset'] : 0;
 
         $agentIds = $this->agentService->getAgentIdsFromGroup($this->user->getAgent());
 
@@ -155,7 +155,7 @@ class PropertyController extends JsonController
 
         $this->propertyService->createProperty($property);
 
-        $propertyId = (int)$property->getId();
+        $propertyId = (int) $property->getId();
 
         $this->logActivityService->createActivity(
             $this->user,
@@ -201,7 +201,7 @@ class PropertyController extends JsonController
             'lng',
         ]);
 
-        $id       = (int)$this->parameters['id'];
+        $id       = (int) $this->parameters['id'];
         $property = $this->propertyService->getProperty($id);
 
         $this->isAuthorized($property->getAgent()->getId(), $this->user->getAgent()->getId());
@@ -252,7 +252,7 @@ class PropertyController extends JsonController
     {
         $this->checkParameters(['id']);
 
-        $id       = (int)$this->parameters['id'];
+        $id       = (int) $this->parameters['id'];
         $property = $this->propertyService->getProperty($id);
 
         $this->isAuthorized($property->getAgent()->getId(), $this->user->getAgent()->getId());
@@ -283,7 +283,7 @@ class PropertyController extends JsonController
             throw new NotAuthorizedException();
         }
 
-        $this->propertyService->deleteProperty((int)$this->parameters['id']);
+        $this->propertyService->deleteProperty((int) $this->parameters['id']);
 
         // todo: delete info from not cascading tables too, including logBundle
         // todo: remove all photos from data folder and Gallery
@@ -301,8 +301,8 @@ class PropertyController extends JsonController
             'soldPrice',
         ]);
 
-        $id        = (int)$this->parameters['id'];
-        $soldPrice = (int)$this->parameters['soldPrice'];
+        $id        = (int) $this->parameters['id'];
+        $soldPrice = (int) $this->parameters['soldPrice'];
         $property  = $this->propertyService->getProperty($id);
 
         $this->isAuthorized($property->getAgent()->getId(), $this->user->getAgent()->getId());
@@ -331,8 +331,8 @@ class PropertyController extends JsonController
             'online',
         ]);
 
-        $id       = (int)$this->parameters['id'];
-        $online   = (bool)$this->parameters['online'];
+        $id       = (int) $this->parameters['id'];
+        $online   = (bool) $this->parameters['online'];
         $property = $this->propertyService->getProperty($id);
 
         $this->isAuthorized($property->getAgent()->getId(), $this->user->getAgent()->getId());
@@ -363,10 +363,10 @@ class PropertyController extends JsonController
 
             $this->logTrafficService->createTraffic(
                 $property,
-                (string)$this->parameters['id'],
-                (string)$this->parameters['browser'],
-                (string)$this->parameters['location'],
-                (string)$this->parameters['referrer']
+                (string) $this->parameters['id'],
+                (string) $this->parameters['browser'],
+                (string) $this->parameters['location'],
+                (string) $this->parameters['referrer']
             );
         }
     }

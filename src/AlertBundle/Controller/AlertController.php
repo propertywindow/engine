@@ -62,7 +62,7 @@ class AlertController extends JsonController
     {
         $this->checkParameters(['id']);
 
-        $alert = $this->alertService->getAlert((int)$this->parameters['id']);
+        $alert = $this->alertService->getAlert((int) $this->parameters['id']);
 
         $this->isAuthorized(
             $this->user->getAgent()->getAgentGroup()->getId(),

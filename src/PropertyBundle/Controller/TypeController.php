@@ -64,7 +64,7 @@ class TypeController extends JsonController
 
         return Mapper::fromType(
             $this->user->getSettings()->getLanguage(),
-            $this->typeService->getType((int)$this->parameters['id'])
+            $this->typeService->getType((int) $this->parameters['id'])
         );
     }
 
@@ -90,6 +90,6 @@ class TypeController extends JsonController
 
         $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
-        $this->typeService->deleteType((int)$this->parameters['id']);
+        $this->typeService->deleteType((int) $this->parameters['id']);
     }
 }
