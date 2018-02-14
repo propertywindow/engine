@@ -55,9 +55,9 @@ class LogErrorService
     /**
      * @param User $user
      *
-     * @return Error|null
+     * @return Error[]
      */
-    public function getErrorFromUser(User $user): ?Error
+    public function getErrorFromUser(User $user): array
     {
         return $this->repository->findByUser($user);
     }

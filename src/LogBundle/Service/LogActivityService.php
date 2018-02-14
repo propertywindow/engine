@@ -69,9 +69,9 @@ class LogActivityService
     /**
      * @param User $user
      *
-     * @return Activity|null
+     * @return Activity[]
      */
-    public function getActivityFromUser(User $user): ?Activity
+    public function getActivityFromUser(User $user): array
     {
         return $this->repository->findByUser($user);
     }
