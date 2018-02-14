@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace Test\AlertBundle\Entity;
+namespace Tests\AlertBundle\Entity;
 
 use AgentBundle\Entity\AgentGroup;
 use AlertBundle\Entity\Applicant;

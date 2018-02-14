@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace Test\AppBundle\Entity;
+namespace Tests\AppBundle\Entity;
 
 use PHPUnit\Framework\TestCase;
 use AppBundle\Entity\Acceptance;

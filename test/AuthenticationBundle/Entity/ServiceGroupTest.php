@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace Test\AuthenticationBundle\Entity;
+namespace Tests\AuthenticationBundle\Entity;
 
 use AuthenticationBundle\Entity\ServiceGroup;
 use PHPUnit\Framework\TestCase;

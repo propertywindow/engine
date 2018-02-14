@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace Test\InvoiceBundle\Entity;
+namespace Tests\InvoiceBundle\Entity;
 
 use AgentBundle\Entity\Agent;
 use InvoiceBundle\Entity\Invoice;

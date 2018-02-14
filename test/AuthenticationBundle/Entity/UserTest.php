@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace Test\AuthenticationBundle\Entity;
+namespace Tests\AuthenticationBundle\Entity;
 
 use AgentBundle\Entity\Agent;
 use AuthenticationBundle\Entity\User;

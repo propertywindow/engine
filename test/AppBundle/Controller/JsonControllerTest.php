@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace Test\AppBundle\Controller;
+namespace Tests\AppBundle\Controller;
 
 use AppBundle\Controller\JsonController;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -23,7 +23,5 @@ class JsonControllerTest extends WebTestCase
         //        $this->assertEquals('Lowercase', $result);
 
         $this->assertNull($result);
-
-        //https://knpuniversity.com/screencast/rest/testing-phpunit
     }
 }

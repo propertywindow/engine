@@ -45,6 +45,7 @@ class LoginController extends JsonController
      *
      * @return array
      * @throws BlacklistNotFoundException
+     * @throws CouldNotAuthenticateUserException
      * @throws InvalidJsonRpcMethodException
      * @throws NotAuthorizedException
      * @throws UserNotFoundException

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace Test\AppointmentBundle\Entity;
+namespace Tests\AppointmentBundle\Entity;
 
 use AppointmentBundle\Entity\Appointment;
 use ClientBundle\Entity\Buyer;

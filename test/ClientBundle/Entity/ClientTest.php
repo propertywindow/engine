@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace Test\ClientBundle\Entity;
+namespace Tests\ClientBundle\Entity;
 
 use AgentBundle\Entity\Agent;
 use ClientBundle\Entity\Client;

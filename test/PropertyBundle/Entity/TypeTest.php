@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace Test\PropertyBundle\Entity;
+namespace Tests\PropertyBundle\Entity;
 
 use PHPUnit\Framework\TestCase;
 use PropertyBundle\Entity\Type;

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace Test\LogBundle\Entity;
+namespace Tests\LogBundle\Entity;
 
 use AuthenticationBundle\Entity\User;
 use LogBundle\Entity\Error;

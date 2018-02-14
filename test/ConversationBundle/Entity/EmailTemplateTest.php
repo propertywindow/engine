@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace Test\ConversationBundle\Entity;
+namespace Tests\ConversationBundle\Entity;
 
 use AgentBundle\Entity\Agent;
 use ConversationBundle\Entity\EmailTemplate;

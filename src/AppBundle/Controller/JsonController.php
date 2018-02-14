@@ -242,7 +242,7 @@ class JsonController extends BaseController
      * @param string $property
      * @param        $value
      *
-     * @return mixed
+     * @return mixed $value
      */
     public function convertParameters(string $property, $value)
     {

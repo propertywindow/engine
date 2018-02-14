@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace Test\AgentBundle\Entity;
+namespace Tests\AgentBundle\Entity;
 
 use AgentBundle\Entity\Agent;
 use AgentBundle\Entity\AgentSettings;

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace Test\InvoiceBundle\Entity;
+namespace Tests\InvoiceBundle\Entity;
 
 use InvoiceBundle\Entity\Invoice;
 use InvoiceBundle\Entity\Payment;
