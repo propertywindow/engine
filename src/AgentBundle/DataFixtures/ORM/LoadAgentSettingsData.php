@@ -1,8 +1,9 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace AgentBundle\DataFixtures\ORM;
 
+use AgentBundle\Entity\Agent;
 use AgentBundle\Entity\AgentSettings;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -10,7 +11,6 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
 /**
  * Class LoadAgentSettingsData
- * @package AgentBundle\DataFixtures\ORM
  */
 class LoadAgentSettingsData extends AbstractFixture implements OrderedFixtureInterface
 {
@@ -20,7 +20,9 @@ class LoadAgentSettingsData extends AbstractFixture implements OrderedFixtureInt
     public function load(ObjectManager $manager)
     {
         $agentSettings = new AgentSettings();
-        $agentSettings->setAgent($this->getReference('agent_propertywindow_1'));
+        /** @var Agent $agent */
+        $agent = $this->getReference('agent_propertywindow_1');
+        $agentSettings->setAgent($agent);
         $agentSettings->setLanguage('en');
         $agentSettings->setCurrency('GBP');
         $agentSettings->setEmailName('Property Window');
@@ -38,37 +40,49 @@ class LoadAgentSettingsData extends AbstractFixture implements OrderedFixtureInt
         $manager->persist($agentSettings);
 
         $agentSettings = new AgentSettings();
-        $agentSettings->setAgent($this->getReference('agent_annan_1'));
+        /** @var Agent $agent */
+        $agent = $this->getReference('agent_annan_1');
+        $agentSettings->setAgent($agent);
         $agentSettings->setLanguage('en');
         $agentSettings->setCurrency('GBP');
         $manager->persist($agentSettings);
 
         $agentSettings = new AgentSettings();
-        $agentSettings->setAgent($this->getReference('agent_annan_2'));
+        /** @var Agent $agent */
+        $agent = $this->getReference('agent_annan_2');
+        $agentSettings->setAgent($agent);
         $agentSettings->setLanguage('en');
         $agentSettings->setCurrency('GBP');
         $manager->persist($agentSettings);
 
         $agentSettings = new AgentSettings();
-        $agentSettings->setAgent($this->getReference('agent_oliver_1'));
+        /** @var Agent $agent */
+        $agent = $this->getReference('agent_oliver_1');
+        $agentSettings->setAgent($agent);
         $agentSettings->setLanguage('en');
         $agentSettings->setCurrency('GBP');
         $manager->persist($agentSettings);
 
         $agentSettings = new AgentSettings();
-        $agentSettings->setAgent($this->getReference('agent_deans_1'));
+        /** @var Agent $agent */
+        $agent = $this->getReference('agent_deans_1');
+        $agentSettings->setAgent($agent);
         $agentSettings->setLanguage('en');
         $agentSettings->setCurrency('GBP');
         $manager->persist($agentSettings);
 
         $agentSettings = new AgentSettings();
-        $agentSettings->setAgent($this->getReference('agent_deans_2'));
+        /** @var Agent $agent */
+        $agent = $this->getReference('agent_deans_2');
+        $agentSettings->setAgent($agent);
         $agentSettings->setLanguage('en');
         $agentSettings->setCurrency('GBP');
         $manager->persist($agentSettings);
 
         $agentSettings = new AgentSettings();
-        $agentSettings->setAgent($this->getReference('agent_deans_3'));
+        /** @var Agent $agent */
+        $agent = $this->getReference('agent_deans_3');
+        $agentSettings->setAgent($agent);
         $agentSettings->setLanguage('en');
         $agentSettings->setCurrency('GBP');
         $manager->persist($agentSettings);

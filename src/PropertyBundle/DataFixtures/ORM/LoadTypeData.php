@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types = 1);
 
 namespace PropertyBundle\DataFixtures\ORM;
 
@@ -8,8 +9,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
 /**
- * Class LoadTypeData
- * @package PropertyBundle\DataFixtures\ORM
+ * Class LoadType Data
  */
 class LoadTypeData extends AbstractFixture implements OrderedFixtureInterface
 {
@@ -21,19 +21,19 @@ class LoadTypeData extends AbstractFixture implements OrderedFixtureInterface
         $type = new Type();
         $type->setEn('House');
         $type->setNl('Huis');
-        $this->addReference('type_house', $type);
+        $this->setReference('type_house', $type);
         $manager->persist($type);
-        
+
         $type = new Type();
         $type->setEn('Flat');
         $type->setNl('Flat');
-        $this->addReference('type_flat', $type);
+        $this->setReference('type_flat', $type);
         $manager->persist($type);
-        
+
         $type = new Type();
         $type->setEn('Other');
         $type->setNl('Overige');
-        $this->addReference('type_other', $type);
+        $this->setReference('type_other', $type);
         $manager->persist($type);
 
         $manager->flush();

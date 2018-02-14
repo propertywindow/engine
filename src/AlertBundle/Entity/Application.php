@@ -114,7 +114,7 @@ class Application
      *
      * @return Application
      */
-    public function setApplicant(Applicant $applicant): Application
+    public function setApplicant(Applicant $applicant): self
     {
         $this->applicant = $applicant;
 
@@ -134,7 +134,7 @@ class Application
      *
      * @return Application
      */
-    public function setKind(Kind $kind = null): Application
+    public function setKind(Kind $kind = null): self
     {
         $this->kind = $kind;
 
@@ -154,7 +154,7 @@ class Application
      *
      * @return Application
      */
-    public function setPostcode(string $postcode): Application
+    public function setPostcode(string $postcode): self
     {
         $this->postcode = $postcode;
 
@@ -174,7 +174,7 @@ class Application
      *
      * @return Application
      */
-    public function setCountry(string $country): Application
+    public function setCountry(string $country): self
     {
         $this->country = $country;
 
@@ -194,7 +194,7 @@ class Application
      *
      * @return Application
      */
-    public function setDistance(int $distance): Application
+    public function setDistance(int $distance): self
     {
         $this->distance = $distance;
 

@@ -21,19 +21,19 @@ class LoadAcceptanceData extends AbstractFixture implements OrderedFixtureInterf
         $acceptance = new Acceptance();
         $acceptance->setEn('Accepted');
         $acceptance->setNl('Geaccepteerd');
-        $this->addReference('acceptance_accepted', $acceptance);
+        $this->setReference('acceptance_accepted', $acceptance);
         $manager->persist($acceptance);
 
         $acceptance = new Acceptance();
         $acceptance->setEn('Rejected');
         $acceptance->setNl('Afgewezen');
-        $this->addReference('acceptance_rejected', $acceptance);
+        $this->setReference('acceptance_rejected', $acceptance);
         $manager->persist($acceptance);
 
         $acceptance = new Acceptance();
         $acceptance->setEn('Withdrawn');
         $acceptance->setNl('Teruggetrokken');
-        $this->addReference('acceptance_withdrawn', $acceptance);
+        $this->setReference('acceptance_withdrawn', $acceptance);
         $manager->persist($acceptance);
 
         $manager->flush();

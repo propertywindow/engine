@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types = 1);
 
 namespace LogBundle\DataFixtures\ORM;
 
@@ -6,35 +7,38 @@ use LogBundle\Entity\Activity;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
+use PropertyBundle\Exceptions\PropertyNotFoundException;
+use PropertyBundle\Service\PropertyService;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class LoadActivityData
- * @package LogBundle\DataFixtures\ORM
  */
 class LoadActivityData extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
 {
     /**
      * @param ObjectManager $manager
+     *
+     * @throws PropertyNotFoundException
      */
     public function load(ObjectManager $manager)
     {
         // Annan Properties
 
-        $propertyService = $this->container->get('PropertyBundle\Service\PropertyService');
+        $propertyService = $this->container->get(PropertyService::class);
 
         for ($i = 1; $i <= 15; $i++) {
             $activity = new Activity();
             $property = $propertyService->getProperty($i);
-            $activity->setUser($this->getReference('user_annan_colleague_'.rand(1, 6)));
+            $activity->setUser($this->getReference('user_annan_colleague_' . rand(1, 6)));
             $activity->setAgent($property->getAgent());
             $activity->setActionCategory('property');
             $activity->setActionId(1);
             $activity->setActionName('create');
             $activity->setNewValue(
                 $this->container->get('jms_serializer')->serialize(
-                    $this->getReference('property_annan_'.$i),
+                    $this->getReference('property_annan_' . $i),
                     'json'
                 )
             );
@@ -45,14 +49,14 @@ class LoadActivityData extends AbstractFixture implements OrderedFixtureInterfac
 
         for ($i = 1; $i <= 6; $i++) {
             $activity = new Activity();
-            $activity->setUser($this->getReference('user_annan_colleague_'.rand(1, 6)));
+            $activity->setUser($this->getReference('user_annan_colleague_' . rand(1, 6)));
             $activity->setAgent($activity->getUser()->getAgent());
             $activity->setActionCategory('user');
             $activity->setActionId(1);
             $activity->setActionName('create');
             $activity->setNewValue(
                 $this->container->get('jms_serializer')->serialize(
-                    $this->getReference('user_annan_colleague_'.$i),
+                    $this->getReference('user_annan_colleague_' . $i),
                     'json'
                 )
             );

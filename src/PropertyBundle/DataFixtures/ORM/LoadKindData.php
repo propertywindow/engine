@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types = 1);
 
 namespace PropertyBundle\DataFixtures\ORM;
 
@@ -8,8 +9,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
 /**
- * Class LoadKindData
- * @package PropertyBundle\DataFixtures\ORM
+ * Class LoadKind Data
  */
 class LoadKindData extends AbstractFixture implements OrderedFixtureInterface
 {
@@ -21,13 +21,13 @@ class LoadKindData extends AbstractFixture implements OrderedFixtureInterface
         $kind = new Kind();
         $kind->setEn('Sale');
         $kind->setNl('Koop');
-        $this->addReference('kind_sale', $kind);
+        $this->setReference('kind_sale', $kind);
         $manager->persist($kind);
 
         $kind = new Kind();
         $kind->setEn('Let');
         $kind->setNl('Huur');
-        $this->addReference('kind_let', $kind);
+        $this->setReference('kind_let', $kind);
         $manager->persist($kind);
 
         $manager->flush();

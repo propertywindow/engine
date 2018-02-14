@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace AuthenticationBundle\DataFixtures\ORM;
 
@@ -9,7 +10,6 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
 /**
  * Class LoadUserData
- * @package AuthenticationBundle\DataFixtures\ORM
  */
 class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
 {
@@ -36,7 +36,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setCountry('NL');
         $user->setActive(true);
         $user->setAvatar('1/users/1.jpg');
-        $this->addReference('user_propertywindow_admin_1', $user);
+        $this->setReference('user_propertywindow_admin_1', $user);
         $manager->persist($user);
 
         $user = new User();
@@ -52,7 +52,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setCity('Edinburgh');
         $user->setCountry('GB');
         $user->setActive(true);
-        $this->addReference('user_propertywindow_admin_2', $user);
+        $this->setReference('user_propertywindow_admin_2', $user);
         $manager->persist($user);
 
         // Property Window Agents
@@ -70,7 +70,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setCity('Edinburgh');
         $user->setCountry('GB');
         $user->setActive(true);
-        $this->addReference('user_propertywindow_agent_1', $user);
+        $this->setReference('user_propertywindow_agent_1', $user);
         $manager->persist($user);
 
         // Annan Agents
@@ -88,7 +88,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setCity('Edinburgh');
         $user->setCountry('GB');
         $user->setActive(true);
-        $this->addReference('user_annan_agent_1', $user);
+        $this->setReference('user_annan_agent_1', $user);
         $manager->persist($user);
 
         $user = new User();
@@ -104,7 +104,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setCity('Musselburgh');
         $user->setCountry('GB');
         $user->setActive(true);
-        $this->addReference('user_annan_agent_2', $user);
+        $this->setReference('user_annan_agent_2', $user);
         $manager->persist($user);
 
         // Oliver Agents
@@ -122,7 +122,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setCity('Hawick');
         $user->setCountry('GB');
         $user->setActive(true);
-        $this->addReference('user_oliver_agent_1', $user);
+        $this->setReference('user_oliver_agent_1', $user);
         $manager->persist($user);
 
         // Deans Agents
@@ -140,7 +140,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setCity('Edinburgh');
         $user->setCountry('GB');
         $user->setActive(true);
-        $this->addReference('user_deans_agent_1', $user);
+        $this->setReference('user_deans_agent_1', $user);
         $manager->persist($user);
 
         $user = new User();
@@ -156,7 +156,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setCity('Edinburgh');
         $user->setCountry('GB');
         $user->setActive(true);
-        $this->addReference('user_deans_agent_2', $user);
+        $this->setReference('user_deans_agent_2', $user);
         $manager->persist($user);
 
         $user = new User();
@@ -172,7 +172,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setCity('Edinburgh');
         $user->setCountry('GB');
         $user->setActive(true);
-        $this->addReference('user_deans_agent_3', $user);
+        $this->setReference('user_deans_agent_3', $user);
         $manager->persist($user);
 
         // Annan Colleagues
@@ -192,7 +192,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setPhone('07773777771');
         $user->setAvatar('2/users/10.jpg');
         $user->setActive(true);
-        $this->addReference('user_annan_colleague_1', $user);
+        $this->setReference('user_annan_colleague_1', $user);
         $manager->persist($user);
 
         $user = new User();
@@ -210,7 +210,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setPhone('07951172592');
         $user->setAvatar('2/users/11.jpg');
         $user->setActive(true);
-        $this->addReference('user_annan_colleague_2', $user);
+        $this->setReference('user_annan_colleague_2', $user);
         $manager->persist($user);
 
         $user = new User();
@@ -228,7 +228,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setPhone('07803950770');
         $user->setAvatar('2/users/12.jpg');
         $user->setActive(true);
-        $this->addReference('user_annan_colleague_3', $user);
+        $this->setReference('user_annan_colleague_3', $user);
         $manager->persist($user);
 
         $user = new User();
@@ -246,7 +246,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setPhone('07950613000');
         $user->setAvatar('2/users/13.jpg');
         $user->setActive(true);
-        $this->addReference('user_annan_colleague_4', $user);
+        $this->setReference('user_annan_colleague_4', $user);
         $manager->persist($user);
 
 
@@ -265,7 +265,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setPhone('07815545405');
         $user->setAvatar('2/users/14.jpg');
         $user->setActive(true);
-        $this->addReference('user_annan_colleague_5', $user);
+        $this->setReference('user_annan_colleague_5', $user);
         $manager->persist($user);
 
         $user = new User();
@@ -283,7 +283,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setPhone('07713793181');
         $user->setAvatar('2/users/15.jpg');
         $user->setActive(true);
-        $this->addReference('user_annan_colleague_6', $user);
+        $this->setReference('user_annan_colleague_6', $user);
         $manager->persist($user);
 
         // Annan Clients
@@ -302,7 +302,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setCountry('GB');
         $user->setPhone('0777-304-057');
         $user->setActive(false);
-        $this->addReference('user_annan_client_1', $user);
+        $this->setReference('user_annan_client_1', $user);
         $manager->persist($user);
 
         $user = new User();
@@ -319,7 +319,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setCountry('GB');
         $user->setPhone('0733-584-718');
         $user->setActive(false);
-        $this->addReference('user_annan_client_2', $user);
+        $this->setReference('user_annan_client_2', $user);
         $manager->persist($user);
 
         $user = new User();
@@ -336,7 +336,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setCountry('GB');
         $user->setPhone('0771-352-802');
         $user->setActive(false);
-        $this->addReference('user_annan_client_3', $user);
+        $this->setReference('user_annan_client_3', $user);
         $manager->persist($user);
 
         $user = new User();
@@ -353,7 +353,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setCountry('GB');
         $user->setPhone('0708-608-084');
         $user->setActive(false);
-        $this->addReference('user_annan_client_4', $user);
+        $this->setReference('user_annan_client_4', $user);
         $manager->persist($user);
 
         $user = new User();
@@ -370,7 +370,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setCountry('GB');
         $user->setPhone('0711-633-034');
         $user->setActive(false);
-        $this->addReference('user_annan_client_5', $user);
+        $this->setReference('user_annan_client_5', $user);
         $manager->persist($user);
 
         $user = new User();
@@ -387,7 +387,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setCountry('GB');
         $user->setPhone('0794-384-088');
         $user->setActive(false);
-        $this->addReference('user_annan_client_6', $user);
+        $this->setReference('user_annan_client_6', $user);
         $manager->persist($user);
 
         $user = new User();
@@ -404,7 +404,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setCountry('GB');
         $user->setPhone('0744-469-763');
         $user->setActive(false);
-        $this->addReference('user_annan_client_7', $user);
+        $this->setReference('user_annan_client_7', $user);
         $manager->persist($user);
 
         $user = new User();
@@ -421,7 +421,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setCountry('GB');
         $user->setPhone('0716-708-782');
         $user->setActive(false);
-        $this->addReference('user_annan_client_8', $user);
+        $this->setReference('user_annan_client_8', $user);
         $manager->persist($user);
 
         $user = new User();
@@ -438,7 +438,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setCountry('GB');
         $user->setPhone('0772-287-090');
         $user->setActive(false);
-        $this->addReference('user_annan_client_9', $user);
+        $this->setReference('user_annan_client_9', $user);
         $manager->persist($user);
 
         $user = new User();
@@ -455,7 +455,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setCountry('GB');
         $user->setPhone('0708-819-216');
         $user->setActive(false);
-        $this->addReference('user_annan_client_10', $user);
+        $this->setReference('user_annan_client_10', $user);
         $manager->persist($user);
 
         $user = new User();
@@ -472,7 +472,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setCountry('GB');
         $user->setPhone('0745-558-552');
         $user->setActive(false);
-        $this->addReference('user_annan_client_11', $user);
+        $this->setReference('user_annan_client_11', $user);
         $manager->persist($user);
 
         $user = new User();
@@ -489,7 +489,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setCountry('GB');
         $user->setPhone('0714-178-492');
         $user->setActive(false);
-        $this->addReference('user_annan_client_12', $user);
+        $this->setReference('user_annan_client_12', $user);
         $manager->persist($user);
 
         $user = new User();
@@ -506,7 +506,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setCountry('GB');
         $user->setPhone('0770-827-159');
         $user->setActive(false);
-        $this->addReference('user_annan_client_13', $user);
+        $this->setReference('user_annan_client_13', $user);
         $manager->persist($user);
 
         $user = new User();
@@ -523,7 +523,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setCountry('GB');
         $user->setPhone('0721-472-470');
         $user->setActive(false);
-        $this->addReference('user_annan_client_14', $user);
+        $this->setReference('user_annan_client_14', $user);
         $manager->persist($user);
 
         $user = new User();
@@ -540,7 +540,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setCountry('GB');
         $user->setPhone('0763-131-045');
         $user->setActive(false);
-        $this->addReference('user_annan_client_15', $user);
+        $this->setReference('user_annan_client_15', $user);
         $manager->persist($user);
 
 

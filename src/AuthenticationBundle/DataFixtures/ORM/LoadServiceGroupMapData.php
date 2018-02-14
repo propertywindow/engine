@@ -1,6 +1,7 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types = 1);
 
-namespace PropertyBundle\DataFixtures\ORM;
+namespace AuthenticationBundle\DataFixtures\ORM;
 
 use AuthenticationBundle\Entity\ServiceGroupMap;
 use Doctrine\Common\DataFixtures\AbstractFixture;
@@ -9,7 +10,6 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
 /**
  * Class LoadServiceGroupData
- * @package PropertyBundle\DataFixtures\ORM
  */
 class LoadServiceGroupMapData extends AbstractFixture implements OrderedFixtureInterface
 {
@@ -243,7 +243,6 @@ class LoadServiceGroupMapData extends AbstractFixture implements OrderedFixtureI
             $serviceGroupMap->setServiceGroup($this->getReference('service_group_statistics'));
             $manager->persist($serviceGroupMap);
         }
-
 
 
         $manager->flush();

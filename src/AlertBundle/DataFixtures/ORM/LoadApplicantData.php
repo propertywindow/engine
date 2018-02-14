@@ -1,8 +1,9 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace AlertBundle\DataFixtures\ORM;
 
+use AgentBundle\Entity\AgentGroup;
 use AlertBundle\Entity\Applicant;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -19,23 +20,27 @@ class LoadApplicantData extends AbstractFixture implements OrderedFixtureInterfa
     public function load(ObjectManager $manager)
     {
         $applicant = new Applicant();
-        $applicant->setAgentGroup($this->getReference('agent_group_annan'));
+        /** @var AgentGroup $agentGroup */
+        $agentGroup = $this->getReference('agent_group_annan');
+        $applicant->setAgentGroup($agentGroup);
         $applicant->setName('Marc Geurts');
         $applicant->setEmail('geurtsmarc@hotmail.com');
         $applicant->setPhone('0611389156');
         $applicant->setProtection(false);
         $applicant->setCountry('NL');
-        $this->addReference('applicant_1', $applicant);
+        $this->setReference('applicant_1', $applicant);
         $manager->persist($applicant);
 
         $applicant = new Applicant();
-        $applicant->setAgentGroup($this->getReference('agent_group_annan'));
+        /** @var AgentGroup $agentGroup */
+        $agentGroup = $this->getReference('agent_group_annan');
+        $applicant->setAgentGroup($agentGroup);
         $applicant->setName('Antica Culina');
         $applicant->setEmail('a.culina@yahoo.com');
         $applicant->setPhone('');
         $applicant->setProtection(true);
         $applicant->setCountry('NL');
-        $this->addReference('applicant_2', $applicant);
+        $this->setReference('applicant_2', $applicant);
         $manager->persist($applicant);
 
         $manager->flush();

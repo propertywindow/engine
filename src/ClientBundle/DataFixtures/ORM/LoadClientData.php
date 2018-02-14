@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace ClientBundle\DataFixtures\ORM;
 
@@ -25,7 +25,7 @@ class LoadClientData extends AbstractFixture implements OrderedFixtureInterface
             $client->setUser($this->getReference('user_annan_client_' . $i));
             $client->setAgent($this->getReference('agent_annan_1'));
             $client->setTransparency(true);
-            $this->addReference('client_annan_' . $i, $client);
+            $this->setReference('client_annan_' . $i, $client);
             $manager->persist($client);
         }
 

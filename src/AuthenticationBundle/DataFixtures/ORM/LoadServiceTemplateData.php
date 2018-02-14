@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types = 1);
 
 namespace AuthenticationBundle\DataFixtures\ORM;
 
@@ -9,7 +10,6 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
 /**
  * Class LoadServiceTemplateData
- * @package AuthenticationBundle\DataFixtures\ORM
  */
 class LoadServiceTemplateData extends AbstractFixture implements OrderedFixtureInterface
 {
@@ -95,13 +95,6 @@ class LoadServiceTemplateData extends AbstractFixture implements OrderedFixtureI
         $manager->persist($serviceTemplate);
 
 
-
-
-
-
-
-
-
         // Agent
 
         $serviceTemplate = new ServiceTemplate();
@@ -128,7 +121,6 @@ class LoadServiceTemplateData extends AbstractFixture implements OrderedFixtureI
         $serviceTemplate->setService($this->getReference('service_archive_property'));
         $serviceTemplate->setUserType($this->getReference('user_type_agent'));
         $manager->persist($serviceTemplate);
-
 
 
         $serviceTemplate = new ServiceTemplate();
@@ -175,7 +167,6 @@ class LoadServiceTemplateData extends AbstractFixture implements OrderedFixtureI
         $serviceTemplate->setService($this->getReference('service_block_user'));
         $serviceTemplate->setUserType($this->getReference('user_type_agent'));
         $manager->persist($serviceTemplate);
-
 
 
         // Colleague
@@ -550,10 +541,6 @@ class LoadServiceTemplateData extends AbstractFixture implements OrderedFixtureI
         $serviceTemplate->setService($this->getReference('service_add_payment'));
         $serviceTemplate->setUserType($this->getReference('user_type_colleague'));
         $manager->persist($serviceTemplate);
-
-
-
-
 
 
         $manager->flush();

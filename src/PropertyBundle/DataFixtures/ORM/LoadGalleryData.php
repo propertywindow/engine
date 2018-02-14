@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types = 1);
 
 namespace PropertyBundle\DataFixtures\ORM;
 
@@ -9,7 +10,6 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
 /**
  * Class LoadGalleryData
- * @package PropertyBundle\DataFixtures\ORM
  */
 class LoadGalleryData extends AbstractFixture implements OrderedFixtureInterface
 {
@@ -25,7 +25,7 @@ class LoadGalleryData extends AbstractFixture implements OrderedFixtureInterface
                 $main    = ($g === 1) ? true : false;
                 $gallery = new Gallery();
                 $gallery->setSort($g);
-                $gallery->setPath('2/properties/'.$i.'/'.$g.'.jpg');
+                $gallery->setPath('2/properties/' . $i . '/' . $g . '.jpg');
                 $gallery->setMain($main);
                 $gallery->setProperty($this->getReference('property_annan_' . $i));
                 $manager->persist($gallery);

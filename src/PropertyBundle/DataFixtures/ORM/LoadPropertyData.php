@@ -1,4 +1,5 @@
-<?php declare(strict_types = 1);
+<?php
+declare(strict_types = 1);
 
 namespace PropertyBundle\DataFixtures\ORM;
 
@@ -8,8 +9,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
 /**
- * Class LoadPropertyData
- * @package PropertyBundle\DataFixtures\ORM
+ * Class LoadProperty Data
  */
 class LoadPropertyData extends AbstractFixture implements OrderedFixtureInterface
 {
@@ -37,7 +37,7 @@ class LoadPropertyData extends AbstractFixture implements OrderedFixtureInterfac
         $property->setLng('-3.101990');
         $property->setEspc(false);
         $property->setArchived(false);
-        $this->addReference('property_annan_1', $property);
+        $this->setReference('property_annan_1', $property);
         $manager->persist($property);
 
         $property = new Property();
@@ -57,7 +57,7 @@ class LoadPropertyData extends AbstractFixture implements OrderedFixtureInterfac
         $property->setLng('-3.102555');
         $property->setEspc(false);
         $property->setArchived(false);
-        $this->addReference('property_annan_2', $property);
+        $this->setReference('property_annan_2', $property);
         $manager->persist($property);
 
         $property = new Property();
@@ -77,7 +77,7 @@ class LoadPropertyData extends AbstractFixture implements OrderedFixtureInterfac
         $property->setLng('-3.108808');
         $property->setEspc(false);
         $property->setArchived(false);
-        $this->addReference('property_annan_3', $property);
+        $this->setReference('property_annan_3', $property);
         $manager->persist($property);
 
         $property = new Property();
@@ -97,7 +97,7 @@ class LoadPropertyData extends AbstractFixture implements OrderedFixtureInterfac
         $property->setLng('-2.985161');
         $property->setEspc(false);
         $property->setArchived(false);
-        $this->addReference('property_annan_4', $property);
+        $this->setReference('property_annan_4', $property);
         $manager->persist($property);
 
         $property = new Property();
@@ -117,7 +117,7 @@ class LoadPropertyData extends AbstractFixture implements OrderedFixtureInterfac
         $property->setLng('-2.659492');
         $property->setEspc(false);
         $property->setArchived(false);
-        $this->addReference('property_annan_5', $property);
+        $this->setReference('property_annan_5', $property);
         $manager->persist($property);
 
         $property = new Property();
@@ -137,7 +137,7 @@ class LoadPropertyData extends AbstractFixture implements OrderedFixtureInterfac
         $property->setLng('-2.779028');
         $property->setEspc(false);
         $property->setArchived(false);
-        $this->addReference('property_annan_6', $property);
+        $this->setReference('property_annan_6', $property);
         $manager->persist($property);
 
         $property = new Property();
@@ -157,7 +157,7 @@ class LoadPropertyData extends AbstractFixture implements OrderedFixtureInterfac
         $property->setLng('-3.055988');
         $property->setEspc(false);
         $property->setArchived(false);
-        $this->addReference('property_annan_7', $property);
+        $this->setReference('property_annan_7', $property);
         $manager->persist($property);
 
         $property = new Property();
@@ -177,7 +177,7 @@ class LoadPropertyData extends AbstractFixture implements OrderedFixtureInterfac
         $property->setLng('-2.946050');
         $property->setEspc(false);
         $property->setArchived(false);
-        $this->addReference('property_annan_8', $property);
+        $this->setReference('property_annan_8', $property);
         $manager->persist($property);
 
         $property = new Property();
@@ -197,7 +197,7 @@ class LoadPropertyData extends AbstractFixture implements OrderedFixtureInterfac
         $property->setLng('-3.114003');
         $property->setEspc(false);
         $property->setArchived(false);
-        $this->addReference('property_annan_9', $property);
+        $this->setReference('property_annan_9', $property);
         $manager->persist($property);
 
         $property = new Property();
@@ -217,7 +217,7 @@ class LoadPropertyData extends AbstractFixture implements OrderedFixtureInterfac
         $property->setLng('-3.095684');
         $property->setEspc(false);
         $property->setArchived(false);
-        $this->addReference('property_annan_10', $property);
+        $this->setReference('property_annan_10', $property);
         $manager->persist($property);
 
         $property = new Property();
@@ -237,7 +237,7 @@ class LoadPropertyData extends AbstractFixture implements OrderedFixtureInterfac
         $property->setLng('-3.224955');
         $property->setEspc(false);
         $property->setArchived(false);
-        $this->addReference('property_annan_11', $property);
+        $this->setReference('property_annan_11', $property);
         $manager->persist($property);
 
         $property = new Property();
@@ -257,7 +257,7 @@ class LoadPropertyData extends AbstractFixture implements OrderedFixtureInterfac
         $property->setLng('-3.106079');
         $property->setEspc(false);
         $property->setArchived(false);
-        $this->addReference('property_annan_12', $property);
+        $this->setReference('property_annan_12', $property);
         $manager->persist($property);
 
         $property = new Property();
@@ -277,7 +277,7 @@ class LoadPropertyData extends AbstractFixture implements OrderedFixtureInterfac
         $property->setLng('-3.120353');
         $property->setEspc(false);
         $property->setArchived(false);
-        $this->addReference('property_annan_13', $property);
+        $this->setReference('property_annan_13', $property);
         $manager->persist($property);
 
         $property = new Property();
@@ -297,7 +297,7 @@ class LoadPropertyData extends AbstractFixture implements OrderedFixtureInterfac
         $property->setLng('-3.142633');
         $property->setEspc(false);
         $property->setArchived(false);
-        $this->addReference('property_annan_14', $property);
+        $this->setReference('property_annan_14', $property);
         $manager->persist($property);
 
         $property = new Property();
@@ -317,7 +317,7 @@ class LoadPropertyData extends AbstractFixture implements OrderedFixtureInterfac
         $property->setLng('-3.199477');
         $property->setEspc(false);
         $property->setArchived(false);
-        $this->addReference('property_annan_15', $property);
+        $this->setReference('property_annan_15', $property);
         $manager->persist($property);
 
 

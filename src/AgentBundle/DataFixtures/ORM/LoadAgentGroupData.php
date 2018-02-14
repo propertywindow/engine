@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace AgentBundle\DataFixtures\ORM;
 
@@ -10,7 +10,6 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
 /**
  * Class LoadAgentGroupData
- * @package AgentBundle\DataFixtures\ORM
  */
 class LoadAgentGroupData extends AbstractFixture implements OrderedFixtureInterface
 {
@@ -21,22 +20,22 @@ class LoadAgentGroupData extends AbstractFixture implements OrderedFixtureInterf
     {
         $agentGroup = new AgentGroup();
         $agentGroup->setName('Property Window');
-        $this->addReference('agent_group_propertywindow', $agentGroup);
+        $this->setReference('agent_group_propertywindow', $agentGroup);
         $manager->persist($agentGroup);
 
         $agentGroup = new AgentGroup();
         $agentGroup->setName('Annan Solicitors & Estate Agents');
-        $this->addReference('agent_group_annan', $agentGroup);
+        $this->setReference('agent_group_annan', $agentGroup);
         $manager->persist($agentGroup);
 
         $agentGroup = new AgentGroup();
         $agentGroup->setName('Geo. & Jas. Oliver W.S.');
-        $this->addReference('agent_group_oliver', $agentGroup);
+        $this->setReference('agent_group_oliver', $agentGroup);
         $manager->persist($agentGroup);
 
         $agentGroup = new AgentGroup();
         $agentGroup->setName('Deans Solicitors & Estate Agents LLP');
-        $this->addReference('agent_group_deans', $agentGroup);
+        $this->setReference('agent_group_deans', $agentGroup);
         $manager->persist($agentGroup);
 
         $manager->flush();

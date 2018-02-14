@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types = 1);
 
 namespace ConversationBundle\DataFixtures\ORM;
 
@@ -9,7 +10,6 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
 /**
  * Class LoadEmailTemplateData
- * @package ConversationBundle\DataFixtures\ORM
  */
 class LoadEmailTemplateData extends AbstractFixture implements OrderedFixtureInterface
 {

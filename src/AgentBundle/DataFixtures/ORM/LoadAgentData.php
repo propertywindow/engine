@@ -1,9 +1,10 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace AgentBundle\DataFixtures\ORM;
 
 use AgentBundle\Entity\Agent;
+use AgentBundle\Entity\AgentGroup;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
@@ -20,7 +21,9 @@ class LoadAgentData extends AbstractFixture implements OrderedFixtureInterface
     public function load(ObjectManager $manager)
     {
         $agent = new Agent();
-        $agent->setAgentGroup($this->getReference('agent_group_propertywindow'));
+        /** @var AgentGroup $agentGroup */
+        $agentGroup = $this->getReference('agent_group_propertywindow');
+        $agent->setAgentGroup($agentGroup);
         $agent->setOffice('Edinburgh');
         $agent->setStreet('Portobello High Street');
         $agent->setHouseNumber('27');
@@ -32,11 +35,14 @@ class LoadAgentData extends AbstractFixture implements OrderedFixtureInterface
         $agent->setPropertyLimit(200);
         $agent->setEspc(false);
         $agent->setArchived(false);
-        $this->addReference('agent_propertywindow_1', $agent);
+        $this->setReference('agent_propertywindow_1', $agent);
         $manager->persist($agent);
 
+
         $agent = new Agent();
-        $agent->setAgentGroup($this->getReference('agent_group_annan'));
+        /** @var AgentGroup $agentGroup */
+        $agentGroup = $this->getReference('agent_group_annan');
+        $agent->setAgentGroup($agentGroup);
         $agent->setOffice('Edinburgh');
         $agent->setStreet('Portobello High Street');
         $agent->setHouseNumber('229');
@@ -49,11 +55,13 @@ class LoadAgentData extends AbstractFixture implements OrderedFixtureInterface
         $agent->setPropertyLimit(100);
         $agent->setEspc(true);
         $agent->setArchived(false);
-        $this->addReference('agent_annan_1', $agent);
+        $this->setReference('agent_annan_1', $agent);
         $manager->persist($agent);
 
         $agent = new Agent();
-        $agent->setAgentGroup($this->getReference('agent_group_annan'));
+        /** @var AgentGroup $agentGroup */
+        $agentGroup = $this->getReference('agent_group_annan');
+        $agent->setAgentGroup($agentGroup);
         $agent->setOffice('East Lothian');
         $agent->setStreet('High Street');
         $agent->setHouseNumber('84');
@@ -66,11 +74,13 @@ class LoadAgentData extends AbstractFixture implements OrderedFixtureInterface
         $agent->setPropertyLimit(100);
         $agent->setEspc(true);
         $agent->setArchived(false);
-        $this->addReference('agent_annan_2', $agent);
+        $this->setReference('agent_annan_2', $agent);
         $manager->persist($agent);
 
         $agent = new Agent();
-        $agent->setAgentGroup($this->getReference('agent_group_oliver'));
+        /** @var AgentGroup $agentGroup */
+        $agentGroup = $this->getReference('agent_group_oliver');
+        $agent->setAgentGroup($agentGroup);
         $agent->setOffice('Main');
         $agent->setStreet('High Street');
         $agent->setHouseNumber('13');
@@ -82,11 +92,13 @@ class LoadAgentData extends AbstractFixture implements OrderedFixtureInterface
         $agent->setPropertyLimit(500);
         $agent->setEspc(false);
         $agent->setArchived(false);
-        $this->addReference('agent_oliver_1', $agent);
+        $this->setReference('agent_oliver_1', $agent);
         $manager->persist($agent);
 
         $agent = new Agent();
-        $agent->setAgentGroup($this->getReference('agent_group_deans'));
+        /** @var AgentGroup $agentGroup */
+        $agentGroup = $this->getReference('agent_group_deans');
+        $agent->setAgentGroup($agentGroup);
         $agent->setOffice('Newington');
         $agent->setStreet('St Patrick Street');
         $agent->setHouseNumber('3');
@@ -98,11 +110,13 @@ class LoadAgentData extends AbstractFixture implements OrderedFixtureInterface
         $agent->setPropertyLimit(100);
         $agent->setEspc(true);
         $agent->setArchived(false);
-        $this->addReference('agent_deans_1', $agent);
+        $this->setReference('agent_deans_1', $agent);
         $manager->persist($agent);
 
         $agent = new Agent();
-        $agent->setAgentGroup($this->getReference('agent_group_deans'));
+        /** @var AgentGroup $agentGroup */
+        $agentGroup = $this->getReference('agent_group_deans');
+        $agent->setAgentGroup($agentGroup);
         $agent->setOffice('Corstorphine');
         $agent->setStreet('St Johns Road');
         $agent->setHouseNumber('135-137');
@@ -114,11 +128,13 @@ class LoadAgentData extends AbstractFixture implements OrderedFixtureInterface
         $agent->setPropertyLimit(100);
         $agent->setEspc(true);
         $agent->setArchived(false);
-        $this->addReference('agent_deans_2', $agent);
+        $this->setReference('agent_deans_2', $agent);
         $manager->persist($agent);
 
         $agent = new Agent();
-        $agent->setAgentGroup($this->getReference('agent_group_deans'));
+        /** @var AgentGroup $agentGroup */
+        $agentGroup = $this->getReference('agent_group_deans');
+        $agent->setAgentGroup($agentGroup);
         $agent->setOffice('South Queensferry');
         $agent->setStreet('High Street');
         $agent->setHouseNumber('31A');
@@ -130,13 +146,13 @@ class LoadAgentData extends AbstractFixture implements OrderedFixtureInterface
         $agent->setPropertyLimit(100);
         $agent->setEspc(true);
         $agent->setArchived(false);
-        $this->addReference('agent_deans_3', $agent);
+        $this->setReference('agent_deans_3', $agent);
         $manager->persist($agent);
 
 
         $manager->flush();
     }
-    
+
     /**
      * @return integer
      */

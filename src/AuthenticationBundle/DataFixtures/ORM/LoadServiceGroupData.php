@@ -1,6 +1,7 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types = 1);
 
-namespace PropertyBundle\DataFixtures\ORM;
+namespace AuthenticationBundle\DataFixtures\ORM;
 
 use AuthenticationBundle\Entity\ServiceGroup;
 use Doctrine\Common\DataFixtures\AbstractFixture;
@@ -9,7 +10,6 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
 /**
  * Class LoadServiceGroupData
- * @package PropertyBundle\DataFixtures\ORM
  */
 class LoadServiceGroupData extends AbstractFixture implements OrderedFixtureInterface
 {
@@ -23,7 +23,7 @@ class LoadServiceGroupData extends AbstractFixture implements OrderedFixtureInte
         $serviceGroup->setNl('Dashboard');
         $serviceGroup->setIcon('flaticon-dashboard');
         $serviceGroup->setUrl('/dashboard');
-        $this->addReference('service_group_dashboard', $serviceGroup);
+        $this->setReference('service_group_dashboard', $serviceGroup);
         $manager->persist($serviceGroup);
 
         $serviceGroup = new ServiceGroup();
@@ -31,14 +31,14 @@ class LoadServiceGroupData extends AbstractFixture implements OrderedFixtureInte
         $serviceGroup->setNl('Woningen');
         $serviceGroup->setIcon('flaticon-house');
         $serviceGroup->setUrl('/properties');
-        $this->addReference('service_group_properties', $serviceGroup);
+        $this->setReference('service_group_properties', $serviceGroup);
         $manager->persist($serviceGroup);
 
         $serviceGroup = new ServiceGroup();
         $serviceGroup->setEn('Users');
         $serviceGroup->setNl('Gebruikers');
         $serviceGroup->setIcon('flaticon-users');
-        $this->addReference('service_group_users', $serviceGroup);
+        $this->setReference('service_group_users', $serviceGroup);
         $manager->persist($serviceGroup);
 
         $serviceGroup = new ServiceGroup();
@@ -46,7 +46,7 @@ class LoadServiceGroupData extends AbstractFixture implements OrderedFixtureInte
         $serviceGroup->setNl('Makelaars');
         $serviceGroup->setIcon('flaticon-internet');
         $serviceGroup->setUrl('/agents');
-        $this->addReference('service_group_agents', $serviceGroup);
+        $this->setReference('service_group_agents', $serviceGroup);
         $manager->persist($serviceGroup);
 
         $serviceGroup = new ServiceGroup();
@@ -54,7 +54,7 @@ class LoadServiceGroupData extends AbstractFixture implements OrderedFixtureInte
         $serviceGroup->setNl('Diensten');
         $serviceGroup->setIcon('flaticon-app');
         $serviceGroup->setUrl('/services');
-        $this->addReference('service_group_services_manager', $serviceGroup);
+        $this->setReference('service_group_services_manager', $serviceGroup);
         $manager->persist($serviceGroup);
 
         $serviceGroup = new ServiceGroup();
@@ -62,7 +62,7 @@ class LoadServiceGroupData extends AbstractFixture implements OrderedFixtureInte
         $serviceGroup->setNl('Afspraken');
         $serviceGroup->setIcon('flaticon-calendar');
         $serviceGroup->setUrl('/appointments');
-        $this->addReference('service_group_appointments', $serviceGroup);
+        $this->setReference('service_group_appointments', $serviceGroup);
         $manager->persist($serviceGroup);
 
         $serviceGroup = new ServiceGroup();
@@ -70,7 +70,7 @@ class LoadServiceGroupData extends AbstractFixture implements OrderedFixtureInte
         $serviceGroup->setNl('Bezichtigingen');
         $serviceGroup->setIcon('flaticon-house-1');
         $serviceGroup->setUrl('/viewings');
-        $this->addReference('service_group_viewings', $serviceGroup);
+        $this->setReference('service_group_viewings', $serviceGroup);
         $manager->persist($serviceGroup);
 
         $serviceGroup = new ServiceGroup();
@@ -78,7 +78,7 @@ class LoadServiceGroupData extends AbstractFixture implements OrderedFixtureInte
         $serviceGroup->setNl('Interesse');
         $serviceGroup->setIcon('flaticon-house-9');
         $serviceGroup->setUrl('/interest');
-        $this->addReference('service_group_interest', $serviceGroup);
+        $this->setReference('service_group_interest', $serviceGroup);
         $manager->persist($serviceGroup);
 
         $serviceGroup = new ServiceGroup();
@@ -86,7 +86,7 @@ class LoadServiceGroupData extends AbstractFixture implements OrderedFixtureInte
         $serviceGroup->setNl('Biedingen');
         $serviceGroup->setIcon('flaticon-house-16');
         $serviceGroup->setUrl('/offers');
-        $this->addReference('service_group_offers', $serviceGroup);
+        $this->setReference('service_group_offers', $serviceGroup);
         $manager->persist($serviceGroup);
 
         $serviceGroup = new ServiceGroup();
@@ -94,14 +94,14 @@ class LoadServiceGroupData extends AbstractFixture implements OrderedFixtureInte
         $serviceGroup->setNl('Surveys');
         $serviceGroup->setIcon('flaticon-blueprint');
         $serviceGroup->setUrl('/surverys');
-        $this->addReference('service_group_surveys', $serviceGroup);
+        $this->setReference('service_group_surveys', $serviceGroup);
         $manager->persist($serviceGroup);
 
         $serviceGroup = new ServiceGroup();
         $serviceGroup->setEn('Contacts');
         $serviceGroup->setNl('Contacten');
         $serviceGroup->setIcon('flaticon-users');
-        $this->addReference('service_group_contacts', $serviceGroup);
+        $this->setReference('service_group_contacts', $serviceGroup);
         $manager->persist($serviceGroup);
 
         $serviceGroup = new ServiceGroup();
@@ -109,7 +109,7 @@ class LoadServiceGroupData extends AbstractFixture implements OrderedFixtureInte
         $serviceGroup->setNl('Property Notificaties');
         $serviceGroup->setIcon('flaticon-megaphone-1');
         $serviceGroup->setUrl('/email-alerts');
-        $this->addReference('service_group_property_alerts', $serviceGroup);
+        $this->setReference('service_group_property_alerts', $serviceGroup);
         $manager->persist($serviceGroup);
 
         $serviceGroup = new ServiceGroup();
@@ -117,7 +117,7 @@ class LoadServiceGroupData extends AbstractFixture implements OrderedFixtureInte
         $serviceGroup->setNl('Email');
         $serviceGroup->setIcon('flaticon-envelope-1');
         $serviceGroup->setUrl('/email');
-        $this->addReference('service_group_email', $serviceGroup);
+        $this->setReference('service_group_email', $serviceGroup);
         $manager->persist($serviceGroup);
 
         $serviceGroup = new ServiceGroup();
@@ -125,28 +125,28 @@ class LoadServiceGroupData extends AbstractFixture implements OrderedFixtureInte
         $serviceGroup->setNl('Notificaties');
         $serviceGroup->setIcon('flaticon-music-1');
         $serviceGroup->setUrl('/notifications');
-        $this->addReference('service_group_notifications', $serviceGroup);
+        $this->setReference('service_group_notifications', $serviceGroup);
         $manager->persist($serviceGroup);
 
         $serviceGroup = new ServiceGroup();
         $serviceGroup->setEn('Invoices');
         $serviceGroup->setNl('Invoices');
         $serviceGroup->setIcon('flaticon-file');
-        $this->addReference('service_group_invoices', $serviceGroup);
+        $this->setReference('service_group_invoices', $serviceGroup);
         $manager->persist($serviceGroup);
 
         $serviceGroup = new ServiceGroup();
         $serviceGroup->setEn('Statistics');
         $serviceGroup->setNl('Statistieken');
         $serviceGroup->setIcon('flaticon-graph-2');
-        $this->addReference('service_group_statistics', $serviceGroup);
+        $this->setReference('service_group_statistics', $serviceGroup);
         $manager->persist($serviceGroup);
 
         $serviceGroup = new ServiceGroup();
         $serviceGroup->setEn('Settings');
         $serviceGroup->setNl('Instellingen');
         $serviceGroup->setIcon('flaticon-settings');
-        $this->addReference('service_group_settings', $serviceGroup);
+        $this->setReference('service_group_settings', $serviceGroup);
         $manager->persist($serviceGroup);
 
         $manager->flush();

@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types = 1);
 
 namespace AuthenticationBundle\DataFixtures\ORM;
 
@@ -9,7 +10,6 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
 /**
  * Class LoadServiceGroupTemplateData
- * @package AuthenticationBundle\DataFixtures\ORM
  */
 class LoadServiceGroupTemplateData extends AbstractFixture implements OrderedFixtureInterface
 {
