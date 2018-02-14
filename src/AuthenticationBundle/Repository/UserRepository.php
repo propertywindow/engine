@@ -161,7 +161,7 @@ class UserRepository extends EntityRepository
             throw new UserNotFoundException($id);
         }
 
-        $userType = (int) $result->getTypeId();
+        $userType = (int)$result->getTypeId();
 
         return $userType;
     }

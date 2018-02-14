@@ -65,7 +65,7 @@ class AgencyController extends JsonController
 
         $this->checkParameters(['id']);
 
-        $agency = $this->agencyService->getAgency((int) $this->parameters['id']);
+        $agency = $this->agencyService->getAgency((int)$this->parameters['id']);
 
         $this->isAuthorized($this->user->getAgent()->getId(), $agency->getAgent()->getId());
 
@@ -123,7 +123,7 @@ class AgencyController extends JsonController
 
         $this->checkParameters(['id']);
 
-        $agency = $this->agencyService->getAgency((int) $this->parameters['id']);
+        $agency = $this->agencyService->getAgency((int)$this->parameters['id']);
 
         $this->isAuthorized($this->user->getAgent()->getId(), $agency->getAgent()->getId());
 
@@ -142,7 +142,7 @@ class AgencyController extends JsonController
 
         $this->checkParameters(['id']);
 
-        $agency = $this->agencyService->getAgency((int) $this->parameters['id']);
+        $agency = $this->agencyService->getAgency((int)$this->parameters['id']);
 
         $this->isAuthorized($this->user->getAgent()->getId(), $agency->getAgent()->getId());
 

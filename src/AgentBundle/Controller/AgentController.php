@@ -68,7 +68,7 @@ class AgentController extends JsonController
     {
         $this->checkParameters(['id']);
 
-        return Mapper::fromAgent($this->agentService->getAgent((int) $this->parameters['id']));
+        return Mapper::fromAgent($this->agentService->getAgent((int)$this->parameters['id']));
     }
 
     /**
@@ -175,9 +175,9 @@ class AgentController extends JsonController
     {
         $this->checkParameters(['id']);
 
-        $agent = $this->agentService->getAgent((int) $this->parameters['id']);
+        $agent = $this->agentService->getAgent((int)$this->parameters['id']);
 
-        if ((int) $this->user->getUserType()->getId() > self::USER_AGENT) {
+        if ((int)$this->user->getUserType()->getId() > self::USER_AGENT) {
             throw new NotAuthorizedException();
         }
 
@@ -204,6 +204,6 @@ class AgentController extends JsonController
 
         // todo: check for users (colleagues) and properties before deleting, just warning
 
-        $this->agentService->deleteAgent((int) $this->parameters['id']);
+        $this->agentService->deleteAgent((int)$this->parameters['id']);
     }
 }

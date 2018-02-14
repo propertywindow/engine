@@ -64,7 +64,7 @@ class ApplicantController extends JsonController
     {
         $this->checkParameters(['id']);
 
-        $applicant = $this->applicantService->getApplicant((int) $this->parameters['id']);
+        $applicant = $this->applicantService->getApplicant((int)$this->parameters['id']);
 
         $this->isAuthorized($this->user->getAgent()->getAgentGroup()->getId(), $applicant->getAgentGroup()->getId());
 
@@ -113,7 +113,7 @@ class ApplicantController extends JsonController
     {
         $this->checkParameters(['id']);
 
-        $applicant = $this->applicantService->getApplicant((int) $this->parameters['id']);
+        $applicant = $this->applicantService->getApplicant((int)$this->parameters['id']);
 
         $this->isAuthorized($this->user->getAgent()->getAgentGroup()->getId(), $applicant->getAgentGroup()->getId());
 

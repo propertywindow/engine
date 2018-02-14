@@ -75,8 +75,8 @@ class LoginController extends JsonController
             'password',
         ]);
 
-        $email    = (string) $this->parameters['email'];
-        $password = md5((string) $this->parameters['password']);
+        $email    = (string)$this->parameters['email'];
+        $password = md5((string)$this->parameters['password']);
         $user     = $this->userService->login($email, $password);
 
         if ($user === null) {
@@ -129,14 +129,14 @@ class LoginController extends JsonController
             'impersonate_id',
         ]);
 
-        $user        = $this->userService->getUser((int) $this->parameters['user_id']);
-        $impersonate = $this->userService->getUser((int) $this->parameters['impersonate_id']);
+        $user        = $this->userService->getUser((int)$this->parameters['user_id']);
+        $impersonate = $this->userService->getUser((int)$this->parameters['impersonate_id']);
 
-        if ((int) $user->getUserType()->getId() > self::USER_AGENT) {
+        if ((int)$user->getUserType()->getId() > self::USER_AGENT) {
             throw new NotAuthorizedException();
         }
 
-        if ((int) $user->getUserType()->getId() !== self::USER_ADMIN) {
+        if ((int)$user->getUserType()->getId() !== self::USER_ADMIN) {
             if ($user->getAgent() !== $impersonate->getAgent()) {
                 throw new NotAuthorizedException();
             }

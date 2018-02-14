@@ -60,7 +60,7 @@ class ServiceGroupController extends JsonController
     {
         $this->checkParameters(['id']);
 
-        $serviceGroup = $this->serviceGroupService->getServiceGroup((int) $this->parameters['id']);
+        $serviceGroup = $this->serviceGroupService->getServiceGroup((int)$this->parameters['id']);
 
         return Mapper::fromServiceGroup($this->user->getSettings()->getLanguage(), $serviceGroup);
     }

@@ -23,7 +23,7 @@ class Response implements JsonSerializable
     /**
      * @return Error|null
      */
-    public function getError(): ?Response
+    public function getError(): ?Error
     {
         return $this->error;
     }

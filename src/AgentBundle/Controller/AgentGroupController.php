@@ -62,7 +62,7 @@ class AgentGroupController extends JsonController
     {
         $this->checkParameters(['id']);
 
-        return Mapper::fromAgentGroup($this->agentGroupService->getAgentGroup((int) $this->parameters['id']));
+        return Mapper::fromAgentGroup($this->agentGroupService->getAgentGroup((int)$this->parameters['id']));
     }
 
     /**
@@ -107,7 +107,7 @@ class AgentGroupController extends JsonController
     {
         $this->checkParameters(['id']);
 
-        $agentGroup = $this->agentGroupService->getAgentGroup((int) $this->parameters['id']);
+        $agentGroup = $this->agentGroupService->getAgentGroup((int)$this->parameters['id']);
 
         $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
@@ -130,7 +130,7 @@ class AgentGroupController extends JsonController
         // todo: check for users and agents before deleting, just warning
         // todo: delete folders
 
-        $this->agentGroupService->deleteAgentGroup((int) $this->parameters['id']);
+        $this->agentGroupService->deleteAgentGroup((int)$this->parameters['id']);
     }
 
     /**

@@ -66,7 +66,7 @@ class Authenticator
     {
         $header     = $this->getHeader($request);
         $decoded    = $this->decodeHeader($header);
-        $this->user = $this->userService->getUser((int) $decoded['user']);
+        $this->user = $this->userService->getUser((int)$decoded['user']);
 
         $this->validateUser($decoded);
 
@@ -157,7 +157,7 @@ class Authenticator
     private function validateUser(array $decoded)
     {
         $secret = $this->user->getPassword();
-        $hash   = hash_hmac('sha1', $decoded['timestamp'] . "-" . (int) $decoded['user'], $secret);
+        $hash   = hash_hmac('sha1', $decoded['timestamp'] . "-" . (int)$decoded['user'], $secret);
 
         if ((empty($this->user) ||
              (!$this->user->getActive())) ||

@@ -65,7 +65,7 @@ class SubTypeController extends JsonController
 
         return Mapper::fromSubType(
             $this->user->getSettings()->getLanguage(),
-            $this->subTypeService->getSubType((int) $this->parameters['id'])
+            $this->subTypeService->getSubType((int)$this->parameters['id'])
         );
     }
 
@@ -88,7 +88,7 @@ class SubTypeController extends JsonController
     {
         $this->checkParameters(['type_id']);
 
-        $type = $this->typeService->getType((int) $this->parameters['type_id']);
+        $type = $this->typeService->getType((int)$this->parameters['type_id']);
 
         return Mapper::fromSubTypes(
             $this->user->getSettings()->getLanguage(),
@@ -107,6 +107,6 @@ class SubTypeController extends JsonController
 
         $this->isAuthorized($this->user->getUserType()->getId(), self::USER_ADMIN);
 
-        $this->subTypeService->deleteSubType((int) $this->parameters['id']);
+        $this->subTypeService->deleteSubType((int)$this->parameters['id']);
     }
 }

@@ -62,7 +62,7 @@ class TermsController extends JsonController
 
         return Mapper::fromTerm(
             $this->user->getSettings()->getLanguage(),
-            $this->termsService->getTerm((int) $this->parameters['id'])
+            $this->termsService->getTerm((int)$this->parameters['id'])
         );
     }
 
