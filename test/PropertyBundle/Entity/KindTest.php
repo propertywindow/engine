@@ -28,10 +28,10 @@ class KindTest extends TestCase
     {
         $this->assertNull($this->kind->getId());
 
-//        $this->kind->setEn('Sale');
-//        $this->assertEquals('Sale', $this->kind->getEn());
-//
-//        $this->kind->setNl('Koop');
-//        $this->assertEquals('Koop', $this->kind->getNl());
+        $this->kind->setEn('Sale');
+        $this->assertEquals('Sale', $this->kind->getEn());
+
+        $this->kind->setNl('Koop');
+        $this->assertEquals('Koop', $this->kind->getNl());
     }
 }
