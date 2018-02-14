@@ -1,4 +1,4 @@
-<phpunit bootstrap="vendor/autoload.php" backupGlobals="false" colors="true">
+<phpunit bootstrap="../../vendor/autoload.php" backupGlobals="false" colors="true">
     <php>
         <ini name="error_reporting" value="-1" />
         <ini name="memory_limit" value="4G" />
