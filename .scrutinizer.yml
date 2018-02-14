@@ -2,6 +2,7 @@ filter:
   excluded_paths:
     - "src/*Bundle/DataFixtures/ORM/"
     - "app/"
+
 before_commands:
     - "composer install"
 
@@ -34,11 +35,6 @@ build:
                         command: phpcs-run --standard=phpcs.xml
                         use_website_config: false
                     - php-scrutinizer-run
-                    -
-                        command: 'vendor/bin/phpunit --coverage-clover=.coverage'
-                        coverage:
-                          file: '.coverage'
-                          format: 'clover'
 
 build_failure_conditions:
   - 'issues.label("coding-style").new.exists'

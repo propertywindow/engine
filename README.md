@@ -108,7 +108,7 @@ $ vendor/bin/phpunit
 
 PHP Codesniffer:
 ```bash
-$ vendor/bin/phpcs --standard=PSR2 src/ tests/
+$ vendor/bin/phpcs --standard=PSR2 src/ test/
 ```
 ---
 

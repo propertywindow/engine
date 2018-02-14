@@ -13,7 +13,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/"
+            "Tests\\": "test/"
         },
         "files": [
             "vendor/symfony/symfony/src/Symfony/Component/VarDumper/Resources/functions/dump.php"
@@ -57,7 +57,7 @@
         "post-update-cmd": [
             "@symfony-scripts"
         ],
-        "test": "./vendor/bin/phpcs --standard=PSR2 src/ tests/ && ./vendor/bin/phpunit"
+        "test": "./vendor/bin/phpcs --standard=PSR2 src/ test/ && ./vendor/bin/phpunit"
     },
     "config": {
         "sort-packages": true
@@ -67,7 +67,7 @@
         "symfony-bin-dir": "app",
         "symfony-var-dir": "var",
         "symfony-web-dir": "web",
-        "symfony-tests-dir": "tests",
+        "symfony-tests-dir": "test",
         "symfony-assets-install": "relative",
         "incenteev-parameters": {
             "file": "app/config/parameters.yml"
