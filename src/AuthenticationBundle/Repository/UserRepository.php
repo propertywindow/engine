@@ -45,7 +45,7 @@ class UserRepository extends EntityRepository
         $users = $this->findBy(['id' => $identifiers]);
 
         $userIdentifiersFound = array_map(
-            function(User $user) {
+            function (User $user) {
                 return $user->getId();
             },
             $users

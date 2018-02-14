@@ -41,7 +41,7 @@ class Mapper
     public static function fromBlacklists(Blacklist ...$blacklists): array
     {
         return array_map(
-            function(Blacklist $blacklist) {
+            function (Blacklist $blacklist) {
                 return self::fromBlacklist($blacklist);
             },
             $blacklists

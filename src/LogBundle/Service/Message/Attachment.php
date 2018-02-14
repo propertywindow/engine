@@ -186,7 +186,7 @@ class Attachment
     {
         return array_merge($this->data, [
             'fields' => array_map(
-                function(Field $field) {
+                function (Field $field) {
                     return $field->toArray();
                 },
                 $this->fields

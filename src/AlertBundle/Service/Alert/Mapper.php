@@ -33,7 +33,7 @@ class Mapper
     public static function fromAlerts(Alert ...$alerts): array
     {
         return array_map(
-            function(Alert $alert) {
+            function (Alert $alert) {
                 return self::fromAlert($alert);
             },
             $alerts

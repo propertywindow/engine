@@ -31,7 +31,7 @@ class Mapper
     public static function fromServiceTemplates(ServiceTemplate ...$serviceTemplates): array
     {
         return array_map(
-            function(ServiceTemplate $serviceTemplate) {
+            function (ServiceTemplate $serviceTemplate) {
                 return self::fromServiceTemplate($serviceTemplate);
             },
             $serviceTemplates
@@ -58,7 +58,7 @@ class Mapper
     public static function fromServiceGroupTemplates(ServiceGroupTemplate ...$serviceGroupTemplates): array
     {
         return array_map(
-            function(ServiceGroupTemplate $serviceGroupTemplate) {
+            function (ServiceGroupTemplate $serviceGroupTemplate) {
                 return self::fromServiceGroupTemplate($serviceGroupTemplate);
             },
             $serviceGroupTemplates

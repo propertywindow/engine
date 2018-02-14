@@ -31,7 +31,7 @@ class Mapper
     public static function fromAgentGroups(AgentGroup ...$agentGroups): array
     {
         return array_map(
-            function(AgentGroup $agentGroup) {
+            function (AgentGroup $agentGroup) {
                 return self::fromAgentGroup($agentGroup);
             },
             $agentGroups

@@ -32,7 +32,7 @@ class Mapper
     public static function fromUserTypes(UserType ...$userTypes): array
     {
         return array_map(
-            function(UserType $userType) {
+            function (UserType $userType) {
                 return self::fromUserType($userType);
             },
             $userTypes

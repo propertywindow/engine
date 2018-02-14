@@ -36,7 +36,7 @@ class Mapper
     public static function fromApplicants(Applicant ...$applicants): array
     {
         return array_map(
-            function(Applicant $applicant) {
+            function (Applicant $applicant) {
                 return self::fromApplicant($applicant);
             },
             $applicants

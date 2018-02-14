@@ -34,7 +34,7 @@ class Mapper
     public static function fromConversations(Conversation ...$conversations): array
     {
         return array_map(
-            function(Conversation $conversation) {
+            function (Conversation $conversation) {
                 return self::fromConversation($conversation);
             },
             $conversations
@@ -50,7 +50,7 @@ class Mapper
     public static function fromMessages(Message ...$messages): array
     {
         return array_map(
-            function(Message $message) {
+            function (Message $message) {
                 return [
                     'id'           => $message->getId(),
                     'author_id'    => $message->getAuthor()->getId(),

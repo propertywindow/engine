@@ -44,7 +44,7 @@ class Mapper
     public static function fromTerms(string $language, Terms ...$terms): array
     {
         return array_map(
-            function(Terms $term) use ($language) {
+            function (Terms $term) use ($language) {
                 return self::fromTerm($language, $term);
             },
             $terms

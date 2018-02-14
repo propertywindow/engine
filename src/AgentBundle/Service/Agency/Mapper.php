@@ -51,7 +51,7 @@ class Mapper
     public static function fromAgencies(Agency ...$agencies): array
     {
         return array_map(
-            function(Agency $agency) {
+            function (Agency $agency) {
                 return self::fromAgency($agency);
             },
             $agencies

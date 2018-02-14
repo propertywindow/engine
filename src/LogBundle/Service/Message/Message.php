@@ -70,7 +70,7 @@ class Message
 
         if (count($this->attachments) > 0) {
             $message['attachments'] = array_map(
-                function(Attachment $attachment) {
+                function (Attachment $attachment) {
                     return $attachment->toArray();
                 },
                 $this->attachments
