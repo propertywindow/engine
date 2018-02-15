@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace AgentBundle\Entity;
 
+use AppBundle\Entity\ContactAddress;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -33,34 +34,10 @@ class Agency
     private $name;
 
     /**
-     * @var string
-     * @ORM\Column(name="street", type="string", length=255)
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\ContactAddress")
+     * @ORM\JoinColumn(name="address_id", referencedColumnName="id", nullable=true)
      */
-    private $street;
-
-    /**
-     * @var string
-     * @ORM\Column(name="house_number", type="string", length=10)
-     */
-    private $houseNumber;
-
-    /**
-     * @var string
-     * @ORM\Column(name="postcode", type="string", length=10)
-     */
-    private $postcode;
-
-    /**
-     * @var string
-     * @ORM\Column(name="city", type="string", length=255)
-     */
-    private $city;
-
-    /**
-     * @var string
-     * @ORM\Column(name="country", type="string", length=255)
-     */
-    private $country;
+    private $address;
 
     /**
      * @var string
@@ -92,7 +69,6 @@ class Agency
      */
     protected $updated;
 
-
     /**
      * @return int|null
      */
@@ -106,7 +82,7 @@ class Agency
      *
      * @return Agency
      */
-    public function setAgent(Agent $agent): Agency
+    public function setAgent(Agent $agent): self
     {
         $this->agent = $agent;
 
@@ -126,7 +102,7 @@ class Agency
      *
      * @return Agency
      */
-    public function setName($name): Agency
+    public function setName($name): self
     {
         $this->name = $name;
 
@@ -142,103 +118,23 @@ class Agency
     }
 
     /**
-     * @param string $street
+     * @param \AppBundle\Entity\ContactAddress $address
      *
      * @return Agency
      */
-    public function setStreet($street): Agency
+    public function setAddress(ContactAddress $address = null): self
     {
-        $this->street = $street;
+        $this->address = $address;
 
         return $this;
     }
 
     /**
-     * @return string
+     * @return \AppBundle\Entity\ContactAddress|null
      */
-    public function getStreet()
+    public function getAddress(): ?ContactAddress
     {
-        return $this->street;
-    }
-
-    /**
-     * @param string $houseNumber
-     *
-     * @return Agency
-     */
-    public function setHouseNumber($houseNumber): Agency
-    {
-        $this->houseNumber = $houseNumber;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getHouseNumber()
-    {
-        return $this->houseNumber;
-    }
-
-    /**
-     * @param string $postcode
-     *
-     * @return Agency
-     */
-    public function setPostcode($postcode): Agency
-    {
-        $this->postcode = $postcode;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPostcode()
-    {
-        return $this->postcode;
-    }
-
-    /**
-     * @param string $city
-     *
-     * @return Agency
-     */
-    public function setCity($city): Agency
-    {
-        $this->city = $city;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCity()
-    {
-        return $this->city;
-    }
-
-    /**
-     * @param string $country
-     *
-     * @return Agency
-     */
-    public function setCountry($country): Agency
-    {
-        $this->country = $country;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCountry()
-    {
-        return $this->country;
+        return $this->address;
     }
 
     /**
@@ -246,7 +142,7 @@ class Agency
      *
      * @return Agency
      */
-    public function setPhone($phone): Agency
+    public function setPhone($phone): self
     {
         $this->phone = $phone;
 
@@ -266,7 +162,7 @@ class Agency
      *
      * @return Agency
      */
-    public function setFax($fax): Agency
+    public function setFax($fax): self
     {
         $this->fax = $fax;
 
@@ -286,7 +182,7 @@ class Agency
      *
      * @return Agency
      */
-    public function setEmail(string $email): Agency
+    public function setEmail(string $email): self
     {
         $this->email = $email;
 
@@ -306,7 +202,7 @@ class Agency
      *
      * @return Agency
      */
-    public function setCreated(?\DateTime $created): Agency
+    public function setCreated(?\DateTime $created): self
     {
         $this->created = $created;
 
@@ -326,7 +222,7 @@ class Agency
      *
      * @return Agency
      */
-    public function setUpdated(?\DateTime $updated): Agency
+    public function setUpdated(?\DateTime $updated): self
     {
         $this->updated = $updated;
 

@@ -104,6 +104,7 @@ class AgencyController extends JsonController
         $agency = new Agency();
 
         $agency->setAgent($this->user->getAgent());
+        $agency->setAddress($this->createAddress());
 
         $this->prepareParameters($agency);
 
@@ -126,6 +127,8 @@ class AgencyController extends JsonController
         $agency = $this->agencyService->getAgency((int)$this->parameters['id']);
 
         $this->isAuthorized($this->user->getAgent()->getId(), $agency->getAgent()->getId());
+
+        $agency->setAddress($this->createAddress());
 
         $this->prepareParameters($agency);
 

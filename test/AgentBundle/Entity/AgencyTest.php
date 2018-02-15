@@ -5,6 +5,7 @@ namespace Tests\AgentBundle\Entity;
 
 use AgentBundle\Entity\Agency;
 use AgentBundle\Entity\Agent;
+use AppBundle\Entity\ContactAddress;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -37,20 +38,10 @@ class AgencyTest extends TestCase
         $this->agency->setName('Agency');
         $this->assertEquals('Agency', $this->agency->getName());
 
-        $this->agency->setStreet('Portobello High Street');
-        $this->assertEquals('Portobello High Street', $this->agency->getStreet());
+        $address = new ContactAddress();
 
-        $this->agency->setHouseNumber('27');
-        $this->assertEquals('27', $this->agency->getHouseNumber());
-
-        $this->agency->setPostcode('EH15 1DE');
-        $this->assertEquals('EH15 1DE', $this->agency->getPostcode());
-
-        $this->agency->setCity('Edinburgh');
-        $this->assertEquals('Edinburgh', $this->agency->getCity());
-
-        $this->agency->setCountry('GB');
-        $this->assertEquals('GB', $this->agency->getCountry());
+        $this->agency->setAddress($address);
+        $this->assertEquals($address, $this->agency->getAddress());
 
         $this->agency->setEmail('info@propertywindow.com');
         $this->assertEquals('info@propertywindow.com', $this->agency->getEmail());

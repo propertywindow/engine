@@ -185,6 +185,8 @@ class AgentController extends JsonController
             $this->hasAccessLevel(self::USER_ADMIN);
         }
 
+        $agent->setAddress($this->createAddress());
+
         $this->prepareParameters($agent);
 
         // todo: also update user with new address, only on address change

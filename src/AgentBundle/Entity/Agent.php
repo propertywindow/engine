@@ -76,8 +76,6 @@ class Agent
      */
     private $logo;
 
-
-
     /**
      * @var int
      * @ORM\Column(name="property_limit", type="integer")
