@@ -125,7 +125,7 @@ class Agent
      *
      * @return Agent
      */
-    public function setAgentGroup(AgentGroup $agentGroup): Agent
+    public function setAgentGroup(AgentGroup $agentGroup): self
     {
         $this->agentGroup = $agentGroup;
 
@@ -145,7 +145,7 @@ class Agent
      *
      * @return Agent
      */
-    public function setUser(User $user = null): Agent
+    public function setUser(User $user = null): self
     {
         $this->user = $user;
 
@@ -165,7 +165,7 @@ class Agent
      *
      * @return Agent
      */
-    public function setAddress(ContactAddress $address = null): Agent
+    public function setAddress(ContactAddress $address = null): self
     {
         $this->address = $address;
 
@@ -185,7 +185,7 @@ class Agent
      *
      * @return Agent
      */
-    public function setOffice(string $office): Agent
+    public function setOffice(string $office): self
     {
         $this->office = $office;
 
@@ -205,7 +205,7 @@ class Agent
      *
      * @return Agent
      */
-    public function setPhone(?string $phone): Agent
+    public function setPhone(?string $phone): self
     {
         $this->phone = $phone;
 
@@ -225,7 +225,7 @@ class Agent
      *
      * @return Agent
      */
-    public function setFax(?string $fax): Agent
+    public function setFax(?string $fax): self
     {
         $this->fax = $fax;
 
@@ -245,7 +245,7 @@ class Agent
      *
      * @return Agent
      */
-    public function setEmail(string $email): Agent
+    public function setEmail(string $email): self
     {
         $this->email = $email;
 
@@ -265,7 +265,7 @@ class Agent
      *
      * @return Agent
      */
-    public function setWebsite(?string $website): Agent
+    public function setWebsite(?string $website): self
     {
         $this->website = $website;
 
@@ -285,7 +285,7 @@ class Agent
      *
      * @return Agent
      */
-    public function setLogo(?string $logo): Agent
+    public function setLogo(?string $logo): self
     {
         $this->logo = $logo;
 
@@ -305,7 +305,7 @@ class Agent
      *
      * @return Agent
      */
-    public function setPropertyLimit(int $propertyLimit): Agent
+    public function setPropertyLimit(int $propertyLimit): self
     {
         $this->propertyLimit = $propertyLimit;
 
@@ -325,7 +325,7 @@ class Agent
      *
      * @return Agent
      */
-    public function setWebprint(bool $webprint): Agent
+    public function setWebprint(bool $webprint): self
     {
         $this->webprint = $webprint;
 
@@ -345,7 +345,7 @@ class Agent
      *
      * @return Agent
      */
-    public function setEspc(bool $espc): Agent
+    public function setEspc(bool $espc): self
     {
         $this->espc = $espc;
 
@@ -365,7 +365,7 @@ class Agent
      *
      * @return Agent
      */
-    public function setArchived(bool $archived): Agent
+    public function setArchived(bool $archived): self
     {
         $this->archived = $archived;
 
@@ -385,7 +385,7 @@ class Agent
      *
      * @return Agent
      */
-    public function setCreated(?\DateTime $created): Agent
+    public function setCreated(?\DateTime $created): self
     {
         $this->created = $created;
 
@@ -405,7 +405,7 @@ class Agent
      *
      * @return Agent
      */
-    public function setUpdated(?\DateTime $updated): Agent
+    public function setUpdated(?\DateTime $updated): self
     {
         $this->updated = $updated;
 

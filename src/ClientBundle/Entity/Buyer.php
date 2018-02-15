@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace ClientBundle\Entity;
 
 use AgentBundle\Entity\Solicitor;
+use AppBundle\Entity\ContactAddress;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -40,34 +41,10 @@ class Buyer
     private $lastName;
 
     /**
-     * @var string
-     * @ORM\Column(name="street", type="string", length=255)
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\ContactAddress")
+     * @ORM\JoinColumn(name="address_id", referencedColumnName="id", nullable=true)
      */
-    private $street;
-
-    /**
-     * @var string
-     * @ORM\Column(name="house_number", type="string", length=10)
-     */
-    private $houseNumber;
-
-    /**
-     * @var string
-     * @ORM\Column(name="postcode", type="string", length=10)
-     */
-    private $postcode;
-
-    /**
-     * @var string
-     * @ORM\Column(name="city", type="string", length=255)
-     */
-    private $city;
-
-    /**
-     * @var string
-     * @ORM\Column(name="country", type="string", length=255)
-     */
-    private $country;
+    private $address;
 
     /**
      * @var string
@@ -126,7 +103,7 @@ class Buyer
      *
      * @return Buyer
      */
-    public function setFirstName($firstName)
+    public function setFirstName($firstName): self
     {
         $this->firstName = $firstName;
 
@@ -146,7 +123,7 @@ class Buyer
      *
      * @return Buyer
      */
-    public function setLastName($lastName)
+    public function setLastName($lastName): self
     {
         $this->lastName = $lastName;
 
@@ -162,103 +139,23 @@ class Buyer
     }
 
     /**
-     * @param string $street
+     * @param \AppBundle\Entity\ContactAddress $address
      *
      * @return Buyer
      */
-    public function setStreet($street)
+    public function setAddress(ContactAddress $address = null): self
     {
-        $this->street = $street;
+        $this->address = $address;
 
         return $this;
     }
 
     /**
-     * @return string
+     * @return \AppBundle\Entity\ContactAddress|null
      */
-    public function getStreet()
+    public function getAddress(): ?ContactAddress
     {
-        return $this->street;
-    }
-
-    /**
-     * @param string $houseNumber
-     *
-     * @return Buyer
-     */
-    public function setHouseNumber($houseNumber)
-    {
-        $this->houseNumber = $houseNumber;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getHouseNumber()
-    {
-        return $this->houseNumber;
-    }
-
-    /**
-     * @param string $postcode
-     *
-     * @return Buyer
-     */
-    public function setPostcode($postcode)
-    {
-        $this->postcode = $postcode;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPostcode()
-    {
-        return $this->postcode;
-    }
-
-    /**
-     * @param string $city
-     *
-     * @return Buyer
-     */
-    public function setCity($city)
-    {
-        $this->city = $city;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCity()
-    {
-        return $this->city;
-    }
-
-    /**
-     * @param string $country
-     *
-     * @return Buyer
-     */
-    public function setCountry($country)
-    {
-        $this->country = $country;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCountry()
-    {
-        return $this->country;
+        return $this->address;
     }
 
     /**
@@ -266,7 +163,7 @@ class Buyer
      *
      * @return Buyer
      */
-    public function setEmail($email)
+    public function setEmail($email): self
     {
         $this->email = $email;
 
@@ -286,7 +183,7 @@ class Buyer
      *
      * @return Buyer
      */
-    public function setPhone($phone)
+    public function setPhone($phone): self
     {
         $this->phone = $phone;
 
@@ -306,7 +203,7 @@ class Buyer
      *
      * @return Buyer
      */
-    public function setCreated(?\DateTime $created): Buyer
+    public function setCreated(?\DateTime $created): self
     {
         $this->created = $created;
 

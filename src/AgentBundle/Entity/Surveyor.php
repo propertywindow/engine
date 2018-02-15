@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace AgentBundle\Entity;
 
+use AppBundle\Entity\ContactAddress;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -33,6 +34,12 @@ class Surveyor
     private $name;
 
     /**
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\ContactAddress")
+     * @ORM\JoinColumn(name="address_id", referencedColumnName="id", nullable=true)
+     */
+    private $address;
+
+    /**
      * @var string
      * @ORM\Column(name="phone", type="string", length=255, nullable=true)
      */
@@ -49,36 +56,6 @@ class Surveyor
      * @ORM\Column(name="email", type="string", length=255, nullable=true)
      */
     private $email;
-
-    /**
-     * @var string
-     * @ORM\Column(name="street", type="string", length=255)
-     */
-    private $street;
-
-    /**
-     * @var string
-     * @ORM\Column(name="house_number", type="string", length=10)
-     */
-    private $houseNumber;
-
-    /**
-     * @var string
-     * @ORM\Column(name="postcode", type="string", length=10)
-     */
-    private $postcode;
-
-    /**
-     * @var string
-     * @ORM\Column(name="city", type="string", length=255)
-     */
-    private $city;
-
-    /**
-     * @var string
-     * @ORM\Column(name="country", type="string", length=255)
-     */
-    private $country;
 
     /**
      * @var \DateTime $created
@@ -105,7 +82,7 @@ class Surveyor
      *
      * @return Surveyor
      */
-    public function setAgent(Agent $agent): Surveyor
+    public function setAgent(Agent $agent): self
     {
         $this->agent = $agent;
 
@@ -125,7 +102,7 @@ class Surveyor
      *
      * @return Surveyor
      */
-    public function setName(string $name): Surveyor
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -141,11 +118,31 @@ class Surveyor
     }
 
     /**
+     * @param \AppBundle\Entity\ContactAddress $address
+     *
+     * @return Surveyor
+     */
+    public function setAddress(ContactAddress $address = null): self
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    /**
+     * @return \AppBundle\Entity\ContactAddress|null
+     */
+    public function getAddress(): ?ContactAddress
+    {
+        return $this->address;
+    }
+
+    /**
      * @param string|null $phone
      *
      * @return Surveyor
      */
-    public function setPhone(?string $phone): Surveyor
+    public function setPhone(?string $phone): self
     {
         $this->phone = $phone;
 
@@ -165,7 +162,7 @@ class Surveyor
      *
      * @return Surveyor
      */
-    public function setFax(?string $fax): Surveyor
+    public function setFax(?string $fax): self
     {
         $this->fax = $fax;
 
@@ -185,7 +182,7 @@ class Surveyor
      *
      * @return Surveyor
      */
-    public function setEmail(?string $email): Surveyor
+    public function setEmail(?string $email): self
     {
         $this->email = $email;
 
@@ -205,7 +202,7 @@ class Surveyor
      *
      * @return Surveyor
      */
-    public function setStreet(string $street): Surveyor
+    public function setStreet(string $street): self
     {
         $this->street = $street;
 
@@ -213,99 +210,11 @@ class Surveyor
     }
 
     /**
-     * @return string
-     */
-    public function getStreet(): string
-    {
-        return $this->street;
-    }
-
-    /**
-     * @param string $houseNumber
-     *
-     * @return Surveyor
-     */
-    public function setHouseNumber(string $houseNumber): Surveyor
-    {
-        $this->houseNumber = $houseNumber;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getHouseNumber(): string
-    {
-        return $this->houseNumber;
-    }
-
-    /**
-     * @param string $postcode
-     *
-     * @return Surveyor
-     */
-    public function setPostcode(string $postcode): Surveyor
-    {
-        $this->postcode = $postcode;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPostcode(): string
-    {
-        return $this->postcode;
-    }
-
-    /**
-     * @param string $city
-     *
-     * @return Surveyor
-     */
-    public function setCity(string $city): Surveyor
-    {
-        $this->city = $city;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCity(): string
-    {
-        return $this->city;
-    }
-
-    /**
-     * @param string $country
-     *
-     * @return Surveyor
-     */
-    public function setCountry(string $country): Surveyor
-    {
-        $this->country = $country;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCountry(): string
-    {
-        return $this->country;
-    }
-
-    /**
      * @param \DateTime|null $created
      *
      * @return Surveyor
      */
-    public function setCreated(?\DateTime $created): Surveyor
+    public function setCreated(?\DateTime $created): self
     {
         $this->created = $created;
 
@@ -325,7 +234,7 @@ class Surveyor
      *
      * @return Surveyor
      */
-    public function setUpdated(?\DateTime $updated): Surveyor
+    public function setUpdated(?\DateTime $updated): self
     {
         $this->updated = $updated;
 

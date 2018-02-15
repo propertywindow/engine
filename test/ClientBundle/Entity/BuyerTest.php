@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace Tests\ClientBundle\Entity;
 
+use AppBundle\Entity\ContactAddress;
 use ClientBundle\Entity\Buyer;
 use AgentBundle\Entity\Solicitor;
 use PHPUnit\Framework\TestCase;
@@ -25,6 +26,14 @@ class BuyerTest extends TestCase
         $this->buyer = new Buyer();
     }
 
+    public function testAddress()
+    {
+        $address = new ContactAddress();
+
+        $this->buyer->setAddress($address);
+        $this->assertEquals($address, $this->buyer->getAddress());
+    }
+
     public function testGetterAndSetter()
     {
         $this->assertNull($this->buyer->getId());
@@ -39,21 +48,6 @@ class BuyerTest extends TestCase
 
         $this->buyer->setLastName('Geurts');
         $this->assertEquals('Geurts', $this->buyer->getLastName());
-
-        $this->buyer->setStreet('Portobello High Street');
-        $this->assertEquals('Portobello High Street', $this->buyer->getStreet());
-
-        $this->buyer->setHouseNumber('27');
-        $this->assertEquals('27', $this->buyer->getHouseNumber());
-
-        $this->buyer->setPostcode('EH15 1DE');
-        $this->assertEquals('EH15 1DE', $this->buyer->getPostcode());
-
-        $this->buyer->setCity('Edinburgh');
-        $this->assertEquals('Edinburgh', $this->buyer->getCity());
-
-        $this->buyer->setCountry('GB');
-        $this->assertEquals('GB', $this->buyer->getCountry());
 
         $this->buyer->setEmail('info@propertywindow.com');
         $this->assertEquals('info@propertywindow.com', $this->buyer->getEmail());

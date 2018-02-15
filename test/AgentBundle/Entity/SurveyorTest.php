@@ -5,6 +5,7 @@ namespace Tests\AgentBundle\Entity;
 
 use AgentBundle\Entity\Agent;
 use AgentBundle\Entity\Surveyor;
+use AppBundle\Entity\ContactAddress;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -25,6 +26,14 @@ class SurveyorTest extends TestCase
         $this->surveyor = new Surveyor();
     }
 
+    public function testAddress()
+    {
+        $address = new ContactAddress();
+
+        $this->surveyor->setAddress($address);
+        $this->assertEquals($address, $this->surveyor->getAddress());
+    }
+
     public function testGetterAndSetter()
     {
         $this->assertNull($this->surveyor->getId());
@@ -36,21 +45,6 @@ class SurveyorTest extends TestCase
 
         $this->surveyor->setName('Agency');
         $this->assertEquals('Agency', $this->surveyor->getName());
-
-        $this->surveyor->setStreet('Portobello High Street');
-        $this->assertEquals('Portobello High Street', $this->surveyor->getStreet());
-
-        $this->surveyor->setHouseNumber('27');
-        $this->assertEquals('27', $this->surveyor->getHouseNumber());
-
-        $this->surveyor->setPostcode('EH15 1DE');
-        $this->assertEquals('EH15 1DE', $this->surveyor->getPostcode());
-
-        $this->surveyor->setCity('Edinburgh');
-        $this->assertEquals('Edinburgh', $this->surveyor->getCity());
-
-        $this->surveyor->setCountry('GB');
-        $this->assertEquals('GB', $this->surveyor->getCountry());
 
         $this->surveyor->setEmail('info@propertywindow.com');
         $this->assertEquals('info@propertywindow.com', $this->surveyor->getEmail());
