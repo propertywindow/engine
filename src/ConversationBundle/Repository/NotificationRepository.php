@@ -65,22 +65,19 @@ class NotificationRepository extends EntityRepository
         $qb->select('n')
            ->from('ConversationBundle:Notification', 'n')
            ->leftJoin('n.users', 'u', Join::WITH, 'u = :userId')
-           ->where(
-               $expr->andX(
-                   $expr->orX(
-                       $expr->eq('n.forEveryone', '1'),
-                       $expr->isNotNull('u.id')
-                   ),
-                   $expr->lt('n.start', 'CURRENT_TIMESTAMP()'),
-                   $expr->orX(
-                       $expr->isNull('n.end'),
-                       $expr->gt('n.end', 'CURRENT_TIMESTAMP()')
-                   ),
-                   $expr->eq('n.visible', '1')
-               )
-           )
-           ->setParameter('userId', $userId);
-
+        ->where($expr->andX(
+            $expr->orX(
+                $expr->eq('n.forEveryone', '1'),
+                $expr->isNotNull('u.id')
+            ),
+            $expr->lt('n.start', 'CURRENT_TIMESTAMP()'),
+            $expr->orX(
+                $expr->isNull('n.end'),
+                $expr->gt('n.end', 'CURRENT_TIMESTAMP()')
+            ),
+            $expr->eq('n.visible', '1')
+        ))
+        ->setParameter('userId', $userId);
 
         $query         = $qb;
         $notifications = $query->getQuery()->getResult();

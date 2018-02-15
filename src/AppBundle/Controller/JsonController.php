@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\ContactAddress;
 use AppBundle\Exceptions\CouldNotAuthenticateUserException;
 use AppBundle\Exceptions\JsonRpc\CouldNotParseJsonRequestException;
 use AppBundle\Exceptions\JsonRpc\InvalidJsonRpcMethodException;
@@ -237,6 +238,17 @@ class JsonController extends BaseController
         }
     }
 
+    /**
+     * @return ContactAddress
+     */
+    public function createAddress()
+    {
+        $address = new ContactAddress();
+
+        $this->prepareParameters($address);
+
+        return $this->addressService->createAddress($address);
+    }
 
     /**
      * @param string $property

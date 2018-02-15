@@ -8,6 +8,7 @@ use AgentBundle\Service\AgentService;
 use AgentBundle\Service\AgentGroupService;
 use AgentBundle\Service\AgentSettingsService;
 use AgentBundle\Service\SolicitorService;
+use AppBundle\Service\ContactAddressService;
 use ClientBundle\Service\ClientService;
 use AlertBundle\Service\AlertService;
 use AlertBundle\Service\ApplicantService;
@@ -222,6 +223,11 @@ class BaseController extends Controller
     public $agencyService;
 
     /**
+     * @var ContactAddressService
+     */
+    public $addressService;
+
+    /**
      * @param Authenticator          $authenticator
      * @param SettingsService        $settingsService
      * @param AgentSettingsService   $agentSettingsService
@@ -257,6 +263,7 @@ class BaseController extends Controller
      * @param ApplicationService     $applicationService
      * @param SolicitorService       $solicitorService
      * @param AgencyService          $agencyService
+     * @param ContactAddressService  $addressService
      */
     public function __construct(
         Authenticator $authenticator,
@@ -293,7 +300,8 @@ class BaseController extends Controller
         ApplicantService $applicantService,
         ApplicationService $applicationService,
         SolicitorService $solicitorService,
-        AgencyService $agencyService
+        AgencyService $agencyService,
+        ContactAddressService $addressService
     ) {
         $this->authenticator          = $authenticator;
         $this->settingsService        = $settingsService;
@@ -330,5 +338,6 @@ class BaseController extends Controller
         $this->applicationService     = $applicationService;
         $this->solicitorService       = $solicitorService;
         $this->agencyService          = $agencyService;
+        $this->addressService         = $addressService;
     }
 }

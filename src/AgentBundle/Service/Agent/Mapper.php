@@ -17,17 +17,16 @@ class Mapper
      */
     public static function fromAgent(Agent $agent): array
     {
-        $country = $agent->getCountry();
+        $country = $agent->getAddress()->getCountry();
 
         switch ($country) {
             case "NL":
-                $address = $agent->getStreet() . ' ' . $agent->getHouseNumber();
+                $address = $agent->getAddress()->getStreet() . ' ' . $agent->getAddress()->getHouseNumber();
                 break;
             default:
-                $address = $agent->getHouseNumber() . ' ' . $agent->getStreet();
+                $address = $agent->getAddress()->getHouseNumber() . ' ' . $agent->getAddress()->getStreet();
                 break;
         }
-
 
         return [
             'id'             => $agent->getId(),
@@ -36,10 +35,10 @@ class Mapper
             'office'         => $agent->getOffice(),
             'agent_user_id'  => $agent->getUser()->getId(),
             'address'        => $address,
-            'street'         => $agent->getStreet(),
-            'house_number'   => $agent->getHouseNumber(),
-            'postcode'       => $agent->getPostcode(),
-            'city'           => $agent->getCity(),
+            'street'         => $agent->getAddress()->getStreet(),
+            'house_number'   => $agent->getAddress()->getHouseNumber(),
+            'postcode'       => $agent->getAddress()->getPostcode(),
+            'city'           => $agent->getAddress()->getCity(),
             'property_limit' => $agent->getPropertyLimit(),
             'phone'          => $agent->getPhone(),
             'fax'            => $agent->getFax(),

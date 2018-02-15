@@ -3,6 +3,8 @@ services:
           arguments: ['%kernel.environment%', '@AuthenticationBundle\Service\UserService', '@AuthenticationBundle\Service\BlacklistService']
     AppBundle\Service\SettingsService:
           arguments: ["@doctrine.orm.entity_manager"]
+    AppBundle\Service\ContactAddressService:
+          arguments: ["@doctrine.orm.entity_manager"]
     AppBundle\Controller\BaseController:
           autowire: true
     AppBundle\Controller\JsonController:

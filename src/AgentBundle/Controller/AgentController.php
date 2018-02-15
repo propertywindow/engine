@@ -8,6 +8,7 @@ use AgentBundle\Exceptions\AgentGroupNotFoundException;
 use AgentBundle\Exceptions\AgentNotFoundException;
 use AgentBundle\Exceptions\AgentSettingsNotFoundException;
 use AppBundle\Controller\JsonController;
+use AppBundle\Entity\ContactAddress;
 use AuthenticationBundle\Entity\User;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use AuthenticationBundle\Exceptions\UserAlreadyExistException;
@@ -129,6 +130,7 @@ class AgentController extends JsonController
 
         $agent = new Agent();
 
+        $agent->setAddress($this->createAddress());
         $agent->setAgentGroup($this->agentGroupService->getAgentGroup($this->parameters['agent_group_id']));
         unset($this->parameters['agent_group_id']);
 

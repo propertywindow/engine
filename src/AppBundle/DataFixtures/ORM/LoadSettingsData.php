@@ -9,7 +9,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
 /**
- * Class LoadSettingsData
+ * Class LoadSettings Data
  */
 class LoadSettingsData extends AbstractFixture implements OrderedFixtureInterface
 {

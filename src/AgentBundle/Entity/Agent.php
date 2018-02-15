@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace AgentBundle\Entity;
 
+use AppBundle\Entity\ContactAddress;
 use AuthenticationBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -32,6 +33,12 @@ class Agent
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true)
      */
     private $user;
+
+    /**
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\ContactAddress")
+     * @ORM\JoinColumn(name="address_id", referencedColumnName="id", nullable=true)
+     */
+    private $address;
 
     /**
      * @var string
@@ -69,35 +76,7 @@ class Agent
      */
     private $logo;
 
-    /**
-     * @var string
-     * @ORM\Column(name="street", type="string", length=255)
-     */
-    private $street;
 
-    /**
-     * @var string
-     * @ORM\Column(name="house_number", type="string", length=10)
-     */
-    private $houseNumber;
-
-    /**
-     * @var string
-     * @ORM\Column(name="postcode", type="string", length=10)
-     */
-    private $postcode;
-
-    /**
-     * @var string
-     * @ORM\Column(name="city", type="string", length=255)
-     */
-    private $city;
-
-    /**
-     * @var string
-     * @ORM\Column(name="country", type="string", length=255)
-     */
-    private $country;
 
     /**
      * @var int
@@ -181,6 +160,26 @@ class Agent
     public function getUser(): ?User
     {
         return $this->user;
+    }
+
+    /**
+     * @param \AppBundle\Entity\ContactAddress $address
+     *
+     * @return Agent
+     */
+    public function setAddress(ContactAddress $address = null): Agent
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    /**
+     * @return \AppBundle\Entity\ContactAddress|null
+     */
+    public function getAddress(): ?ContactAddress
+    {
+        return $this->address;
     }
 
     /**
@@ -301,106 +300,6 @@ class Agent
     public function getLogo(): ?string
     {
         return $this->logo;
-    }
-
-    /**
-     * @param string $street
-     *
-     * @return Agent
-     */
-    public function setStreet(string $street): Agent
-    {
-        $this->street = $street;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStreet(): string
-    {
-        return $this->street;
-    }
-
-    /**
-     * @param string $houseNumber
-     *
-     * @return Agent
-     */
-    public function setHouseNumber(string $houseNumber): Agent
-    {
-        $this->houseNumber = $houseNumber;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getHouseNumber(): string
-    {
-        return $this->houseNumber;
-    }
-
-    /**
-     * @param string $postcode
-     *
-     * @return Agent
-     */
-    public function setPostcode(string $postcode): Agent
-    {
-        $this->postcode = $postcode;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPostcode(): string
-    {
-        return $this->postcode;
-    }
-
-    /**
-     * @param string $city
-     *
-     * @return Agent
-     */
-    public function setCity(string $city): Agent
-    {
-        $this->city = $city;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCity(): string
-    {
-        return $this->city;
-    }
-
-    /**
-     * @param string $country
-     *
-     * @return Agent
-     */
-    public function setCountry(string $country): Agent
-    {
-        $this->country = $country;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCountry(): string
-    {
-        return $this->country;
     }
 
     /**
