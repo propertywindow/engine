@@ -109,6 +109,7 @@ class SolicitorController extends JsonController
 
         $solicitor->setAgent($this->user->getAgent());
         $solicitor->setAgency($agency);
+        $solicitor->setAddress($this->createAddress());
 
         $this->prepareParameters($solicitor);
 
@@ -131,6 +132,8 @@ class SolicitorController extends JsonController
         $solicitor = $this->solicitorService->getSolicitor((int)$this->parameters['id']);
 
         $this->isAuthorized($this->user->getAgent()->getId(), $solicitor->getAgent()->getId());
+
+        $solicitor->setAddress($this->createAddress());
 
         $this->prepareParameters($solicitor);
 

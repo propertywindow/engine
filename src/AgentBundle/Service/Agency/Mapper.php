@@ -17,14 +17,14 @@ class Mapper
      */
     public static function fromAgency(Agency $agency): array
     {
-        $country = $agency->getCountry();
+        $country = $agency->getAddress()->getCountry();
 
         switch ($country) {
             case "NL":
-                $address = $agency->getStreet() . ' ' . $agency->getHouseNumber();
+                $address = $agency->getAddress()->getStreet() . ' ' . $agency->getAddress()->getHouseNumber();
                 break;
             default:
-                $address = $agency->getHouseNumber() . ' ' . $agency->getStreet();
+                $address = $agency->getAddress()->getHouseNumber() . ' ' . $agency->getAddress()->getStreet();
                 break;
         }
 
@@ -33,10 +33,11 @@ class Mapper
             'name'         => $agency->getName(),
             'agent_id'     => $agency->getAgent()->getId(),
             'address'      => $address,
-            'street'       => $agency->getStreet(),
-            'house_number' => $agency->getHouseNumber(),
-            'postcode'     => $agency->getPostcode(),
-            'city'         => $agency->getCity(),
+            'street'       => $agency->getAddress()->getStreet(),
+            'house_number' => $agency->getAddress()->getHouseNumber(),
+            'postcode'     => $agency->getAddress()->getPostcode(),
+            'city'         => $agency->getAddress()->getCity(),
+            'country'      => $country,
             'phone'        => $agency->getPhone(),
             'fax'          => $agency->getFax(),
             'email'        => $agency->getEmail(),

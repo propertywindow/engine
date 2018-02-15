@@ -6,12 +6,13 @@ namespace AgentBundle\DataFixtures\ORM;
 use AgentBundle\Entity\Agency;
 use AgentBundle\Entity\Agent;
 use AgentBundle\Entity\Solicitor;
+use AppBundle\Entity\ContactAddress;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
 /**
- * Class LoadSolicitorData
+ * Class LoadSolicitor Data
  */
 class LoadSolicitorData extends AbstractFixture implements OrderedFixtureInterface
 {
@@ -20,19 +21,18 @@ class LoadSolicitorData extends AbstractFixture implements OrderedFixtureInterfa
      */
     public function load(ObjectManager $manager)
     {
-        $solicitor = new Solicitor();
         /** @var Agent $agent */
-        $agent = $this->getReference('agent_annan_1');
-        $solicitor->setAgent($agent);
         /** @var Agency $agency */
+        /** @var ContactAddress $address */
+
+        $solicitor = new Solicitor();
+        $agent     = $this->getReference('agent_annan_1');
+        $solicitor->setAgent($agent);
         $agency = $this->getReference('agent_annan_agency_1');
         $solicitor->setAgency($agency);
         $solicitor->setName('Gareth Williams');
-        $solicitor->setStreet('Cadzow PlaceLondon road');
-        $solicitor->setHouseNumber('19');
-        $solicitor->setPostcode('EH7 5SN');
-        $solicitor->setCity('Edinburgh');
-        $solicitor->setCountry('GB');
+        $address = $this->getReference('address_annan_solicitor_1');
+        $solicitor->setAddress($address);
         $solicitor->setEmail('info@aikmainbell.co.uk');
         $solicitor->setPhone('0131 661 0015');
         $this->setReference('agent_annan_solicitor_1', $solicitor);

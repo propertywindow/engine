@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace AgentBundle\Entity;
 
+use AppBundle\Entity\ContactAddress;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -39,34 +40,10 @@ class Solicitor
     private $name;
 
     /**
-     * @var string
-     * @ORM\Column(name="street", type="string", length=255)
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\ContactAddress")
+     * @ORM\JoinColumn(name="address_id", referencedColumnName="id", nullable=true)
      */
-    private $street;
-
-    /**
-     * @var string
-     * @ORM\Column(name="house_number", type="string", length=10)
-     */
-    private $houseNumber;
-
-    /**
-     * @var string
-     * @ORM\Column(name="postcode", type="string", length=10)
-     */
-    private $postcode;
-
-    /**
-     * @var string
-     * @ORM\Column(name="city", type="string", length=255)
-     */
-    private $city;
-
-    /**
-     * @var string
-     * @ORM\Column(name="country", type="string", length=255)
-     */
-    private $country;
+    private $address;
 
     /**
      * @var string
@@ -111,7 +88,7 @@ class Solicitor
      *
      * @return Solicitor
      */
-    public function setAgent(Agent $agent): Solicitor
+    public function setAgent(Agent $agent): self
     {
         $this->agent = $agent;
 
@@ -131,7 +108,7 @@ class Solicitor
      *
      * @return Solicitor
      */
-    public function setAgency(Agency $agency): Solicitor
+    public function setAgency(Agency $agency): self
     {
         $this->agency = $agency;
 
@@ -151,7 +128,7 @@ class Solicitor
      *
      * @return Solicitor
      */
-    public function setName(string $name): Solicitor
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -167,103 +144,23 @@ class Solicitor
     }
 
     /**
-     * @param string $street
+     * @param \AppBundle\Entity\ContactAddress $address
      *
      * @return Solicitor
      */
-    public function setStreet(string $street): Solicitor
+    public function setAddress(ContactAddress $address = null): self
     {
-        $this->street = $street;
+        $this->address = $address;
 
         return $this;
     }
 
     /**
-     * @return string
+     * @return \AppBundle\Entity\ContactAddress|null
      */
-    public function getStreet(): string
+    public function getAddress(): ?ContactAddress
     {
-        return $this->street;
-    }
-
-    /**
-     * @param string $houseNumber
-     *
-     * @return Solicitor
-     */
-    public function setHouseNumber(string $houseNumber): Solicitor
-    {
-        $this->houseNumber = $houseNumber;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getHouseNumber(): string
-    {
-        return $this->houseNumber;
-    }
-
-    /**
-     * @param string $postcode
-     *
-     * @return Solicitor
-     */
-    public function setPostcode(string $postcode): Solicitor
-    {
-        $this->postcode = $postcode;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPostcode(): string
-    {
-        return $this->postcode;
-    }
-
-    /**
-     * @param string $city
-     *
-     * @return Solicitor
-     */
-    public function setCity(string $city): Solicitor
-    {
-        $this->city = $city;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCity(): string
-    {
-        return $this->city;
-    }
-
-    /**
-     * @param string $country
-     *
-     * @return Solicitor
-     */
-    public function setCountry(string $country): Solicitor
-    {
-        $this->country = $country;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCountry(): string
-    {
-        return $this->country;
+        return $this->address;
     }
 
     /**

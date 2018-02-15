@@ -39,6 +39,7 @@ class Mapper
             'house_number'   => $agent->getAddress()->getHouseNumber(),
             'postcode'       => $agent->getAddress()->getPostcode(),
             'city'           => $agent->getAddress()->getCity(),
+            'country'        => $country,
             'property_limit' => $agent->getPropertyLimit(),
             'phone'          => $agent->getPhone(),
             'fax'            => $agent->getFax(),

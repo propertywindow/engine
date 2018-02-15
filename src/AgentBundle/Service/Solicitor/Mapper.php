@@ -17,24 +17,25 @@ class Mapper
      */
     public static function fromSolicitor(Solicitor $solicitor): array
     {
-        $country = $solicitor->getCountry();
+        $country = $solicitor->getAddress()->getCountry();
 
         switch ($country) {
             case "NL":
-                $address = $solicitor->getStreet() . ' ' . $solicitor->getHouseNumber();
+                $address = $solicitor->getAddress()->getStreet() . ' ' . $solicitor->getAddress()->getHouseNumber();
                 break;
             default:
-                $address = $solicitor->getHouseNumber() . ' ' . $solicitor->getStreet();
+                $address = $solicitor->getAddress()->getHouseNumber() . ' ' . $solicitor->getAddress()->getStreet();
                 break;
         }
 
         return [
             'id'           => $solicitor->getId(),
             'address'      => $address,
-            'street'       => $solicitor->getStreet(),
-            'house_number' => $solicitor->getHouseNumber(),
-            'postcode'     => $solicitor->getPostcode(),
-            'city'         => $solicitor->getCity(),
+            'street'       => $solicitor->getAddress()->getStreet(),
+            'house_number' => $solicitor->getAddress()->getHouseNumber(),
+            'postcode'     => $solicitor->getAddress()->getPostcode(),
+            'city'         => $solicitor->getAddress()->getCity(),
+            'country'      => $country,
             'phone'        => $solicitor->getPhone(),
             'fax'          => $solicitor->getFax(),
             'email'        => $solicitor->getEmail(),

@@ -90,6 +90,15 @@ class LoadContactAddressData extends AbstractFixture implements OrderedFixtureIn
         $this->setReference('address_agent_annan_agency_1', $address);
         $manager->persist($address);
 
+        $address = new ContactAddress();
+        $address->setStreet('Cadzow PlaceLondon road');
+        $address->setHouseNumber('19');
+        $address->setPostcode('EH7 5SN');
+        $address->setCity('Edinburgh');
+        $address->setCountry('GB');
+        $this->setReference('address_annan_solicitor_1', $address);
+        $manager->persist($address);
+
 
         $manager->flush();
     }

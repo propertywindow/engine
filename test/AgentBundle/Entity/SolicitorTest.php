@@ -6,6 +6,7 @@ namespace Tests\AgentBundle\Entity;
 use AgentBundle\Entity\Agency;
 use AgentBundle\Entity\Agent;
 use AgentBundle\Entity\Solicitor;
+use AppBundle\Entity\ContactAddress;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -43,20 +44,10 @@ class SolicitorTest extends TestCase
         $this->solicitor->setName('Property Window');
         $this->assertEquals('Property Window', $this->solicitor->getName());
 
-        $this->solicitor->setStreet('Portobello High Street');
-        $this->assertEquals('Portobello High Street', $this->solicitor->getStreet());
+        $address = new ContactAddress();
 
-        $this->solicitor->setHouseNumber('27');
-        $this->assertEquals('27', $this->solicitor->getHouseNumber());
-
-        $this->solicitor->setPostcode('EH15 1DE');
-        $this->assertEquals('EH15 1DE', $this->solicitor->getPostcode());
-
-        $this->solicitor->setCity('Edinburgh');
-        $this->assertEquals('Edinburgh', $this->solicitor->getCity());
-
-        $this->solicitor->setCountry('GB');
-        $this->assertEquals('GB', $this->solicitor->getCountry());
+        $this->solicitor->setAddress($address);
+        $this->assertEquals($address, $this->solicitor->getAddress());
 
         $this->solicitor->setEmail('iain@propertywindow.com');
         $this->assertEquals('iain@propertywindow.com', $this->solicitor->getEmail());
