@@ -3,6 +3,7 @@
 namespace AuthenticationBundle\Entity;
 
 use AgentBundle\Entity\Agent;
+use AppBundle\Entity\ContactAddress;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -50,34 +51,10 @@ class User
     private $lastName;
 
     /**
-     * @var string
-     * @ORM\Column(name="street", type="string", length=255)
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\ContactAddress")
+     * @ORM\JoinColumn(name="address_id", referencedColumnName="id", nullable=true)
      */
-    private $street;
-
-    /**
-     * @var string
-     * @ORM\Column(name="house_number", type="string", length=10)
-     */
-    private $houseNumber;
-
-    /**
-     * @var string
-     * @ORM\Column(name="postcode", type="string", length=10)
-     */
-    private $postcode;
-
-    /**
-     * @var string
-     * @ORM\Column(name="city", type="string", length=255)
-     */
-    private $city;
-
-    /**
-     * @var string
-     * @ORM\Column(name="country", type="string", length=2)
-     */
-    private $country;
+    private $address;
 
     /**
      * @var string
@@ -165,7 +142,7 @@ class User
      *
      * @return User
      */
-    public function setEmail(string $email): User
+    public function setEmail(string $email): self
     {
         $this->email = $email;
 
@@ -185,7 +162,7 @@ class User
      *
      * @return User
      */
-    public function setPassword(string $password): User
+    public function setPassword(string $password): self
     {
         $this->password = $password;
 
@@ -205,7 +182,7 @@ class User
      *
      * @return User
      */
-    public function setFirstName(string $firstName): User
+    public function setFirstName(string $firstName): self
     {
         $this->firstName = $firstName;
 
@@ -225,7 +202,7 @@ class User
      *
      * @return User
      */
-    public function setLastName(string $lastName): User
+    public function setLastName(string $lastName): self
     {
         $this->lastName = $lastName;
 
@@ -241,103 +218,23 @@ class User
     }
 
     /**
-     * @param string $street
+     * @param \AppBundle\Entity\ContactAddress $address
      *
      * @return User
      */
-    public function setStreet(string $street): User
+    public function setAddress(ContactAddress $address = null): self
     {
-        $this->street = $street;
+        $this->address = $address;
 
         return $this;
     }
 
     /**
-     * @return string
+     * @return \AppBundle\Entity\ContactAddress|null
      */
-    public function getStreet(): string
+    public function getAddress(): ?ContactAddress
     {
-        return $this->street;
-    }
-
-    /**
-     * @param string $houseNumber
-     *
-     * @return User
-     */
-    public function setHouseNumber(string $houseNumber): User
-    {
-        $this->houseNumber = $houseNumber;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getHouseNumber(): string
-    {
-        return $this->houseNumber;
-    }
-
-    /**
-     * @param string $postcode
-     *
-     * @return User
-     */
-    public function setPostcode(string $postcode): User
-    {
-        $this->postcode = $postcode;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPostcode(): string
-    {
-        return $this->postcode;
-    }
-
-    /**
-     * @param string $city
-     *
-     * @return User
-     */
-    public function setCity(string $city): User
-    {
-        $this->city = $city;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCity(): string
-    {
-        return $this->city;
-    }
-
-    /**
-     * @param string $country
-     *
-     * @return User
-     */
-    public function setCountry(string $country): User
-    {
-        $this->country = $country;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCountry(): string
-    {
-        return $this->country;
+        return $this->address;
     }
 
     /**
@@ -345,7 +242,7 @@ class User
      *
      * @return User
      */
-    public function setPhone(?string $phone): User
+    public function setPhone(?string $phone): self
     {
         $this->phone = $phone;
 
@@ -405,7 +302,7 @@ class User
      *
      * @return User
      */
-    public function setAvatar(?string $avatar): User
+    public function setAvatar(?string $avatar): self
     {
         $this->avatar = $avatar;
 
@@ -425,7 +322,7 @@ class User
      *
      * @return User
      */
-    public function setLastLogin(?\DateTime $lastLogin): User
+    public function setLastLogin(?\DateTime $lastLogin): self
     {
         $this->lastLogin = $lastLogin;
 
@@ -445,7 +342,7 @@ class User
      *
      * @return User
      */
-    public function setLastOnline(?\DateTime $lastOnline): User
+    public function setLastOnline(?\DateTime $lastOnline): self
     {
         $this->lastOnline = $lastOnline;
 
@@ -465,7 +362,7 @@ class User
      *
      * @return User
      */
-    public function setActive(bool $active): User
+    public function setActive(bool $active): self
     {
         $this->active = $active;
 
@@ -501,7 +398,7 @@ class User
      *
      * @return User
      */
-    public function setCreated(?\DateTime $created): User
+    public function setCreated(?\DateTime $created): self
     {
         $this->created = $created;
 
@@ -521,7 +418,7 @@ class User
      *
      * @return User
      */
-    public function setUpdated(?\DateTime $updated): User
+    public function setUpdated(?\DateTime $updated): self
     {
         $this->updated = $updated;
 

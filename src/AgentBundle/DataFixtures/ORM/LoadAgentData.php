@@ -37,7 +37,6 @@ class LoadAgentData extends AbstractFixture implements OrderedFixtureInterface
         $this->setReference('agent_propertywindow_1', $agent);
         $manager->persist($agent);
 
-
         $agent = new Agent();
         $agentGroup = $this->getReference('agent_group_annan');
         $agent->setAgentGroup($agentGroup);

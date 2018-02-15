@@ -128,9 +128,10 @@ class AgentController extends JsonController
             throw new UserAlreadyExistException($this->parameters['email']);
         }
 
-        $agent = new Agent();
+        $agent   = new Agent();
+        $address = $this->createAddress();
 
-        $agent->setAddress($this->createAddress());
+        $agent->setAddress($address);
         $agent->setAgentGroup($this->agentGroupService->getAgentGroup($this->parameters['agent_group_id']));
         unset($this->parameters['agent_group_id']);
 
@@ -143,6 +144,7 @@ class AgentController extends JsonController
         $newUser->setAgent($agent);
         $newUser->setUserType($this->userTypeService->getUserType(2));
         $newUser->setActive(false);
+        $newUser->setAddress($address);
 
         $this->prepareParameters($newUser);
 
@@ -188,8 +190,6 @@ class AgentController extends JsonController
         $agent->setAddress($this->createAddress());
 
         $this->prepareParameters($agent);
-
-        // todo: also update user with new address, only on address change
 
         return Mapper::fromAgent($this->agentService->updateAgent($agent));
     }

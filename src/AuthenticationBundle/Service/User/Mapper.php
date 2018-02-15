@@ -17,15 +17,19 @@ class Mapper
      */
     public static function fromUser(User $user): array
     {
-        switch ($user->getCountry()) {
+        $street      = $user->getAddress()->getStreet();
+        $houseNumber = $user->getAddress()->getHouseNumber();
+        $country     = $user->getAddress()->getCountry();
+
+        switch ($country) {
             case "NL":
-                $address = $user->getStreet() . ' ' . $user->getHouseNumber();
+                $address = $street . ' ' . $houseNumber;
                 break;
             case "GB":
-                $address = $user->getHouseNumber() . ' ' . $user->getStreet();
+                $address = $houseNumber . ' ' . $street;
                 break;
             default:
-                $address = $user->getStreet() . ' ' . $user->getHouseNumber();
+                $address = $street . ' ' . $houseNumber;
         }
 
         return [
@@ -40,11 +44,11 @@ class Mapper
             'first_name'   => $user->getFirstName(),
             'last_name'    => $user->getLastName(),
             'address'      => $address,
-            'street'       => $user->getStreet(),
-            'house_number' => $user->getHouseNumber(),
-            'postcode'     => $user->getPostcode(),
-            'city'         => $user->getCity(),
-            'country'      => $user->getCountry(),
+            'street'       => $street,
+            'house_number' => $houseNumber,
+            'postcode'     => $user->getAddress()->getPostcode(),
+            'city'         => $user->getAddress()->getCity(),
+            'country'      => $country,
             'avatar'       => $user->getAvatar(),
             'phone'        => $user->getPhone(),
             'last_login'   => $user->getLastLogin() ? $user->getLastLogin()->format('Y-m-d H:i:s') : null,

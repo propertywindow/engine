@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace Tests\AuthenticationBundle\Entity;
 
 use AgentBundle\Entity\Agent;
+use AppBundle\Entity\ContactAddress;
 use AuthenticationBundle\Entity\User;
 use AuthenticationBundle\Entity\UserType;
 use PHPUnit\Framework\TestCase;
@@ -24,6 +25,14 @@ class UserTest extends TestCase
     public function setUp(): void
     {
         $this->user = new User();
+    }
+
+    public function testAddress()
+    {
+        $address = new ContactAddress();
+
+        $this->user->setAddress($address);
+        $this->assertEquals($address, $this->user->getAddress());
     }
 
     public function testGetterAndSetter()
@@ -53,21 +62,6 @@ class UserTest extends TestCase
 
         $this->user->setLastName('Geurts');
         $this->assertEquals('Geurts', $this->user->getLastName());
-
-        $this->user->setStreet('Graafsedijk');
-        $this->assertEquals('Graafsedijk', $this->user->getStreet());
-
-        $this->user->setHouseNumber('19');
-        $this->assertEquals('19', $this->user->getHouseNumber());
-
-        $this->user->setPostcode('5437 NG');
-        $this->assertEquals('5437 NG', $this->user->getPostcode());
-
-        $this->user->setCity('Beers');
-        $this->assertEquals('Beers', $this->user->getCity());
-
-        $this->user->setCountry('NL');
-        $this->assertEquals('NL', $this->user->getCountry());
 
         $this->user->setActive(true);
         $this->assertTrue($this->user->getActive());

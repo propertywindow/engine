@@ -245,7 +245,11 @@ class JsonController extends BaseController
     {
         $address = new ContactAddress();
 
-        $this->prepareParameters($address);
+        $address->setStreet($this->parameters['street']);
+        $address->setHouseNumber($this->parameters['house_number']);
+        $address->setPostcode($this->parameters['postcode']);
+        $address->setCity($this->parameters['city']);
+        $address->setCountry($this->parameters['country']);
 
         return $this->addressService->createAddress($address);
     }

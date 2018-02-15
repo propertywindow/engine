@@ -27,6 +27,14 @@ class SolicitorTest extends TestCase
         $this->solicitor = new Solicitor();
     }
 
+    public function testAddress()
+    {
+        $address = new ContactAddress();
+
+        $this->solicitor->setAddress($address);
+        $this->assertEquals($address, $this->solicitor->getAddress());
+    }
+
     public function testGetterAndSetter()
     {
         $this->assertNull($this->solicitor->getId());
@@ -43,11 +51,6 @@ class SolicitorTest extends TestCase
 
         $this->solicitor->setName('Property Window');
         $this->assertEquals('Property Window', $this->solicitor->getName());
-
-        $address = new ContactAddress();
-
-        $this->solicitor->setAddress($address);
-        $this->assertEquals($address, $this->solicitor->getAddress());
 
         $this->solicitor->setEmail('iain@propertywindow.com');
         $this->assertEquals('iain@propertywindow.com', $this->solicitor->getEmail());

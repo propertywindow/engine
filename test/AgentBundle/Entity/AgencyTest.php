@@ -26,6 +26,14 @@ class AgencyTest extends TestCase
         $this->agency = new Agency();
     }
 
+    public function testAddress()
+    {
+        $address = new ContactAddress();
+
+        $this->agency->setAddress($address);
+        $this->assertEquals($address, $this->agency->getAddress());
+    }
+
     public function testGetterAndSetter()
     {
         $this->assertNull($this->agency->getId());
@@ -37,11 +45,6 @@ class AgencyTest extends TestCase
 
         $this->agency->setName('Agency');
         $this->assertEquals('Agency', $this->agency->getName());
-
-        $address = new ContactAddress();
-
-        $this->agency->setAddress($address);
-        $this->assertEquals($address, $this->agency->getAddress());
 
         $this->agency->setEmail('info@propertywindow.com');
         $this->assertEquals('info@propertywindow.com', $this->agency->getEmail());

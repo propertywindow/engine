@@ -157,6 +157,7 @@ class UserController extends JsonController
         $newUser->setAgent($this->user->getAgent());
         $newUser->setUserType($this->userTypeService->getUserType($this->parameters['user_type_id']));
         $newUser->setActive(false);
+        $newUser->setAddress($this->createAddress());
 
         $this->prepareParameters($newUser);
 
@@ -193,6 +194,9 @@ class UserController extends JsonController
         $updateUser = $this->userService->getUser((int)$this->parameters['id']);
 
         $this->isAuthorized($updateUser->getAgent()->getId(), $this->user->getAgent()->getId());
+
+        $updateUser->setAddress($this->createAddress());
+
         $this->prepareParameters($updateUser);
 
         return Mapper::fromUser($this->userService->updateUser($updateUser));
