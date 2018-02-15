@@ -98,7 +98,7 @@ class ApplicantController extends JsonController
         $applicant = new Applicant();
 
         $applicant->setAgentGroup($this->user->getAgent()->getAgentGroup());
-        $applicant->setCountry($this->user->getAgent()->getCountry());
+        $applicant->setCountry($this->user->getAgent()->getAddress()->getCountry());
 
         $this->prepareParameters($applicant);
 
