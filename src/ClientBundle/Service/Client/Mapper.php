@@ -17,15 +17,17 @@ class Mapper
      */
     public static function fromClient(Client $client): array
     {
-        $user    = $client->getUser();
-        $country = $user->getCountry();
+        $user        = $client->getUser();
+        $country     = $user->getAddress()->getCountry();
+        $street      = $user->getAddress()->getStreet();
+        $houseNumber = $user->getAddress()->getHouseNumber();
 
         switch ($country) {
             case "NL":
-                $address = $user->getStreet() . ' ' . $user->getHouseNumber();
+                $address = $street . ' ' . $houseNumber;
                 break;
             default:
-                $address = $user->getHouseNumber() . ' ' . $user->getStreet();
+                $address = $houseNumber . ' ' . $street;
                 break;
         }
 
@@ -36,10 +38,11 @@ class Mapper
             'first_name'   => $user->getFirstName(),
             'last_name'    => $user->getLastName(),
             'address'      => $address,
-            'street'       => $user->getStreet(),
-            'house_number' => $user->getHouseNumber(),
-            'postcode'     => $user->getPostcode(),
-            'city'         => $user->getCity(),
+            'street'       => $street,
+            'house_number' => $houseNumber,
+            'postcode'     => $user->getAddress()->getPostcode(),
+            'city'         => $user->getAddress()->getCity(),
+            'country'      => $country,
             'phone'        => $user->getPhone(),
             'email'        => $user->getEmail(),
         ];

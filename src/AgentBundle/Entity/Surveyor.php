@@ -198,18 +198,6 @@ class Surveyor
     }
 
     /**
-     * @param string $street
-     *
-     * @return Surveyor
-     */
-    public function setStreet(string $street): self
-    {
-        $this->street = $street;
-
-        return $this;
-    }
-
-    /**
      * @param \DateTime|null $created
      *
      * @return Surveyor

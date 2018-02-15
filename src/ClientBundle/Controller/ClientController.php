@@ -104,6 +104,7 @@ class ClientController extends JsonController
         $newUser->setAgent($this->user->getAgent());
         $newUser->setUserType($this->userTypeService->getUserType(4));
         $newUser->setActive(false);
+        $newUser->setAddress($this->createAddress());
 
         $createdUser = $this->userService->createUser($newUser);
 
