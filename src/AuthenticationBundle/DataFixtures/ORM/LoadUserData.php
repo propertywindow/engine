@@ -534,7 +534,6 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $manager->flush();
     }
 
-
     /**
      * @return integer
      */
