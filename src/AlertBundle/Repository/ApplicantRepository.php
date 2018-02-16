@@ -37,12 +37,14 @@ class ApplicantRepository extends EntityRepository
      */
     public function findByAgent(AgentGroup $agentGroup): array
     {
-        $qb = $this->getEntityManager()->createQueryBuilder()
-                   ->select('a')
-                   ->from('AlertBundle:Applicant', 'a')
-                   ->where("a.agentGroup = :agentGroup")
-                   ->setParameter('agentGroup', $agentGroup)
-                   ->orderBy('a.created', 'DESC');
+        $qb = $this
+            ->getEntityManager()
+            ->createQueryBuilder()
+            ->select('a')
+            ->from('AlertBundle:Applicant', 'a')
+            ->where("a.agentGroup = :agentGroup")
+            ->setParameter('agentGroup', $agentGroup)
+            ->orderBy('a.created', 'DESC');
 
         $results = $qb->getQuery()->getResult();
 

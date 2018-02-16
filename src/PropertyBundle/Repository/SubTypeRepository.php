@@ -1,4 +1,5 @@
-<?php declare(strict_types = 1);
+<?php
+declare(strict_types = 1);
 
 namespace PropertyBundle\Repository;
 
@@ -8,7 +9,7 @@ use PropertyBundle\Entity\Type;
 use PropertyBundle\Exceptions\SubTypeNotFoundException;
 
 /**
- * SubTypeRepository
+ * SubType Repository
  */
 class SubTypeRepository extends EntityRepository
 {
@@ -37,9 +38,11 @@ class SubTypeRepository extends EntityRepository
      */
     public function listAllForType(Type $type): array
     {
-        $qb = $this->getEntityManager()->createQueryBuilder()
-                   ->select('s')
-                   ->from('PropertyBundle:SubType', 's');
+        $qb = $this
+            ->getEntityManager()
+            ->createQueryBuilder()
+            ->select('s')
+            ->from('PropertyBundle:SubType', 's');
 
         if (!empty($type)) {
             $qb->where("s.type = :type");

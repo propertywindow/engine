@@ -38,12 +38,14 @@ class ClientRepository extends EntityRepository
      */
     public function listAll(Agent $agent): array
     {
-        $qb = $this->getEntityManager()->createQueryBuilder()
-                   ->select('c')
-                   ->from('ClientBundle:Client', 'c')
-                   ->where("c.agent = :agent")
-                   ->setParameter('agent', $agent)
-                   ->orderBy('c.id', 'ASC');
+        $qb = $this
+            ->getEntityManager()
+            ->createQueryBuilder()
+            ->select('c')
+            ->from('ClientBundle:Client', 'c')
+            ->where("c.agent = :agent")
+            ->setParameter('agent', $agent)
+            ->orderBy('c.id', 'ASC');
 
         $results = $qb->getQuery()->getResult();
 

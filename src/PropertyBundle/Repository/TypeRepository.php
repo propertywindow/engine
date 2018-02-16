@@ -35,9 +35,11 @@ class TypeRepository extends EntityRepository
      */
     public function listAll(): array
     {
-        $qb = $this->getEntityManager()->createQueryBuilder()
-                   ->select('t')
-                   ->from('PropertyBundle:Type', 't');
+        $qb = $this
+            ->getEntityManager()
+            ->createQueryBuilder()
+            ->select('t')
+            ->from('PropertyBundle:Type', 't');
 
         $qb->orderBy('t.id', 'ASC');
 

@@ -1,4 +1,5 @@
-<?php declare(strict_types = 1);
+<?php
+declare(strict_types = 1);
 
 namespace PropertyBundle\Repository;
 
@@ -7,7 +8,7 @@ use PropertyBundle\Entity\Terms;
 use PropertyBundle\Exceptions\TermsNotFoundException;
 
 /**
- * TermsRepository
+ * Terms Repository
  */
 class TermsRepository extends EntityRepository
 {
@@ -34,9 +35,11 @@ class TermsRepository extends EntityRepository
      */
     public function listAll(): array
     {
-        $qb = $this->getEntityManager()->createQueryBuilder()
-                   ->select('t')
-                   ->from('PropertyBundle:Terms', 't');
+        $qb = $this
+            ->getEntityManager()
+            ->createQueryBuilder()
+            ->select('t')
+            ->from('PropertyBundle:Terms', 't');
 
         $qb->orderBy('t.id', 'ASC');
 

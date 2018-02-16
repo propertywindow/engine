@@ -37,12 +37,14 @@ class ApplicationRepository extends EntityRepository
      */
     public function findByApplicant(Applicant $applicant): array
     {
-        $qb = $this->getEntityManager()->createQueryBuilder()
-                   ->select('a')
-                   ->from('AlertBundle:Application', 'a')
-                   ->where("a.applicant = :applicant")
-                   ->setParameter('applicant', $applicant)
-                   ->orderBy('a.created', 'DESC');
+        $qb = $this
+            ->getEntityManager()
+            ->createQueryBuilder()
+            ->select('a')
+            ->from('AlertBundle:Application', 'a')
+            ->where("a.applicant = :applicant")
+            ->setParameter('applicant', $applicant)
+            ->orderBy('a.created', 'DESC');
 
         $results = $qb->getQuery()->getResult();
 

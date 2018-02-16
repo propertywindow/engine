@@ -1,4 +1,5 @@
-<?php declare(strict_types = 1);
+<?php
+declare(strict_types = 1);
 
 namespace PropertyBundle\Repository;
 
@@ -9,7 +10,7 @@ use PropertyBundle\Entity\Property;
 use PropertyBundle\Exceptions\PropertyNotFoundException;
 
 /**
- * PropertyRepository
+ * Property Repository
  */
 class PropertyRepository extends EntityRepository
 {
@@ -38,12 +39,14 @@ class PropertyRepository extends EntityRepository
      */
     public function listProperties(Agent $agent): array
     {
-        $qb = $this->getEntityManager()->createQueryBuilder()
-                   ->select('p')
-                   ->from('PropertyBundle:Property', 'p')
-                   ->where('p.agent = :agent')
-                   ->orderBy('p.id', 'DESC')
-                   ->setParameter('agent', $agent);
+        $qb = $this
+            ->getEntityManager()
+            ->createQueryBuilder()
+            ->select('p')
+            ->from('PropertyBundle:Property', 'p')
+            ->where('p.agent = :agent')
+            ->orderBy('p.id', 'DESC')
+            ->setParameter('agent', $agent);
 
         $results = $qb->getQuery()->getResult();
 
@@ -59,14 +62,16 @@ class PropertyRepository extends EntityRepository
      */
     public function listAllProperties($agentIds, int $limit, int $offset): array
     {
-        $qb = $this->getEntityManager()->createQueryBuilder()
-                   ->select('p')
-                   ->from('PropertyBundle:Property', 'p')
-                   ->where("p.agent IN (:agentIds)")
-                   ->orderBy('p.id', 'DESC')
-                   ->setFirstResult($offset)
-                   ->setMaxResults($limit)
-                   ->setParameter('agentIds', $agentIds);
+        $qb = $this
+            ->getEntityManager()
+            ->createQueryBuilder()
+            ->select('p')
+            ->from('PropertyBundle:Property', 'p')
+            ->where("p.agent IN (:agentIds)")
+            ->orderBy('p.id', 'DESC')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->setParameter('agentIds', $agentIds);
 
         $pages = new Paginator($qb);
 
@@ -86,9 +91,11 @@ class PropertyRepository extends EntityRepository
      */
     public function findPropertiesWithSubType(int $subTypeId): array
     {
-        $qb = $this->getEntityManager()->createQueryBuilder()
-                   ->select('p')
-                   ->from('PropertyBundle:Property', 'p');
+        $qb = $this
+            ->getEntityManager()
+            ->createQueryBuilder()
+            ->select('p')
+            ->from('PropertyBundle:Property', 'p');
 
         $qb->where("p.subType = :subTypeId");
         $qb->andWhere("p.archived = false");
