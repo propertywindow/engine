@@ -89,7 +89,7 @@ class Applicant
      *
      * @return Applicant
      */
-    public function setAgentGroup(AgentGroup $agentGroup): Applicant
+    public function setAgentGroup(AgentGroup $agentGroup): self
     {
         $this->agentGroup = $agentGroup;
 
@@ -109,7 +109,7 @@ class Applicant
      *
      * @return Applicant
      */
-    public function setName(string $name): Applicant
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -129,7 +129,7 @@ class Applicant
      *
      * @return Applicant
      */
-    public function setEmail(string $email): Applicant
+    public function setEmail(string $email): self
     {
         $this->email = $email;
 
@@ -149,7 +149,7 @@ class Applicant
      *
      * @return Applicant
      */
-    public function setPhone($phone): Applicant
+    public function setPhone($phone): self
     {
         $this->phone = $phone;
 
@@ -169,7 +169,7 @@ class Applicant
      *
      * @return Applicant
      */
-    public function setProtection(bool $protection): Applicant
+    public function setProtection(bool $protection): self
     {
         $this->protection = $protection;
 
@@ -189,7 +189,7 @@ class Applicant
      *
      * @return Applicant
      */
-    public function setCountry(string $country): Applicant
+    public function setCountry(string $country): self
     {
         $this->country = $country;
 
@@ -209,7 +209,7 @@ class Applicant
      *
      * @return Applicant
      */
-    public function setActive(bool $active): Applicant
+    public function setActive(bool $active): self
     {
         $this->active = $active;
 

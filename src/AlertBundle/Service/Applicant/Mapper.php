@@ -1,4 +1,5 @@
-<?php declare(strict_types = 1);
+<?php
+declare(strict_types = 1);
 
 namespace AlertBundle\Service\Applicant;
 
@@ -6,7 +7,6 @@ use AlertBundle\Entity\Applicant;
 
 /**
  * Class Mapper
- * @package AlertBundle\Service\Applicant
  */
 class Mapper
 {

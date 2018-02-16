@@ -214,7 +214,7 @@ class Application
      *
      * @return Application
      */
-    public function setMinPrice($minPrice)
+    public function setMinPrice(int $minPrice): self
     {
         $this->minPrice = $minPrice;
 
@@ -224,7 +224,7 @@ class Application
     /**
      * @return int
      */
-    public function getMinPrice()
+    public function getMinPrice(): int
     {
         return $this->minPrice;
     }
@@ -234,7 +234,7 @@ class Application
      *
      * @return Application
      */
-    public function setMaxPrice($maxPrice)
+    public function setMaxPrice(int $maxPrice): self
     {
         $this->maxPrice = $maxPrice;
 
@@ -244,7 +244,7 @@ class Application
     /**
      * @return int
      */
-    public function getMaxPrice()
+    public function getMaxPrice(): int
     {
         return $this->maxPrice;
     }
@@ -254,7 +254,7 @@ class Application
      *
      * @return Application
      */
-    public function setSubType(SubType $subType = null)
+    public function setSubType(SubType $subType = null): self
     {
         $this->subType = $subType;
 
@@ -262,9 +262,9 @@ class Application
     }
 
     /**
-     * @return Applicant
+     * @return \PropertyBundle\Entity\SubType
      */
-    public function getSubType()
+    public function getSubType(): SubType
     {
         return $this->subType;
     }
@@ -274,7 +274,7 @@ class Application
      *
      * @return Application
      */
-    public function setRooms($rooms)
+    public function setRooms(int $rooms): self
     {
         $this->rooms = $rooms;
 
@@ -284,7 +284,7 @@ class Application
     /**
      * @return int
      */
-    public function getRooms()
+    public function getRooms(): int
     {
         return $this->rooms;
     }
@@ -294,7 +294,7 @@ class Application
      *
      * @return Application
      */
-    public function setTerms(Terms $terms = null)
+    public function setTerms(Terms $terms = null): self
     {
         $this->terms = $terms;
 
@@ -302,9 +302,9 @@ class Application
     }
 
     /**
-     * @return Applicant
+     * @return \PropertyBundle\Entity\Terms
      */
-    public function getTerms()
+    public function getTerms(): Terms
     {
         return $this->terms;
     }

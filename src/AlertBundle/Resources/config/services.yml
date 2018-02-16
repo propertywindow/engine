@@ -9,4 +9,6 @@ services:
       autowire: true
   AlertBundle\Controller\ApplicantController:
       autowire: true
+  AlertBundle\Controller\ApplicationController:
+      autowire: true
 

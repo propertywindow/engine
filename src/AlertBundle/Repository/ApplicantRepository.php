@@ -35,7 +35,7 @@ class ApplicantRepository extends EntityRepository
      *
      * @return Applicant[]
      */
-    public function findByAgent(AgentGroup $agentGroup): array
+    public function findByAgentGroup(AgentGroup $agentGroup): array
     {
         $qb = $this
             ->getEntityManager()

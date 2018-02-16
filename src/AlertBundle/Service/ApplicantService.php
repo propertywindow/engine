@@ -51,7 +51,7 @@ class ApplicantService
      */
     public function getApplicants(AgentGroup $agentGroup): array
     {
-        return $this->repository->findByAgent($agentGroup);
+        return $this->repository->findByAgentGroup($agentGroup);
     }
 
     /**

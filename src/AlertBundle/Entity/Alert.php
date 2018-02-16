@@ -65,7 +65,7 @@ class Alert
      *
      * @return Alert
      */
-    public function setApplicant(Applicant $applicant): Alert
+    public function setApplicant(Applicant $applicant): self
     {
         $this->applicant = $applicant;
 
@@ -105,7 +105,7 @@ class Alert
      *
      * @return Alert
      */
-    public function setRead(bool $read): Alert
+    public function setRead(bool $read): self
     {
         $this->read = $read;
 
