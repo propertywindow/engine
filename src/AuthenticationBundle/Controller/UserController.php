@@ -269,10 +269,14 @@ class UserController extends JsonController
     {
         $this->hasAccessLevel(self::USER_AGENT);
 
-        $this->checkParameters(['agent_id']);
+        if ($this->user->getUserType() === self::USER_ADMIN) {
+            $this->checkParameters(['agent_id']);
+            $agent = $this->agentService->getAgent($this->parameters['agent_id']);
+        } else {
+            $agent = $this->user->getAgent();
+        }
 
         $userType = $this->userTypeService->getUserType(5);
-        $agent    = $this->agentService->getAgent($this->parameters['agent_id']);
         $user     = $this->userService->getApiUser($agent, $userType);
 
         if ($user) {
@@ -300,10 +304,14 @@ class UserController extends JsonController
     {
         $this->hasAccessLevel(self::USER_AGENT);
 
-        $this->checkParameters(['agent_id']);
+        if ($this->user->getUserType() === self::USER_ADMIN) {
+            $this->checkParameters(['agent_id']);
+            $agent = $this->agentService->getAgent($this->parameters['agent_id']);
+        } else {
+            $agent = $this->user->getAgent();
+        }
 
         $userType = $this->userTypeService->getUserType(5);
-        $agent    = $this->agentService->getAgent($this->parameters['agent_id']);
         $user     = $this->userService->getApiUser($agent, $userType);
 
         if (!$user) {
