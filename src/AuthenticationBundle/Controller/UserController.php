@@ -318,6 +318,8 @@ class UserController extends JsonController
             $user->setActive(true);
 
             $user = $this->userService->createUser($user);
+
+            // todo: add services to view properties and create property alerts
         }
 
         $timestamp = time();
