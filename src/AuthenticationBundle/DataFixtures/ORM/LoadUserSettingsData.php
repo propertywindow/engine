@@ -3,13 +3,14 @@ declare(strict_types = 1);
 
 namespace AuthenticationBundle\DataFixtures\ORM;
 
+use AuthenticationBundle\Entity\User;
 use AuthenticationBundle\Entity\UserSettings;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
 /**
- * Class LoadUserSettingsData
+ * LoadUserSettings Data
  */
 class LoadUserSettingsData extends AbstractFixture implements OrderedFixtureInterface
 {
@@ -18,11 +19,14 @@ class LoadUserSettingsData extends AbstractFixture implements OrderedFixtureInte
      */
     public function load(ObjectManager $manager)
     {
+        /** @var User $user */
+
         // Property Window
 
         for ($i = 1; $i <= 2; $i++) {
             $userSettings = new UserSettings();
-            $userSettings->setUser($this->getReference('user_propertywindow_admin_' . $i));
+            $user = $this->getReference('user_propertywindow_admin_' . $i);
+            $userSettings->setUser($user);
             $userSettings->setLanguage('en');
             $userSettings->setEmailName('Property Window');
             $userSettings->setEmailAddress('propertywindownl@gmail.com');
@@ -40,25 +44,29 @@ class LoadUserSettingsData extends AbstractFixture implements OrderedFixtureInte
         }
 
         $userSettings = new UserSettings();
-        $userSettings->setUser($this->getReference('user_propertywindow_agent_1'));
+        $user = $this->getReference('user_propertywindow_agent_1');
+        $userSettings->setUser($user);
         $userSettings->setLanguage('en');
         $manager->persist($userSettings);
 
         // Annan Users
 
         $userSettings = new UserSettings();
-        $userSettings->setUser($this->getReference('user_annan_agent_1'));
+        $user = $this->getReference('user_annan_agent_1');
+        $userSettings->setUser($user);
         $userSettings->setLanguage('en');
         $manager->persist($userSettings);
 
         $userSettings = new UserSettings();
-        $userSettings->setUser($this->getReference('user_annan_agent_2'));
+        $user = $this->getReference('user_annan_agent_2');
+        $userSettings->setUser($user);
         $userSettings->setLanguage('en');
         $manager->persist($userSettings);
 
         for ($i = 1; $i <= 6; $i++) {
             $userSettings = new UserSettings();
-            $userSettings->setUser($this->getReference('user_annan_colleague_' . $i));
+            $user = $this->getReference('user_annan_colleague_' . $i);
+            $userSettings->setUser($user);
             $userSettings->setLanguage('en');
             $manager->persist($userSettings);
         }
@@ -66,7 +74,8 @@ class LoadUserSettingsData extends AbstractFixture implements OrderedFixtureInte
         // Oliver Users
 
         $userSettings = new UserSettings();
-        $userSettings->setUser($this->getReference('user_oliver_agent_1'));
+        $user = $this->getReference('user_oliver_agent_1');
+        $userSettings->setUser($user);
         $userSettings->setLanguage('en');
         $manager->persist($userSettings);
 
@@ -74,11 +83,19 @@ class LoadUserSettingsData extends AbstractFixture implements OrderedFixtureInte
 
         for ($i = 1; $i <= 3; $i++) {
             $userSettings = new UserSettings();
-            $userSettings->setUser($this->getReference('user_deans_agent_' . $i));
+            $user = $this->getReference('user_deans_agent_' . $i);
+            $userSettings->setUser($user);
             $userSettings->setLanguage('en');
             $manager->persist($userSettings);
         }
 
+        // Api
+
+        $userSettings = new UserSettings();
+        $user = $this->getReference('user_annan_api_1');
+        $userSettings->setUser($user);
+        $userSettings->setLanguage('en');
+        $manager->persist($userSettings);
 
         $manager->flush();
     }

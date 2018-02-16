@@ -152,6 +152,7 @@ class AgentController extends JsonController
         $password    = $this->generatePassword();
 
         // todo: set services for user
+        // todo: add to settings entity
 
         $mailParameters = [
             'name'     => $this->parameters['first_name'],

@@ -153,6 +153,9 @@ class UserController extends JsonController
             throw new UserAlreadyExistException($this->parameters['email']);
         }
 
+        // todo: add to settings entity
+        // todo: add to services
+
         $newUser = new User();
         $newUser->setAgent($this->user->getAgent());
         $newUser->setUserType($this->userTypeService->getUserType($this->parameters['user_type_id']));
@@ -328,6 +331,7 @@ class UserController extends JsonController
 
             $user = $this->userService->createUser($newUser);
 
+            // todo: add to settings entity
             // todo: add services to view properties and create property alerts
         }
 
