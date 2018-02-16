@@ -33,6 +33,9 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         /** @var UserType $userTypeClient */
         $userTypeClient = $this->getReference('user_type_client');
 
+        /** @var UserType $userTypeApi */
+        $userTypeApi = $this->getReference('user_type_api');
+
         /** @var Agent $agent */
         /** @var ContactAddress $address */
 
@@ -514,6 +517,19 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $this->setReference('user_annan_client_15', $user);
         $manager->persist($user);
 
+        // API
+
+        $user = new User();
+        $user->setUserType($userTypeApi);
+        $agent = $this->getReference('agent_annan_1');
+        $user->setAgent($agent);
+        $user->setEmail('fake@example.com');
+        $user->setPassword(md5('edinburgh'));
+        $user->setFirstName('Michael');
+        $user->setLastName('Annan');
+        $user->setActive(false);
+        $this->setReference('user_annan_api_1', $user);
+        $manager->persist($user);
 
         $manager->flush();
     }
