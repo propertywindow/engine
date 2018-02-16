@@ -527,7 +527,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setPassword(md5('edinburgh'));
         $user->setFirstName('Michael');
         $user->setLastName('Annan');
-        $user->setActive(false);
+        $user->setActive(true);
         $this->setReference('user_annan_api_1', $user);
         $manager->persist($user);
 
