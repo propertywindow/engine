@@ -50,19 +50,39 @@ class JsonController extends BaseController
     public $parameters = [];
 
     /**
+     * @param int $length
+     *
      * @return string
      */
-    public function randomPassword()
+    public function generatePassword($length = 12)
     {
-        $alphabet    = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789";
-        $pass        = [];
-        $alphaLength = strlen($alphabet) - 1;
-        for ($i = 0; $i < 10; $i++) {
-            $n      = rand(0, $alphaLength);
-            $pass[] = $alphabet[$n];
+        $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        $count = mb_strlen($chars);
+
+        for ($i = 0, $result = ''; $i < $length; $i++) {
+            $index  = rand(0, $count - 1);
+            $result .= mb_substr($chars, $index, 1);
         }
 
-        return implode($pass);
+        return $result;
+    }
+
+    /**
+     * @return string
+     */
+    function generateEmail()
+    {
+        $characters      = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $tld             = ["com", "net", "org", "nl", "co.uk", "eu", "info"];
+        $randomName      = '';
+        $randomDomain    = '';
+
+        for ($j = 0; $j < 10; $j++) {
+            $randomName   .= $characters[rand(0, strlen($characters) - 1)];
+            $randomDomain .= $characters[rand(0, strlen($characters) - 1)];
+        }
+
+        return $randomName . "@" . $randomDomain . "." .  $tld[array_rand($tld)];
     }
 
     /**
@@ -198,7 +218,7 @@ class JsonController extends BaseController
      */
     public function hasAccessLevel(int $userType)
     {
-        if ($this->user->getUserType()->getId() < $userType) {
+        if ($this->user->getUserType()->getId() >= $userType) {
             throw new NotAuthorizedException();
         }
     }

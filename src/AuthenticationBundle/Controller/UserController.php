@@ -95,7 +95,7 @@ class UserController extends JsonController
      * @throws NotAuthorizedException
      * @throws UserTypeNotFoundException
      */
-    private function getAgentUsers(): array
+    private function getAgentColleagues(): array
     {
         $this->hasAccessLevel(self::USER_ADMIN);
 
@@ -103,7 +103,7 @@ class UserController extends JsonController
 
         $agent         = $this->agentService->getAgent((int)$this->parameters['id']);
         $colleagueType = $this->userTypeService->getUserType(3);
-        $users         = $this->userService->getAgentUsers($agent, $colleagueType);
+        $users         = $this->userService->getAgentColleagues($agent, $colleagueType);
 
         return Mapper::fromUsers(...$users);
     }
@@ -116,7 +116,7 @@ class UserController extends JsonController
     {
         $userType = $this->userTypeService->getUserType(3);
         $agentIds = $this->agentService->getAgentIdsFromGroup($this->user->getAgent());
-        $users    = $this->userService->getColleagues($agentIds, $userType);
+        $users    = $this->userService->getAllColleagues($agentIds, $userType);
 
         return Mapper::fromUsers(...$users);
     }
@@ -162,7 +162,7 @@ class UserController extends JsonController
         $this->prepareParameters($newUser);
 
         $createdUser = $this->userService->createUser($newUser);
-        $password    = $this->randomPassword();
+        $password    = $this->generatePassword();
 
         $mailParameters = [
             'name'     => $this->parameters['first_name'],
@@ -257,5 +257,80 @@ class UserController extends JsonController
     private function verify(): array
     {
         return Mapper::fromUser($this->user);
+    }
+
+    /**
+     * @return array|null
+     * @throws AgentNotFoundException
+     * @throws NotAuthorizedException
+     * @throws UserTypeNotFoundException
+     */
+    private function getApiUser(): ?array
+    {
+        $this->hasAccessLevel(self::USER_AGENT);
+
+        $this->checkParameters(['agent_id']);
+
+        $userType = $this->userTypeService->getUserType(5);
+        $agent    = $this->agentService->getAgent($this->parameters['agent_id']);
+        $user     = $this->userService->getApiUser($agent, $userType);
+
+        if ($user) {
+            return [
+                'id'     => $user->getId(),
+                'active' => $user->getActive(),
+            ];
+        } else {
+            return [
+                'id'     => null,
+                'active' => false,
+            ];
+        }
+    }
+
+    /**
+     * @return string
+     * @throws AgentNotFoundException
+     * @throws NotAuthorizedException
+     * @throws UserTypeNotFoundException
+     */
+    private function createApiUser(): string
+    {
+        $this->hasAccessLevel(self::USER_AGENT);
+
+        $this->checkParameters(['agent_id']);
+
+        $userType = $this->userTypeService->getUserType(5);
+        $agent    = $this->agentService->getAgent($this->parameters['agent_id']);
+        $user     = $this->userService->getApiUser($agent, $userType);
+
+        if (!$user) {
+            $user = new User();
+
+            $user->setAgent($agent);
+            $user->setUserType($userType);
+            $user->setEmail($this->generateEmail());
+            $user->setPassword(md5($this->generatePassword()));
+            $user->setFirstName($agent->getUser()->getFirstName());
+            $user->setLastName($agent->getUser()->getLastName());
+            $user->setAddress($agent->getAddress());
+            $user->setPhone($agent->getPhone());
+            $user->setActive(true);
+
+            $user = $this->userService->createUser($user);
+        }
+
+        $timestamp = time();
+        $secret    = $user->getPassword();
+        $signature = hash_hmac("sha1", $timestamp . "-" . $user->getId(), $secret);
+        $payload   = [
+            "user"      => $user->getId(),
+            "password"  => $secret,
+            "timestamp" => $timestamp,
+            "signature" => $signature,
+        ];
+        $token     = json_encode($payload);
+
+        return base64_encode($token);
     }
 }

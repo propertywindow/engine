@@ -81,6 +81,8 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setAddress($address);
         $user->setActive(true);
         $this->setReference('user_propertywindow_agent_1', $user);
+        $agent->setUser($user);
+        $manager->persist($agent);
         $manager->persist($user);
 
         // Annan Agents
@@ -97,6 +99,8 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setAddress($address);
         $user->setActive(true);
         $this->setReference('user_annan_agent_1', $user);
+        $agent->setUser($user);
+        $manager->persist($agent);
         $manager->persist($user);
 
         $user = new User();
@@ -111,6 +115,8 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setAddress($address);
         $user->setActive(true);
         $this->setReference('user_annan_agent_2', $user);
+        $agent->setUser($user);
+        $manager->persist($agent);
         $manager->persist($user);
 
         // Oliver Agents
@@ -127,6 +133,8 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setAddress($address);
         $user->setActive(true);
         $this->setReference('user_oliver_agent_1', $user);
+        $agent->setUser($user);
+        $manager->persist($agent);
         $manager->persist($user);
 
         // Deans Agents
@@ -143,6 +151,8 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setAddress($address);
         $user->setActive(true);
         $this->setReference('user_deans_agent_1', $user);
+        $agent->setUser($user);
+        $manager->persist($agent);
         $manager->persist($user);
 
         $user = new User();
@@ -157,6 +167,8 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setAddress($address);
         $user->setActive(true);
         $this->setReference('user_deans_agent_2', $user);
+        $agent->setUser($user);
+        $manager->persist($agent);
         $manager->persist($user);
 
         $user = new User();
@@ -171,6 +183,8 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setAddress($address);
         $user->setActive(true);
         $this->setReference('user_deans_agent_3', $user);
+        $agent->setUser($user);
+        $manager->persist($agent);
         $manager->persist($user);
 
         // Annan Colleagues

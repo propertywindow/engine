@@ -149,7 +149,7 @@ class AgentController extends JsonController
         $this->prepareParameters($newUser);
 
         $createdUser = $this->userService->createUser($newUser);
-        $password    = $this->randomPassword();
+        $password    = $this->generatePassword();
 
         $mailParameters = [
             'name'     => $this->parameters['first_name'],

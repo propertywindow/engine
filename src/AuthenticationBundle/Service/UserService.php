@@ -56,7 +56,7 @@ class UserService
      */
     public function getUsers(User $user, UserType $adminType, UserType $colleagueType)
     {
-        $user = $this->repository->listAll($user, $adminType, $colleagueType);
+        $user = $this->repository->getUsers($user, $adminType, $colleagueType);
 
         return $user;
     }
@@ -67,9 +67,9 @@ class UserService
      *
      * @return User[] $user
      */
-    public function getAgentUsers(Agent $agent, UserType $colleagueType)
+    public function getAgentColleagues(Agent $agent, UserType $colleagueType)
     {
-        $user = $this->repository->agentListAll($agent, $colleagueType);
+        $user = $this->repository->getAgentColleagues($agent, $colleagueType);
 
         return $user;
     }
@@ -80,9 +80,9 @@ class UserService
      *
      * @return User[] $user
      */
-    public function getColleagues(array $agentIds, UserType $userType)
+    public function getAllColleagues(array $agentIds, UserType $userType)
     {
-        $user = $this->repository->listColleagues($agentIds, $userType);
+        $user = $this->repository->getAllColleagues($agentIds, $userType);
 
         return $user;
     }
@@ -96,7 +96,7 @@ class UserService
      */
     public function isColleague(int $userId, array $agentIds, UserType $userType): bool
     {
-        $users = $this->repository->listColleagues($agentIds, $userType);
+        $users = $this->repository->getAllColleagues($agentIds, $userType);
 
         foreach ($users as $user) {
             if ($userId === $user->getId()) {
@@ -192,6 +192,19 @@ class UserService
             $user->setLastOnline(new \DateTime());
             $this->entityManager->flush();
         }
+
+        return $user;
+    }
+
+    /**
+     * @param Agent    $agent
+     * @param UserType $colleagueType
+     *
+     * @return User|null $user
+     */
+    public function getApiUser(Agent $agent, UserType $colleagueType)
+    {
+        $user = $this->repository->getApiUser($agent, $colleagueType);
 
         return $user;
     }

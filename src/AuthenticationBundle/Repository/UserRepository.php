@@ -9,9 +9,10 @@ use Doctrine\ORM\EntityRepository;
 use AuthenticationBundle\Entity\User;
 use AuthenticationBundle\Exceptions\UserNotFoundException;
 use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 
 /**
- * UserRepository
+ * User Repository
  */
 class UserRepository extends EntityRepository
 {
@@ -38,6 +39,7 @@ class UserRepository extends EntityRepository
      *
      * @return User[]
      * @throws OptimisticLockException
+     * @throws ORMException
      */
     public function findByUserIdentifiers(array $identifiers): array
     {
@@ -84,7 +86,7 @@ class UserRepository extends EntityRepository
      *
      * @return array|User[]
      */
-    public function listAll(User $user, UserType $adminType, UserType $colleagueType): array
+    public function getUsers(User $user, UserType $adminType, UserType $colleagueType): array
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
                    ->select('u')
@@ -109,7 +111,7 @@ class UserRepository extends EntityRepository
      *
      * @return array|User[]
      */
-    public function agentListAll(Agent $agent, UserType $colleagueType): array
+    public function getAgentColleagues(Agent $agent, UserType $colleagueType): array
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
                    ->select('u')
@@ -131,7 +133,7 @@ class UserRepository extends EntityRepository
      *
      * @return User[]
      */
-    public function listColleagues(array $agentIds, UserType $userType): array
+    public function getAllColleagues(array $agentIds, UserType $userType): array
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
                    ->select('u')
@@ -148,21 +150,25 @@ class UserRepository extends EntityRepository
     }
 
     /**
-     * @param int $id
+     * @param Agent    $agent
+     * @param UserType $apiType
      *
-     * @return int $userType
-     * @throws UserNotFoundException
+     * @return array|null
      */
-    public function getUserType(int $id): int
+    public function getApiUser(Agent $agent, UserType $apiType): ?array
     {
-        $result = $this->find($id);
+        $qb = $this->getEntityManager()->createQueryBuilder()
+                   ->select('u')
+                   ->from('AuthenticationBundle:User', 'u')
+                   ->where('u.userType = :apiType')
+                   ->andWhere("u.agent = :agent")
+                   ->setParameter('agent', $agent)
+                   ->setParameter('apiType', $apiType)
+                   ->orderBy('u.id', 'ASC')
+                   ->setMaxResults(1);
 
-        if ($result === null) {
-            throw new UserNotFoundException($id);
-        }
+        $results = $qb->getQuery()->getResult();
 
-        $userType = (int)$result->getTypeId();
-
-        return $userType;
+        return $results;
     }
 }
