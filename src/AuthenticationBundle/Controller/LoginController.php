@@ -99,21 +99,9 @@ class LoginController extends JsonController
             $ipAddress
         );
 
-        $timestamp      = time();
-        $secret         = $user->getPassword();
-        $signature      = hash_hmac("sha1", $timestamp . "-" . $user->getId(), $secret);
-        $payload        = [
-            "user"      => $user->getId(),
-            "password"  => $secret,
-            "timestamp" => $timestamp,
-            "signature" => $signature,
-        ];
-        $payloadJson    = json_encode($payload);
-        $payloadEncoded = base64_encode($payloadJson);
-
         return [
             'user_id' => $user->getId(),
-            'token'   => $payloadEncoded,
+            'token'   => $this->generateToken($user),
         ];
     }
 

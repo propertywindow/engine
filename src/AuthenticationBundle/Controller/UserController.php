@@ -279,11 +279,13 @@ class UserController extends JsonController
             return [
                 'id'     => $user->getId(),
                 'active' => $user->getActive(),
+                'token'  => $this->generateToken($user),
             ];
         } else {
             return [
                 'id'     => null,
                 'active' => false,
+                'token'  => null,
             ];
         }
     }
@@ -322,17 +324,6 @@ class UserController extends JsonController
             // todo: add services to view properties and create property alerts
         }
 
-        $timestamp = time();
-        $secret    = $user->getPassword();
-        $signature = hash_hmac("sha1", $timestamp . "-" . $user->getId(), $secret);
-        $payload   = [
-            "user"      => $user->getId(),
-            "password"  => $secret,
-            "timestamp" => $timestamp,
-            "signature" => $signature,
-        ];
-        $token     = json_encode($payload);
-
-        return base64_encode($token);
+        return $this->generateToken($user);
     }
 }

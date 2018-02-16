@@ -86,6 +86,27 @@ class JsonController extends BaseController
     }
 
     /**
+     * @param User $user
+     *
+     * @return string
+     */
+    public function generateToken(User $user)
+    {
+        $timestamp      = time();
+        $secret         = $user->getPassword();
+        $signature      = hash_hmac("sha1", $timestamp . "-" . $user->getId(), $secret);
+        $payload        = [
+            "user"      => $user->getId(),
+            "password"  => $secret,
+            "timestamp" => $timestamp,
+            "signature" => $signature,
+        ];
+        $payloadJson    = json_encode($payload);
+
+        return base64_encode($payloadJson);
+    }
+
+    /**
      * @param Request $httpRequest
      * @param bool    $authenticate
      * @param bool    $impersonate
