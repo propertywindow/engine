@@ -88,17 +88,19 @@ class UserRepository extends EntityRepository
      */
     public function getUsers(User $user, UserType $adminType, UserType $colleagueType): array
     {
-        $qb = $this->getEntityManager()->createQueryBuilder()
-                   ->select('u')
-                   ->from('AuthenticationBundle:User', 'u')
-                   ->where('u.userType = :adminType')
-                   ->andWhere("u.agent = :agent")
-                   ->orWhere('u.userType = :colleagueType')
-                   ->andWhere("u.agent = :agent")
-                   ->setParameter('agent', $user->getAgent())
-                   ->setParameter('adminType', $adminType)
-                   ->setParameter('colleagueType', $colleagueType)
-                   ->orderBy('u.id', 'ASC');
+        $qb = $this
+            ->getEntityManager()
+            ->createQueryBuilder()
+            ->select('u')
+            ->from('AuthenticationBundle:User', 'u')
+            ->where('u.userType = :adminType')
+            ->andWhere("u.agent = :agent")
+            ->orWhere('u.userType = :colleagueType')
+            ->andWhere("u.agent = :agent")
+            ->setParameter('agent', $user->getAgent())
+            ->setParameter('adminType', $adminType)
+            ->setParameter('colleagueType', $colleagueType)
+            ->orderBy('u.id', 'ASC');
 
         $results = $qb->getQuery()->getResult();
 
@@ -113,14 +115,16 @@ class UserRepository extends EntityRepository
      */
     public function getAgentColleagues(Agent $agent, UserType $colleagueType): array
     {
-        $qb = $this->getEntityManager()->createQueryBuilder()
-                   ->select('u')
-                   ->from('AuthenticationBundle:User', 'u')
-                   ->where('u.userType = :colleagueType')
-                   ->andWhere("u.agent = :agent")
-                   ->setParameter('agent', $agent)
-                   ->setParameter('colleagueType', $colleagueType)
-                   ->orderBy('u.id', 'ASC');
+        $qb = $this
+            ->getEntityManager()
+            ->createQueryBuilder()
+            ->select('u')
+            ->from('AuthenticationBundle:User', 'u')
+            ->where('u.userType = :colleagueType')
+            ->andWhere("u.agent = :agent")
+            ->setParameter('agent', $agent)
+            ->setParameter('colleagueType', $colleagueType)
+            ->orderBy('u.id', 'ASC');
 
         $results = $qb->getQuery()->getResult();
 
@@ -135,14 +139,16 @@ class UserRepository extends EntityRepository
      */
     public function getAllColleagues(array $agentIds, UserType $userType): array
     {
-        $qb = $this->getEntityManager()->createQueryBuilder()
-                   ->select('u')
-                   ->from('AuthenticationBundle:User', 'u')
-                   ->where("u.agent IN (:agentIds)")
-                   ->andWhere('u.userType = :userType')
-                   ->setParameter('agentIds', $agentIds)
-                   ->setParameter('userType', $userType)
-                   ->orderBy('u.id', 'ASC');
+        $qb = $this
+            ->getEntityManager()
+            ->createQueryBuilder()
+            ->select('u')
+            ->from('AuthenticationBundle:User', 'u')
+            ->where("u.agent IN (:agentIds)")
+            ->andWhere('u.userType = :userType')
+            ->setParameter('agentIds', $agentIds)
+            ->setParameter('userType', $userType)
+            ->orderBy('u.id', 'ASC');
 
         $results = $qb->getQuery()->getResult();
 

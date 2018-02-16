@@ -212,10 +212,6 @@ class UserService
             ]
         );
 
-        if ($user) {
-            return $user;
-        }
-
-        return null;
+        return (empty($user)) ? null : $user;
     }
 }
