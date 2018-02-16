@@ -25,6 +25,7 @@ class LoadSettingsData extends AbstractFixture implements OrderedFixtureInterfac
         $settings->setSlackEnabled(true);
         $settings->setSlackURL('https://hooks.slack.com/services/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');
         $settings->setSlackUsername('Property Window');
+        $settings->setGoogleKey('AIzaSyB9vh1cp6zxPc74gtlLiYehjyNqDlEGX2Q');
         $manager->persist($settings);
 
         $manager->flush();

@@ -8,6 +8,7 @@ use AlertBundle\Exceptions\ApplicantNotFoundException;
 use AlertBundle\Exceptions\ApplicationNotFoundException;
 use AlertBundle\Service\Application\Mapper;
 use AppBundle\Controller\JsonController;
+use AppBundle\Exceptions\SettingsNotFoundException;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use PropertyBundle\Exceptions\KindNotFoundException;
 use PropertyBundle\Exceptions\SubTypeNotFoundException;
@@ -25,7 +26,7 @@ use Throwable;
 class ApplicationController extends JsonController
 {
     /**
-     * @Route("/applicant" , name="applicant")
+     * @Route("/application" , name="application")
      * @param Request $httpRequest
      *
      * @return HttpResponse
@@ -67,25 +68,31 @@ class ApplicationController extends JsonController
     {
         $this->checkParameters(['id']);
 
-        $applicant = $this->applicationService->getApplication((int)$this->parameters['id']);
+        $application = $this->applicationService->getApplication((int)$this->parameters['id']);
 
         $this->isAuthorized(
             $this->user->getAgent()->getAgentGroup()->getId(),
-            $applicant->getApplicant()->getAgentGroup()->getId()
+            $application->getApplicant()->getAgentGroup()->getId()
         );
 
-        return Mapper::fromApplication($applicant);
+        return Mapper::fromApplication($application);
     }
 
     /**
      * @return array
      * @throws ApplicantNotFoundException
+     * @throws NotAuthorizedException
      */
     private function getApplicationFromApplicant(): array
     {
         $this->checkParameters(['applicant_id']);
 
         $applicant = $this->applicantService->getApplicant((int)$this->parameters['applicant_id']);
+
+        $this->isAuthorized(
+            $this->user->getAgent()->getAgentGroup()->getId(),
+            $applicant->getAgentGroup()->getId()
+        );
 
         return Mapper::fromApplications(...
             $this->applicationService->getApplicationFromApplicant($applicant));
@@ -145,5 +152,51 @@ class ApplicationController extends JsonController
 
         $application->setActive(false);
         $this->applicationService->updateApplication($application);
+    }
+
+    /**
+     * @return array
+     * @throws ApplicationNotFoundException
+     * @throws NotAuthorizedException
+     * @throws SettingsNotFoundException
+     */
+    private function getPropertiesforApplication()
+    {
+        $this->checkParameters(['application_id']);
+
+        $application = $this->applicationService->getApplication((int)$this->parameters['application_id']);
+
+        $this->isAuthorized(
+            $this->user->getAgent()->getAgentGroup()->getId(),
+            $application->getApplicant()->getAgentGroup()->getId()
+        );
+
+        $postcode = $application->getPostcode();
+        $distance = $application->getDistance();
+
+        $coordinates = $this->getCoordinates($postcode);
+
+        // todo: get array of agents properties lat, lng
+
+        return $coordinates;
+    }
+
+    /**
+     * @param string $postcode
+     *
+     * @return array
+     * @throws SettingsNotFoundException
+     */
+    private function getCoordinates(string $postcode): array
+    {
+        $key    = $this->settingsService->getSettings()->getGoogleKey();
+        $url    = 'https://maps.googleapis.com/maps/api/geocode/json?address=' . $postcode . '&sensor=false&key='. $key;
+        $result = file_get_contents($url);
+        $json   = json_decode($result);
+
+        return [
+            'lat' => $json->results[0]->geometry->location->lat,
+            'lng' => $json->results[0]->geometry->location->lng,
+        ];
     }
 }

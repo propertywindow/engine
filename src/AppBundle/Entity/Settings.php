@@ -56,6 +56,12 @@ class Settings
     private $slackUsername;
 
     /**
+     * @var string
+     * @ORM\Column(name="google_key", type="string", length=255)
+     */
+    private $googleKey;
+
+    /**
      * @return int|null
      */
     public function getId(): ?int
@@ -68,7 +74,7 @@ class Settings
      *
      * @return Settings
      */
-    public function setApplicationName($applicationName)
+    public function setApplicationName(string $applicationName): self
     {
         $this->applicationName = $applicationName;
 
@@ -78,7 +84,7 @@ class Settings
     /**
      * @return string
      */
-    public function getApplicationName()
+    public function getApplicationName(): string
     {
         return $this->applicationName;
     }
@@ -88,7 +94,7 @@ class Settings
      *
      * @return Settings
      */
-    public function setApplicationURL($applicationURL)
+    public function setApplicationURL(string $applicationURL): self
     {
         $this->applicationURL = $applicationURL;
 
@@ -98,7 +104,7 @@ class Settings
     /**
      * @return string
      */
-    public function getApplicationURL()
+    public function getApplicationURL(): string
     {
         return $this->applicationURL;
     }
@@ -108,7 +114,7 @@ class Settings
      *
      * @return Settings
      */
-    public function setMaxFailedLogin($maxFailedLogin)
+    public function setMaxFailedLogin(int $maxFailedLogin): self
     {
         $this->maxFailedLogin = $maxFailedLogin;
 
@@ -118,7 +124,7 @@ class Settings
     /**
      * @return int
      */
-    public function getMaxFailedLogin()
+    public function getMaxFailedLogin(): int
     {
         return $this->maxFailedLogin;
     }
@@ -128,7 +134,7 @@ class Settings
      *
      * @return Settings
      */
-    public function setSlackEnabled($slackEnabled)
+    public function setSlackEnabled(bool $slackEnabled): self
     {
         $this->slackEnabled = $slackEnabled;
 
@@ -138,7 +144,7 @@ class Settings
     /**
      * @return bool
      */
-    public function getSlackEnabled()
+    public function getSlackEnabled(): bool
     {
         return $this->slackEnabled;
     }
@@ -148,7 +154,7 @@ class Settings
      *
      * @return Settings
      */
-    public function setSlackURL($slackURL)
+    public function setSlackURL(string $slackURL): self
     {
         $this->slackURL = $slackURL;
 
@@ -158,7 +164,7 @@ class Settings
     /**
      * @return string
      */
-    public function getSlackURL()
+    public function getSlackURL(): string
     {
         return $this->slackURL;
     }
@@ -168,7 +174,7 @@ class Settings
      *
      * @return Settings
      */
-    public function setSlackUsername($slackUsername)
+    public function setSlackUsername(string $slackUsername): self
     {
         $this->slackUsername = $slackUsername;
 
@@ -178,8 +184,28 @@ class Settings
     /**
      * @return string
      */
-    public function getSlackUsername()
+    public function getSlackUsername(): string
     {
         return $this->slackUsername;
+    }
+
+    /**
+     * @param string $googleKey
+     *
+     * @return Settings
+     */
+    public function setGoogleKey(string $googleKey): self
+    {
+        $this->googleKey = $googleKey;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGoogleKey(): string
+    {
+        return $this->googleKey;
     }
 }
