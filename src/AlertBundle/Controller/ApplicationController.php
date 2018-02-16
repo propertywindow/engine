@@ -161,7 +161,7 @@ class ApplicationController extends JsonController
      * @throws NotAuthorizedException
      * @throws SettingsNotFoundException
      */
-    private function getPropertiesforApplication()
+    private function getPropertiesForApplication()
     {
         // todo: maybe move to service, and store result in db: property, application, distance
         // todo: that way it's easier for getInterested
