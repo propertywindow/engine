@@ -269,7 +269,7 @@ class UserController extends JsonController
     {
         $this->hasAccessLevel(self::USER_AGENT);
 
-        if ($this->user->getUserType() === self::USER_ADMIN) {
+        if ($this->user->getUserType()->getId() === self::USER_ADMIN) {
             $this->checkParameters(['agent_id']);
             $agent = $this->agentService->getAgent($this->parameters['agent_id']);
         } else {
@@ -304,7 +304,7 @@ class UserController extends JsonController
     {
         $this->hasAccessLevel(self::USER_AGENT);
 
-        if ($this->user->getUserType() === self::USER_ADMIN) {
+        if ($this->user->getUserType()->getId() === self::USER_ADMIN) {
             $this->checkParameters(['agent_id']);
             $agent = $this->agentService->getAgent($this->parameters['agent_id']);
         } else {
