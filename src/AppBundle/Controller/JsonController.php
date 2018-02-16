@@ -68,16 +68,18 @@ class JsonController extends BaseController
     }
 
     /**
+     * @param int $length
+     *
      * @return string
      */
-    function generateEmail()
+    public function generateEmail($length = 12)
     {
         $characters      = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $tld             = ["com", "net", "org", "nl", "co.uk", "eu", "info"];
         $randomName      = '';
         $randomDomain    = '';
 
-        for ($j = 0; $j < 10; $j++) {
+        for ($j = 0; $j < $length; $j++) {
             $randomName   .= $characters[rand(0, strlen($characters) - 1)];
             $randomDomain .= $characters[rand(0, strlen($characters) - 1)];
         }
