@@ -70,6 +70,20 @@ class LoadApplicationData extends AbstractFixture implements OrderedFixtureInter
         $this->setReference('application_3', $application);
         $manager->persist($application);
 
+        $application = new Application();
+        /** @var Applicant $applicant */
+        $applicant = $this->getReference('applicant_3');
+        $application->setApplicant($applicant);
+        $application->setKind($this->getReference('kind_sale'));
+        $application->setPostcode('EH15 1DE');
+        $application->setCountry('GB');
+        $application->setDistance(5);
+        $application->setMinPrice(90000);
+        $application->setMaxPrice(450000);
+        $application->setActive(true);
+        $this->setReference('application_4', $application);
+        $manager->persist($application);
+
 
         $manager->flush();
     }

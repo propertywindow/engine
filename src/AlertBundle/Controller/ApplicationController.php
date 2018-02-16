@@ -10,6 +10,7 @@ use AlertBundle\Service\Application\Mapper;
 use AppBundle\Controller\JsonController;
 use AppBundle\Exceptions\SettingsNotFoundException;
 use AuthenticationBundle\Exceptions\NotAuthorizedException;
+use PropertyBundle\Entity\Property;
 use PropertyBundle\Exceptions\KindNotFoundException;
 use PropertyBundle\Exceptions\SubTypeNotFoundException;
 use PropertyBundle\Exceptions\TermsNotFoundException;
@@ -162,6 +163,10 @@ class ApplicationController extends JsonController
      */
     private function getPropertiesforApplication()
     {
+        // todo: maybe move to service, and store result in db: property, application, distance
+        // todo: that way it's easier for getInterested
+        // todo: getInterested runs clears and runs this first
+
         $this->checkParameters(['application_id']);
 
         $application = $this->applicationService->getApplication((int)$this->parameters['application_id']);
@@ -171,32 +176,27 @@ class ApplicationController extends JsonController
             $application->getApplicant()->getAgentGroup()->getId()
         );
 
-        $postcode = $application->getPostcode();
-        $distance = $application->getDistance();
+        // todo: save coordinates to application entity on create
 
-        $coordinates = $this->getCoordinates($postcode);
+        $array       = [];
+        $coordinates = $this->getCoordinatesFromPostcode($application->getPostcode());
+        $agentIds    = $this->agentService->getAgentIdsFromGroup($this->user->getAgent());
+        $properties  = $this->propertyService->getAllProperties($agentIds);
 
-        // todo: get array of agents properties lat, lng
+        /** @var Property $property */
+        foreach ($properties as $property) {
+            $lat      = $property->getLat();
+            $lng      = $property->getLng();
+            $distance = $this->getDistance($coordinates['lat'], $coordinates['lng'], $lat, $lng);
 
-        return $coordinates;
-    }
+            if ($distance <= $application->getDistance()) {
+                $array[] = [
+                    'property_id' => $property->getId(),
+                    'distance'    => round($distance, 2),
+                ];
+            }
+        }
 
-    /**
-     * @param string $postcode
-     *
-     * @return array
-     * @throws SettingsNotFoundException
-     */
-    private function getCoordinates(string $postcode): array
-    {
-        $key    = $this->settingsService->getSettings()->getGoogleKey();
-        $url    = 'https://maps.googleapis.com/maps/api/geocode/json?address=' . $postcode . '&sensor=false&key='. $key;
-        $result = file_get_contents($url);
-        $json   = json_decode($result);
-
-        return [
-            'lat' => $json->results[0]->geometry->location->lat,
-            'lng' => $json->results[0]->geometry->location->lng,
-        ];
+        return $array;
     }
 }

@@ -43,6 +43,18 @@ class LoadApplicantData extends AbstractFixture implements OrderedFixtureInterfa
         $this->setReference('applicant_2', $applicant);
         $manager->persist($applicant);
 
+        $applicant = new Applicant();
+        /** @var AgentGroup $agentGroup */
+        $agentGroup = $this->getReference('agent_group_annan');
+        $applicant->setAgentGroup($agentGroup);
+        $applicant->setName('Iain Anderson');
+        $applicant->setEmail('iain@anderson.co.uk');
+        $applicant->setPhone('');
+        $applicant->setProtection(true);
+        $applicant->setCountry('GB');
+        $this->setReference('applicant_3', $applicant);
+        $manager->persist($applicant);
+
         $manager->flush();
     }
 

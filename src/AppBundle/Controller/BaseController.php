@@ -8,6 +8,7 @@ use AgentBundle\Service\AgentService;
 use AgentBundle\Service\AgentGroupService;
 use AgentBundle\Service\AgentSettingsService;
 use AgentBundle\Service\SolicitorService;
+use AppBundle\Exceptions\SettingsNotFoundException;
 use AppBundle\Service\ContactAddressService;
 use ClientBundle\Service\ClientService;
 use AlertBundle\Service\AlertService;
@@ -339,5 +340,53 @@ class BaseController extends Controller
         $this->solicitorService       = $solicitorService;
         $this->agencyService          = $agencyService;
         $this->addressService         = $addressService;
+    }
+
+    /**
+     * @param string $postcode
+     *
+     * @return array
+     * @throws SettingsNotFoundException
+     */
+    public function getCoordinatesFromPostcode(string $postcode): array
+    {
+        $key    = $this->settingsService->getSettings()->getGoogleKey();
+        $url    = 'https://maps.googleapis.com/maps/api/geocode/json?address='
+                  . urlencode($postcode) . '&sensor=false&key='
+                  . $key;
+        $result = file_get_contents($url);
+        $json   = json_decode($result);
+
+        return [
+            'lat' => $json->results[0]->geometry->location->lat,
+            'lng' => $json->results[0]->geometry->location->lng,
+        ];
+    }
+
+    /**
+     * @param      $lat1
+     * @param      $lng1
+     * @param      $lat2
+     * @param      $lng2
+     * @param bool $miles
+     *
+     * @return float|int
+     */
+    public function getDistance($lat1, $lng1, $lat2, $lng2, $miles = true)
+    {
+        $pi80 = M_PI / 180;
+        $lat1 *= $pi80;
+        $lng1 *= $pi80;
+        $lat2 *= $pi80;
+        $lng2 *= $pi80;
+
+        $r    = 6372.797;
+        $dlat = $lat2 - $lat1;
+        $dlng = $lng2 - $lng1;
+        $a    = sin($dlat / 2) * sin($dlat / 2) + cos($lat1) * cos($lat2) * sin($dlng / 2) * sin($dlng / 2);
+        $c    = 2 * atan2(sqrt($a), sqrt(1 - $a));
+        $km   = $r * $c;
+
+        return ($miles ? ($km * 0.621371192) : $km);
     }
 }

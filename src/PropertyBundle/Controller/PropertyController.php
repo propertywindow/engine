@@ -84,7 +84,7 @@ class PropertyController extends JsonController
     private function getProperties(): array
     {
         return Mapper::fromProperties($this->user->getSettings()->getLanguage(), ...
-            $this->propertyService->listProperties($this->user->getAgent()));
+            $this->propertyService->getProperties($this->user->getAgent()));
     }
 
     /**
@@ -92,19 +92,10 @@ class PropertyController extends JsonController
      */
     private function getAllProperties(): array
     {
-        $limit  = array_key_exists('limit', $this->parameters) &&
-                  $this->parameters['limit'] !== null ? (int)$this->parameters['limit'] : 50;
-        $offset = array_key_exists('offset', $this->parameters) &&
-                  $this->parameters['offset'] !== null ? (int)$this->parameters['offset'] : 0;
+        $agentIds   = $this->agentService->getAgentIdsFromGroup($this->user->getAgent());
+        $properties = $this->propertyService->getAllProperties($agentIds);
 
-        $agentIds = $this->agentService->getAgentIdsFromGroup($this->user->getAgent());
-
-        list($properties, $count) = $this->propertyService->listAllProperties($agentIds, $limit, $offset);
-
-        return [
-            'properties' => Mapper::fromProperties($this->user->getSettings()->getLanguage(), ...$properties),
-            'count'      => $count,
-        ];
+        return Mapper::fromProperties($this->user->getSettings()->getLanguage(), ...$properties);
     }
 
     /**

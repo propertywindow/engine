@@ -37,7 +37,7 @@ class PropertyRepository extends EntityRepository
      *
      * @return Property[]
      */
-    public function listProperties(Agent $agent): array
+    public function getProperties(Agent $agent): array
     {
         $qb = $this
             ->getEntityManager()
@@ -58,30 +58,25 @@ class PropertyRepository extends EntityRepository
      * @param int   $limit
      * @param int   $offset
      *
-     * @return array First value Property[], second value the total count.
+     * @return Property[]
      */
-    public function listAllProperties($agentIds, int $limit, int $offset): array
+    public function getAllProperties($agentIds, int $limit = 500, int $offset = 0): array
     {
         $qb = $this
             ->getEntityManager()
             ->createQueryBuilder()
             ->select('p')
             ->from('PropertyBundle:Property', 'p')
-            ->where("p.agent IN (:agentIds)")
+            ->where('p.agent IN (:agentIds)')
+            ->andWhere('p.archived = false')
             ->orderBy('p.id', 'DESC')
             ->setFirstResult($offset)
             ->setMaxResults($limit)
             ->setParameter('agentIds', $agentIds);
 
-        $pages = new Paginator($qb);
+        $results = $qb->getQuery()->getResult();
 
-        $count   = $pages->count();
-        $results = $pages->getQuery()->getResult();
-
-        return [
-            $results,
-            $count,
-        ];
+        return $results;
     }
 
     /**

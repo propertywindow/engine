@@ -75,21 +75,19 @@ class PropertyService
      *
      * @return array|Property[] $properties
      */
-    public function listProperties(Agent $agent): array
+    public function getProperties(Agent $agent): array
     {
-        return $this->repository->listProperties($agent);
+        return $this->repository->getProperties($agent);
     }
 
     /**
      * @param int[] $agentIds
-     * @param int   $limit
-     * @param int   $offset
      *
-     * @return array|Property First value Property[], second value the total count.
+     * @return Property[]
      */
-    public function listAllProperties(array $agentIds, int $limit, int $offset)
+    public function getAllProperties(array $agentIds)
     {
-        return $this->repository->listAllProperties($agentIds, $limit, $offset);
+        return $this->repository->getAllProperties($agentIds);
     }
 
     /**
