@@ -73,7 +73,7 @@ class PropertyController extends JsonController
 
         $this->isAuthorized($property->getAgent()->getId(), $this->user->getAgent()->getId());
 
-        $this->logTraffic($property);
+//        $this->logTraffic($property);
 
         return Mapper::fromProperty($this->user->getSettings()->getLanguage(), $property);
     }
