@@ -148,27 +148,4 @@ class UserRepository extends EntityRepository
 
         return $results;
     }
-
-    /**
-     * @param Agent    $agent
-     * @param UserType $apiType
-     *
-     * @return User|array|null
-     */
-    public function getApiUser(Agent $agent, UserType $apiType): ?array
-    {
-        $qb = $this->getEntityManager()->createQueryBuilder()
-                   ->select('u')
-                   ->from('AuthenticationBundle:User', 'u')
-                   ->where('u.userType = :apiType')
-                   ->andWhere("u.agent = :agent")
-                   ->setParameter('agent', $agent)
-                   ->setParameter('apiType', $apiType)
-                   ->orderBy('u.id', 'ASC')
-                   ->setMaxResults(1);
-
-        $results = $qb->getQuery()->getResult();
-
-        return $results;
-    }
 }

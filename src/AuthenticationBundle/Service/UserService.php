@@ -164,7 +164,7 @@ class UserService
      *
      * @return User $user
      */
-    public function getUserByEmail(string $email)
+    public function getUserByEmail(string $email): ?User
     {
         $user = $this->repository->findOneBy(['email' => $email]);
 
@@ -177,7 +177,7 @@ class UserService
      *
      * @return User $user
      */
-    public function login(string $email, string $password)
+    public function login(string $email, string $password): ?User
     {
         $user = $this->repository->findOneBy(
             [
@@ -198,14 +198,24 @@ class UserService
 
     /**
      * @param Agent    $agent
-     * @param UserType $colleagueType
+     * @param UserType $apiUserType
      *
-     * @return User|array|null $user
+     * @return User|null $user
      */
-    public function getApiUser(Agent $agent, UserType $colleagueType)
+    public function getApiUser(Agent $agent, UserType $apiUserType): ?User
     {
-        $user = $this->repository->getApiUser($agent, $colleagueType);
+        /** @var User $user */
+        $user = $this->repository->findOneBy(
+            [
+                'agent'    => $agent,
+                'userType' => $apiUserType,
+            ]
+        );
 
-        return $user;
+        if ($user) {
+            return $user;
+        }
+
+        return null;
     }
 }

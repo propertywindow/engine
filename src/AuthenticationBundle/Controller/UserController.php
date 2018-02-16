@@ -307,19 +307,18 @@ class UserController extends JsonController
         $user     = $this->userService->getApiUser($agent, $userType);
 
         if (!$user) {
-            $user = new User();
+            $newUser = new User();
 
-            $user->setAgent($agent);
-            $user->setUserType($userType);
-            $user->setEmail($this->generateEmail());
-            $user->setPassword(md5($this->generatePassword()));
-            $user->setFirstName($agent->getUser()->getFirstName());
-            $user->setLastName($agent->getUser()->getLastName());
-            $user->setAddress($agent->getAddress());
-            $user->setPhone($agent->getPhone());
-            $user->setActive(true);
+            $newUser->setAgent($agent);
+            $newUser->setUserType($userType);
+            $newUser->setEmail($this->generateEmail());
+            $newUser->setPassword(md5($this->generatePassword()));
+            $newUser->setFirstName($agent->getUser()->getFirstName());
+            $newUser->setLastName($agent->getUser()->getLastName());
+            $newUser->setPhone($agent->getPhone());
+            $newUser->setActive(true);
 
-            $user = $this->userService->createUser($user);
+            $user = $this->userService->createUser($newUser);
 
             // todo: add services to view properties and create property alerts
         }
