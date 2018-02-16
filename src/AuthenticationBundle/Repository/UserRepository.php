@@ -153,7 +153,7 @@ class UserRepository extends EntityRepository
      * @param Agent    $agent
      * @param UserType $apiType
      *
-     * @return array|null
+     * @return User|null
      */
     public function getApiUser(Agent $agent, UserType $apiType): ?array
     {
