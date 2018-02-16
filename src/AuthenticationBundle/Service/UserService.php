@@ -200,7 +200,7 @@ class UserService
      * @param Agent    $agent
      * @param UserType $colleagueType
      *
-     * @return User|null $user
+     * @return User|array|null $user
      */
     public function getApiUser(Agent $agent, UserType $colleagueType)
     {
