@@ -45,5 +45,8 @@ class SettingsTest extends TestCase
 
         $this->settings->setSlackUsername('username');
         $this->assertEquals('username', $this->settings->getSlackUsername());
+
+        $this->settings->setGoogleKey('key');
+        $this->assertEquals('key', $this->settings->getGoogleKey());
     }
 }

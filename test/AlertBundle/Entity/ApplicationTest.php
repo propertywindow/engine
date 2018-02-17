@@ -72,5 +72,11 @@ class ApplicationTest extends TestCase
 
         $this->application->setActive(true);
         $this->assertTrue($this->application->getActive());
+
+        $this->application->setLat('51.9629568');
+        $this->assertEquals('51.9629568', $this->application->getLat());
+
+        $this->application->setLng('5.6496844');
+        $this->assertEquals('5.6496844', $this->application->getLng());
     }
 }
