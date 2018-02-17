@@ -1,0 +1,41 @@
+filter:
+  excluded_paths:
+    - "src/*Bundle/DataFixtures/ORM/"
+    - "app/"
+    - "web/"
+
+before_commands:
+    - "composer install"
+
+checks:
+    php: true
+
+build:
+    environment:
+        timezone: 'Europe/Amsterdam'
+        variables:
+              integration_test_file: 'config_scrutinizer.php'
+        php:
+            version: '7.1'
+            ini:
+                'date.timezone': 'Europe/Amsterdam'
+    dependencies:
+        before: []
+        override: []
+        after: []
+    project_setup:
+        before: []
+        override: []
+        after: []
+    nodes:
+        tests: true
+        analysis:
+            tests:
+                override:
+                    -
+                        command: phpcs-run --standard=phpcs.xml
+                        use_website_config: false
+                    - php-scrutinizer-run
+
+build_failure_conditions:
+  - 'issues.label("coding-style").new.exists'
