@@ -10,6 +10,8 @@ use AgentBundle\Service\AgentSettingsService;
 use AgentBundle\Service\SolicitorService;
 use AppBundle\Exceptions\SettingsNotFoundException;
 use AppBundle\Service\ContactAddressService;
+use AuthenticationBundle\Entity\User;
+use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use ClientBundle\Service\ClientService;
 use AlertBundle\Service\AlertService;
 use AlertBundle\Service\ApplicantService;
@@ -48,6 +50,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
  */
 class BaseController extends Controller
 {
+    /**
+     * @var User $user
+     */
+    public $user;
+
     /**
      * @var Authenticator
      */
@@ -343,20 +350,22 @@ class BaseController extends Controller
     }
 
     /**
-     * @param string $postcode
-     * @param string $country
+     * @param string      $postcode
+     * @param string|null $country
      *
      * @return array
      * @throws SettingsNotFoundException
      */
-    public function getCoordinatesFromPostcode(string $postcode, string $country): array
+    public function getCoordinatesFromPostcode(string $postcode, string $country = null): array
     {
+        if ($country) {
+            $search = urlencode($postcode . ',' . $country);
+        } else {
+            $search = urlencode($postcode);
+        }
+
         $key    = $this->settingsService->getSettings()->getGoogleKey();
-        $url    = 'https://maps.googleapis.com/maps/api/geocode/json?address='
-                  . urlencode($postcode)
-                  . ','
-                  . urlencode($country)
-                  . '&sensor=false&key=' . $key;
+        $url    = 'https://maps.googleapis.com/maps/api/geocode/json?address=' . $search . '&sensor=false&key=' . $key;
         $result = file_get_contents($url);
         $json   = json_decode($result);
 
@@ -391,5 +400,65 @@ class BaseController extends Controller
         $km   = $r * $c;
 
         return ($miles ? ($km * 0.621371192) : $km);
+    }
+
+    /**
+     * @param int $userRight
+     * @param int $userCheck
+     *
+     * @throws NotAuthorizedException
+     */
+    public function isAuthorized(int $userRight, int $userCheck)
+    {
+        if ($userRight !== $userCheck) {
+            throw new NotAuthorizedException();
+        }
+    }
+
+    /**
+     * @param int $userType
+     *
+     * @throws NotAuthorizedException
+     */
+    public function hasAccessLevel(int $userType)
+    {
+        if ($this->user->getUserType()->getId() >= $userType) {
+            throw new NotAuthorizedException();
+        }
+    }
+
+    /**
+     * @param int $length
+     *
+     * @return string
+     */
+    public function generatePassword($length = 12)
+    {
+        $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        $count = mb_strlen($chars);
+
+        for ($i = 0, $result = ''; $i < $length; $i++) {
+            $result .= mb_substr($chars, rand(0, $count - 1), 1);
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param int $length
+     *
+     * @return string
+     */
+    public function generateEmail($length = 12)
+    {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $tld        = ["com", "net", "org", "nl", "co.uk", "eu", "info"];
+
+        for ($j = 0, $randomName = '', $randomDomain = ''; $j < $length; $j++) {
+            $randomName   .= $characters[rand(0, strlen($characters) - 1)];
+            $randomDomain .= $characters[rand(0, strlen($characters) - 1)];
+        }
+
+        return $randomName . "@" . $randomDomain . "." . $tld[array_rand($tld)];
     }
 }

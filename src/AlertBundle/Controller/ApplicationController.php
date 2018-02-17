@@ -165,7 +165,7 @@ class ApplicationController extends JsonController
      */
     private function getPropertiesForApplication()
     {
-        // todo: create service to store in entity, here just read that entity
+        // todo: create service to store in entity, (here just read that entity?)
         // todo: service needs to empty application first, or something else to track if has been mailed
         // todo: getInterested runs this first
         // todo: add other application criteria

@@ -12,7 +12,6 @@ use AppBundle\Exceptions\SettingsNotFoundException;
 use AppBundle\Models\JsonRpc\Error;
 use AppBundle\Models\JsonRpc\Response;
 use AuthenticationBundle\Entity\User;
-use AuthenticationBundle\Exceptions\NotAuthorizedException;
 use AuthenticationBundle\Exceptions\UserNotFoundException;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -40,48 +39,24 @@ class JsonController extends BaseController
     public const USER_API               = 5;
 
     /**
-     * @var User $user
-     */
-    public $user;
-
-    /**
      * @var array $parameters
      */
     public $parameters = [];
 
     /**
-     * @param int $length
-     *
-     * @return string
+     * @return ContactAddress
      */
-    public function generatePassword($length = 12)
+    public function createAddress()
     {
-        $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-        $count = mb_strlen($chars);
+        $address = new ContactAddress();
 
-        for ($i = 0, $result = ''; $i < $length; $i++) {
-            $result .= mb_substr($chars, rand(0, $count - 1), 1);
-        }
+        $address->setStreet($this->parameters['street']);
+        $address->setHouseNumber($this->parameters['house_number']);
+        $address->setPostcode($this->parameters['postcode']);
+        $address->setCity($this->parameters['city']);
+        $address->setCountry($this->parameters['country']);
 
-        return $result;
-    }
-
-    /**
-     * @param int $length
-     *
-     * @return string
-     */
-    public function generateEmail($length = 12)
-    {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $tld        = ["com", "net", "org", "nl", "co.uk", "eu", "info"];
-
-        for ($j = 0, $randomName = '', $randomDomain = ''; $j < $length; $j++) {
-            $randomName   .= $characters[rand(0, strlen($characters) - 1)];
-            $randomDomain .= $characters[rand(0, strlen($characters) - 1)];
-        }
-
-        return $randomName . "@" . $randomDomain . "." . $tld[array_rand($tld)];
+        return $this->addressService->createAddress($address);
     }
 
     /**
@@ -219,38 +194,14 @@ class JsonController extends BaseController
     }
 
     /**
-     * @param int $userRight
-     * @param int $userCheck
-     *
-     * @throws NotAuthorizedException
-     */
-    public function isAuthorized(int $userRight, int $userCheck)
-    {
-        if ($userRight !== $userCheck) {
-            throw new NotAuthorizedException();
-        }
-    }
-
-    /**
-     * @param int $userType
-     *
-     * @throws NotAuthorizedException
-     */
-    public function hasAccessLevel(int $userType)
-    {
-        if ($this->user->getUserType()->getId() >= $userType) {
-            throw new NotAuthorizedException();
-        }
-    }
-
-    /**
      * @param string[] $required
      */
     public function checkParameters(array $required)
     {
-        // todo: add which parameter is missing
-        if (count(array_intersect_key(array_flip($required), $this->parameters)) !== count($required)) {
-            throw new InvalidArgumentException("there is a required parameter missing");
+        foreach ($required as $key) {
+            if (!array_key_exists($key, $this->parameters)) {
+                throw new InvalidArgumentException($key . " parameter missing");
+            }
         }
 
         if (array_key_exists('email', $required)) {
@@ -276,22 +227,6 @@ class JsonController extends BaseController
                 $entity->$method($value);
             }
         }
-    }
-
-    /**
-     * @return ContactAddress
-     */
-    public function createAddress()
-    {
-        $address = new ContactAddress();
-
-        $address->setStreet($this->parameters['street']);
-        $address->setHouseNumber($this->parameters['house_number']);
-        $address->setPostcode($this->parameters['postcode']);
-        $address->setCity($this->parameters['city']);
-        $address->setCountry($this->parameters['country']);
-
-        return $this->addressService->createAddress($address);
     }
 
     /**
