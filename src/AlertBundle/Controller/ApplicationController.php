@@ -105,6 +105,7 @@ class ApplicationController extends JsonController
      * @throws KindNotFoundException
      * @throws SubTypeNotFoundException
      * @throws TermsNotFoundException
+     * @throws SettingsNotFoundException
      */
     private function createApplication(): array
     {
@@ -117,11 +118,11 @@ class ApplicationController extends JsonController
             'distance',
         ]);
 
-        $applicant = $this->applicantService->getApplicant((int)$this->parameters['applicant_id']);
-        $kind      = $this->kindService->getKind((int)$this->parameters['kind_id']);
-        $subtype   = $this->subTypeService->getSubType((int)$this->parameters['subtype_id']);
-        $terms     = $this->termsService->getTerm((int)$this->parameters['terms_id']);
-
+        $applicant   = $this->applicantService->getApplicant((int)$this->parameters['applicant_id']);
+        $kind        = $this->kindService->getKind((int)$this->parameters['kind_id']);
+        $subtype     = $this->subTypeService->getSubType((int)$this->parameters['subtype_id']);
+        $terms       = $this->termsService->getTerm((int)$this->parameters['terms_id']);
+        $coordinates = $this->getCoordinatesFromPostcode($this->parameters['postcode'], $this->parameters['country']);
         $application = new Application();
 
         $application->setApplicant($applicant);
@@ -130,6 +131,8 @@ class ApplicationController extends JsonController
         $application->setTerms($terms);
         $application->setCountry($this->user->getAgent()->getAddress()->getCountry());
         $application->setActive(true);
+        $application->setLat($coordinates['lat']);
+        $application->setLng($coordinates['lng']);
 
         $this->prepareParameters($application);
 
@@ -159,12 +162,9 @@ class ApplicationController extends JsonController
      * @return array
      * @throws ApplicationNotFoundException
      * @throws NotAuthorizedException
-     * @throws SettingsNotFoundException
      */
     private function getPropertiesForApplication()
     {
-        // todo: maybe move to service, and store result in db: property, application, distance
-        // todo: that way it's easier for getInterested
         // todo: getInterested runs clears and runs this first
 
         $this->checkParameters(['application_id']);
@@ -176,18 +176,15 @@ class ApplicationController extends JsonController
             $application->getApplicant()->getAgentGroup()->getId()
         );
 
-        // todo: save coordinates to application entity on create
-
-        $array       = [];
-        $coordinates = $this->getCoordinatesFromPostcode($application->getPostcode());
-        $agentIds    = $this->agentService->getAgentIdsFromGroup($this->user->getAgent());
-        $properties  = $this->propertyService->getAllProperties($agentIds);
+        $array      = [];
+        $agentIds   = $this->agentService->getAgentIdsFromGroup($this->user->getAgent());
+        $properties = $this->propertyService->getAllProperties($agentIds);
 
         /** @var Property $property */
         foreach ($properties as $property) {
             $lat      = $property->getLat();
             $lng      = $property->getLng();
-            $distance = $this->getDistance($coordinates['lat'], $coordinates['lng'], $lat, $lng);
+            $distance = $this->getDistance($application->getLat(), $application->getLng(), $lat, $lng);
 
             if ($distance <= $application->getDistance()) {
                 $array[] = [

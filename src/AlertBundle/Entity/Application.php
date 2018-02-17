@@ -90,6 +90,18 @@ class Application
     private $active = true;
 
     /**
+     * @var string
+     * @ORM\Column(name="lat", type="string", length=20)
+     */
+    private $lat;
+
+    /**
+     * @var string
+     * @ORM\Column(name="lng", type="string", length=20)
+     */
+    private $lng;
+
+    /**
      * @var \DateTime $created
      * @ORM\Column(type="datetime")
      */
@@ -327,6 +339,46 @@ class Application
     public function getActive(): bool
     {
         return $this->active;
+    }
+
+    /**
+     * @param string $lat
+     *
+     * @return Application
+     */
+    public function setLat(string $lat): self
+    {
+        $this->lat = $lat;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLat(): string
+    {
+        return $this->lat;
+    }
+
+    /**
+     * @param string $lng
+     *
+     * @return Application
+     */
+    public function setLng(string $lng): self
+    {
+        $this->lng = $lng;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLng(): string
+    {
+        return $this->lng;
     }
 
     /**

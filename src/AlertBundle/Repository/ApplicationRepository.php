@@ -1,4 +1,5 @@
-<?php declare(strict_types = 1);
+<?php
+declare(strict_types = 1);
 
 namespace AlertBundle\Repository;
 
@@ -8,7 +9,7 @@ use AlertBundle\Entity\Application;
 use AlertBundle\Exceptions\ApplicationNotFoundException;
 
 /**
- * ApplicationRepository
+ * Application Repository
  */
 class ApplicationRepository extends EntityRepository
 {

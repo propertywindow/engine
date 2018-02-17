@@ -344,16 +344,19 @@ class BaseController extends Controller
 
     /**
      * @param string $postcode
+     * @param string $country
      *
      * @return array
      * @throws SettingsNotFoundException
      */
-    public function getCoordinatesFromPostcode(string $postcode): array
+    public function getCoordinatesFromPostcode(string $postcode, string $country): array
     {
         $key    = $this->settingsService->getSettings()->getGoogleKey();
         $url    = 'https://maps.googleapis.com/maps/api/geocode/json?address='
-                  . urlencode($postcode) . '&sensor=false&key='
-                  . $key;
+                  . urlencode($postcode)
+                  . ','
+                  . urlencode($country)
+                  . '&sensor=false&key=' . $key;
         $result = file_get_contents($url);
         $json   = json_decode($result);
 

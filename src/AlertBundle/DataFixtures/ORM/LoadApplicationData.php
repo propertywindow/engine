@@ -33,6 +33,8 @@ class LoadApplicationData extends AbstractFixture implements OrderedFixtureInter
         $application->setSubType($this->getReference('sub_type_detached_house'));
         $application->setTerms($this->getReference('term_fixed_price'));
         $application->setActive(true);
+        $application->setLat('51.4668801');
+        $application->setLng('5.8144041');
         $this->setReference('application_1', $application);
         $manager->persist($application);
 
@@ -50,6 +52,8 @@ class LoadApplicationData extends AbstractFixture implements OrderedFixtureInter
         $application->setSubType($this->getReference('sub_type_detached_house'));
         $application->setTerms();
         $application->setActive(true);
+        $application->setLat('51.4668801');
+        $application->setLng('5.8144041');
         $this->setReference('application_2', $application);
         $manager->persist($application);
 
@@ -67,6 +71,8 @@ class LoadApplicationData extends AbstractFixture implements OrderedFixtureInter
         $application->setSubType($this->getReference('sub_type_second_floor_flat'));
         $application->setTerms($this->getReference('term_offers_around'));
         $application->setActive(true);
+        $application->setLat('51.9629568');
+        $application->setLng('5.6496844');
         $this->setReference('application_3', $application);
         $manager->persist($application);
 
@@ -81,9 +87,10 @@ class LoadApplicationData extends AbstractFixture implements OrderedFixtureInter
         $application->setMinPrice(90000);
         $application->setMaxPrice(450000);
         $application->setActive(true);
+        $application->setLat('55.9553591');
+        $application->setLng('-3.1188563');
         $this->setReference('application_4', $application);
         $manager->persist($application);
-
 
         $manager->flush();
     }
