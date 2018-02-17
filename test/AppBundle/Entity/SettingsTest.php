@@ -36,7 +36,10 @@ class SettingsTest extends TestCase
 
         $this->settings->setMaxFailedLogin(5);
         $this->assertEquals(5, $this->settings->getMaxFailedLogin());
+    }
 
+    public function testSlackGetterAndSetter()
+    {
         $this->settings->setSlackEnabled(true);
         $this->assertTrue($this->settings->getSlackEnabled());
 
@@ -45,7 +48,10 @@ class SettingsTest extends TestCase
 
         $this->settings->setSlackUsername('username');
         $this->assertEquals('username', $this->settings->getSlackUsername());
+    }
 
+    public function testGoogleGetterAndSetter()
+    {
         $this->settings->setGoogleKey('key');
         $this->assertEquals('key', $this->settings->getGoogleKey());
     }
