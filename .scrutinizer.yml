@@ -13,8 +13,6 @@ checks:
 build:
     environment:
         timezone: 'Europe/Amsterdam'
-        variables:
-              integration_test_file: 'config_scrutinizer.php'
         php:
             version: '7.1'
             ini:
@@ -27,6 +25,12 @@ build:
         before: []
         override: []
         after: []
+    tests:
+        override:
+          - command: 'vendor/bin/phpunit --coverage-clover=.coverage'
+            coverage:
+              file: '.coverage'
+              format: 'clover'
     nodes:
         tests: true
         analysis:
@@ -36,6 +40,39 @@ build:
                         command: phpcs-run --standard=phpcs.xml
                         use_website_config: false
                     - php-scrutinizer-run
+
+tools:
+  php_code_coverage: true
+  php_code_sniffer:
+      enabled: true
+      config:
+          standard: PSR2
+      filter:
+          paths: ["src/*", "test/*"]
+  php_cpd:
+      enabled: true
+      excluded_dirs: ["test", "vendor"]
+  php_cs_fixer:
+      enabled: true
+      config:
+          level: all
+      filter:
+          paths: ["src/*", "test/*"]
+  php_loc:
+      enabled: true
+      excluded_dirs: ["test", "vendor"]
+  php_mess_detector:
+      enabled: true
+      filter:
+          paths: ["src/*"]
+  php_pdepend:
+      enabled: true
+      excluded_dirs: ["test", "vendor"]
+  php_analyzer: true
+  php_analyzer:
+      filter:
+          paths: ["src/*", "test/*"]
+  sensiolabs_security_checker: true
 
 build_failure_conditions:
   - 'issues.label("coding-style").new.exists'
