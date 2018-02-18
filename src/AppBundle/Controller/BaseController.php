@@ -358,7 +358,7 @@ class BaseController extends Controller
      */
     public function getCoordinatesFromPostcode(string $postcode, string $country = null): array
     {
-        if ($country) {
+        if ($country !== null) {
             $search = urlencode($postcode . ',' . $country);
         } else {
             $search = urlencode($postcode);

@@ -191,8 +191,9 @@ class ApplicationController extends JsonController
 
             if ($distance <= $application->getDistance()) {
                 $array[] = [
-                    'property_id' => $property->getId(),
-                    'distance'    => round($distance, 2),
+                    'property_id'      => $property->getId(),
+                    'property_address' => $property->getStreet(),
+                    'distance'         => round($distance, 2),
                 ];
             }
         }
