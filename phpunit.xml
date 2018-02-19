@@ -18,6 +18,7 @@
                 <directory>src/*Bundle/Resources</directory>
                 <directory>src/*Bundle/DataFixtures</directory>
                 <directory>src/*Bundle/Exceptions</directory>
+                <directory>src/*Bundle/Controller</directory>
             </exclude>
         </whitelist>
     </filter>
